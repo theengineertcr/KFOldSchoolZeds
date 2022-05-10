@@ -4,3 +4,4 @@ Attack 2 deals slightly(15%?) more damage as it's slower
 Rename all zed names to to "Zed Name 2.5"
 No turning when knocked down(turn off targetting?)
 Meleestun/Hit animation immunity during knockdown(they're knocked on their ass so they shouldn't suddenly stand up and start moving around)
+Clot to use clawing animations on door instead of grappling
