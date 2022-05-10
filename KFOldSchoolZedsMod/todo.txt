@@ -1,5 +1,6 @@
-Scrake melee attack 1 should be preferred when raged on Suicidal
-Attack 1 deal less damage, Attack 2 deal more damage
-Rename all zeds to 2.5 zeds
-No turning when knocked down(targetting off?)
-Meleestun/Hit animation immunity during knockdown(so they dont flinch and suddenly stand up)
+Scrake melee attack 1 should be preferred when raged on Suicidal+
+Attack 1 deal less damage(20%?) as its faster and hits twice
+Attack 2 deals slightly(15%?) more damage as it's slower
+Rename all zed names to to "Zed Name 2.5"
+No turning when knocked down(turn off targetting?)
+Meleestun/Hit animation immunity during knockdown(they're knocked on their ass so they shouldn't suddenly stand up and start moving around)
