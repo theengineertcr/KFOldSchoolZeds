@@ -10,6 +10,8 @@ Gameplay Tweaks
 
 〇 Meleestun/Hit animation immunity during knockdown(they're knocked on their ass so they shouldn't suddenly stand up and start moving around)
 
+〇 Get rid of Fleshpound's AvoidArea.
+
 
 Bugs to be fixed
 〇 FleshPound dealing continuous damage post-rage(online?) https://www.youtube.com/watch?v=ItSdKJu7KXE
