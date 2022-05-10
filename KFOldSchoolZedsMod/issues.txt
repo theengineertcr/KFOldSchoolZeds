@@ -1,0 +1,40 @@
+issues:
+*door attack is wrong(slower than kfmod), but it's fine
+*boss doesnt use correct needle, it's a minor visual error but that's fine
+*maybe add a minigun idle anim for patty so he doesnt jitter when hes not firing? or revert to old behaviour where he mows people down?
+*increase bloat puke range
+*ranged pound is extremely strong in comparison to the husk, balance by accuracy, burst length, and mgdamage
+*ranged pound animations sometimes break after firing and i cant fucking figure out why
+
+*fleshpound and ranged pound have fucked up head hitboxes(scrake, patty, and siren kinda do as well)
+ this is due to their animations, using any other animation such as the clot walk fixes them
+ TODO: rework their bones to use modern anims?
+ 
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ TEMP HACK FIX TO BE MADE: EDIT MODEL IN 3DSMAX, MOVE HEAD BONE TO THE RIGHT A 1 METER OR SO.
+ 
+ 
+Must fixes:
+*fleshpound rage timeout doesnt work
+
+summon kfoldschoolzedschar.zombieclot_os
+summon kfoldschoolzedschar.zombiebloat_os
+summon kfoldschoolzedschar.zombiestalker_os
+summon kfoldschoolzedschar.zombiegorefast_os
+summon kfoldschoolzedschar.zombiecrawler_os
+summon kfoldschoolzedschar.zombiesiren_os
+summon kfoldschoolzedschar.zombiescrake_os
+summon kfoldschoolzedschar.zombiefleshpound_os
+summon kfoldschoolzedschar.zombieboss_os
+summon kfoldschoolzedschar.zombierangedpound_os
+
+summon kfoldschoolzedschar.braindeadclotOS
+summon kfoldschoolzedschar.braindeadbloatOS
+summon kfoldschoolzedschar.braindeadstalkerOS
+summon kfoldschoolzedschar.braindeadgorefastOS
+summon kfoldschoolzedschar.braindeadcrawlerOS
+summon kfoldschoolzedschar.braindeadsirenOS
+summon kfoldschoolzedschar.braindeadscrakeOS
+summon kfoldschoolzedschar.braindeadfleshpoundOS
+summon kfoldschoolzedschar.braindeadbossOS
+summon kfoldschoolzedschar.braindeadrangedpoundOS

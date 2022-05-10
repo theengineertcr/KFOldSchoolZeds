@@ -1,9 +1,10 @@
-class SawZombieController extends KFMonsterController;
+class SawZombieControllerOS extends KFMonsterControllerOS;
 // Custom Zombie Thinkerating
 // By : Alex
 
 var	bool	bDoneSpottedCheck;
 
+//Need this for voicelines
 state ZombieHunt
 {
 	event SeePlayer(Pawn SeenPlayer)
@@ -24,6 +25,7 @@ state ZombieHunt
 	}
 }
 
+//Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
 	if ( (Enemy == None) || FireWeaponAt(Enemy) )
@@ -31,6 +33,7 @@ function TimedFireWeaponAtEnemy()
 	else SetTimer(0.01, True);
 }
 
+//More or less the same
 state ZombieCharge
 {
     // Don't do this in this state

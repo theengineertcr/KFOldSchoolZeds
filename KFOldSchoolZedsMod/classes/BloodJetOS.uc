@@ -1,9 +1,9 @@
-//=============================================================================
-// BloodJet.
-//=============================================================================
-class BloodJet extends xEmitter;
+// KFMod BloodJet
+class BloodJetOS extends xEmitter;
 
-//#exec OBJ LOAD File=XGameShadersB.utx
+// TODO: Import necessary file from this package
+// Into KFOldSchoolZeds_Textures, and load it too.
+#exec OBJ LOAD File=KFOldSchoolZeds_Textures.utx
 
 var class<ProjectedDecal> SplatterClass;
 
@@ -46,50 +46,34 @@ simulated function WallSplat()
 
 defaultproperties
 {
-	SplatterClass=class'ROBloodSplatter'
-    LifeSpan=3.5
-    Style=STY_Alpha
-    mParticleType=PT_Sprite
-    mDirDev=(X=0.05,Y=0.05,Z=0.05)
-    mPosDev=(X=0.0,Y=0.0,Z=0.0)
-    mDelayRange(0)=0.000000
-    mDelayRange(1)=0.00000
-    mLifeRange(0)=1.00000
-    mLifeRange(1)=1.000000
-    mSpeedRange(0)=50.000000
-    mSpeedRange(1)=90.000000
-    mSizeRange(0)=1.5
-    mSizeRange(1)=2.5
-    mMassRange(0)=0.4
-    mMassRange(1)=0.5
-    mGrowthRate=12.0
-	mRegenRange(0)=80.000000
-	mRegenRange(1)=80.000000
-    mRegenOnTime(0)=1.0
-	mRegenOnTime(1)=2.0
-	mRegenOffTime(0)=0.4
-	mRegenOffTime(1)=1.0
-    mRegenDist=0.000000
-    mRandOrient=true
-    mMaxParticles=60
-    mStartParticles=0
-    DrawScale=1.000000
-    ScaleGlow=1.000000
-    mAirResistance=0.6
-    mAttenuate=true
-    mRegenPause=true
-    mRegen=true
-    Skins(0)=none//Material'XGameShadersB.Blood.BloodJetC' KFTODO: replace this texture
-    CollisionRadius=0.000000
-    CollisionHeight=0.000000
-    mColorRange(0)=(R=255,G=255,B=255,A=255)
-    mColorRange(1)=(R=255,G=255,B=255,A=255)
-    mCollision=False
-    bForceAffected=False
-    mRandTextures=True
-    mNumTileColumns=4
-    mNumTileRows=4
-    bUnlit=true
-    bNetTemporary=true
-    RemoteRole=ROLE_None
+	 // Use Old Splatterclass
+     SplatterClass=Class'KFOldSchoolZedsMod.BloodSplatterOS'
+     mRegenPause=True
+     mRegenOnTime(0)=1.000000
+     mRegenOnTime(1)=2.000000
+     mRegenOffTime(0)=0.400000
+     mRegenOffTime(1)=1.000000
+     mStartParticles=0
+     mMaxParticles=60
+     mLifeRange(0)=1.000000
+     mLifeRange(1)=1.000000
+     mRegenRange(0)=80.000000
+     mRegenRange(1)=80.000000
+     mDirDev=(X=0.050000,Y=0.050000,Z=0.050000)
+     mSpeedRange(0)=50.000000
+     mSpeedRange(1)=90.000000
+     mMassRange(0)=0.400000
+     mMassRange(1)=0.500000
+     mAirResistance=0.600000
+     mRandOrient=True
+     mSizeRange(0)=1.500000
+     mSizeRange(1)=2.500000
+     mGrowthRate=12.000000
+     mRandTextures=True
+     mNumTileColumns=4
+     mNumTileRows=4
+     LifeSpan=3.500000	
+	 // Texture originally from UT2004	 
+     Skins(0)=Texture'KFOldSchoolZeds_Textures.Shared.BloodJetc'
+     Style=STY_Alpha	 
 }

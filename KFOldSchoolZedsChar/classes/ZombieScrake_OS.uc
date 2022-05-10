@@ -1,31 +1,49 @@
-class ZombieScrake_STANDARD extends ZombieScrake;
+//Because we want the zeds to extend to KFMonsterOS, there's no choice
+//Other than to overhaul all 3 files of each zed, controllers as well if
+//We count certain other Zeds
+
+//Make sure this uses all appropriate sounds, model, textures, etc.
+class ZombieScrake_OS extends ZombieScrakeOS;
+
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 defaultproperties
 {
-    DetachedArmClass=class'SeveredArmScrake'
-	DetachedSpecialArmClass=class'SeveredArmScrakeSaw'
-	DetachedLegClass=class'SeveredLegScrake'
-	DetachedHeadClass=class'SeveredHeadScrake'
+	////Detached Limbs don't exist
+    //DetachedArmClass=class'SeveredArmScrake'
+	//DetachedSpecialArmClass=class'SeveredArmScrakeSaw'
+	//DetachedLegClass=class'SeveredLegScrake'
+	//DetachedHeadClass=class'SeveredHeadScrake'
 
-    Mesh=SkeletalMesh'KF_Freaks_Trip.Scrake_Freak'
+	//Use KFMod Models and Textures
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.SawZombie'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin'
+    Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'	
+	Skins(2)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin'
+    Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'	
 
-    Skins(0)=Shader'KF_Specimens_Trip_T.scrake_FB'
-    Skins(1)=TexPanner'KF_Specimens_Trip_T.scrake_saw_panner'
+	//Use KFMod Sounds
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Scrake.Saw_Idle'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Scrake.Scrake_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 
-    AmbientSound=Sound'KF_BaseScrake.Scrake_Chainsaw_Idle'
-    MoanVoice=Sound'KF_EnemiesFinalSnd.Scrake_Talk'
-    JumpSound=Sound'KF_EnemiesFinalSnd.Scrake_Jump'
-    MeleeAttackHitSound=Sound'KF_EnemiesFinalSnd.Scrake_Chainsaw_HitPlayer'
+	//Dont think we need this?	
+    //MeleeAttackHitSound=Sound'KF_EnemiesFinalSnd.Scrake_Chainsaw_HitPlayer'
 
-    HitSound(0)=Sound'KF_EnemiesFinalSnd.Scrake_Pain'
-    DeathSound(0)=Sound'KF_EnemiesFinalSnd.Scrake_Death'
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-    ChallengeSound(0)=Sound'KF_EnemiesFinalSnd.Scrake_Challenge'
-    ChallengeSound(1)=Sound'KF_EnemiesFinalSnd.Scrake_Challenge'
-    ChallengeSound(2)=Sound'KF_EnemiesFinalSnd.Scrake_Challenge'
-    ChallengeSound(3)=Sound'KF_EnemiesFinalSnd.Scrake_Challenge'
+	//KFMod Zeds don't use challenge sounds
+    ChallengeSound(0)=None
+    ChallengeSound(1)=None
+    ChallengeSound(2)=None
+    ChallengeSound(3)=None
 
-    SawAttackLoopSound=Sound'KF_BaseScrake.Scrake_Chainsaw_Impale'
-    ChainSawOffSound=Sound'KF_ChainsawSnd.Chainsaw_Deselect'
+	//Retail variables we dont want
+    //SawAttackLoopSound=Sound'KF_BaseScrake.Scrake_Chainsaw_Impale'
+    //ChainSawOffSound=Sound'KF_ChainsawSnd.Chainsaw_Deselect'
 }
 

@@ -1,11 +1,15 @@
 //=============================================================================
 // Vomit Splash (when it hits ground
+// KFMod style!
 //=============================================================================
-class VomGroundSplash extends AlienSmallHit;
+class VomGroundSplashOS extends AlienSmallHit;
 
-#exec OBJ LOAD File=KFX.utx
+// Load relevant texture package
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+
 
 defaultproperties
 {
-     Skins(0)=Texture'KFX.VomitSplash'
+	//Use KFMod Texture
+     Skins(0)=Texture'KFOldSchoolZeds_Textures.VomitSplash'
 }

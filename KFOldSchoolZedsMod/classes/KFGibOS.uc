@@ -1,7 +1,8 @@
 // Spawns Trail on PostBeginPlay.
 
-class KFGib extends Gib;
+class KFGibOS extends GibOS;
 
+//All code from Retail
 simulated function PostBeginPlay()
 {
    SpawnTrail();
@@ -41,8 +42,9 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
 
 defaultproperties
 {
+	 //As much as I loved KFMod's infinite gibs, we don't
+	 //Want to kill people's PCs, so were keeping 'em temporarily
+     LifeSpan=8.0
      DampenFactor=0.400000
      Mass=280.000000
-     // Infinite gibs? i think , yes
-     LifeSpan=8.0
 }

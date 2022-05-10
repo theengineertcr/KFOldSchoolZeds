@@ -1,13 +1,14 @@
-class BioDecal extends ProjectedDecal;
+//KFModified BioDecal
+class BioDecalOS extends ProjectedDecal;
 
-//#exec TEXTURE IMPORT NAME=xbiosplat FILE=TEXTURES\DECALS\BioDecala.tga LODSET=2 MODULATED=1 UCLAMPMODE=CLAMP VCLAMPMODE=CLAMP
-//#exec TEXTURE IMPORT NAME=xbiosplat2 FILE=TEXTURES\DECALS\BioDecalb.tga LODSET=2 MODULATED=1 UCLAMPMODE=CLAMP VCLAMPMODE=CLAMP
+// Load XEffects Texture Package
+#exec OBJ LOAD File=KFOldSchool_XEffects.utx
 
 simulated function BeginPlay()
 {
-	//KFTODO: Maybe replace this
-    //if ( !Level.bDropDetail && (FRand() < 0.5) )
-	//	ProjTexture = texture'xbiosplat2';
+	//Bringing this back
+    if ( !Level.bDropDetail && (FRand() < 0.5) )
+		ProjTexture = texture'KFOldSchool_XEffects.xbiosplat2';
 	Super.BeginPlay();
 }
 
@@ -15,7 +16,7 @@ defaultproperties
 {
 	LifeSpan=6
 	DrawScale=+0.65
-	ProjTexture=none//texture'xbiosplat' KFTODO: Maybe replace this
+	ProjTexture=Texture'KFOldSchool_XEffects.xbiosplat'//Brought this back
 	bClipStaticMesh=True
     CullDistance=+7000.0
 }

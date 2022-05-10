@@ -1,13 +1,25 @@
+//Because we want the zeds to extend to KFMonsterOS,
+//We'll need to overhaul all class files of each zed, 
+//Controllers as well if we count certain Zeds
+
 // Zombie Monster for KF Invasion gametype
-class ZombieFleshpound extends ZombieFleshpoundBase
+class ZombieFleshpoundOS extends ZombieFleshpoundBaseOS
     abstract;
 
-#exec OBJ LOAD FILE=PlayerSounds.uax
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 //----------------------------------------------------------------------------
 // NOTE: All Variables are declared in the base class to eliminate hitching
 //----------------------------------------------------------------------------
 
+//Issues:
+//Rage anim timeout doesn't work
+//Head hitbox is wonky.
+
+//Dont touch this retail code
 simulated function PostNetBeginPlay()
 {
 	if (AvoidArea == None)
@@ -20,6 +32,7 @@ simulated function PostNetBeginPlay()
 	super.PostNetBeginPlay();
 }
 
+//Not sure what the SetMindControlled function does, so were keeping it
 // This zed has been taken control of. Boost its health and speed
 function SetMindControlled(bool bNewMindControlled)
 {
@@ -66,6 +79,7 @@ function SetMindControlled(bool bNewMindControlled)
     bZedUnderControl = bNewMindControlled;
 }
 
+//Not sure what this Retail code is used for, so we'll keep it
 // Handle the zed being commanded to move to a new location
 function GivenNewMarker()
 {
@@ -79,6 +93,8 @@ function GivenNewMarker()
     }
 }
 
+
+//Same as KFMod more or less
 // Important Block of code controlling how the Zombies (excluding the Bloat and Fleshpound who cannot be stunned, respond to damage from the
 // various weapons in the game. The basic rule is that any damage amount equal to or greater than 40 points will cause a stun.
 // There are exceptions with the fists however, which are substantially under the damage quota but can still cause stuns 50% of the time.
@@ -89,6 +105,7 @@ function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageTyp
 	if( Level.TimeSeconds - LastPainAnim < MinTimeBetweenPainAnims )
 		return;
 
+	//We can expand this with KFMod code, but I don't think it's worth it
     // Don't interrupt the controller if its waiting for an animation to end
     if( !Controller.IsInState('WaitForAnim') && Damage >= 10 )
         PlayDirectionalHit(HitLocation);
@@ -102,10 +119,12 @@ function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageTyp
 	PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
 }
 
+//Dont touch this too much unless necessary
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
-	local int BlockSlip, OldHealth;
-	local float BlockChance;//, RageChance;
+	//We dont care about the block stuff as it isnt used
+	local int OldHealth;//, BlockSlip;
+	//local float BlockChance;//, RageChance;
 	local Vector X,Y,Z, Dir;
 	local bool bIsHeadShot;
 	local float HeadShotCheckScale;
@@ -171,17 +190,18 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 	// Damage Berserk responses...
 	// Start a charge.
 	// The Lower his health, the less damage needed to trigger this response.
+	// Tempted to bring this KFMod behavior back but it'd fuck with the balance
 	//RageChance = (( HealthMax / Health * 300) - TwoSecondDamageTotal );
 
 	// Calculate whether the shot was coming from in front.
 	Dir = -Normal(Location - hitlocation);
-	BlockSlip = rand(5);
+	//BlockSlip = rand(5);//No more blocking
 
-	if (AnimAction == 'PoundBlock')
-		Damage *= BlockDamageReduction;
+	//if (AnimAction == 'PoundBlock')
+	//	Damage *= BlockDamageReduction;
 
-	if (Dir Dot X > 0.7 || Dir == vect(0,0,0))
-		BlockChance = (Health / HealthMax * 100 ) - Damage * 0.25;
+	//if (Dir Dot X > 0.7 || Dir == vect(0,0,0))
+	//	BlockChance = (Health / HealthMax * 100 ) - Damage * 0.25;
 
 
 	// We are healthy enough to block the attack, and we succeeded the blockslip.
@@ -210,15 +230,21 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
 }
 
+// Use KFMod Textures
 // changes colors on Device (notified in anim)
 simulated function DeviceGoRed()
 {
-    Skins[1]=Shader'KFCharacters.FPRedBloomShader';
+	//TODO:Make sure it uses the correct texture
+	Skins[1]=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.RedPoundMeter';
+    Skins[2]=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomRedShader';
 }
 
+// Use KFMod Textures
 simulated function DeviceGoNormal()
 {
-    Skins[1] = Shader'KFCharacters.FPAmberBloomShader';
+	//TODO:Make sure it uses the correct texture
+	Skins[1]=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter';	
+    Skins[2]=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader';
 }
 
 function RangedAttack(Actor A)
@@ -229,7 +255,7 @@ function RangedAttack(Actor A)
 	{
 		bShotAnim = true;
 		SetAnimAction('Claw');
-		//PlaySound(sound'Claw2s', SLOT_None); KFTODO: Replace this
+		PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
 		return;
 	}
 }
@@ -237,6 +263,7 @@ function RangedAttack(Actor A)
 // Sets the FP in a berserk charge state until he either strikes his target, or hits timeout
 function StartCharging()
 {
+	//We want this Retail code
     local float RageAnimDur;
 
     if( Health <= 0 )
@@ -250,12 +277,13 @@ function StartCharging()
 	Velocity.X = 0;
 	Velocity.Y = 0;
 	Controller.GoToState('WaitForAnim');
-	KFMonsterController(Controller).bUseFreezeHack = True;
-	RageAnimDur = GetAnimDuration('PoundRage');
-    FleshpoundZombieController(Controller).SetPoundRageTimout(RageAnimDur);
+	KFMonsterControllerOS(Controller).bUseFreezeHack = True;
+	RageAnimDur = GetAnimDuration('PoundRage'); //FleshpoundZombieController to FleshpoundZombieControllerOS
+    FleshpoundZombieControllerOS(Controller).SetPoundRageTimout(RageAnimDur);
 	GoToState('BeginRaging');
 }
 
+//Retail code we want
 state BeginRaging
 {
     Ignores StartCharging;
@@ -290,6 +318,7 @@ Begin:
 }
 
 
+//Retail code were keeping
 simulated function SetBurningBehavior()
 {
     if( bFrustrated || bChargingPlayer )
@@ -304,6 +333,7 @@ state RageCharging
 {
 Ignores StartCharging;
 
+	//Keep the retail code
     // Set the zed to the zapped behavior
     simulated function SetZappedBehavior()
     {
@@ -330,6 +360,7 @@ Ignores StartCharging;
         return false;
     }
 
+	//Keep this retail code for balance reasons
 	function BeginState()
 	{
         local float DifficultyModifier;
@@ -372,7 +403,8 @@ Ignores StartCharging;
         bChargingPlayer = False;
         bFrustrated = false;
 
-        FleshPoundZombieController(Controller).RageFrustrationTimer = 0;
+		//FleshPoundZombieController to FleshpoundZombieControllerOS
+        FleshpoundZombieControllerOS(Controller).RageFrustrationTimer = 0;
 
 		if( Health>0 && !bZapped )
 		{
@@ -404,10 +436,12 @@ Ignores StartCharging;
     		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
     		}
         }
-
+		
+		//Not sure if we need this tick as it isn't in KFMod code?
         global.Tick(Delta);
 	}
 
+	//We'll keep this modern code as the bumping thing does affect gameplay to some extent
 	function Bump( Actor Other )
 	{
         local float RageBumpDamage;
@@ -416,7 +450,8 @@ Ignores StartCharging;
         KFMonst = KFMonster(Other);
 
         // Hurt/Kill enemies that we run into while raging
-        if( !bShotAnim && KFMonst!=None && ZombieFleshPound(Other)==None && Pawn(Other).Health>0 )
+		// Added additional "ZombieFleshPoundOS(Other)==None" just incase people play with Old and Retail zeds
+        if( !bShotAnim && KFMonst!=None && ( ZombieFleshPound(Other)==None || ZombieFleshPoundOS(Other)==None ) && Pawn(Other).Health>0 )
 		{
 			// Random chance of doing obliteration damage
             if( FRand() < 0.4 )
@@ -447,6 +482,7 @@ Ignores StartCharging;
 	}
 }
 
+//Retail code we need
 // State where the zed is charging to a marked location.
 // Not sure if we need this since its just like RageCharging,
 // but keeping it here for now in case we need to implement some
@@ -479,6 +515,7 @@ Ignores StartCharging;
 	}
 }
 
+//Unchanged
 simulated function PostNetReceive()
 {
 	if( bClientCharge!=bChargingPlayer && !bZapped )
@@ -503,6 +540,7 @@ simulated function PostNetReceive()
 	}
 }
 
+//Unchanged
 simulated function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
 {
 	Super.PlayDyingAnimation(DamageType,HitLoc);
@@ -510,11 +548,13 @@ simulated function PlayDyingAnimation(class<DamageType> DamageType, vector HitLo
 		DeviceGoNormal();
 }
 
+//Unchanged
 simulated function ClientChargingAnims()
 {
 	PostNetReceive();
 }
 
+//Unchanged
 function ClawDamageTarget()
 {
 	local vector PushDir;
@@ -562,10 +602,11 @@ function ClawDamageTarget()
 			HumanTargetController = KFPlayerController(HumanTarget.Controller);
 		if( HumanTargetController!=None )
 			HumanTargetController.ShakeView(RotMag, RotRate, RotTime, OffsetMag, OffsetRate, OffsetTime);
-		PlaySound(MeleeAttackHitSound, SLOT_Interact, 1.25);
+		PlayZombieAttackHitSound();//PlaySound(MeleeAttackHitSound, SLOT_Interact, 1.25);
 	}
 }
 
+//Unchanged
 function SpinDamage(actor Target)
 {
 	local vector HitLocation;
@@ -591,7 +632,7 @@ function SpinDamage(actor Target)
 	if (Target !=none && Target.IsA('KFDoorMover'))
 	{
 		Target.TakeDamage(DamageAmount , self ,HitLocation,pushdir, class 'KFmod.ZombieMeleeDamage');
-		PlaySound(MeleeAttackHitSound, SLOT_Interact, 1.25);
+		PlayZombieAttackHitSound();//PlaySound(MeleeAttackHitSound, SLOT_Interact, 1.25);
 	}
 
 	if (KFHumanPawn(Target)!=none)
@@ -612,74 +653,92 @@ function SpinDamage(actor Target)
 	}
 }
 
+//Overhauled with old code
 simulated function int DoAnimAction( name AnimName )
 {
-	if( AnimName=='PoundAttack1' || AnimName=='PoundAttack2' || AnimName=='PoundAttack3'
-        ||AnimName=='FPRageAttack' || AnimName=='ZombieFireGun' )
+	if( AnimName=='PoundAttack1' || AnimName=='PoundAttack2' || AnimName=='FPRageAttack' || AnimName=='ZombieFireGun' )
 	{
-		AnimBlendParams(1, 1.0, 0.0,, FireRootBone);
-		PlayAnim(AnimName,, 0.1, 1);
+		AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+		PlayAnim(AnimName,, 0.0, 1);
 		Return 1;
 	}
 	Return Super.DoAnimAction(AnimName);
 }
 
+//Overhauled with old code
 simulated event SetAnimAction(name NewAction)
 {
-	local int meleeAnimIndex;
-
-	if( NewAction=='' )
-		Return;
-	if(NewAction == 'Claw')
-	{
-		meleeAnimIndex = Rand(3);
-		NewAction = meleeAnims[meleeAnimIndex];
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-	else if( NewAction == 'DoorBash' )
-	{
-	   CurrentDamtype = ZombieDamType[Rand(3)];
-	}
-	ExpectingChannel = DoAnimAction(NewAction);
-
-    if( AnimNeedsWait(NewAction) )
-    {
-        bWaitForAnim = true;
-    }
-
-	if( Level.NetMode!=NM_Client )
+	if (!bWaitForAnim)
 	{
 		AnimAction = NewAction;
-		bResetAnimAct = True;
-		ResetAnimActTime = Level.TimeSeconds+0.3;
+
+		if ( AnimAction == KFHitFront )
+		{
+			AnimBlendParams(1, 1.0, 0.0,,'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == KFHitBack )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == KFHitRight )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == KFHitLeft )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == 'PoundRage' )
+		{
+			PlayAnim(NewAction);
+		}
+		else if ( AnimAction == 'PoundAttack1' )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == 'PoundAttack2' )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if ( AnimAction == 'FPRageAttack' )
+		{
+			AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+			PlayAnim(NewAction,, 0.0, 1);
+		}
+		else if(AnimAction == 'Claw')
+		{
+			AnimAction=meleeAnims[Rand(3)];
+			SetAnimAction(AnimAction);
+			return;
+		}
+		if( AnimAction=='PoundAttack3' && Controller!=None )
+			Controller.GotoState('spinattack');
+		else if(NewAction == 'ZombieFeed')
+		{
+			AnimAction = NewAction;
+			LoopAnim(AnimAction,,0.1);
+		}
+		else AnimAction = NewAction;
+
+		if ( PlayAnim(AnimAction,,0.1) && AnimAction != KFHitFront 
+			&& AnimAction != KFHitBack
+			&& AnimAction != KFHitLeft
+			&& AnimAction != KFHitRight
+			&& AnimAction != 'PoundAttack1'
+			&& AnimAction != 'PoundAttack2' 
+			&& AnimAction != 'FPRageAttack' ) 
+		{
+			if ( Physics != PHYS_None )
+				bWaitForAnim = true;
+		}
 	}
 }
-
-// The animation is full body and should set the bWaitForAnim flag
-simulated function bool AnimNeedsWait(name TestAnim)
-{
-    if( TestAnim == 'PoundRage' || TestAnim == 'DoorBash' )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-simulated function Tick(float DeltaTime)
-{
-    super.Tick(DeltaTime);
-
-    // Keep the flesh pound moving toward its target when attacking
-	if( Role == ROLE_Authority && bShotAnim)
-	{
-		if( LookTarget!=None )
-		{
-		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-		}
-    }
-}
-
 
 function bool FlipOver()
 {
@@ -688,9 +747,11 @@ function bool FlipOver()
 
 function bool SameSpeciesAs(Pawn P)
 {
-	return (ZombieFleshPound(P)!=None);
+	//Added a check for retail and KFMod FP
+	return (ZombieFleshPound(P)!=None || ZombieFleshPoundOS(P)!=None);
 }
 
+//Need this to get rid of AvoidArea's spawned by the FP
 simulated function Destroyed()
 {
 	if( AvoidArea!=None )
@@ -699,12 +760,15 @@ simulated function Destroyed()
 	Super.Destroyed();
 }
 
-
+//Precache KFMod textures.
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.fleshpound_cmb');
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.fleshpound_env_cmb');
-	myLevel.AddPrecacheMaterial(Texture'KF_Specimens_Trip_T.fleshpound_diff');
+	myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.RedPoundMeter');
+	myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter');
+	myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomRedShader');
+	myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader');
+	myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader');
+	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin');
 }
 
 defaultproperties
@@ -713,6 +777,6 @@ defaultproperties
 	// NOTE: Most Default Properties are set in the base class to eliminate hitching
 	//-------------------------------------------------------------------------------
 
-    EventClasses(0)="KFChar.ZombieFleshpound_STANDARD"
-	ControllerClass=Class'KFChar.FleshpoundZombieController'
+	//Use KFMod controller
+	ControllerClass=Class'KFOldSchoolZedsChar.FleshpoundZombieControllerOS'
 }

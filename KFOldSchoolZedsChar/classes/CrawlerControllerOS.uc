@@ -1,7 +1,9 @@
-class CrawlerController extends KFMonsterController;
+//This doesn't need much changes
+//At least I don't think so?
+class CrawlerControllerOS extends KFMonsterControllerOS;
 
 var	float	LastPounceTime;
-var	bool	bDoneSpottedCheck;
+var	bool	bDoneSpottedCheck; //Need this for voicelines to play
 
 state ZombieHunt
 {
@@ -36,7 +38,7 @@ function bool IsInPounceDist(actor PTarget)
   DistVec = pawn.location - PTarget.location;
   DistVec.Z=0;
 
-  time = vsize(DistVec)/ZombieCrawler(pawn).PounceSpeed;
+  time = vsize(DistVec)/ZombieCrawlerOS(pawn).PounceSpeed; //ZombieCrawler to ZombieCrawlerOS
 
   // vertical change in that time
 
@@ -59,7 +61,9 @@ function bool FireWeaponAt(Actor A)
 {
 	local vector aFacing,aToB;
 	local float RelativeDir;
-
+	//Were bringing back this old KFMod variable
+	//local rotator newrot;
+	
     if ( A == None )
 		A = Enemy;
 	if ( (A == None) || (Focus != A) )
@@ -85,9 +89,23 @@ function bool FireWeaponAt(Actor A)
                 //Facing enemy
                 if(IsInPounceDist(A) )
                 {
-                    if(ZombieCrawler(Pawn).DoPounce()==true )
+                    if(ZombieCrawlerOS(Pawn).DoPounce()==true ) //ZombieCrawler to ZombieCrawlerOS
                         LastPounceTime = Level.TimeSeconds;
                 }
+				//Old KFMod code were bringing back for newrot
+				//Bad idea, it spins them around like crazy
+	            //else
+				//{
+				//	//TODO: if the DoPounce borks, undo rot change?
+				//	//      or can we guarantee no borkage?
+				//	if(frand() < 0.5 )
+				//		newrot = pawn.Rotation + rot(0, 10920,0);//8190,0);
+				//	else
+				//		newrot = pawn.Rotation + rot(0,54616,0); // 57346,0);
+				//	pawn.SetRotation( newrot );
+				//	if(ZombieCrawlerOS(Pawn).DoPounce()==true ) //ZombieCrawler to ZombieCrawlerOS
+				//		LastPounceTime = Level.TimeSeconds;
+				//}			
             }
         }
     }
@@ -96,7 +114,7 @@ function bool FireWeaponAt(Actor A)
 
 function bool NotifyLanded(vector HitNormal)
 {
-  if( zombiecrawler(pawn).bPouncing )
+  if( ZombieCrawlerOS(pawn).bPouncing ) //ZombieCrawler to ZombieCrawlerOS
   {
      // restart pathfinding from landing location
      GotoState('hunting');

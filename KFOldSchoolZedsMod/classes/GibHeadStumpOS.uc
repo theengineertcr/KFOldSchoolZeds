@@ -1,6 +1,14 @@
-// Spawns Trail on PostBeginPlay.
+// All gibs are supposed to be infinite, create a KFGibOS
+// In future if you really want them to be infinite,
+// Class is exactly the same, so could just add
+// Lifespan = 0 for this if I really wanted to
 
-class GibHeadStump extends KFGib;
+// Spawns Trail on PostBeginPlay.
+class GibHeadStumpOS extends KFGibOS;
+
+	// Load the texture and static mesh
+	#exec OBJ LOAD FILE=22Patch.usx
+	#exec OBJ LOAD FILE=22CharTex.utx
 
 simulated function PostBeginPlay()
 {
@@ -9,22 +17,22 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     GibGroupClass=Class'KFMod.KFHumanGibGroup'
-     TrailClass=Class'ROEffects.BloodTrail'
+	// Use the KFMod GibGroup and GibJet
+     GibGroupClass=Class'KFOldSchoolZedsMod.KFHumanGibGroupOS'
+     TrailClass=Class'KFOldSchoolZedsMod.KFGibJetOS'
+     DampenFactor=0.300000
      DrawType=DT_StaticMesh
+	 
+	 // This Mesh never changed, so don't change it
      StaticMesh=StaticMesh'22Patch.Severed_Head'
-     DrawScale=0.6
+     RemoteRole=ROLE_SimulatedProxy
+     NetUpdateFrequency=10.000000
+     LifeSpan=9999.000000
+     DrawScale=0.600000
+	 // This Texture never changed, so don't change it
      Skins(0)=Texture'22CharTex.SeveredSkin'
      bUnlit=False
      TransientSoundVolume=25.000000
      CollisionRadius=5.000000
      CollisionHeight=2.500000
-
-     DampenFactor=0.300000
-     Mass=280.000000
-     LifeSpan=9999
-
-     RemoteRole=ROLE_SimulatedProxy
-     NetUpdateFrequency=10
-     bNotOnDedServer = false
 }

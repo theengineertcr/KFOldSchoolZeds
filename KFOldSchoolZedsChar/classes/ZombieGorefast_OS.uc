@@ -1,26 +1,50 @@
-class ZombieGorefast_STANDARD extends ZombieGorefast;
+//Because we want the zeds to extend to KFMonsterOS, there's no choice
+//Other than to overhaul all 3 files of each zed, controllers as well if
+//We count certain other Zeds
+
+//Make sure this uses all appropriate sounds, model, textures, etc.
+class ZombieGorefast_OS extends ZombieGorefastOS;
+
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+
+//Because the fucking animation set doesn't save whenever I change the default
+//Anims, Unreal Editor can go fuck itself, I'll just force the Mesh to use
+//The desired animation right here
+event PreBeginPlay()
+{
+	Super.PreBeginPlay();
+	LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.BloatSet');
+}
 
 defaultproperties
 {
-    DetachedArmClass=class'SeveredArmGorefast'
-	DetachedLegClass=class'SeveredLegGorefast'
-	DetachedHeadClass=class'SeveredHeadGorefast'
+	////Detached Limbs don't exist
+    //DetachedArmClass=class'SeveredArmGorefast'
+	//DetachedLegClass=class'SeveredLegGorefast'
+	//DetachedHeadClass=class'SeveredHeadGorefast'
 
-    Mesh=SkeletalMesh'KF_Freaks_Trip.GoreFast_Freak'
+	//Use KFMod Models and Textures	
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.GoreFast'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
 
-    Skins(0)=Combiner'KF_Specimens_Trip_T.Gorefast_cmb'
+	//Use KFMod Sounds
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Gorefast.Gorefast_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+	
+	//Dont think we need this?	
+    //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Gorefast_HitPlayer'
 
-    AmbientSound=Sound'KF_BaseGorefast.Gorefast_Idle'
-    MoanVoice=Sound'KF_EnemiesFinalSnd.Gorefast_Talk'
-    JumpSound=Sound'KF_EnemiesFinalSnd.Gorefast_Jump'
-    MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Gorefast_HitPlayer'
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-    HitSound(0)=Sound'KF_EnemiesFinalSnd.Gorefast_Pain'
-    DeathSound(0)=Sound'KF_EnemiesFinalSnd.Gorefast_Death'
-
-    ChallengeSound(0)=Sound'KF_EnemiesFinalSnd.Gorefast_Challenge'
-    ChallengeSound(1)=Sound'KF_EnemiesFinalSnd.Gorefast_Challenge'
-    ChallengeSound(2)=Sound'KF_EnemiesFinalSnd.Gorefast_Challenge'
-    ChallengeSound(3)=Sound'KF_EnemiesFinalSnd.Gorefast_Challenge'
+	//KFMod Zeds don't use challenge sounds
+    ChallengeSound(0)=None
+    ChallengeSound(1)=None
+    ChallengeSound(2)=None
+    ChallengeSound(3)=None
 }
 

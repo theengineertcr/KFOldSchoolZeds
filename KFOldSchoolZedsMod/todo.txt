@@ -1,0 +1,8 @@
+Priority - get source on github
+
+Scrake melee attack 1 should be preferred when raged on Suicidal
+Attack 1 deal less damage, Attack 2 deal more damage
+Rename all zeds to 2.5 zeds
+No turning when knocked down(targetting off?)
+Meleestun/Hit animation immunity during knockdown(so they dont flinch and suddenly stand up)
+Rework/export gunpound anim(he moves right when shooting)

@@ -1,7 +1,12 @@
-class KFHitEmitter extends Emitter
+// ✔
+// Old KFHitEmitter, no changes done
+class KFHitEmitterOS extends Emitter
 	abstract
 	hidedropdown;
 
+// Not sure what these sounds are, but that's fine for now
+// Edit: Child classes use these impact sounds e.g FleshHitEmitter
+// To play noises of blood gushing out of flesh after a zed gets shot
 var() array<Sound> ImpactSounds;
 
 //Particle start velocity is relative to rotation.
@@ -62,9 +67,7 @@ defaultproperties
 {
      AutoDestroy=True
      bNoDelete=False
-     RemoteRole=ROLE_None
-     LifeSpan=5
+     LifeSpan=5.000000
      TransientSoundVolume=150.000000
      TransientSoundRadius=80.000000
-     bNotOnDedServer=True
 }

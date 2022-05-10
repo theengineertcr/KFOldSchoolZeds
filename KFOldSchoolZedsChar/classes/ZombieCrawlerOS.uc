@@ -1,13 +1,28 @@
+//Because we want the zeds to extend to KFMonsterOS,
+//We'll need to overhaul all class files of each zed, 
+//Controllers as well if we count certain Zeds
+
 // Zombie Monster for KF Invasion gametype
-class ZombieCrawler extends ZombieCrawlerBase
+class ZombieCrawlerOS extends ZombieCrawlerBaseOS
     abstract;
 
-#exec OBJ LOAD FILE=PlayerSounds.uax
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 //----------------------------------------------------------------------------
 // NOTE: All Variables are declared in the base class to eliminate hitching
 //----------------------------------------------------------------------------
 
+//Issues:
+//None for now.
+
+//For some reason, retail KF redefined the same functions in the base class here,
+//So we'll redefine them here as well, except for ZombieMoan since Zeds already have
+//A set MoanVoice, and nothing warrants redefining it for our special Crawler boy
+
+//Exact same as in KFMod, do not touch
 function bool DoPounce()
 {
 	if ( bZapped || bIsCrouched || bWantsToCrouch || (Physics != PHYS_Walking) || VSize(Location - Controller.Target.Location) > (MeleeRange * 5) )
@@ -21,17 +36,20 @@ function bool DoPounce()
 	return true;
 }
 
+//Exact same as in KFMod, do not touch
 simulated function ZombieSpringAnim()
 {
 	SetAnimAction('ZombieSpring');
 }
 
+//Exact same as in KFMod, do not touch
 event Landed(vector HitNormal)
 {
 	bPouncing=false;
 	super.Landed(HitNormal);
 }
 
+//More or less unchanged, we just want the modern damage calculations
 event Bump(actor Other)
 {
 	// TODO: is there a better way
@@ -48,88 +66,76 @@ event Bump(actor Other)
 	}
 }
 
+// Overhauled with KFMod Code
 // Blend his attacks so he can hit you in mid air.
 simulated function int DoAnimAction( name AnimName )
 {
-    if( AnimName=='InAir_Attack1' || AnimName=='InAir_Attack2' )
+	if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
 	{
-		AnimBlendParams(1, 1.0, 0.0,, FireRootBone);
+		AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
 		PlayAnim(AnimName,, 0.0, 1);
-		return 1;
+		Return 1;
 	}
-
-    if( AnimName=='HitF' )
-	{
-		AnimBlendParams(1, 1.0, 0.0,, NeckBone);
-		PlayAnim(AnimName,, 0.0, 1);
-		return 1;
-	}
-
-	if( AnimName=='ZombieSpring' )
-	{
-        PlayAnim(AnimName,,0.02);
-        return 0;
-	}
-
-	return Super.DoAnimAction(AnimName);
+	Return Super.DoAnimAction(AnimName);
 }
 
-simulated event SetAnimAction(name NewAction)
-{
-	local int meleeAnimIndex;
+//Retail code we dont want
+//simulated event SetAnimAction(name NewAction)
+//{
+//	local int meleeAnimIndex;
+//
+//	if( NewAction=='' )
+//		Return;
+//	if(NewAction == 'Claw')
+//	{
+//		meleeAnimIndex = Rand(2);
+//		if( Physics == PHYS_Falling )
+//		{
+//            NewAction = MeleeAirAnims[meleeAnimIndex];
+//		}
+//		else
+//		{
+//            NewAction = meleeAnims[meleeAnimIndex];
+//		}
+//		CurrentDamtype = ZombieDamType[meleeAnimIndex];
+//	}
+//	ExpectingChannel = DoAnimAction(NewAction);
+//
+//    if( AnimNeedsWait(NewAction) )
+//    {
+//        bWaitForAnim = true;
+//    }
+//
+//	if( Level.NetMode!=NM_Client )
+//	{
+//		AnimAction = NewAction;
+//		bResetAnimAct = True;
+//		ResetAnimActTime = Level.TimeSeconds+0.3;
+//	}
+//}
 
-	if( NewAction=='' )
-		Return;
-	if(NewAction == 'Claw')
-	{
-		meleeAnimIndex = Rand(2);
-		if( Physics == PHYS_Falling )
-		{
-            NewAction = MeleeAirAnims[meleeAnimIndex];
-		}
-		else
-		{
-            NewAction = meleeAnims[meleeAnimIndex];
-		}
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-	ExpectingChannel = DoAnimAction(NewAction);
-
-    if( AnimNeedsWait(NewAction) )
-    {
-        bWaitForAnim = true;
-    }
-
-	if( Level.NetMode!=NM_Client )
-	{
-		AnimAction = NewAction;
-		bResetAnimAct = True;
-		ResetAnimActTime = Level.TimeSeconds+0.3;
-	}
-}
-
+//Retail code we dont want
 // The animation is full body and should set the bWaitForAnim flag
-simulated function bool AnimNeedsWait(name TestAnim)
-{
-    if( TestAnim == 'ZombieSpring' || TestAnim == 'DoorBash' )
-    {
-        return true;
-    }
-
-    return false;
-}
+//simulated function bool AnimNeedsWait(name TestAnim)
+//{
+//    if( TestAnim == 'ZombieSpring' /*|| TestAnim == 'DoorBash'*/ ) //Crawlers don't use Doorbash anims
+//    {
+//        return true;
+//    }
+//
+//    return false;
+//}
 
 function bool FlipOver()
 {
 	Return False;
 }
 
-
+//Precache KFMod textures.
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.crawler_cmb');
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.crawler_env_cmb');
-	myLevel.AddPrecacheMaterial(Texture'KF_Specimens_Trip_T.crawler_diff');
+	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin');
+	myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
 }
 
 defaultproperties
@@ -138,6 +144,6 @@ defaultproperties
 	// NOTE: Most Default Properties are set in the base class to eliminate hitching
 	//-------------------------------------------------------------------------------
 
-    EventClasses(0)="KFChar.ZombieCrawler_STANDARD"
-    ControllerClass=Class'KFChar.CrawlerController'
+	//Use the Old CrawlerController
+    ControllerClass=Class'KFOldSchoolZedsChar.CrawlerControllerOS'
 }

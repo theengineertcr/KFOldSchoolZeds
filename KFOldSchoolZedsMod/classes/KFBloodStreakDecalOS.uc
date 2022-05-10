@@ -1,8 +1,9 @@
 // KFs very own higher-res Bloodstains
 
-class KFBloodStreakDecal extends KFBloodSplatterDecal;
+class KFBloodStreakDecalOS extends KFBloodSplatterDecalOS;
 
-#exec OBJ LOAD File=KFX.utx
+// Load KFOldSchoolZeds_Textures
+#exec OBJ LOAD File=KFOldSchoolZeds_Textures.utx
 
 simulated function PostBeginPlay()
 {
@@ -50,11 +51,12 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     Splats(0)=Texture'KFX.BloodStreak'
-     Splats(1)=Texture'KFX.BloodStreak'
-     Splats(2)=Texture'KFX.BloodStreak'
+	// KFX to KFOldSchoolZeds_Textures
+     Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+     Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+     Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
      PushBack=5.000000
      RandomOrient=False
-     ProjTexture=Texture'KFX.BloodStreak'
+     ProjTexture=Texture'KFOldSchoolZeds_Textures.BloodStreak'
      LifeSpan=10.000000
 }

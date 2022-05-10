@@ -1,17 +1,24 @@
+//Because we want the zeds to extend to KFMonsterOS,
+//We'll need to overhaul all class files of each zed, 
+//Controllers as well if we count certain Zeds
+
 // Zombie Monster for KF Invasion gametype
-class ZombieClot extends ZombieClotBase
+class ZombieClotOS extends ZombieClotBaseOS
     abstract;
 
-#exec OBJ LOAD FILE=PlayerSounds.uax
-#exec OBJ LOAD FILE=KF_Freaks_Trip.ukx
-#exec OBJ LOAD FILE=KF_Specimens_Trip_T.utx
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 //----------------------------------------------------------------------------
 // NOTE: All Variables are declared in the base class to eliminate hitching
 //----------------------------------------------------------------------------
 
+//Issues:
+//Possible incompatability with Serverperks because of grabbing code?
 
-
+//We'll use a combination of necessary Retail code and Old Code
 function ClawDamageTarget()
 {
 	local vector PushDir;
@@ -33,12 +40,11 @@ function ClawDamageTarget()
 	{
 		KFP = KFPawn(Controller.Target);
 
-        PlaySound(MeleeAttackHitSound, SLOT_Interact, 2.0);
-
         if( !bDecapitated && KFP != none )
         {
-			if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo) == none ||
-				 KFP.GetVeteran().static.CanBeGrabbed(KFPlayerReplicationInfo(KFP.PlayerReplicationInfo), self))
+			//Had to change this or the Clot will grab Berserkers 
+			//TODO:Make this Custom perk friendly somehow?
+			if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
 			{
 				if( DisabledPawn != none )
 				{
@@ -60,58 +66,25 @@ function RangedAttack(Actor A)
 	{
 		bShotAnim = true;
 		SetAnimAction('Claw');
-		return;
+		//We dont need this return, Clots dont play different anims after grabbing
+		//return;
+		//KFMod code to make the Clot move towards the target he is grappling
+		Acceleration = Normal(A.Location-Location)*600;
+		Controller.GoToState('WaitForAnim');
+		Controller.MoveTarget = A;
+		Controller.MoveTimer = 1.5;		
 	}
 }
 
-simulated event SetAnimAction(name NewAction)
-{
-	local int meleeAnimIndex;
-
-	if( NewAction=='' )
-		Return;
-	if(NewAction == 'Claw')
-	{
-		meleeAnimIndex = Rand(3);
-		NewAction = meleeAnims[meleeAnimIndex];
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-	// Do a claw attack on door, not a grapple
-	else if( NewAction == 'DoorBash' )
-	{
-	   CurrentDamtype = ZombieDamType[Rand(3)];
-	}
-	ExpectingChannel = DoAnimAction(NewAction);
-
-    if( AnimNeedsWait(NewAction) )
-    {
-        bWaitForAnim = true;
-    }
-
-	if( Level.NetMode!=NM_Client )
-	{
-		AnimAction = NewAction;
-		bResetAnimAct = True;
-		ResetAnimActTime = Level.TimeSeconds+0.3;
-	}
-}
-
-simulated function bool AnimNeedsWait(name TestAnim)
-{
-    if( TestAnim == 'KnockDown' || TestAnim == 'DoorBash' )
-    {
-        return true;
-    }
-
-    return false;
-}
-
+////This wasn't in KFMod, but we need it for voicelines
 simulated function int DoAnimAction( name AnimName )
 {
-	if( AnimName=='ClotGrapple' || AnimName=='ClotGrappleTwo' || AnimName=='ClotGrappleThree' )
+	//There is no ClotGrappleTwo or ClotGrappleThree, so we got rid of them
+	if( AnimName=='ClotGrapple' )
 	{
-		AnimBlendParams(1, 1.0, 0.1,, FireRootBone);
-		PlayAnim(AnimName,, 0.1, 1);
+		//Dont need anything but voicelines
+		//AnimBlendParams(1, 1.0, 0.1,, FireRootBone);
+		//PlayAnim(AnimName,, 0.1, 1);
 
 		// Randomly send out a message about Clot grabbing you(10% chance)
 		if ( FRand() < 0.10 && LookTarget != none && KFPlayerController(LookTarget.Controller) != none &&
@@ -122,45 +95,8 @@ simulated function int DoAnimAction( name AnimName )
 			PlayerController(LookTarget.Controller).Speech('AUTO', 11, "");
 			KFPlayerController(LookTarget.Controller).LastClotGrabMessageTime = Level.TimeSeconds;
 		}
-
-        bGrappling = true;
-        GrappleEndTime = Level.TimeSeconds + GrappleDuration;
-
-		return 1;
 	}
-
 	return super.DoAnimAction( AnimName );
-}
-
-simulated function Tick(float DeltaTime)
-{
-    super.Tick(DeltaTime);
-
-	if( bShotAnim && Role == ROLE_Authority )
-	{
-		if( LookTarget!=None )
-		{
-		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-		}
-    }
-
-	if( Role == ROLE_Authority && bGrappling )
-	{
-		if( Level.TimeSeconds > GrappleEndTime )
-		{
-		    bGrappling = false;
-		}
-    }
-
-    // if we move out of melee range, stop doing the grapple animation
-    if( bGrappling && LookTarget != none )
-    {
-        if( VSize(LookTarget.Location - Location) > MeleeRange + CollisionRadius + LookTarget.CollisionRadius )
-        {
-            bGrappling = false;
-            AnimEnd(1);
-        }
-    }
 }
 
 function RemoveHead()
@@ -172,56 +108,27 @@ function RemoveHead()
 
     MeleeDamage *= 2;
     MeleeRange *= 2;
-
-	if( DisabledPawn != none )
-	{
-	     DisabledPawn.bMovementDisabled = false;
-	     DisabledPawn = none;
-	}
 }
 
-function Died(Controller Killer, class<DamageType> damageType, vector HitLocation)
-{
-	if( DisabledPawn != none )
-	{
-	     DisabledPawn.bMovementDisabled = false;
-	     DisabledPawn = none;
-	}
 
-    super.Died(Killer, damageType, HitLocation);
-
-}
-
-simulated function Destroyed()
-{
-    super.Destroyed();
-
-	if( DisabledPawn != none )
-	{
-	     DisabledPawn.bMovementDisabled = false;
-	     DisabledPawn = none;
-	}
-}
-
+//Keep this
 static simulated function PreCacheStaticMeshes(LevelInfo myLevel)
 {//should be derived and used.
-    Super.PreCacheStaticMeshes(myLevel);
-/*
-    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_1');
-	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_2');
-	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_3');
-	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_4');
-	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_5');
-	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_6');
-*/
+   Super.PreCacheStaticMeshes(myLevel);
+///*
+//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_1');
+//	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_2');
+//	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_3');
+//	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_4');
+//	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_5');
+//	myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_6');
+//*/
 }
 
+//Use KFMod textures for precache
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.clot_cmb');
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.clot_env_cmb');
-	myLevel.AddPrecacheMaterial(Texture'KF_Specimens_Trip_T.clot_diffuse');
-	myLevel.AddPrecacheMaterial(Texture'KF_Specimens_Trip_T.clot_spec');
+	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin');
 }
 
 defaultproperties
@@ -229,6 +136,4 @@ defaultproperties
 	//-------------------------------------------------------------------------------
 	// NOTE: Most Default Properties are set in the base class to eliminate hitching
 	//-------------------------------------------------------------------------------
-
-	EventClasses(0)="KFChar.ZombieClot_STANDARD"
 }

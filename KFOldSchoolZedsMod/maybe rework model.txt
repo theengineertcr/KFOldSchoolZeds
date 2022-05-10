@@ -1,0 +1,20 @@
+pelvis:
+rotation:
+X: 90
+Y: -85.876
+Z: 90
+
+position:
+X: -0.0
+Y: 2.157
+Z: 53.695
+
+to not move mesh with bone:
+in skin, advanced parameters, turn off always deform.
+
+to not move bones with bone:
+in hierarchy tab, adjust transform, dont affect children.
+
+additonal notes:
+when i make chaingunner use fleshpound run/any retail anim, his right arm(with chr_...) bugs out.
+todo:figure this out

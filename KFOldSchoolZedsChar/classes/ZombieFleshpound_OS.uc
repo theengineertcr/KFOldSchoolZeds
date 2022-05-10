@@ -1,25 +1,43 @@
-class ZombieFleshpound_STANDARD extends ZombieFleshpound;
+//Because we want the zeds to extend to KFMonsterOS, there's no choice
+//Other than to overhaul all 3 files of each zed, controllers as well if
+//We count certain other Zeds
+
+//Make sure this uses all appropriate sounds, model, textures, etc.
+class ZombieFleshpound_OS extends ZombieFleshpoundOS;
+
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 defaultproperties
 {
-    DetachedArmClass=class'SeveredArmPound'
-	DetachedLegClass=class'SeveredLegPound'
-	DetachedHeadClass=class'SeveredHeadPound'
+	////Detached Limbs don't exist
+    //DetachedArmClass=class'SeveredArmPound'
+	//DetachedLegClass=class'SeveredLegPound'
+	//DetachedHeadClass=class'SeveredHeadPound'
 
-	Mesh=SkeletalMesh'KF_Freaks_Trip.FleshPound_Freak'
+	//Use KFMod Models and Textures
+	Mesh=SkeletalMesh'KFCharacterModelsOldSchool.ZombieBoss'
+	Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
+	Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter'
+	Skins(2)=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader' 
+	Skins(3)=Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin'	
 
-	Skins(0)=Combiner'KF_Specimens_Trip_T.fleshpound_cmb'
+	//Use KFMod Sounds
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+	MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 
-	AmbientSound=Sound'KF_BaseFleshpound.FP_IdleLoop'
-	MoanVoice=Sound'KF_EnemiesFinalSnd.FP_Talk'
-    JumpSound=Sound'KF_EnemiesFinalSnd.FP_Jump'
-   	MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.FP_HitPlayer'
+	//Dont think we need this?	
+   	//MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.FP_HitPlayer'
 
-	HitSound(0)=Sound'KF_EnemiesFinalSnd.FP_Pain'
-    DeathSound(0)=Sound'KF_EnemiesFinalSnd.FP_Death'
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-    ChallengeSound(0)=Sound'KF_EnemiesFinalSnd.FP_Challenge'
-    ChallengeSound(1)=Sound'KF_EnemiesFinalSnd.FP_Challenge'
-    ChallengeSound(2)=Sound'KF_EnemiesFinalSnd.FP_Challenge'
-    ChallengeSound(3)=Sound'KF_EnemiesFinalSnd.FP_Challenge'
+	//KFMod Zeds don't use challenge sounds
+    ChallengeSound(0)=None
+    ChallengeSound(1)=None
+    ChallengeSound(2)=None
+    ChallengeSound(3)=None
 }

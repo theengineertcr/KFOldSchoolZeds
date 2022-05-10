@@ -1,10 +1,15 @@
-class DamTypeVomit extends DamTypeZombieAttack
+//KFModified
+class DamTypeVomitOS extends DamTypeVomit
     abstract;
+
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
-     HUDDamageTex=FinalBlend'KillingFloorHUD.ClassMenu.VomitFB'
-     HUDUberDamageTex=FinalBlend'KillingFloorHUD.ClassMenu.VomitFB'
+	//Use KFMod Textures
+     HUDDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
+     HUDUberDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
      HUDTime=1.500000
      DeathString="%o was corroded by %k's vomit."
      FemaleSuicide="%o was corroded by some vomit."

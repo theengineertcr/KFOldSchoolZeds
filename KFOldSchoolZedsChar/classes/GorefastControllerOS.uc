@@ -1,6 +1,7 @@
 // Custom code to make the Gorefast act abit more interesting.
-class GorefastController extends KFMonsterController;
+class GorefastControllerOS extends KFMonsterControllerOS;
 
+//Dont need to touch any of the retail code this time
 var	bool	bDoneSpottedCheck;
 
 state ZombieHunt

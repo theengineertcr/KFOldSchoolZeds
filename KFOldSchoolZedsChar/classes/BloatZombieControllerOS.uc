@@ -1,4 +1,7 @@
-class BloatZombieController extends KFMonsterController;
+//I'm not sure the point of bringing this back, and I'll probably
+//Get rid of this at some point, but it should be okay for now
+class BloatZombieControllerOS extends KFMonsterControllerOS;
+
 // Custom Zombie Thinkerating
 // By : Alex
 

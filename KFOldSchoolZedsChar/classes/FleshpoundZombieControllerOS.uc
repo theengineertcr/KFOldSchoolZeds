@@ -1,13 +1,19 @@
-//-----------------------------------------------------------
-//
-//-----------------------------------------------------------
-class FleshpoundZombieController extends KFMonsterController;
+//Modified Fleshpound Controller
+class FleshpoundZombieControllerOS extends KFMonsterControllerOS;
 
+//Issues:
+//For some reason, the Rage timeout doesn't work and I'm not sure why
+//TODO:Fix this? Not many people can outrun a Fleshy long enough on easier difficulties
+//That he'd get out of his raging state, but it does affect gameplay to some extent.
+
+//We want to keep all these variables
 var     float       RageAnimTimeout;    // How long until the RageAnim is completed; Hack so the server doesn't get stuck in idle when its doing the Rage anim
 var		bool		bDoneSpottedCheck;
 var     float       RageFrustrationTimer;       // Tracks how long we have been walking toward a visible enemy
 var     float       RageFrustrationThreshhold;  // Base value for how long the FP should walk torward an enemy without reaching them before getting frustrated and raging
 
+//We want to hear them fear the scary tall man,
+//So were keeping any retail code that triggers voice lines
 state ZombieHunt
 {
 	event SeePlayer(Pawn SeenPlayer)
@@ -28,6 +34,7 @@ state ZombieHunt
 	}
 }
 
+//Unchanged KFMod Code
 function TimedFireWeaponAtEnemy()
 {
 	if ( (Enemy == None) || FireWeaponAt(Enemy) )
@@ -47,9 +54,9 @@ ignores EnemyNotVisible;
 	{
 		local Actor A;
 
-		//log("FLESHPOUND DOSPINDAMAGE!");
-		foreach CollidingActors(class'actor', A, (ZombieFleshpound(pawn).MeleeRange * 1.5)+pawn.CollisionRadius, pawn.Location)
-			zombiefleshpound(pawn).SpinDamage(A);
+		//log("FLESHPOUND DOSPINDAMAGE!");//ZombieFleshpound to ZombieFleshpoundOS
+		foreach CollidingActors(class'actor', A, (ZombieFleshpoundOS(pawn).MeleeRange * 1.5)+pawn.CollisionRadius, pawn.Location)
+			ZombieFleshpoundOS(pawn).SpinDamage(A);
 	}
 
 Begin:
@@ -68,19 +75,21 @@ WaitForAnim:
 
 state ZombieCharge
 {
+	//Retail code we want
 	function Tick( float Delta )
 	{
-		local ZombieFleshPound ZFP;
+		local ZombieFleshpoundOS ZFP; //ZombieFleshPound to ZombieFleshpoundOS
         Global.Tick(Delta);
 
         // Make the FP rage if we haven't reached our enemy after a certain amount of time
+		// This works.
 		if( RageFrustrationTimer < RageFrustrationThreshhold )
 		{
             RageFrustrationTimer += Delta;
 
             if( RageFrustrationTimer >= RageFrustrationThreshhold )
             {
-                ZFP = ZombieFleshPound(Pawn);
+                ZFP = ZombieFleshpoundOS(Pawn); //ZombieFleshPound to ZombieFleshpoundOS
 
                 if( ZFP != none && !ZFP.bChargingPlayer )
                 {
@@ -91,18 +100,20 @@ state ZombieCharge
 		}
 	}
 
-
+	//Unchanged KFMod Code
 	function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)
 	{
 		return false;
 	}
 
+	//Unchanged KFMod Code
 	// I suspect this function causes bloats to get confused
 	function bool TryStrafe(vector sideDir)
 	{
 		return false;
 	}
 
+	//Unchanged KFMod Code
 	function Timer()
 	{
         Disable('NotifyBump');
@@ -110,6 +121,7 @@ state ZombieCharge
 		TimedFireWeaponAtEnemy();
 	}
 
+	//Retail code we want
 	function BeginState()
 	{
         super.BeginState();
@@ -133,6 +145,7 @@ Moving:
 		SoakStop("STUCK IN CHARGING!");
 }
 
+//Retail code we want
 // Used to set a timeout for the WaitForAnim state. This is a bit of a hack fix
 // for the FleshPound getting stuck in its idle anim on a dedicated server when it
 // is supposed to be raging. For some reason, on a dedicated server only, it
@@ -144,6 +157,7 @@ function SetPoundRageTimout(float NewRageTimeOut)
     RageAnimTimeout = NewRageTimeOut;
 }
 
+//Retail code we want
 state WaitForAnim
 {
 Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump;

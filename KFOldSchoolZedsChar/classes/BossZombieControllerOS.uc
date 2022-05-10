@@ -1,20 +1,23 @@
 //-----------------------------------------------------------
 //
 //-----------------------------------------------------------
-class BossZombieController extends KFMonsterController;
+class BossZombieControllerOS extends KFMonsterControllerOS;
 
 var NavigationPoint HidingSpots;
 
+//Dont touch these retail variables
 var     float       WaitAnimTimeout;    // How long until the Anim we are waiting for is completed; Hack so the server doesn't get stuck in idle when its doing the Rage anim
 var     int         AnimWaitChannel;    // The channel we are waiting to end in WaitForAnim
 var     name        AnimWaitingFor;     // The animation we are waiting to end in WaitForAnim, mostly used for debugging
 var     bool        bAlreadyFoundEnemy; // The Boss has already found an enemy at least once
 
+//Retail function, don't touch
 function bool CanKillMeYet()
 {
     return false;
 }
 
+//This function hasn't changed since KFMod, were keeping it
 function TimedFireWeaponAtEnemy()
 {
 	if ( (Enemy == None) || FireWeaponAt(Enemy) )
@@ -23,6 +26,7 @@ function TimedFireWeaponAtEnemy()
 		SetTimer(0.01, True);
 }
 
+//Retail function we need
 // Overridden to support a quick initial attack to get the boss to the players quickly
 function FightEnemy(bool bCanCharge)
 {
@@ -51,8 +55,9 @@ function FightEnemy(bool bCanCharge)
 	}
 	if ( !EnemyVisible() )
 	{
+		//ZombieBoss to ZombieBossOS
         // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-        if( bAlreadyFoundEnemy || ZombieBoss(Pawn).SneakCount > 2 )
+        if( bAlreadyFoundEnemy || ZombieBossOS(Pawn).SneakCount > 2 )
         {
             bAlreadyFoundEnemy = true;
             GoalString = "Hunt";
@@ -60,8 +65,9 @@ function FightEnemy(bool bCanCharge)
         }
         else
         {
+			//ZombieBoss to ZombieBossOS		
             // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-            ZombieBoss(Pawn).SneakCount++;
+            ZombieBossOS(Pawn).SneakCount++;
             GoalString = "InitialHunt";
             GotoState('InitialHunting');
         }
@@ -76,6 +82,7 @@ function FightEnemy(bool bCanCharge)
 }
 
 
+//Retail code we dont want to touch
 // Get the boss to the players quickly after initial spawn
 state InitialHunting extends Hunting
 {
@@ -91,8 +98,9 @@ state InitialHunting extends Hunting
 	{
 		local float ZDif;
 
+		//ZombieBoss to ZombieBossOS
         // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-        ZombieBoss(Pawn).SneakCount++;
+        ZombieBossOS(Pawn).SneakCount++;
 
 		if( Pawn.CollisionRadius>27 || Pawn.CollisionHeight>46 )
 		{
@@ -118,6 +126,7 @@ state InitialHunting extends Hunting
 	}
 }
 
+//Same as in KFMod
 state ZombieCharge
 {
 	function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)
@@ -155,7 +164,7 @@ Moving:
 
 state RunSomewhere
 {
-Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
+Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle; //Startle is new, but we dont care
 
 	function BeginState()
 	{
@@ -182,7 +191,7 @@ Begin:
 	if( HidingSpots==None )
 		HidingSpots = FindRandomDest();
 	if( HidingSpots==None )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	if( ActorReachable(HidingSpots) )
 	{
 		MoveTarget = HidingSpots;
@@ -190,12 +199,12 @@ Begin:
 	}
 	else FindBestPathToward(HidingSpots,True,False);
 	if( MoveTarget==None )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
 		MoveToward(MoveTarget,Enemy,,False);
 	else MoveToward(MoveTarget,MoveTarget,,False);
 	if( HidingSpots==None || !PlayerSeesMe() )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	GoTo'Begin';
 }
 State SyrRetreat
@@ -258,7 +267,7 @@ Begin:
 	if( HidingSpots==None )
 		FindHideSpot();
 	if( HidingSpots==None )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	if( ActorReachable(HidingSpots) )
 	{
 		MoveTarget = HidingSpots;
@@ -266,12 +275,12 @@ Begin:
 	}
 	else FindBestPathToward(HidingSpots,True,False);
 	if( MoveTarget==None )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
 		MoveToward(MoveTarget,Enemy,,False);
 	else MoveToward(MoveTarget,MoveTarget,,False);
 	if( HidingSpots==None )
-		ZombieBoss(Pawn).BeginHealing();
+		ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
 	GoTo'Begin';
 }
 function bool PlayerSeesMe()
@@ -285,6 +294,8 @@ function bool PlayerSeesMe()
 	}
 	Return False;
 }
+
+//The rest of this is Retail Code that we'll keep
 
 // Used to set a timeout for the WaitForAnim state. This is a bit of a hack fix
 // for the Patriach getting stuck in its idle anim on a dedicated server when it

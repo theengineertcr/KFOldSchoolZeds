@@ -1,26 +1,50 @@
-class ZombieCrawler_STANDARD extends ZombieCrawler;
+//Because we want the zeds to extend to KFMonsterOS, there's no choice
+//Other than to overhaul all 3 files of each zed, controllers as well if
+//We count certain other Zeds
+
+//Make sure this uses all appropriate sounds, model, textures, etc.
+class ZombieCrawler_OS extends ZombieCrawlerOS;
+
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+//Textures are flipped from the modified model resulting in it looking weird, use the animation package that comes with the game
+#exec OBJ LOAD FILE=KFCharacterModels.ukx
+
+//Force it to use our anim set
+event PreBeginPlay()
+{
+	Super.PreBeginPlay();
+	LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
+}
 
 defaultproperties
 {
-    DetachedArmClass=class'SeveredArmCrawler'
-	DetachedLegClass=class'SeveredLegCrawler'
-	DetachedHeadClass=class'SeveredHeadCrawler'
+	////Detached Limbs don't exist
+    //DetachedArmClass=class'SeveredArmCrawler'
+	//DetachedLegClass=class'SeveredLegCrawler'
+	//DetachedHeadClass=class'SeveredHeadCrawler'
 
-    Mesh=SkeletalMesh'KF_Freaks_Trip.Crawler_Freak'
+	//Use KFMod Models and Textures
+    Mesh=SkeletalMesh'KFCharacterModels.Shade'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
+    Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB'
+	
+	//Use KFMod Sounds
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Crawler.Crawler_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+	
+	//Dont think we need this?
+    //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Crawler_HitPlayer'
 
-    Skins(0)=Combiner'KF_Specimens_Trip_T.crawler_cmb'
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-    AmbientSound=Sound'KF_BaseCrawler.Crawler_Idle'
-    MoanVoice=Sound'KF_EnemiesFinalSnd.Crawler_Talk'
-    JumpSound=Sound'KF_EnemiesFinalSnd.Crawler_Jump'
-    MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Crawler_HitPlayer'
-
-    HitSound(0)=Sound'KF_EnemiesFinalSnd.Crawler_Pain'
-    DeathSound(0)=Sound'KF_EnemiesFinalSnd.Crawler_Death'
-
-    ChallengeSound(0)=Sound'KF_EnemiesFinalSnd.Crawler_Acquire'
-    ChallengeSound(1)=Sound'KF_EnemiesFinalSnd.Crawler_Acquire'
-    ChallengeSound(2)=Sound'KF_EnemiesFinalSnd.Crawler_Acquire'
-    ChallengeSound(3)=Sound'KF_EnemiesFinalSnd.Crawler_Acquire'
+	//KFMod Zeds don't use challenge sounds
+    ChallengeSound(0)=None
+    ChallengeSound(1)=None
+    ChallengeSound(2)=None
+    ChallengeSound(3)=None
 }
 

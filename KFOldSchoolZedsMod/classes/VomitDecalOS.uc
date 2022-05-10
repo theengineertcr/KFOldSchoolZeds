@@ -1,17 +1,20 @@
-class VomitDecal extends ProjectedDecal;
+//Old KFMod puke decal
+class VomitDecalOS extends ProjectedDecal;
 
-#exec OBJ LOAD File=KFX.utx
+// Load relevant texture package
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 simulated function BeginPlay()
 {
-    if ( !Level.bDropDetail && (FRand() < 0.5) )
-        ProjTexture = texture'VomSplat';
+    if ( !Level.bDropDetail && (FRand() < 0.5) ) //Use KFMod Texture
+        ProjTexture = texture'KFOldSchoolZeds_Textures.VomSplat';
     Super.BeginPlay();
 }
 
 defaultproperties
 {
-     ProjTexture=Texture'KFX.VomSplat'
+	//Use KFMod Texture
+     ProjTexture=Texture'KFOldSchoolZeds_Textures.VomSplat'
      bClipStaticMesh=True
      CullDistance=7000.000000
      LifeSpan=5.000000

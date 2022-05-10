@@ -1,4 +1,5 @@
-class KFNoGibGroup extends xPawnGibGroup;
+//A gib group with no gibs, but there's plenty of blood!
+class KFNoGibGroupOS extends xPawnGibGroup;
 
 defaultproperties
 {
@@ -8,12 +9,12 @@ defaultproperties
      Gibs(3)=None
      Gibs(4)=None
      Gibs(5)=None
-     BloodHitClass=Class'KFMod.KFBloodPuff'
-     LowGoreBloodHitClass=Class'KFMod.KFBloodPuff'
-     BloodGibClass=Class'ROEffects.BrainSplash'
-     LowGoreBloodGibClass=Class'KFMod.KFBloodPuff'
-     LowGoreBloodEmitClass=Class'KFMod.KFBloodPuff'
-     BloodEmitClass=Class'KFMod.KFBloodPuff'
-     NoBloodEmitClass=Class'KFMod.KFBloodPuff'
-     NoBloodHitClass=Class'KFMod.KFBloodPuff'
+     BloodHitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     LowGoreBloodHitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     BloodGibClass=None
+     LowGoreBloodGibClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     LowGoreBloodEmitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     BloodEmitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     NoBloodEmitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
+     NoBloodHitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
 }

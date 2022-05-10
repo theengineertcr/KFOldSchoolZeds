@@ -1,12 +1,21 @@
+//Because we want the zeds to extend to KFMonsterOS, there's no choice
+//Other than to overhaul all 3 files of each zed, controllers as well if
+//We count certain other Zeds
+
 // Zombie Monster for KF Invasion gametype
 // He's speedy, and swings with a Single enlongated arm, affording him slightly more range
-class ZombieGoreFastBase extends KFMonster
+class ZombieGoreFastBaseOS extends KFMonsterOS
     abstract;
 
-#exec OBJ LOAD FILE=PlayerSounds.uax
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 var bool bRunning;
-var float RunAttackTimeout;
+
+//Removed
+//var float RunAttackTimeout;
 
 replication
 {
@@ -21,33 +30,20 @@ replication
 
 defaultproperties
 {
-    DrawScale=1.2
-    Prepivot=(Z=10.0)
-
-    bUseExtendedCollision=true
-	ColOffset=(Z=52)
-	ColRadius=25
-	ColHeight=10
-
-    ExtCollAttachBoneName="Collision_Attach"
-
+	//These values were not set in KFMod
+    //DrawScale=1.2
+    //Prepivot=(Z=10.0)
+    //ExtCollAttachBoneName="Collision_Attach"
+    //KFRagdollName="GoreFast_Trip"
+	//SeveredHeadAttachScale=1.0
+	//SeveredLegAttachScale=0.9
+	//SeveredArmAttachScale=0.9
+    //AmbientGlow=0
+	
+	//Values that don't need to be changed	
     MeleeAnims(0)="GoreAttack1"
     MeleeAnims(1)="GoreAttack2"
     MeleeAnims(2)="GoreAttack1"
-    MeleeDamage=15
-    damageForce=5000
-    KFRagdollName="GoreFast_Trip"
-    ScoringValue=12
-    IdleHeavyAnim="GoreIdle"
-    IdleRifleAnim="GoreIdle"
-    MeleeRange=30.0//60.000000
-    GroundSpeed=120.0//150.000000
-    WaterSpeed=140.000000
-    Health=250//350
-    HealthMax=250
-    PlayerCountHealthScale=0.15
-    PlayerNumHeadHealthScale=0.0
-	HeadHealth=25
     MovementAnims(0)="GoreWalk"
     WalkAnims(0)="GoreWalk"
     WalkAnims(1)="GoreWalk"
@@ -56,21 +52,40 @@ defaultproperties
     IdleCrouchAnim="GoreIdle"
     IdleWeaponAnim="GoreIdle"
     IdleRestAnim="GoreIdle"
-    AmbientGlow=0
-    CollisionRadius=26.000000
+    IdleHeavyAnim="GoreIdle"
+    IdleRifleAnim="GoreIdle"
     Mass=350.000000
     RotationRate=(Yaw=45000,Roll=0)
-
-    bCannibal = true
-    MenuName="Gorefast"
-
-	SeveredHeadAttachScale=1.0
-	SeveredLegAttachScale=0.9
-	SeveredArmAttachScale=0.9
-	HeadHeight=2.5
-	HeadScale=1.5
-	CrispUpThreshhold=8
-	OnlineHeadshotOffset=(X=5,Y=0,Z=53)
-	OnlineHeadshotScale=1.5
+	
+	//We'll keep these values the same as the retail version
+	//As this mod was made purely for the visual aspect, not gameplay	
+	//Exception:Zed cannot charge anymore, so range has been increased.
+    MeleeDamage=15
+    damageForce=5000
+    ScoringValue=12
+    MeleeRange=45.0//30.0//60.000000
+    GroundSpeed=120.0//150.000000
+    WaterSpeed=140.000000
+    Health=250//350
+    HealthMax=250
+    PlayerCountHealthScale=0.15
+    PlayerNumHeadHealthScale=0.0
+	HeadHealth=25
+	CrispUpThreshhold=8	
 	MotionDetectorThreat=0.5
+
+	//A connoisseur of flesh, despite being jawless
+    bCannibal = true
+    MenuName="Gorefast 2.5"//"Gorefast"
+	
+	HeadHeight=2.75//2.5
+	HeadScale=1.5	
+	OnlineHeadshotOffset=(X=5,Y=0,Z=53)
+	OnlineHeadshotScale=1.5    
+	CollisionRadius=26.000000	
+	
+    bUseExtendedCollision=true
+	ColOffset=(Z=52)
+	ColRadius=25
+	ColHeight=10	
 }

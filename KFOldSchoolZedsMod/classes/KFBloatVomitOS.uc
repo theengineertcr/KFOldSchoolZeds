@@ -1,61 +1,16 @@
 // The Nice, nasty barf we'll be using for the Bloat's ranged attack.
-class KFBloatVomit extends BioGlob;
+// KFModified!
+class KFBloatVomitOS extends KFBloatVomit;
 
-simulated function PostBeginPlay()
-{
-	SetOwner(None);
 
-	if (Role == ROLE_Authority)
-	{
-		Velocity = Vector(Rotation) * Speed;
-		Velocity.Z += TossZ;
-	}
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KillingFloorLabTextures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 
-	if (Role == ROLE_Authority)
-		Rand3 = Rand(3);
-	if ( (Level.NetMode != NM_DedicatedServer) && ((Level.DetailMode == DM_Low) || Level.bDropDetail) )
-	{
-		bDynamicLight = false;
-		LightType = LT_None;
-	}
+//PostBeginPlay and DifficultyDamageModifer removed,
+//We don't need to restate things in the parent class
 
-	// Difficulty Scaling
-	if (Level.Game != none)
-	{
-		BaseDamage = Max((DifficultyDamageModifer() * BaseDamage),1);
-		Damage = Max((DifficultyDamageModifer() * Damage),1);
-	}
-}
-
-// Scales the damage this Zed deals by the difficulty level
-function float DifficultyDamageModifer()
-{
-    local float AdjustedDamageModifier;
-
-    if ( Level.Game.GameDifficulty >= 7.0 ) // Hell on Earth
-    {
-    	AdjustedDamageModifier = 2.5;
-    }
-    else if ( Level.Game.GameDifficulty >= 5.0 ) // Suicidal
-    {
-    	AdjustedDamageModifier = 2.0;
-    }
-    else if ( Level.Game.GameDifficulty >= 4.0 ) // Hard
-    {
-    	AdjustedDamageModifier = 1.5;
-    }
-    else if ( Level.Game.GameDifficulty >= 2.0 ) // Normal
-    {
-    	AdjustedDamageModifier = 1.0;
-    }
-    else //if ( GameDifficulty == 1.0 ) // Beginner
-    {
-    	AdjustedDamageModifier = 0.3;
-    }
-
-    return AdjustedDamageModifier;
-}
-
+//Some minor differences
 state OnGround
 {
 	simulated function BeginState()
@@ -74,6 +29,8 @@ state OnGround
 			bCollideWorld = true;
 			bCheckedsurface = false;
 			bProjTarget = false;
+			//KFMod wants to have the anim loop, so we'll loop it
+			LoopAnim('flying', 1.0);
 			GotoState('Flying');
 		}
 		else BlowUp(Location);
@@ -102,6 +59,8 @@ state OnGround
 			DotProduct = SurfaceNormal dot Vect(0,0,-1);
 			if (DotProduct > 0.7)
 			{
+				//KFMod Code
+				PlayAnim('Drip', 0.66);
 				bDrip = true;
 				SetTimer(DripTime, false);
 				if (bOnMover)
@@ -109,6 +68,8 @@ state OnGround
 			}
 			else if (DotProduct > -0.5)
 			{
+				//KFMode Code
+				PlayAnim('Slide', 1.0);
 				if (bOnMover)
 					BlowUp(Location);
 			}
@@ -130,15 +91,19 @@ state OnGround
 		SetGoopLevel(NewGoopLevel);
 		SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
 		PlaySound(ImpactSound, SLOT_Misc);
+		//KFMod Code
+        PlayAnim('hit');		
 		bCheckedSurface = false;
 		SetTimer(RestTime, false);
 	}
 }
 
+//KFModified
 singular function SplashGlobs(int NumGloblings)
 {
-    local int g;
-    local KFBloatVomit NewGlob;
+    local int g; 
+	//Use KFMod Bloat Vomit
+    local KFBloatVomitOS NewGlob;
     local Vector VNorm;
 
     for (g=0; g<NumGloblings; g++)
@@ -158,12 +123,14 @@ singular function SplashGlobs(int NumGloblings)
     }
 }
 
+//KFModified
 simulated function Destroyed()
 {
     if ( !bNoFX && EffectIsRelevant(Location,false) )
     {
         //Spawn(class'xEffects.GoopSmoke');
-        Spawn(class'KFmod.VomGroundSplash');
+		//Use KFMod VomGroundSplash
+        Spawn(class'KFOldSchoolZedsMod.VomGroundSplashOS');
     }
     if ( Fear != None )
         Fear.Destroy();
@@ -172,7 +139,7 @@ simulated function Destroyed()
     //Super.Destroyed();
 }
 
-
+//KFModified
 auto state Flying
 {
     simulated function Landed( Vector HitNormal )
@@ -196,7 +163,8 @@ auto state Flying
                 SplashGlobs(GoopLevel - CoreGoopLevel);
             SetGoopLevel(CoreGoopLevel);
         }
-        spawn(class'KFMod.VomitDecal',,,, rotator(-HitNormal));
+		//Use KFMod VomitDecal
+        spawn(class'KFOldSchoolZedsMod.VomitDecalOS',,,, rotator(-HitNormal));
 
         bCollideWorld = false;
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
@@ -236,20 +204,26 @@ auto state Flying
 
 defaultproperties
 {
-     DrawType=DT_StaticMesh
+	 //Not set in KFMod, maybe set to none?
+     //DrawType=DT_StaticMesh
      BaseDamage=3
      TouchDetonationDelay=0.000000
      Speed=400.000000
      Damage=4.000000
      MomentumTransfer=2000.000000
-     MyDamageType=Class'KFMod.DamTypeVomit'
+	 //Use KFMod DamTypeVomit
+     MyDamageType=Class'KFOldSchoolZedsMod.DamTypeVomitOS'
      bDynamicLight=False
-     LifeSpan=8.000000
-     Skins(0)=Texture'kf_fx_trip_t.Gore.pukechunk_diffuse'
-     CollisionRadius=2.000000
-     CollisionHeight=2.000000
+     LifeSpan=1.000000//8.000000 Old value used
+	 //Use KFMod's texture, even though it wont be useful
+	 Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
+     CollisionRadius=0.000000//2.000000 Old Values used here
+     CollisionHeight=0.000000//2.000000
      bUseCollisionStaticMesh=False
-     StaticMesh=StaticMesh'kf_gore_trip_sm.puke.puke_chunk'//Mesh'XWeapons_rc.GoopMesh' KFTODO: Replace this
-     ImpactSound=Sound'KF_EnemiesFinalSnd.Bloat_AcidSplash'
+	 //Dont use modern chunks
+     StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
+	 //Use BioGlob's Impact and Explosion sound
+	 ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'	 
+     ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
      bBlockHitPointTraces=false
 }

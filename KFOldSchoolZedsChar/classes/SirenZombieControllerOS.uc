@@ -1,7 +1,8 @@
-class SirenZombieController extends KFMonsterController;
+class SirenZombieControllerOS extends KFMonsterControllerOS;
 
 var		bool		bDoneSpottedCheck;
 
+//No changes needed
 state ZombieHunt
 {
 	event SeePlayer(Pawn SeenPlayer)

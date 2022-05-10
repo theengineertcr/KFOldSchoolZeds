@@ -1,7 +1,12 @@
+// ✔
+
 // Spawns Trail on PostBeginPlay.
+class ClotGibThighOS extends KFGibOS;
 
-class ClotGibThigh extends KFGib;
-
+	// Load the texture and static mesh
+	#exec OBJ LOAD FILE=KFOldSchoolStatics.usx
+	#exec OBJ LOAD FILE=22CharTex.utx
+	
 simulated function PostBeginPlay()
 {
    SpawnTrail();
@@ -9,17 +14,18 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     GibGroupClass=Class'KFMod.KFHumanGibGroup'
-     TrailClass=Class'ROEffects.BloodTrail'
+	// Use the KFMod GibGroup and GibJet
+     GibGroupClass=Class'KFOldSchoolZedsMod.KFHumanGibGroupOS'
+     TrailClass=Class'KFOldSchoolZedsMod.KFGibJetOS'	 
+     DampenFactor=0.300000
      DrawType=DT_StaticMesh
-     StaticMesh=StaticMesh'22Patch.ClotGibThigh'
-     DrawScale=1
+	 
+	 // Updated to use the 2.5 Meshes 
+     StaticMesh=StaticMesh'KFOldSchoolStatics.ClotGibThigh'
+	 // This Texture never changed, so don't change it
      Skins(0)=Texture'22CharTex.GibletsSkin'
      bUnlit=False
      TransientSoundVolume=25.000000
      CollisionRadius=5.000000
      CollisionHeight=2.500000
-
-     DampenFactor=0.300000
-     Mass=280.000000
 }

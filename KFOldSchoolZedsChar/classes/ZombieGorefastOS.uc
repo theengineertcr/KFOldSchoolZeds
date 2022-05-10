@@ -1,14 +1,24 @@
+//Because we want the zeds to extend to KFMonsterOS,
+//We'll need to overhaul all class files of each zed, 
+//Controllers as well if we count certain Zeds
+
 // Zombie Monster for KF Invasion gametype
 // GOREFAST.
 // He's speedy, and swings with a Single enlongated arm, affording him slightly more range
-class ZombieGoreFast extends ZombieGoreFastBase
+class ZombieGoreFastOS extends ZombieGoreFastBaseOS
     abstract;
 
-#exec OBJ LOAD FILE=PlayerSounds.uax
+// Load all relevant texture, sound, and other packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 
 //----------------------------------------------------------------------------
 // NOTE: All Variables are declared in the base class to eliminate hitching
 //----------------------------------------------------------------------------
+
+//Issues:
+//None?
 
 simulated function PostNetReceive()
 {
@@ -20,6 +30,7 @@ simulated function PostNetReceive()
     }
 }
 
+//Not sure what this is used for so we'll keep it
 // This zed has been taken control of. Boost its health and speed
 function SetMindControlled(bool bNewMindControlled)
 {
@@ -66,6 +77,7 @@ function SetMindControlled(bool bNewMindControlled)
     bZedUnderControl = bNewMindControlled;
 }
 
+//Not sure what this is used for so we'll keep it
 // Handle the zed being commanded to move to a new location
 function GivenNewMarker()
 {
@@ -79,10 +91,30 @@ function GivenNewMarker()
     }
 }
 
+//KFMod Code
+function PlayZombieAttackHitSound()
+{
+	local int MeleeAttackSounds;
+
+	MeleeAttackSounds = rand(3);
+
+	switch(MeleeAttackSounds)
+	{
+		case 0:
+			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit1', SLOT_Interact);
+			break;
+		case 1:
+			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit2', SLOT_Interact);
+			break;
+		case 2:
+			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit3', SLOT_Interact);
+	}
+}
+
 function RangedAttack(Actor A)
 {
 	Super.RangedAttack(A);
-	if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 )
+	if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
 		GoToState('RunningState');
 }
 
@@ -109,12 +141,12 @@ state RunningState
         }
         else
         {
-    		SetGroundSpeed(OriginalGroundSpeed * 1.875);
+    		SetGroundSpeed(OriginalGroundSpeed * 1.875); //Was 1.5 in KFMod, dont touch for balance reasons
     		bRunning = true;
     		if( Level.NetMode!=NM_DedicatedServer )
     			PostNetReceive();
 
-    		NetUpdateTime = Level.TimeSeconds - 1;
+    		NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
 		}
 	}
 
@@ -127,10 +159,10 @@ state RunningState
 		bRunning = False;
 		if( Level.NetMode!=NM_DedicatedServer )
 			PostNetReceive();
+		
+		//RunAttackTimeout=0;
 
-		RunAttackTimeout=0;
-
-		NetUpdateTime = Level.TimeSeconds - 1;
+		NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
 	}
 
 	function RemoveHead()
@@ -139,66 +171,39 @@ state RunningState
 		Global.RemoveHead();
 	}
 
+	//Old zeds don't support charging(full body anims), so all charging code removed
     function RangedAttack(Actor A)
     {
-        local float ChargeChance;
-
-        // Decide what chance the gorefast has of charging during an attack
-        if( Level.Game.GameDifficulty < 2.0 )
-        {
-            ChargeChance = 0.1;
-        }
-        else if( Level.Game.GameDifficulty < 4.0 )
-        {
-            ChargeChance = 0.2;
-        }
-        else if( Level.Game.GameDifficulty < 5.0 )
-        {
-            ChargeChance = 0.3;
-        }
-        else // Hardest difficulty
-        {
-            ChargeChance = 0.4;
-        }
-
-    	if ( bShotAnim || Physics == PHYS_Swimming)
-    		return;
-    	else if ( CanAttack(A) )
-    	{
-    		bShotAnim = true;
-
-    		// Randomly do a moving attack so the player can't kite the zed
-            if( FRand() < ChargeChance )
-    		{
-        		SetAnimAction('ClawAndMove');
-        		RunAttackTimeout = GetAnimDuration('GoreAttack1', 1.0);
-    		}
-    		else
-    		{
-        		SetAnimAction('Claw');
-        		Controller.bPreparingMove = true;
-        		Acceleration = vect(0,0,0);
-                // Once we attack stop running
-        		GoToState('');
-    		}
-    		return;
-    	}
+		Super.RangedAttack(A);
     }
 
+	//Added in code to increase Head Hitbox whenever Gorefasts
+	//Do their running animation because during that specific
+	//Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
-		// Keep moving toward the target until the timer runs out (anim finishes)
-        if( RunAttackTimeout > 0 )
+		if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
 		{
-            RunAttackTimeout -= DeltaTime;
-
-            if( RunAttackTimeout <= 0 && !bZedUnderControl )
-            {
-                RunAttackTimeout = 0;
-                GoToState('');
-            }
+			HeadScale=3.0;
+			OnlineHeadshotScale=3.0;
 		}
-
+		else
+		{
+			HeadScale=default.HeadScale;
+			OnlineHeadshotScale=default.OnlineHeadshotScale;
+		}
+		// Keep moving toward the target until the timer runs out (anim finishes)
+        //if( RunAttackTimeout > 0 )
+		//{
+        //    RunAttackTimeout -= DeltaTime;
+		//
+        //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
+        //    {
+        //        RunAttackTimeout = 0;
+        //        GoToState('');
+        //    }
+		//}
+	
         // Keep the gorefast moving toward its target when attacking
     	if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
     	{
@@ -207,17 +212,17 @@ state RunningState
     		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
     		}
         }
-
+	
         global.Tick(DeltaTime);
     }
 
-
+//KFMod doesn't do a CheckCharge, but we'll keep it
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 )
+    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 ) //KFMod had <400 instead of <700
     {
-        Sleep(0.5+ FRand() * 0.5);
+        Sleep(0.5+ FRand() * 0.5); //KFMod didn't have the *0.5 at the end, but we'll keep it
         //log("Still charging");
         GoTo('CheckCharge');
     }
@@ -234,17 +239,17 @@ state RunningToMarker extends RunningState
     simulated function Tick(float DeltaTime)
     {
 		// Keep moving toward the target until the timer runs out (anim finishes)
-        if( RunAttackTimeout > 0 )
-		{
-            RunAttackTimeout -= DeltaTime;
-
-            if( RunAttackTimeout <= 0 && !bZedUnderControl )
-            {
-                RunAttackTimeout = 0;
-                GoToState('');
-            }
-		}
-
+        //if( RunAttackTimeout > 0 )
+		//{
+        //    RunAttackTimeout -= DeltaTime;
+		//
+        //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
+        //    {
+        //        RunAttackTimeout = 0;
+        //        GoToState('');
+        //    }
+		//}
+	
         // Keep the gorefast moving toward its target when attacking
     	if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
     	{
@@ -253,10 +258,9 @@ state RunningToMarker extends RunningState
     		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
     		}
         }
-
+	
         global.Tick(DeltaTime);
     }
-
 
 Begin:
     GoTo('CheckCharge');
@@ -272,87 +276,11 @@ CheckCharge:
     }
 }
 
-// Overridden to handle playing upper body only attacks when moving
-simulated event SetAnimAction(name NewAction)
-{
-	local int meleeAnimIndex;
-	local bool bWantsToAttackAndMove;
 
-	if( NewAction=='' )
-		Return;
-
-	bWantsToAttackAndMove = NewAction == 'ClawAndMove';
-
-	if( NewAction == 'Claw' )
-	{
-		meleeAnimIndex = Rand(3);
-		NewAction = meleeAnims[meleeAnimIndex];
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-
-	if( bWantsToAttackAndMove )
-	{
-	   ExpectingChannel = AttackAndMoveDoAnimAction(NewAction);
-	}
-	else
-	{
-	   ExpectingChannel = DoAnimAction(NewAction);
-	}
-
-    if( !bWantsToAttackAndMove && AnimNeedsWait(NewAction) )
-    {
-        bWaitForAnim = true;
-    }
-    else
-    {
-        bWaitForAnim = false;
-    }
-
-	if( Level.NetMode!=NM_Client )
-	{
-		AnimAction = NewAction;
-		bResetAnimAct = True;
-		ResetAnimActTime = Level.TimeSeconds+0.3;
-	}
-}
-
-// Handle playing the anim action on the upper body only if we're attacking and moving
-simulated function int AttackAndMoveDoAnimAction( name AnimName )
-{
-	local int meleeAnimIndex;
-
-    if( AnimName == 'ClawAndMove' )
-	{
-		meleeAnimIndex = Rand(3);
-		AnimName = meleeAnims[meleeAnimIndex];
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-
-    if( AnimName=='GoreAttack1' || AnimName=='GoreAttack2' )
-	{
-		AnimBlendParams(1, 1.0, 0.0,, FireRootBone);
-		PlayAnim(AnimName,, 0.1, 1);
-
-		return 1;
-	}
-
-	return super.DoAnimAction( AnimName );
-}
-
-simulated function HideBone(name boneName)
-{
-	//  Gorefast does not have a left arm and does not need it to be hidden
-	if (boneName != LeftFArmBone)
-	{
-		super.HideBone(boneName);
-	}
-}
-
+//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.gorefast_cmb');
-	myLevel.AddPrecacheMaterial(Combiner'KF_Specimens_Trip_T.gorefast_env_cmb');
-	myLevel.AddPrecacheMaterial(Texture'KF_Specimens_Trip_T.gorefast_diff');
+	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin');
 }
 
 defaultproperties
@@ -360,10 +288,9 @@ defaultproperties
 	//-------------------------------------------------------------------------------
 	// NOTE: Most Default Properties are set in the base class to eliminate hitching
 	//-------------------------------------------------------------------------------
-
-    EventClasses(0)="KFChar.ZombieGorefast_STANDARD"
-    ControllerClass=Class'KFChar.GorefastController'
-
-	// The gorefasts left arm is already set to gibbed so that shooting his nub will not create severed limbs
-	bLeftArmGibbed=true
+	//EventClasses aren't a thing in KFMod
+    //EventClasses(0)="KFChar.ZombieGorefast_STANDARD"
+	
+	//Use KFMod Controller
+    ControllerClass=Class'KFOldSchoolZedsChar.GorefastControllerOS'
 }
