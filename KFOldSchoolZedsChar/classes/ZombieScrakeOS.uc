@@ -201,13 +201,20 @@ state RunningState
         local float Dist;
         
         Dist = VSize(A.Location - Location);
+        //Get even closer before doing an attack so you can get a
+        //Guaranteed hit on the player!
+        DistBeforeSaw = 20.0;
         
         if ( bShotAnim || Physics == PHYS_Swimming)
             return; //Added it here just incase
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
         {
             bShotAnim = true;
-            SetAnimAction(MeleeAnims[Rand(2)]);
+            //Code that makes it so Scrake on suicidal+ prefers attack 1 instead of 2 while charging
+            if(Level.Game.GameDifficulty < 5.0)
+                SetAnimAction(MeleeAnims[Rand(2)]);
+            else
+                SetAnimAction(MeleeAnims[0]);
             CurrentDamType = ZombieDamType[0];
             GoToState('SawingLoop');
         }
