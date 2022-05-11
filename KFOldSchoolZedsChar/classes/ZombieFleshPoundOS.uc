@@ -22,10 +22,15 @@ class ZombieFleshpoundOS extends ZombieFleshpoundBaseOS
 //Dont touch this retail code
 simulated function PostNetBeginPlay()
 {
-    if (AvoidArea == None)
-        AvoidArea = Spawn(class'FleshPoundAvoidArea',self);
-    if (AvoidArea != None)
-        AvoidArea.InitFor(Self);
+    //TODO: Make Avoid Area spawn if Fleshy is charging
+    //Also, extend AvoidArea box more forward so zeds
+    //In front have chance to move away once Zeds notice
+    //That he's pissed off. Or, just remove it entirely.
+    
+    //if (AvoidArea == None && bChargingPlayer )
+    //    AvoidArea = Spawn(class'FleshPoundAvoidArea',self);
+    //if (AvoidArea != None)
+    //    AvoidArea.InitFor(Self);
 
     EnableChannelNotify ( 1,1);
     AnimBlendParams(1, 1.0, 0.0,, SpineBone1);
