@@ -110,7 +110,7 @@ defaultproperties
     KFRagdollName="SawZombieRag"//"Scrake_Trip"//Used KFMod ragdoll
 	//He doesn't cut them up just for fun, he's hungry too!
     bCannibal = true
-    MenuName="Old Scrake"//"Scrake"
+    MenuName="Scrake 2.5"//"Scrake"
     SoundRadius=200.000000//100.0//Used KFMod value
     AmbientSoundScaling=1.800000//KFMod variable
 	

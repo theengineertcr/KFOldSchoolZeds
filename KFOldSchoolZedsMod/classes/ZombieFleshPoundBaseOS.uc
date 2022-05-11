@@ -123,7 +123,7 @@ defaultproperties
 	//Not needed anymore
 	//BlockDamageReduction=0.400000
 
-	MenuName="Old Flesh Pound"//"Flesh Pound"
+	MenuName="Flesh Pound 2.5"//"Flesh Pound"
 
 	//Skins set in event class ZombieFleshpound_OS
 	//Skins(1)=Shader'KFCharacters.FPAmberBloomShader'

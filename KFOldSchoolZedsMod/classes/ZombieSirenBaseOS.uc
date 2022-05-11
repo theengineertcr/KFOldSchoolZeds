@@ -120,7 +120,7 @@ defaultproperties
     ChallengeSound(2)=None
     ChallengeSound(3)=None
 
-    MenuName="Old Siren"//"Siren"
+    MenuName="Siren 2.5"//"Siren"
     bCanDistanceAttackDoors=True
 	
     CollisionRadius=26.000000

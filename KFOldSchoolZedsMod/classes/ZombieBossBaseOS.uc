@@ -163,7 +163,7 @@ defaultproperties
 	
     TurnLeftAnim="BossHitF"//"TurnLeft"
     TurnRightAnim="BossHitF"//"TurnRight"
-	MenuName="Old Patriarch"//"Patriarch"
+	MenuName="Patriarch 2.5"//"Patriarch"
 	
 	//This may need to be changed
 	ColOffset=(Z=65)//(Z=50)

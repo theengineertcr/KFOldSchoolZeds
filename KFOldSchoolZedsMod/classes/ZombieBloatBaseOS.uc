@@ -94,8 +94,7 @@ defaultproperties
 	//Looks like Shreks a little hungry
     bCannibal=True
 	
-	//"Bloat" to "Old Bloat"
-    MenuName="Old Bloat"
+    MenuName="Bloat 2.5"
 
 	Prepivot=(Z=8.000000) //(Z=5.0)
 

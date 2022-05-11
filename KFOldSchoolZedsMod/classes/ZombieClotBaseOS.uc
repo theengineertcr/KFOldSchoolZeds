@@ -87,8 +87,7 @@ defaultproperties
 	//"Clot_Trip" to "ClotRag"
     KFRagdollName="ClotRag"
    
-	//"Clot" to "Old Clot"
-    MenuName="Old Clot"
+    MenuName="Clot 2.5"
 	
 	GrappleDuration=1.0//1.5 shortened to match with KFMod Grapple Duration	as were not going to destroy grapples upon death
 	

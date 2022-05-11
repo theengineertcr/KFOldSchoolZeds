@@ -110,7 +110,7 @@ defaultproperties
 	MGFireBurst=10//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
 	
     bCannibal = False // No animation for him.
-    MenuName="Fleshpound Chaingunner"
+    MenuName="Flesh Pound Chaingunner"
 
 	//Use RangedIdle
     IdleHeavyAnim="RangedIdle"

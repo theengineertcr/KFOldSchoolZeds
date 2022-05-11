@@ -72,7 +72,7 @@ defaultproperties
 
 	//She was a cannibal in KFMod, so keep feasting on their corpses, please.
     bCannibal=True
-    MenuName="Old Stalker"//"Stalker"
+    MenuName="Stalker 2.5"//"Stalker"
 	//Have yet to make this, will do it later
     //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
 	
