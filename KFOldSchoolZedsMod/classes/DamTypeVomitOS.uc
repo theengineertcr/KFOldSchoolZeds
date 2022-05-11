@@ -7,7 +7,7 @@ class DamTypeVomitOS extends DamTypeVomit
 
 defaultproperties
 {
-	//Use KFMod Textures
+    //Use KFMod Textures
      HUDDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
      HUDUberDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
      HUDTime=1.500000

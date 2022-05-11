@@ -25,93 +25,93 @@ class ZombieCrawlerOS extends ZombieCrawlerBaseOS
 //Exact same as in KFMod, do not touch
 function bool DoPounce()
 {
-	if ( bZapped || bIsCrouched || bWantsToCrouch || (Physics != PHYS_Walking) || VSize(Location - Controller.Target.Location) > (MeleeRange * 5) )
-		return false;
+    if ( bZapped || bIsCrouched || bWantsToCrouch || (Physics != PHYS_Walking) || VSize(Location - Controller.Target.Location) > (MeleeRange * 5) )
+        return false;
 
-	Velocity = Normal(Controller.Target.Location-Location)*PounceSpeed;
-	Velocity.Z = JumpZ;
-	SetPhysics(PHYS_Falling);
-	ZombieSpringAnim();
-	bPouncing=true;
-	return true;
+    Velocity = Normal(Controller.Target.Location-Location)*PounceSpeed;
+    Velocity.Z = JumpZ;
+    SetPhysics(PHYS_Falling);
+    ZombieSpringAnim();
+    bPouncing=true;
+    return true;
 }
 
 //Exact same as in KFMod, do not touch
 simulated function ZombieSpringAnim()
 {
-	SetAnimAction('ZombieSpring');
+    SetAnimAction('ZombieSpring');
 }
 
 //Exact same as in KFMod, do not touch
 event Landed(vector HitNormal)
 {
-	bPouncing=false;
-	super.Landed(HitNormal);
+    bPouncing=false;
+    super.Landed(HitNormal);
 }
 
 //More or less unchanged, we just want the modern damage calculations
 event Bump(actor Other)
 {
-	// TODO: is there a better way
-	if(bPouncing && KFHumanPawn(Other)!=none )
-	{
-		KFHumanPawn(Other).TakeDamage(((MeleeDamage - (MeleeDamage * 0.05)) + (MeleeDamage * (FRand() * 0.1))), self ,self.Location,self.velocity, class 'KFmod.ZombieMeleeDamage');
-		if (KFHumanPawn(Other).Health <=0)
-		{
-			//TODO - move this to humanpawn.takedamage? Also see KFMonster.MeleeDamageTarget
-			KFHumanPawn(Other).SpawnGibs(self.rotation, 1);
-		}
-		//After impact, there'll be no momentum for further bumps
-		bPouncing=false;
-	}
+    // TODO: is there a better way
+    if(bPouncing && KFHumanPawn(Other)!=none )
+    {
+        KFHumanPawn(Other).TakeDamage(((MeleeDamage - (MeleeDamage * 0.05)) + (MeleeDamage * (FRand() * 0.1))), self ,self.Location,self.velocity, class 'KFmod.ZombieMeleeDamage');
+        if (KFHumanPawn(Other).Health <=0)
+        {
+            //TODO - move this to humanpawn.takedamage? Also see KFMonster.MeleeDamageTarget
+            KFHumanPawn(Other).SpawnGibs(self.rotation, 1);
+        }
+        //After impact, there'll be no momentum for further bumps
+        bPouncing=false;
+    }
 }
 
 // Overhauled with KFMod Code
 // Blend his attacks so he can hit you in mid air.
 simulated function int DoAnimAction( name AnimName )
 {
-	if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
-	{
-		AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
-		PlayAnim(AnimName,, 0.0, 1);
-		Return 1;
-	}
-	Return Super.DoAnimAction(AnimName);
+    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
+    {
+        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+        PlayAnim(AnimName,, 0.0, 1);
+        Return 1;
+    }
+    Return Super.DoAnimAction(AnimName);
 }
 
 //Retail code we dont want
 //simulated event SetAnimAction(name NewAction)
 //{
-//	local int meleeAnimIndex;
+//    local int meleeAnimIndex;
 //
-//	if( NewAction=='' )
-//		Return;
-//	if(NewAction == 'Claw')
-//	{
-//		meleeAnimIndex = Rand(2);
-//		if( Physics == PHYS_Falling )
-//		{
+//    if( NewAction=='' )
+//        Return;
+//    if(NewAction == 'Claw')
+//    {
+//        meleeAnimIndex = Rand(2);
+//        if( Physics == PHYS_Falling )
+//        {
 //            NewAction = MeleeAirAnims[meleeAnimIndex];
-//		}
-//		else
-//		{
+//        }
+//        else
+//        {
 //            NewAction = meleeAnims[meleeAnimIndex];
-//		}
-//		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-//	}
-//	ExpectingChannel = DoAnimAction(NewAction);
+//        }
+//        CurrentDamtype = ZombieDamType[meleeAnimIndex];
+//    }
+//    ExpectingChannel = DoAnimAction(NewAction);
 //
 //    if( AnimNeedsWait(NewAction) )
 //    {
 //        bWaitForAnim = true;
 //    }
 //
-//	if( Level.NetMode!=NM_Client )
-//	{
-//		AnimAction = NewAction;
-//		bResetAnimAct = True;
-//		ResetAnimActTime = Level.TimeSeconds+0.3;
-//	}
+//    if( Level.NetMode!=NM_Client )
+//    {
+//        AnimAction = NewAction;
+//        bResetAnimAct = True;
+//        ResetAnimActTime = Level.TimeSeconds+0.3;
+//    }
 //}
 
 //Retail code we dont want
@@ -128,22 +128,22 @@ simulated function int DoAnimAction( name AnimName )
 
 function bool FlipOver()
 {
-	Return False;
+    Return False;
 }
 
 //Precache KFMod textures.
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin');
-	myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
+    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin');
+    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
 }
 
 defaultproperties
 {
-	//-------------------------------------------------------------------------------
-	// NOTE: Most Default Properties are set in the base class to eliminate hitching
-	//-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
+    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    //-------------------------------------------------------------------------------
 
-	//Use the Old CrawlerController
+    //Use the Old CrawlerController
     ControllerClass=Class'KFOldSchoolZedsChar.CrawlerControllerOS'
 }

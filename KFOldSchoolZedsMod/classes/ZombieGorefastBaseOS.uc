@@ -19,8 +19,8 @@ var bool bRunning;
 
 replication
 {
-	reliable if(Role == ROLE_Authority)
-		bRunning;
+    reliable if(Role == ROLE_Authority)
+        bRunning;
 }
 
 //-------------------------------------------------------------------------------
@@ -30,17 +30,17 @@ replication
 
 defaultproperties
 {
-	//These values were not set in KFMod
+    //These values were not set in KFMod
     //DrawScale=1.2
     //Prepivot=(Z=10.0)
     //ExtCollAttachBoneName="Collision_Attach"
     //KFRagdollName="GoreFast_Trip"
-	//SeveredHeadAttachScale=1.0
-	//SeveredLegAttachScale=0.9
-	//SeveredArmAttachScale=0.9
+    //SeveredHeadAttachScale=1.0
+    //SeveredLegAttachScale=0.9
+    //SeveredArmAttachScale=0.9
     //AmbientGlow=0
-	
-	//Values that don't need to be changed	
+    
+    //Values that don't need to be changed    
     MeleeAnims(0)="GoreAttack1"
     MeleeAnims(1)="GoreAttack2"
     MeleeAnims(2)="GoreAttack1"
@@ -56,10 +56,10 @@ defaultproperties
     IdleRifleAnim="GoreIdle"
     Mass=350.000000
     RotationRate=(Yaw=45000,Roll=0)
-	
-	//We'll keep these values the same as the retail version
-	//As this mod was made purely for the visual aspect, not gameplay	
-	//Exception:Zed cannot charge anymore, so range has been increased.
+    
+    //We'll keep these values the same as the retail version
+    //As this mod was made purely for the visual aspect, not gameplay    
+    //Exception:Zed cannot charge anymore, so range has been increased.
     MeleeDamage=15
     damageForce=5000
     ScoringValue=12
@@ -70,22 +70,22 @@ defaultproperties
     HealthMax=250
     PlayerCountHealthScale=0.15
     PlayerNumHeadHealthScale=0.0
-	HeadHealth=25
-	CrispUpThreshhold=8	
-	MotionDetectorThreat=0.5
+    HeadHealth=25
+    CrispUpThreshhold=8    
+    MotionDetectorThreat=0.5
 
-	//A connoisseur of flesh, despite being jawless
+    //A connoisseur of flesh, despite being jawless
     bCannibal = true
     MenuName="Gorefast 2.5"//"Gorefast"
-	
-	HeadHeight=2.75//2.5
-	HeadScale=1.5	
-	OnlineHeadshotOffset=(X=5,Y=0,Z=53)
-	OnlineHeadshotScale=1.5    
-	CollisionRadius=26.000000	
-	
+    
+    HeadHeight=2.75//2.5
+    HeadScale=1.5    
+    OnlineHeadshotOffset=(X=5,Y=0,Z=53)
+    OnlineHeadshotScale=1.5    
+    CollisionRadius=26.000000    
+    
     bUseExtendedCollision=true
-	ColOffset=(Z=52)
-	ColRadius=25
-	ColHeight=10	
+    ColOffset=(Z=52)
+    ColRadius=25
+    ColHeight=10    
 }

@@ -27,19 +27,19 @@ var float DistBeforePuke;
 
 defaultproperties
 {
-	//These values were not set in KFMod 
+    //These values were not set in KFMod 
     //DrawScale=1.075
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
     //SoundVolume=200
     //AmbientGlow=0
-	//CollisionRadius=26.000000
+    //CollisionRadius=26.000000
     //ZombieFlag=1
-	//SeveredHeadAttachScale=1.7
-	//SeveredLegAttachScale=1.3
-	//SeveredArmAttachScale=1.1
-	
-	//Values that don't need to be changed
+    //SeveredHeadAttachScale=1.7
+    //SeveredLegAttachScale=1.3
+    //SeveredArmAttachScale=1.1
+    
+    //Values that don't need to be changed
     MeleeAnims(0)="BloatChop2"
     MeleeAnims(1)="BloatChop2"
     MeleeAnims(2)="BloatChop2"
@@ -59,17 +59,17 @@ defaultproperties
     IdleWeaponAnim="BloatIdle"
     IdleRestAnim="BloatIdle"
     Mass=400.000000
-    RotationRate=(Yaw=45000,Roll=0)	
+    RotationRate=(Yaw=45000,Roll=0)    
     bCanDistanceAttackDoors=True
-	bUseExtendedCollision=True
+    bUseExtendedCollision=True
     ColRadius=27
-	Intelligence=BRAINS_Stupid	
-	
-	//We'll keep these values the same as the retail version
-	//As this mod was made purely for the visual aspect, not gameplay
-	//This is an exception for the Bloat as he no longer can move
-	//While puking, so were going to increase his puke attack's range
-	DistBeforePuke=250//250
+    Intelligence=BRAINS_Stupid    
+    
+    //We'll keep these values the same as the retail version
+    //As this mod was made purely for the visual aspect, not gameplay
+    //This is an exception for the Bloat as he no longer can move
+    //While puking, so were going to increase his puke attack's range
+    DistBeforePuke=250//250
     ScoringValue=17
     MeleeRange=30.0//55.000000
     GroundSpeed=75.0//105.000000
@@ -78,34 +78,34 @@ defaultproperties
     HealthMax=525
     PlayerCountHealthScale=0.25
     PlayerNumHeadHealthScale=0.0
-	HeadHealth=25
+    HeadHealth=25
     MeleeDamage=14
-    JumpZ=320.000000	
-	BleedOutDuration=6.0	
-	MotionDetectorThreat=1.0
-	ZapThreshold=0.5
-	ZappedDamageMod=1.5
-	bHarpoonToHeadStuns=true
-	bHarpoonToBodyStuns=false
-	
-	//Use old ragdoll
+    JumpZ=320.000000    
+    BleedOutDuration=6.0    
+    MotionDetectorThreat=1.0
+    ZapThreshold=0.5
+    ZappedDamageMod=1.5
+    bHarpoonToHeadStuns=true
+    bHarpoonToBodyStuns=false
+    
+    //Use old ragdoll
     KFRagdollName="BloatRag"
-	
-	//Looks like Shreks a little hungry
+    
+    //Looks like Shreks a little hungry
     bCannibal=True
-	
+    
     MenuName="Bloat 2.5"
 
-	Prepivot=(Z=8.000000) //(Z=5.0)
+    Prepivot=(Z=8.000000) //(Z=5.0)
 
-	//Tweak these, we dont want a floating fatty!
-	CollisionHeight=44.000000//previously  44
+    //Tweak these, we dont want a floating fatty!
+    CollisionHeight=44.000000//previously  44
     ColOffset=(Z=60)//(Z=60)
     ColHeight=22//22
 
-	HeadHeight=2.5//2.5
-	HeadScale=1.5	
-	
-	OnlineHeadshotOffset=(X=5,Y=0,Z=70)
-	OnlineHeadshotScale=1.5		
+    HeadHeight=2.5//2.5
+    HeadScale=1.5    
+    
+    OnlineHeadshotOffset=(X=5,Y=0,Z=70)
+    OnlineHeadshotScale=1.5        
 }

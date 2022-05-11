@@ -23,16 +23,16 @@ class ZombieScrakeOS extends ZombieScrakeBaseOS
 //Same as KFMod
 simulated function PostNetBeginPlay()
 {
-	EnableChannelNotify ( 1,1);
-	AnimBlendParams(1, 1.0, 0.0,, SpineBone1);
-	super.PostNetBeginPlay();
+    EnableChannelNotify ( 1,1);
+    AnimBlendParams(1, 1.0, 0.0,, SpineBone1);
+    super.PostNetBeginPlay();
 }
 
 simulated function PostNetReceive()
 {
-	if (bCharging)
-		MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
-	else if( !(bCrispified && bBurnified) )
+    if (bCharging)
+        MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
+    else if( !(bCrispified && bBurnified) )
         MovementAnims[0]=default.MovementAnims[0];
 }
 
@@ -71,9 +71,9 @@ function SetMindControlled(bool bNewMindControlled)
         if( bNewMindControlled != bZedUnderControl )
         {
             SetGroundSpeed(OriginalGroundSpeed * 1.25);
-    		Health *= 1.25;
-    		HealthMax *= 1.25;
-		}
+            Health *= 1.25;
+            HealthMax *= 1.25;
+        }
     }
     else
     {
@@ -102,47 +102,47 @@ simulated function SetBurningBehavior()
 {
     // If we're burning stop charging
     if( Role == Role_Authority && IsInState('RunningState') )
-			{
+            {
         super.SetBurningBehavior();
         GotoState('');
-			}
+            }
 
     super.SetBurningBehavior();
 }
 
 function RangedAttack(Actor A)
 {
-	//Retail variable
-	local float Dist;
+    //Retail variable
+    local float Dist;
 
-	Dist = VSize(A.Location - Location);
-	
-	if ( bShotAnim || Physics == PHYS_Swimming)
-		return; //Makes it so the Scrake has to be closer before he can saw the player
-	else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
-	{
-		bShotAnim = true;
-		SetAnimAction(MeleeAnims[Rand(2)]);
-		CurrentDamType = ZombieDamType[0];
-		PlaySound(sound'Claw2s', SLOT_None);//We have this sound, so we can play it
-		GoToState('SawingLoop');
-	}
+    Dist = VSize(A.Location - Location);
+    
+    if ( bShotAnim || Physics == PHYS_Swimming)
+        return; //Makes it so the Scrake has to be closer before he can saw the player
+    else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
+    {
+        bShotAnim = true;
+        SetAnimAction(MeleeAnims[Rand(2)]);
+        CurrentDamType = ZombieDamType[0];
+        PlaySound(sound'Claw2s', SLOT_None);//We have this sound, so we can play it
+        GoToState('SawingLoop');
+    }
 
-	//Code that handles running when low on health, we need it
-	//As we want retail Scrake behaviour, even if the Mod didn't have it
-	if( !bShotAnim && !bDecapitated )
-	{
-		if ( Level.Game.GameDifficulty < 5.0 )
-		{
-			if ( float(Health)/HealthMax < 0.5 )
-				GoToState('RunningState');
-		}
-		else
-		{
-			if ( float(Health)/HealthMax < 0.75 ) // Changed Rage Point from 0.5 to 0.75 in Balance Round 1(applied to only Suicidal and HoE in Round 7)
-				GoToState('RunningState');
-		}
-	}
+    //Code that handles running when low on health, we need it
+    //As we want retail Scrake behaviour, even if the Mod didn't have it
+    if( !bShotAnim && !bDecapitated )
+    {
+        if ( Level.Game.GameDifficulty < 5.0 )
+        {
+            if ( float(Health)/HealthMax < 0.5 )
+                GoToState('RunningState');
+        }
+        else
+        {
+            if ( float(Health)/HealthMax < 0.75 ) // Changed Rage Point from 0.5 to 0.75 in Balance Round 1(applied to only Suicidal and HoE in Round 7)
+                GoToState('RunningState');
+        }
+    }
 }
 
 //Dont touch this retail code
@@ -155,62 +155,62 @@ state RunningState
         GoToState('');
     }
 
-	// Don't override speed in this state
+    // Don't override speed in this state
     function bool CanSpeedAdjust()
     {
         return false;
     }
 
-	function BeginState()
-	{
-		if( bZapped )
+    function BeginState()
+    {
+        if( bZapped )
         {
             GoToState('');
         }
         else
         {
-    		SetGroundSpeed(OriginalGroundSpeed * 3.5);
-    		bCharging = true;
-    		if( Level.NetMode!=NM_DedicatedServer )
-    			PostNetReceive();
+            SetGroundSpeed(OriginalGroundSpeed * 3.5);
+            bCharging = true;
+            if( Level.NetMode!=NM_DedicatedServer )
+                PostNetReceive();
 
-    		NetUpdateTime = Level.TimeSeconds - 1;
-		}
-	}
+            NetUpdateTime = Level.TimeSeconds - 1;
+        }
+    }
 
-	function EndState()
-	{
-		if( !bZapped )
-		{
+    function EndState()
+    {
+        if( !bZapped )
+        {
             SetGroundSpeed(GetOriginalGroundSpeed());
         }
-		bCharging = False;
-		if( Level.NetMode!=NM_DedicatedServer )
-			PostNetReceive();
-	}
+        bCharging = False;
+        if( Level.NetMode!=NM_DedicatedServer )
+            PostNetReceive();
+    }
 
-	function RemoveHead()
-	{
-		GoToState('');
-		Global.RemoveHead();
-	}
+    function RemoveHead()
+    {
+        GoToState('');
+        Global.RemoveHead();
+    }
 
     function RangedAttack(Actor A)
     {
-		//Retail variable
-		local float Dist;
-		
-		Dist = VSize(A.Location - Location);
-		
-    	if ( bShotAnim || Physics == PHYS_Swimming)
-    		return; //Added it here just incase
-    	else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
-    	{
-    		bShotAnim = true;
-    		SetAnimAction(MeleeAnims[Rand(2)]);
-    		CurrentDamType = ZombieDamType[0];
-    		GoToState('SawingLoop');
-    	}
+        //Retail variable
+        local float Dist;
+        
+        Dist = VSize(A.Location - Location);
+        
+        if ( bShotAnim || Physics == PHYS_Swimming)
+            return; //Added it here just incase
+        else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
+        {
+            bShotAnim = true;
+            SetAnimAction(MeleeAnims[Rand(2)]);
+            CurrentDamType = ZombieDamType[0];
+            GoToState('SawingLoop');
+        }
     }
 }
 
@@ -223,8 +223,8 @@ state RunningToMarker extends RunningState
 
 State SawingLoop
 {
-	//Keep this retail code
-	// Don't override speed in this state
+    //Keep this retail code
+    // Don't override speed in this state
     function bool CanSpeedAdjust()
     {
         return false;
@@ -235,161 +235,161 @@ State SawingLoop
         return false;
     }
 
-	function RangedAttack(Actor A)
-	{
-		if ( bShotAnim )
-			return; //We dont need distance checking for sawing
-		else if ( CanAttack(A) )
-		{
-			Acceleration = vect(0,0,0);
-			bShotAnim = true;
-			MeleeDamage = default.MeleeDamage*0.6;
-			SetAnimAction('SawImpaleLoop');
-			CurrentDamType = ZombieDamType[0];
-		}
-		else GoToState('');
-	}
-	function AnimEnd( int Channel )
-	{
-		Super.AnimEnd(Channel);
-		if( Controller!=None && Controller.Enemy!=None )
-			RangedAttack(Controller.Enemy); // Keep on attacking if possible.
-	}
+    function RangedAttack(Actor A)
+    {
+        if ( bShotAnim )
+            return; //We dont need distance checking for sawing
+        else if ( CanAttack(A) )
+        {
+            Acceleration = vect(0,0,0);
+            bShotAnim = true;
+            MeleeDamage = default.MeleeDamage*0.6;
+            SetAnimAction('SawImpaleLoop');
+            CurrentDamType = ZombieDamType[0];
+        }
+        else GoToState('');
+    }
+    function AnimEnd( int Channel )
+    {
+        Super.AnimEnd(Channel);
+        if( Controller!=None && Controller.Enemy!=None )
+            RangedAttack(Controller.Enemy); // Keep on attacking if possible.
+    }
 
-	//Removed unnecessary code and added in some to increase Head Hitbox
-	//Whenever he's doing his running animation because whenever he's
-	//Doing that specific animation, he can't be headshot
+    //Removed unnecessary code and added in some to increase Head Hitbox
+    //Whenever he's doing his running animation because whenever he's
+    //Doing that specific animation, he can't be headshot
     simulated function Tick(float DeltaTime)
     {
-		if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
-		{
-			HeadScale=3.3;
-			OnlineHeadshotScale=3.5;
-		}
-		else
-		{
-			HeadScale=default.HeadScale;
-			OnlineHeadshotScale=default.OnlineHeadshotScale;
-		}
-        // Keep the scrake moving toward its target when attacking
-    	if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-    	{
-    		if( LookTarget!=None )
-    		{
-    		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-    		}
+        if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
+        {
+            HeadScale=3.3;
+            OnlineHeadshotScale=3.5;
         }
-	
-		global.Tick(DeltaTime);
-	}
+        else
+        {
+            HeadScale=default.HeadScale;
+            OnlineHeadshotScale=default.OnlineHeadshotScale;
+        }
+        // Keep the scrake moving toward its target when attacking
+        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        {
+            if( LookTarget!=None )
+            {
+                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+            }
+        }
+    
+        global.Tick(DeltaTime);
+    }
 
-	function EndState()
-	{
-		MeleeDamage = Max( DifficultyDamageModifer() * default.MeleeDamage, 1 );
+    function EndState()
+    {
+        MeleeDamage = Max( DifficultyDamageModifer() * default.MeleeDamage, 1 );
 
-		SetGroundSpeed(GetOriginalGroundSpeed());
-		bCharging = False;
-		if( Level.NetMode!=NM_DedicatedServer )
-			PostNetReceive();
-	}
+        SetGroundSpeed(GetOriginalGroundSpeed());
+        bCharging = False;
+        if( Level.NetMode!=NM_DedicatedServer )
+            PostNetReceive();
+    }
 }
 
 //Dont touch this
 // Added in Balance Round 1 to reduce the headshot damage taken from Crossbows
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
-	local bool bIsHeadShot;
-	local PlayerController PC;
-	local KFSteamStatsAndAchievements Stats;
+    local bool bIsHeadShot;
+    local PlayerController PC;
+    local KFSteamStatsAndAchievements Stats;
 
-	bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
+    bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
 
-	if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
-	{
-		Damage *= 0.5; // Was 0.5 in Balance Round 1, then 0.6 in Round 2, back to 0.5 in Round 3
-	}
+    if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
+    {
+        Damage *= 0.5; // Was 0.5 in Balance Round 1, then 0.6 in Round 2, back to 0.5 in Round 3
+    }
 
-	Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
+    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
 
-	// Added in Balance Round 3 to make the Scrake "Rage" more reliably when his health gets low(limited to Suicidal and HoE in Round 7)
-	if ( Level.Game.GameDifficulty >= 5.0 && !IsInState('SawingLoop') && !IsInState('RunningState') && float(Health) / HealthMax < 0.75 )
-		RangedAttack(InstigatedBy);
+    // Added in Balance Round 3 to make the Scrake "Rage" more reliably when his health gets low(limited to Suicidal and HoE in Round 7)
+    if ( Level.Game.GameDifficulty >= 5.0 && !IsInState('SawingLoop') && !IsInState('RunningState') && float(Health) / HealthMax < 0.75 )
+        RangedAttack(InstigatedBy);
 
-	//Can remove this but I dont want to
+    //Can remove this but I dont want to
     if( damageType == class'DamTypeDBShotgun' )
     {
-    	PC = PlayerController( InstigatedBy.Controller );
-    	if( PC != none )
-    	{
-    	    Stats = KFSteamStatsAndAchievements( PC.SteamStatsAndAchievements );
-    	    if( Stats != none )
-    	    {
-    	        Stats.CheckAndSetAchievementComplete( Stats.KFACHIEVEMENT_PushScrakeSPJ );
-    	    }
-    	}
+        PC = PlayerController( InstigatedBy.Controller );
+        if( PC != none )
+        {
+            Stats = KFSteamStatsAndAchievements( PC.SteamStatsAndAchievements );
+            if( Stats != none )
+            {
+                Stats.CheckAndSetAchievementComplete( Stats.KFACHIEVEMENT_PushScrakeSPJ );
+            }
+        }
     }
 }
 
 //More or less same as KFMod code
 function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageType)
 {
-	local int StunChance;
+    local int StunChance;
 
-	StunChance = rand(5);
+    StunChance = rand(5);
 
-	if( Level.TimeSeconds - LastPainAnim < MinTimeBetweenPainAnims )
-		return;
+    if( Level.TimeSeconds - LastPainAnim < MinTimeBetweenPainAnims )
+        return;
 
-	if( (Level.Game.GameDifficulty < 5.0 || StunsRemaining != 0) && (Damage>=150 || (DamageType.name=='DamTypeStunNade' && StunChance>3) || (DamageType.name=='DamTypeCrossbowHeadshot' && Damage>=200)) )
-		PlayDirectionalHit(HitLocation);
+    if( (Level.Game.GameDifficulty < 5.0 || StunsRemaining != 0) && (Damage>=150 || (DamageType.name=='DamTypeStunNade' && StunChance>3) || (DamageType.name=='DamTypeCrossbowHeadshot' && Damage>=200)) )
+        PlayDirectionalHit(HitLocation);
 
-	LastPainAnim = Level.TimeSeconds;
+    LastPainAnim = Level.TimeSeconds;
 
-	if( Level.TimeSeconds - LastPainSound < MinTimeBetweenPainSounds )
-		return;
+    if( Level.TimeSeconds - LastPainSound < MinTimeBetweenPainSounds )
+        return;
 
-	LastPainSound = Level.TimeSeconds;
-	PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
+    LastPainSound = Level.TimeSeconds;
+    PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
 }
 
 //Overhauled with KFMod Code
 simulated function int DoAnimAction( name AnimName )
 {
-	if( AnimName=='SawZombieAttack1' || AnimName=='SawZombieAttack2' || AnimName=='SawImpaleLoop' )
-	{
-		AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
-		PlayAnim(AnimName,, 0.0, 1);
-		Return 1;
-	}
-	Return Super.DoAnimAction(AnimName);
+    if( AnimName=='SawZombieAttack1' || AnimName=='SawZombieAttack2' || AnimName=='SawImpaleLoop' )
+    {
+        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+        PlayAnim(AnimName,, 0.0, 1);
+        Return 1;
+    }
+    Return Super.DoAnimAction(AnimName);
 }
 
 //Retail code we'll keep
 simulated event SetAnimAction(name NewAction)
 {
-	local int meleeAnimIndex;
+    local int meleeAnimIndex;
 
-	if( NewAction=='' )
-		Return;
-	if(NewAction == 'Claw')
-	{
-		meleeAnimIndex = Rand(3);
-		NewAction = meleeAnims[meleeAnimIndex];
-		CurrentDamtype = ZombieDamType[meleeAnimIndex];
-	}
-	ExpectingChannel = DoAnimAction(NewAction);
+    if( NewAction=='' )
+        Return;
+    if(NewAction == 'Claw')
+    {
+        meleeAnimIndex = Rand(3);
+        NewAction = meleeAnims[meleeAnimIndex];
+        CurrentDamtype = ZombieDamType[meleeAnimIndex];
+    }
+    ExpectingChannel = DoAnimAction(NewAction);
 
     if( AnimNeedsWait(NewAction) )
     {
         bWaitForAnim = true;
     }
 
-	if( Level.NetMode!=NM_Client )
-	{
-		AnimAction = NewAction;
-		bResetAnimAct = True;
-		ResetAnimActTime = Level.TimeSeconds+0.3;
-	}
+    if( Level.NetMode!=NM_Client )
+    {
+        AnimAction = NewAction;
+        bResetAnimAct = True;
+        ResetAnimActTime = Level.TimeSeconds+0.3;
+    }
 }
 
 //Retail code we'll keep
@@ -415,18 +415,18 @@ simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation)
 //Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin');
-	myLevel.AddPrecacheMaterial(TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC');
-	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin');
-	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin');
+    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin');
+    myLevel.AddPrecacheMaterial(TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC');
+    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin');
+    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin');
 }
 
 defaultproperties
 {
-	//-------------------------------------------------------------------------------
-	// NOTE: Most Default Properties are set in the base class to eliminate hitching
-	//-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
+    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    //-------------------------------------------------------------------------------
 
-	//Use KFMod Controller	
+    //Use KFMod Controller    
     ControllerClass=Class'KFOldSchoolZedsChar.SawZombieControllerOS'
 }

@@ -5,7 +5,7 @@ class KFHumanGibGroupOS extends xPawnGibGroup;
 
 defaultproperties
 {
-	 //KFMod Gibs
+     //KFMod Gibs
      Gibs(0)=Class'KFOldSchoolZedsMod.KFGibHeadOS'
      Gibs(1)=Class'KFOldSchoolZedsMod.KFGibHeadbOS'
      Gibs(2)=Class'KFOldSchoolZedsMod.KFGibHeadOS'
@@ -14,8 +14,8 @@ defaultproperties
      Gibs(5)=Class'KFOldSchoolZedsMod.KFGibHeadOS'
      Gibs(6)=Class'KFOldSchoolZedsMod.KFGibHeadbOS'
      Gibs(7)=Class'KFOldSchoolZedsMod.KFGibHeadOS'
-	 
-	 //KFMod Blood Puffs
+     
+     //KFMod Blood Puffs
      BloodHitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
      LowGoreBloodHitClass=Class'KFOldSchoolZedsMod.KFBloodPuffOS'
      BloodGibClass=None

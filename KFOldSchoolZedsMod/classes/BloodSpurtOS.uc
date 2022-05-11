@@ -14,56 +14,56 @@ var bool bMustShow;
 
 replication
 {
-	unreliable if ( bNetInitial && (Role==ROLE_Authority) )
-		bMustShow,HitDir;
+    unreliable if ( bNetInitial && (Role==ROLE_Authority) )
+        bMustShow,HitDir;
 }
 
 simulated function PostNetBeginPlay()
 {
-	if ( Level.NetMode != NM_DedicatedServer )
-		WallSplat();
-	else 
-		LifeSpan = 0.2;
+    if ( Level.NetMode != NM_DedicatedServer )
+        WallSplat();
+    else 
+        LifeSpan = 0.2;
 }
 
 simulated function WallSplat()
 {
-	local vector WallHit, WallNormal;
-	local Actor WallActor;
+    local vector WallHit, WallNormal;
+    local Actor WallActor;
 
-	if ( Level.bDropDetail || (!bMustShow && (FRand() > 0.8)) || (BloodDecalClass == None) )
-		return;
-	
-	if ( HitDir == vect(0,0,0) )
-	{
-		if ( Owner != None )
-			HitDir = Location - Owner.Location;
-		else
-			HitDir.Z = -1;
-	}
-	HitDir = Normal(HitDir);
-	
-	WallActor = Trace(WallHit, WallNormal, Location + 350 * HitDir, Location, false);
-	if ( WallActor != None )	
-		spawn(BloodDecalClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
+    if ( Level.bDropDetail || (!bMustShow && (FRand() > 0.8)) || (BloodDecalClass == None) )
+        return;
+    
+    if ( HitDir == vect(0,0,0) )
+    {
+        if ( Owner != None )
+            HitDir = Location - Owner.Location;
+        else
+            HitDir.Z = -1;
+    }
+    HitDir = Normal(HitDir);
+    
+    WallActor = Trace(WallHit, WallNormal, Location + 350 * HitDir, Location, false);
+    if ( WallActor != None )    
+        spawn(BloodDecalClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
 }
 
 static function PrecacheContent(LevelInfo Level)
 {
-	local int i;
-	
-	Super.PrecacheContent(Level);
-	if ( Default.BloodDecalClass != None )
-	{
-		for ( i=0; i<3; i++ )
-			Level.AddPrecacheMaterial(Default.splats[i]);
-	}	
+    local int i;
+    
+    Super.PrecacheContent(Level);
+    if ( Default.BloodDecalClass != None )
+    {
+        for ( i=0; i<3; i++ )
+            Level.AddPrecacheMaterial(Default.splats[i]);
+    }    
 }
 
 defaultproperties
 {
      BloodDecalClass=Class'KFOldSchoolZedsMod.BloodSplatterOS'
-	 // Use Relevant Splat Textures found in KFOldSchool_XEffects
+     // Use Relevant Splat Textures found in KFOldSchool_XEffects
      Splats(0)=Texture'KFOldSchool_XEffects.BloodSplat1'
      Splats(1)=Texture'KFOldSchool_XEffects.BloodSplat2'
      Splats(2)=Texture'KFOldSchool_XEffects.BloodSplat3'
@@ -90,7 +90,7 @@ defaultproperties
      bOnlyRelevantToOwner=True
      RemoteRole=ROLE_SimulatedProxy
      LifeSpan=3.500000
-	 //Texture ported to KFOldSchool_XEffects
+     //Texture ported to KFOldSchool_XEffects
      Skins(0)=Texture'KFOldSchool_XEffects.pcl_Blooda'
      Style=STY_Alpha
 }

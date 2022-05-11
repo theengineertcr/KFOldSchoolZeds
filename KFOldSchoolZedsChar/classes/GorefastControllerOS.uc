@@ -2,26 +2,26 @@
 class GorefastControllerOS extends KFMonsterControllerOS;
 
 //Dont need to touch any of the retail code this time
-var	bool	bDoneSpottedCheck;
+var    bool    bDoneSpottedCheck;
 
 state ZombieHunt
 {
-	event SeePlayer(Pawn SeenPlayer)
-	{
-		if ( !bDoneSpottedCheck && PlayerController(SeenPlayer.Controller) != none )
-		{
-			// 25% chance of first player to see this Gorefast saying something
-			if ( !KFGameType(Level.Game).bDidSpottedGorefastMessage && FRand() < 0.25 )
-			{
-				PlayerController(SeenPlayer.Controller).Speech('AUTO', 13, "");
-				KFGameType(Level.Game).bDidSpottedGorefastMessage = true;
-			}
+    event SeePlayer(Pawn SeenPlayer)
+    {
+        if ( !bDoneSpottedCheck && PlayerController(SeenPlayer.Controller) != none )
+        {
+            // 25% chance of first player to see this Gorefast saying something
+            if ( !KFGameType(Level.Game).bDidSpottedGorefastMessage && FRand() < 0.25 )
+            {
+                PlayerController(SeenPlayer.Controller).Speech('AUTO', 13, "");
+                KFGameType(Level.Game).bDidSpottedGorefastMessage = true;
+            }
 
-			bDoneSpottedCheck = true;
-		}
+            bDoneSpottedCheck = true;
+        }
 
-		global.SeePlayer(SeenPlayer);
-	}
+        global.SeePlayer(SeenPlayer);
+    }
 }
 
 defaultproperties

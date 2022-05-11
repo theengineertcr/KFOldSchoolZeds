@@ -1,20 +1,20 @@
 // Chunky bits of flesh
 class KFGibHeadbOS extends KFGibOS;
 
-	//Load necessary meshes and textures
-	#exec OBJ LOAD FILE=KillingFloorStatics.usx
-	#exec OBJ LOAD FILE=KillingFloorTextures.utx
+    //Load necessary meshes and textures
+    #exec OBJ LOAD FILE=KillingFloorStatics.usx
+    #exec OBJ LOAD FILE=KillingFloorTextures.utx
 
 defaultproperties
 {
-	 // Use the KFMod version of KFHumanGibGroup & GibJet
+     // Use the KFMod version of KFHumanGibGroup & GibJet
      GibGroupClass=Class'KFOldSchoolZedsMod.KFHumanGibGroupOS'
      TrailClass=Class'KFOldSchoolZedsMod.KFGibJetOS'
      DrawType=DT_StaticMesh
-	 // Same model as in KFMod, no need to change	 
+     // Same model as in KFMod, no need to change     
      StaticMesh=StaticMesh'KillingFloorStatics.Gib2'
      DrawScale=0.500000
-	 // Same Texture as in KFMod, no need to change	 
+     // Same Texture as in KFMod, no need to change     
      Skins(0)=Texture'KillingFloorTextures.Statics.GibsSKin'
      bUnlit=False
      TransientSoundVolume=25.000000

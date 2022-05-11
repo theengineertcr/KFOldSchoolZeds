@@ -36,14 +36,14 @@ defaultproperties
          ScaleSizeByVelocityMax=3.000000
          InitialParticlesPerSecond=100.000000
          DrawStyle=PTDS_Modulated
-		 // Bloody spray in KFX was imported to KFOldSchoolZeds_Textures
+         // Bloody spray in KFX was imported to KFOldSchoolZeds_Textures
          Texture=Texture'KFOldSchoolZeds_Textures.BloodySpray'
          TextureUSubdivisions=4
          TextureVSubdivisions=2
          LifetimeRange=(Min=0.400000,Max=0.550000)
          StartVelocityRange=(X=(Min=-200.000000,Max=200.000000),Y=(Min=-100.000000,Max=100.000000),Z=(Min=300.000000,Max=500.000000))
      End Object
-	 // This class uses this emitter, make sure that's known	 
+     // This class uses this emitter, make sure that's known     
      Emitters(0)=SpriteEmitter'KFOldSchoolZedsMod.GibExplosionOS.SpriteEmitter43'
 
 }

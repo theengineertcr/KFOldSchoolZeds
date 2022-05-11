@@ -11,7 +11,7 @@ class KFVomitJetOS extends BloodJetOS;
 //Overhauled, no longer defines emitter parameters
 defaultproperties
 {
-	//Use KFModified version of BioDecal
+    //Use KFModified version of BioDecal
      SplatterClass=Class'KFOldSchoolZedsMod.BioDecalOS'
      mMaxParticles=50
      mSpeedRange(0)=100.000000
@@ -19,7 +19,7 @@ defaultproperties
      mCollision=True
      mGrowthRate=50.000000
      LifeSpan=2.000000
-	//Use KFMod Texture
+    //Use KFMod Texture
      Skins(0)=Texture'KFOldSchoolZeds_Textures.VomitSplash'
      bUnlit=False
 }

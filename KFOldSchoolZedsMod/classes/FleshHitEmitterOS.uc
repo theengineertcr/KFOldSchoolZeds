@@ -1,13 +1,13 @@
 // ✔
 class FleshHitEmitterOS extends KFHitEmitterOS;
-	 // Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
-	 // So we'll load that package instead. Also, load the texture package
+     // Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
+     // So we'll load that package instead. Also, load the texture package
      #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-	 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+     #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
-	 // Sounds to accompany blood flying all over the air
+     // Sounds to accompany blood flying all over the air
      ImpactSounds(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact1'
      ImpactSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact1'
      ImpactSounds(2)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact2'
@@ -42,14 +42,14 @@ defaultproperties
          ScaleSizeByVelocityMax=3.000000
          InitialParticlesPerSecond=100.000000
          DrawStyle=PTDS_Modulated
-		 // Bloody spray in KFX was imported to KFOldSchoolZeds_Textures
+         // Bloody spray in KFX was imported to KFOldSchoolZeds_Textures
          Texture=Texture'KFOldSchoolZeds_Textures.BloodySpray'
          TextureUSubdivisions=4
          TextureVSubdivisions=4
          LifetimeRange=(Min=0.500000,Max=0.750000)
          StartVelocityRange=(Z=(Min=120.000000,Max=150.000000))
      End Object
-	 // This class uses this emitter, make sure that's known
+     // This class uses this emitter, make sure that's known
      Emitters(0)=SpriteEmitter'KFOldSchoolZedsMod.FleshHitEmitterOS.SpriteEmitter0'
 
      LifeSpan=1.000000

@@ -12,18 +12,18 @@ class ZombieSiren_OS extends ZombieSirenOS;
 
 defaultproperties
 {
-	////Detached Limbs don't exist
+    ////Detached Limbs don't exist
     //DetachedLegClass=class'SeveredLegSiren'
-	//DetachedHeadClass=class'SeveredHeadSiren'
+    //DetachedHeadClass=class'SeveredHeadSiren'
 
-	//Use KFMod Models and Textures
+    //Use KFMod Models and Textures
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale2'
 
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin'
     Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB'
 
-	//Use KFMod Sounds
-	//Let's not have her breathe
+    //Use KFMod Sounds
+    //Let's not have her breathe
     AmbientSound=None
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Siren.Siren_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'

@@ -24,9 +24,9 @@ simulated function PostNetReceive()
 {
     if( !bZapped )
     {
-    	if (bRunning)
-    		MovementAnims[0]='ZombieRun';
-    	else MovementAnims[0]=default.MovementAnims[0];
+        if (bRunning)
+            MovementAnims[0]='ZombieRun';
+        else MovementAnims[0]=default.MovementAnims[0];
     }
 }
 
@@ -65,9 +65,9 @@ function SetMindControlled(bool bNewMindControlled)
         if( bNewMindControlled != bZedUnderControl )
         {
             SetGroundSpeed(OriginalGroundSpeed * 1.25);
-    		Health *= 1.25;
-    		HealthMax *= 1.25;
-		}
+            Health *= 1.25;
+            HealthMax *= 1.25;
+        }
     }
     else
     {
@@ -94,28 +94,28 @@ function GivenNewMarker()
 //KFMod Code
 function PlayZombieAttackHitSound()
 {
-	local int MeleeAttackSounds;
+    local int MeleeAttackSounds;
 
-	MeleeAttackSounds = rand(3);
+    MeleeAttackSounds = rand(3);
 
-	switch(MeleeAttackSounds)
-	{
-		case 0:
-			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit1', SLOT_Interact);
-			break;
-		case 1:
-			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit2', SLOT_Interact);
-			break;
-		case 2:
-			PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit3', SLOT_Interact);
-	}
+    switch(MeleeAttackSounds)
+    {
+        case 0:
+            PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit1', SLOT_Interact);
+            break;
+        case 1:
+            PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit2', SLOT_Interact);
+            break;
+        case 2:
+            PlaySound(sound'KFOldSchoolZeds_Sounds.Stab_Hit3', SLOT_Interact);
+    }
 }
 
 function RangedAttack(Actor A)
 {
-	Super.RangedAttack(A);
-	if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
-		GoToState('RunningState');
+    Super.RangedAttack(A);
+    if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
+        GoToState('RunningState');
 }
 
 state RunningState
@@ -133,86 +133,86 @@ state RunningState
         return false;
     }
 
-	function BeginState()
-	{
-		if( bZapped )
+    function BeginState()
+    {
+        if( bZapped )
         {
             GoToState('');
         }
         else
         {
-    		SetGroundSpeed(OriginalGroundSpeed * 1.875); //Was 1.5 in KFMod, dont touch for balance reasons
-    		bRunning = true;
-    		if( Level.NetMode!=NM_DedicatedServer )
-    			PostNetReceive();
+            SetGroundSpeed(OriginalGroundSpeed * 1.875); //Was 1.5 in KFMod, dont touch for balance reasons
+            bRunning = true;
+            if( Level.NetMode!=NM_DedicatedServer )
+                PostNetReceive();
 
-    		NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
-		}
-	}
-
-	function EndState()
-	{
-		if( !bZapped )
-		{
-            SetGroundSpeed(GetOriginalGroundSpeed());
+            NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
         }
-		bRunning = False;
-		if( Level.NetMode!=NM_DedicatedServer )
-			PostNetReceive();
-		
-		//RunAttackTimeout=0;
-
-		NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
-	}
-
-	function RemoveHead()
-	{
-		GoToState('');
-		Global.RemoveHead();
-	}
-
-	//Old zeds don't support charging(full body anims), so all charging code removed
-    function RangedAttack(Actor A)
-    {
-		Super.RangedAttack(A);
     }
 
-	//Added in code to increase Head Hitbox whenever Gorefasts
-	//Do their running animation because during that specific
-	//Animation, they can't be headshot
+    function EndState()
+    {
+        if( !bZapped )
+        {
+            SetGroundSpeed(GetOriginalGroundSpeed());
+        }
+        bRunning = False;
+        if( Level.NetMode!=NM_DedicatedServer )
+            PostNetReceive();
+        
+        //RunAttackTimeout=0;
+
+        NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
+    }
+
+    function RemoveHead()
+    {
+        GoToState('');
+        Global.RemoveHead();
+    }
+
+    //Old zeds don't support charging(full body anims), so all charging code removed
+    function RangedAttack(Actor A)
+    {
+        Super.RangedAttack(A);
+    }
+
+    //Added in code to increase Head Hitbox whenever Gorefasts
+    //Do their running animation because during that specific
+    //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
-		if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
-		{
-			HeadScale=3.0;
-			OnlineHeadshotScale=3.0;
-		}
-		else
-		{
-			HeadScale=default.HeadScale;
-			OnlineHeadshotScale=default.OnlineHeadshotScale;
-		}
-		// Keep moving toward the target until the timer runs out (anim finishes)
+        if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
+        {
+            HeadScale=3.0;
+            OnlineHeadshotScale=3.0;
+        }
+        else
+        {
+            HeadScale=default.HeadScale;
+            OnlineHeadshotScale=default.OnlineHeadshotScale;
+        }
+        // Keep moving toward the target until the timer runs out (anim finishes)
         //if( RunAttackTimeout > 0 )
-		//{
+        //{
         //    RunAttackTimeout -= DeltaTime;
-		//
+        //
         //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
         //    {
         //        RunAttackTimeout = 0;
         //        GoToState('');
         //    }
-		//}
-	
+        //}
+    
         // Keep the gorefast moving toward its target when attacking
-    	if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-    	{
-    		if( LookTarget!=None )
-    		{
-    		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-    		}
+        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        {
+            if( LookTarget!=None )
+            {
+                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+            }
         }
-	
+    
         global.Tick(DeltaTime);
     }
 
@@ -238,27 +238,27 @@ state RunningToMarker extends RunningState
 {
     simulated function Tick(float DeltaTime)
     {
-		// Keep moving toward the target until the timer runs out (anim finishes)
+        // Keep moving toward the target until the timer runs out (anim finishes)
         //if( RunAttackTimeout > 0 )
-		//{
+        //{
         //    RunAttackTimeout -= DeltaTime;
-		//
+        //
         //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
         //    {
         //        RunAttackTimeout = 0;
         //        GoToState('');
         //    }
-		//}
-	
+        //}
+    
         // Keep the gorefast moving toward its target when attacking
-    	if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-    	{
-    		if( LookTarget!=None )
-    		{
-    		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-    		}
+        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        {
+            if( LookTarget!=None )
+            {
+                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+            }
         }
-	
+    
         global.Tick(DeltaTime);
     }
 
@@ -280,17 +280,17 @@ CheckCharge:
 //Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.
-	myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin');
+    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin');
 }
 
 defaultproperties
 {
-	//-------------------------------------------------------------------------------
-	// NOTE: Most Default Properties are set in the base class to eliminate hitching
-	//-------------------------------------------------------------------------------
-	//EventClasses aren't a thing in KFMod
+    //-------------------------------------------------------------------------------
+    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    //-------------------------------------------------------------------------------
+    //EventClasses aren't a thing in KFMod
     //EventClasses(0)="KFChar.ZombieGorefast_STANDARD"
-	
-	//Use KFMod Controller
+    
+    //Use KFMod Controller
     ControllerClass=Class'KFOldSchoolZedsChar.GorefastControllerOS'
 }

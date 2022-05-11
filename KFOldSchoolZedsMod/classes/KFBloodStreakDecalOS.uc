@@ -51,7 +51,7 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-	// KFX to KFOldSchoolZeds_Textures
+    // KFX to KFOldSchoolZeds_Textures
      Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
      Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
      Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodStreak'

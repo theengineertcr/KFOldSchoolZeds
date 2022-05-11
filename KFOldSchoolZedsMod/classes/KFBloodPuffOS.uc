@@ -4,14 +4,14 @@
 //=============================================================================
 class KFBloodPuffOS extends BloodSmallHit;
 
-	// Load the texture package
-	#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+    // Load the texture package
+    #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
-	 // Use the KFMod BloodSplatter
+     // Use the KFMod BloodSplatter
      BloodDecalClass=Class'KFOldSchoolZedsMod.KFBloodSplatterDecalOS'
-	 //KFX to KFOldSchoolZeds_Textures
+     //KFX to KFOldSchoolZeds_Textures
      Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
      Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodSplat2'
      Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodSplat3'
@@ -30,7 +30,7 @@ defaultproperties
      mGrowthRate=45.000000
      mNumTileColumns=4
      mNumTileRows=4
-	 // KFX to KFOldSchoolZeds_Textures
+     // KFX to KFOldSchoolZeds_Textures
      Skins(0)=Texture'KFOldSchoolZeds_Textures.BloodySpray'
      Style=STY_Modulated
 }

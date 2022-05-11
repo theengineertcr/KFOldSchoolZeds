@@ -13,96 +13,96 @@ class KFBloatVomitOS extends KFBloatVomit;
 //Some minor differences
 state OnGround
 {
-	simulated function BeginState()
-	{
+    simulated function BeginState()
+    {
         SetTimer(RestTime, false);
-		BlowUp(Location);
-	}
-	simulated function Timer()
-	{
-		if (bDrip)
-		{
-			bDrip = false;
-			SetCollisionSize(default.CollisionHeight, default.CollisionRadius);
-			Velocity = PhysicsVolume.Gravity * 0.2;
-			SetPhysics(PHYS_Falling);
-			bCollideWorld = true;
-			bCheckedsurface = false;
-			bProjTarget = false;
-			//KFMod wants to have the anim loop, so we'll loop it
-			LoopAnim('flying', 1.0);
-			GotoState('Flying');
-		}
-		else BlowUp(Location);
-	}
+        BlowUp(Location);
+    }
+    simulated function Timer()
+    {
+        if (bDrip)
+        {
+            bDrip = false;
+            SetCollisionSize(default.CollisionHeight, default.CollisionRadius);
+            Velocity = PhysicsVolume.Gravity * 0.2;
+            SetPhysics(PHYS_Falling);
+            bCollideWorld = true;
+            bCheckedsurface = false;
+            bProjTarget = false;
+            //KFMod wants to have the anim loop, so we'll loop it
+            LoopAnim('flying', 1.0);
+            GotoState('Flying');
+        }
+        else BlowUp(Location);
+    }
 
-	simulated function ProcessTouch(Actor Other, Vector HitLocation)
-	{
+    simulated function ProcessTouch(Actor Other, Vector HitLocation)
+    {
         if ( Other != none )
-			BlowUp(Location);
-	}
+            BlowUp(Location);
+    }
 
-	function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
-	{
-		if (DamageType.default.bDetonatesGoop)
-		{
-			bDrip = false;
-			SetTimer(0.1, false);
-		}
-	}
-	simulated function AnimEnd(int Channel)
-	{
-		local float DotProduct;
+    function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
+    {
+        if (DamageType.default.bDetonatesGoop)
+        {
+            bDrip = false;
+            SetTimer(0.1, false);
+        }
+    }
+    simulated function AnimEnd(int Channel)
+    {
+        local float DotProduct;
 
-		if (!bCheckedSurface)
-		{
-			DotProduct = SurfaceNormal dot Vect(0,0,-1);
-			if (DotProduct > 0.7)
-			{
-				//KFMod Code
-				PlayAnim('Drip', 0.66);
-				bDrip = true;
-				SetTimer(DripTime, false);
-				if (bOnMover)
-					BlowUp(Location);
-			}
-			else if (DotProduct > -0.5)
-			{
-				//KFMode Code
-				PlayAnim('Slide', 1.0);
-				if (bOnMover)
-					BlowUp(Location);
-			}
-			bCheckedSurface = true;
-		}
-	}
-	simulated function MergeWithGlob(int AdditionalGoopLevel)
-	{
-		local int NewGoopLevel, ExtraSplash;
-		NewGoopLevel = AdditionalGoopLevel + GoopLevel;
-		if (NewGoopLevel > MaxGoopLevel)
-		{
-			Rand3 = (Rand3 + 1) % 3;
-			ExtraSplash = Rand3;
-			if (Role == ROLE_Authority)
-				SplashGlobs(NewGoopLevel - MaxGoopLevel + ExtraSplash);
-			NewGoopLevel = MaxGoopLevel - ExtraSplash;
-		}
-		SetGoopLevel(NewGoopLevel);
-		SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
-		PlaySound(ImpactSound, SLOT_Misc);
-		//KFMod Code
-        PlayAnim('hit');		
-		bCheckedSurface = false;
-		SetTimer(RestTime, false);
-	}
+        if (!bCheckedSurface)
+        {
+            DotProduct = SurfaceNormal dot Vect(0,0,-1);
+            if (DotProduct > 0.7)
+            {
+                //KFMod Code
+                PlayAnim('Drip', 0.66);
+                bDrip = true;
+                SetTimer(DripTime, false);
+                if (bOnMover)
+                    BlowUp(Location);
+            }
+            else if (DotProduct > -0.5)
+            {
+                //KFMode Code
+                PlayAnim('Slide', 1.0);
+                if (bOnMover)
+                    BlowUp(Location);
+            }
+            bCheckedSurface = true;
+        }
+    }
+    simulated function MergeWithGlob(int AdditionalGoopLevel)
+    {
+        local int NewGoopLevel, ExtraSplash;
+        NewGoopLevel = AdditionalGoopLevel + GoopLevel;
+        if (NewGoopLevel > MaxGoopLevel)
+        {
+            Rand3 = (Rand3 + 1) % 3;
+            ExtraSplash = Rand3;
+            if (Role == ROLE_Authority)
+                SplashGlobs(NewGoopLevel - MaxGoopLevel + ExtraSplash);
+            NewGoopLevel = MaxGoopLevel - ExtraSplash;
+        }
+        SetGoopLevel(NewGoopLevel);
+        SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
+        PlaySound(ImpactSound, SLOT_Misc);
+        //KFMod Code
+        PlayAnim('hit');        
+        bCheckedSurface = false;
+        SetTimer(RestTime, false);
+    }
 }
 
 //KFModified
 singular function SplashGlobs(int NumGloblings)
 {
     local int g; 
-	//Use KFMod Bloat Vomit
+    //Use KFMod Bloat Vomit
     local KFBloatVomitOS NewGlob;
     local Vector VNorm;
 
@@ -129,7 +129,7 @@ simulated function Destroyed()
     if ( !bNoFX && EffectIsRelevant(Location,false) )
     {
         //Spawn(class'xEffects.GoopSmoke');
-		//Use KFMod VomGroundSplash
+        //Use KFMod VomGroundSplash
         Spawn(class'KFOldSchoolZedsMod.VomGroundSplashOS');
     }
     if ( Fear != None )
@@ -163,7 +163,7 @@ auto state Flying
                 SplashGlobs(GoopLevel - CoreGoopLevel);
             SetGoopLevel(CoreGoopLevel);
         }
-		//Use KFMod VomitDecal
+        //Use KFMod VomitDecal
         spawn(class'KFOldSchoolZedsMod.VomitDecalOS',,,, rotator(-HitNormal));
 
         bCollideWorld = false;
@@ -179,51 +179,51 @@ auto state Flying
         GotoState('OnGround');
     }
 
-	simulated function HitWall( Vector HitNormal, Actor Wall )
-	{
-		Landed(HitNormal);
-		if ( !Wall.bStatic && !Wall.bWorldGeometry )
-		{
-			bOnMover = true;
-			SetBase(Wall);
-			if (Base == None)
-				BlowUp(Location);
-		}
-	}
+    simulated function HitWall( Vector HitNormal, Actor Wall )
+    {
+        Landed(HitNormal);
+        if ( !Wall.bStatic && !Wall.bWorldGeometry )
+        {
+            bOnMover = true;
+            SetBase(Wall);
+            if (Base == None)
+                BlowUp(Location);
+        }
+    }
 
-	simulated function ProcessTouch(Actor Other, Vector HitLocation)
-	{
-		if( ExtendedZCollision(Other)!=None )
-			Return;
-		if (Other != Instigator && (Other.IsA('Pawn') || Other.IsA('DestroyableObjective') || Other.bProjTarget))
-			HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation );
-		else if ( Other != Instigator && Other.bBlockActors )
-			HitWall( Normal(HitLocation-Location), Other );
-	}
+    simulated function ProcessTouch(Actor Other, Vector HitLocation)
+    {
+        if( ExtendedZCollision(Other)!=None )
+            Return;
+        if (Other != Instigator && (Other.IsA('Pawn') || Other.IsA('DestroyableObjective') || Other.bProjTarget))
+            HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation );
+        else if ( Other != Instigator && Other.bBlockActors )
+            HitWall( Normal(HitLocation-Location), Other );
+    }
 }
 
 defaultproperties
 {
-	 //Not set in KFMod, maybe set to none?
+     //Not set in KFMod, maybe set to none?
      //DrawType=DT_StaticMesh
      BaseDamage=3
      TouchDetonationDelay=0.000000
      Speed=400.000000
      Damage=4.000000
      MomentumTransfer=2000.000000
-	 //Use KFMod DamTypeVomit
+     //Use KFMod DamTypeVomit
      MyDamageType=Class'KFOldSchoolZedsMod.DamTypeVomitOS'
      bDynamicLight=False
      LifeSpan=1.000000//8.000000 Old value used
-	 //Use KFMod's texture, even though it wont be useful
-	 Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
+     //Use KFMod's texture, even though it wont be useful
+     Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
      CollisionRadius=0.000000//2.000000 Old Values used here
      CollisionHeight=0.000000//2.000000
      bUseCollisionStaticMesh=False
-	 //Dont use modern chunks
+     //Dont use modern chunks
      StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
-	 //Use BioGlob's Impact and Explosion sound
-	 ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'	 
+     //Use BioGlob's Impact and Explosion sound
+     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'     
      ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
      bBlockHitPointTraces=false
 }

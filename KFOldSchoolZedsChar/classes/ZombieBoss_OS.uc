@@ -12,14 +12,14 @@ class ZombieBoss_OS extends ZombieBossOS;
 
 defaultproperties
 {
-	////Detached Limbs don't exist	
+    ////Detached Limbs don't exist    
     //DetachedArmClass=class'SeveredArmPatriarch'
-	//DetachedSpecialArmClass=class'SeveredRocketArmPatriarch'
-	//DetachedLegClass=class'SeveredLegPatriarch'
-	//DetachedHeadClass=class'SeveredHeadPatriarch'
+    //DetachedSpecialArmClass=class'SeveredRocketArmPatriarch'
+    //DetachedLegClass=class'SeveredLegPatriarch'
+    //DetachedHeadClass=class'SeveredHeadPatriarch'
 
-	//Use KFMod Models and Textures
-	Mesh=SkeletalMesh'KFBossOld.Boss'
+    //Use KFMod Models and Textures
+    Mesh=SkeletalMesh'KFBossOld.Boss'
     Skins(0)=FinalBlend'KFPatch2.BossHairFB'
     Skins(1)=Texture'KFPatch2.BossBits'
     Skins(2)=Texture'KFPatch2.GunPoundSkin'
@@ -28,20 +28,20 @@ defaultproperties
     Skins(5)=Texture'KFPatch2.BossBits'
     Skins(6)=Shader'KFPatch2.LaserShader'
 
-	//Use KFMod Sounds
+    //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-	
-	//Dont think we need this?		
+    
+    //Dont think we need this?        
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Kev_HitPlayer_Fist'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Pain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-	//Modern variables we dont want
-	//MeleeImpaleHitSound=sound'KF_EnemiesFinalSnd.Kev_HitPlayer_Impale'
-	//RocketFireSound=sound'KF_EnemiesFinalSnd.Kev_FireRocket'
-	//MiniGunFireSound=sound'KF_BasePatriarch.Kev_MG_GunfireLoop'
-	//MiniGunSpinSound=Sound'KF_BasePatriarch.Attack.Kev_MG_TurbineFireLoop'
+    //Modern variables we dont want
+    //MeleeImpaleHitSound=sound'KF_EnemiesFinalSnd.Kev_HitPlayer_Impale'
+    //RocketFireSound=sound'KF_EnemiesFinalSnd.Kev_FireRocket'
+    //MiniGunFireSound=sound'KF_BasePatriarch.Kev_MG_GunfireLoop'
+    //MiniGunSpinSound=Sound'KF_BasePatriarch.Attack.Kev_MG_TurbineFireLoop'
 }

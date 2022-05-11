@@ -12,31 +12,31 @@ class ZombieBloat_OS extends ZombieBloatOS;
 
 defaultproperties
 {
-	////Detached Limbs don't exist	
+    ////Detached Limbs don't exist    
     //DetachedArmClass=class'SeveredArmBloat'
-	//DetachedLegClass=class'SeveredLegBloat'
-	//DetachedHeadClass=class'SeveredHeadBloat'
+    //DetachedLegClass=class'SeveredLegBloat'
+    //DetachedHeadClass=class'SeveredHeadBloat'
 
-	//This doesn't need to be stated, keep it in ZombieBloat
-	//BileExplosion=class'KFMod.BileExplosion'
-	//BileExplosionHeadless=class'KFMod.BileExplosionHeadless'
+    //This doesn't need to be stated, keep it in ZombieBloat
+    //BileExplosion=class'KFMod.BileExplosion'
+    //BileExplosionHeadless=class'KFMod.BileExplosionHeadless'
 
-	//Use KFMod Models and Textures
+    //Use KFMod Models and Textures
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Bloat'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin'
 
-	//Use KFMod Sounds
+    //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Bloat.Bloat_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-	
-	//Dont think we need this?	
+    
+    //Dont think we need this?    
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Bloat_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-	
-	//KFMod Zeds don't use challenge sounds
+    
+    //KFMod Zeds don't use challenge sounds
     ChallengeSound(0)=None
     ChallengeSound(1)=None
     ChallengeSound(2)=None

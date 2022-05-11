@@ -13,7 +13,7 @@ simulated function BeginPlay()
 
 defaultproperties
 {
-	//Use KFMod Texture
+    //Use KFMod Texture
      ProjTexture=Texture'KFOldSchoolZeds_Textures.VomSplat'
      bClipStaticMesh=True
      CullDistance=7000.000000

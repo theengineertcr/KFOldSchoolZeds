@@ -12,5 +12,5 @@ class BossLAWProjOS extends BossLAWProj;
 
 defaultproperties
 {
-	 ExplosionSound=Sound'KFOldSchoolZeds_Sounds.Shared.TankFire01'
+     ExplosionSound=Sound'KFOldSchoolZeds_Sounds.Shared.TankFire01'
 }
