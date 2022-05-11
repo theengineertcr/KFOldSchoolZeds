@@ -8,8 +8,6 @@ Gameplay Tweaks
    
 〇 Prevent zeds from turning their whole body to face the player when knocked down(turn off targetting?)
 
-〇 Meleestun/Hit animation immunity during knockdown(they're knocked on their ass so they shouldn't suddenly stand up and start moving around)
-
 〇 Make Fleshpound Avoid Area's only spawn when enraged.
 
 
@@ -27,5 +25,5 @@ Bugs to be fixed
 
 Misc.
 〇 Rename all zed names to to "Zed Name 2.5"
- 
+〇 Meleestun/Hit animation immunity during knockdown(they're knocked on their ass so they shouldn't suddenly stand up and start moving around)
  
