@@ -10,8 +10,6 @@ var     float       WaitAnimTimeout;    // How long until the Anim we are waitin
 var     int         AnimWaitChannel;    // The channel we are waiting to end in WaitForAnim
 var     name        AnimWaitingFor;     // The animation we are waiting to end in WaitForAnim, mostly used for debugging
 
-//No longer referenced
-//var     bool        bAlreadyFoundEnemy; // The Boss has already found an enemy at least once
 
 // Overridden to create a delay between when the Rangedpound fires his minigun
 function bool FireWeaponAt(Actor A)
@@ -33,13 +31,6 @@ function bool FireWeaponAt(Actor A)
     return false;
 }
 
-//We may not need this
-//Modern function dont touch
-//function bool CanKillMeYet()
-//{
-//    return false;
-//}
-
 //Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
@@ -49,107 +40,6 @@ function TimedFireWeaponAtEnemy()
         SetTimer(0.01, True);
 }
 
-//Not needed for RangedPound as he doesnt sneak
-//Retail function we need
-// Overridden to support a quick initial attack to get the boss to the players quickly
-//function FightEnemy(bool bCanCharge)
-//{
-//    if( KFM.bShotAnim )
-//    {
-//        GoToState('WaitForAnim');
-//        Return;
-//    }
-//    if (KFM.MeleeRange != KFM.default.MeleeRange)
-//        KFM.MeleeRange = KFM.default.MeleeRange;
-//
-//    if ( Enemy == none || Enemy.Health <= 0 )
-//        FindNewEnemy();
-//
-//    if ( (Enemy == FailedHuntEnemy) && (Level.TimeSeconds == FailedHuntTime) )
-//    {
-//    //    if ( Enemy.Controller.bIsPlayer )
-//        //    FindNewEnemy();
-//
-//        if ( Enemy == FailedHuntEnemy )
-//        {
-//                        GoalString = "FAILED HUNT - HANG OUT";
-//            if ( EnemyVisible() )
-//                bCanCharge = false;
-//        }
-//    }
-//    if ( !EnemyVisible() )
-//    {
-//        //ZombieBoss to ZombieBossOS
-//        // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-//        if( bAlreadyFoundEnemy || ZombieBossOS(Pawn).SneakCount > 2 )
-//        {
-//            bAlreadyFoundEnemy = true;
-//            GoalString = "Hunt";
-//            GotoState('ZombieHunt');
-//        }
-//        else
-//        {
-//            //ZombieBoss to ZombieBossOS        
-//            // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-//            ZombieBossOS(Pawn).SneakCount++;
-//            GoalString = "InitialHunt";
-//            GotoState('InitialHunting');
-//        }
-//        return;
-//    }
-//
-//    // see enemy - decide whether to charge it or strafe around/stand and fire
-//    Target = Enemy;
-//    GoalString = "Charge";
-//    PathFindState = 2;
-//    DoCharge();
-//}
-
-
-//Not needed for RangedPound
-//Retail code we dont want to touch
-// Get the boss to the players quickly after initial spawn
-//state InitialHunting extends Hunting
-//{
-//    event SeePlayer(Pawn SeenPlayer)
-//    {
-//        super.SeePlayer(SeenPlayer);
-//        bAlreadyFoundEnemy = true;
-//        GoalString = "Hunt";
-//        GotoState('ZombieHunt');
-//    }
-//
-//    function BeginState()
-//    {
-//        local float ZDif;
-//
-//        //ZombieBoss to ZombieBossOS
-//        // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
-//        ZombieBossOS(Pawn).SneakCount++;
-//
-//        if( Pawn.CollisionRadius>27 || Pawn.CollisionHeight>46 )
-//        {
-//            ZDif = Pawn.CollisionHeight-44;
-//            Pawn.SetCollisionSize(24,44);
-//            Pawn.MoveSmooth(vect(0,0,-1)*ZDif);
-//        }
-//
-//        super.BeginState();
-//    }
-//    function EndState()
-//    {
-//        local float ZDif;
-//
-//        if( Pawn.CollisionRadius!=Pawn.Default.CollisionRadius || Pawn.CollisionHeight!=Pawn.Default.CollisionHeight )
-//        {
-//            ZDif = Pawn.Default.CollisionRadius-44;
-//            Pawn.MoveSmooth(vect(0,0,1)*ZDif);
-//            Pawn.SetCollisionSize(Pawn.Default.CollisionRadius,Pawn.Default.CollisionHeight);
-//        }
-//
-//        super.EndState();
-//    }
-//}
 
 //We'll keep this because it might have to do with the Ranged Attack
 //Exactly same as in KFMod
@@ -188,139 +78,6 @@ Moving:
         SoakStop("STUCK IN CHARGING!");
 }
 
-//RangedPound doesnt heal, aso he doesnt need this
-//state RunSomewhere
-//{
-//Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle; //Startle is new, but we dont care
-//
-//    function BeginState()
-//    {
-//        HidingSpots = None;
-//        Enemy = None;
-//        SetTimer(0.1,True);
-//    }
-//    event SeePlayer(Pawn SeenPlayer)
-//    {
-//        SetEnemy(SeenPlayer);
-//    }
-//    function Timer()
-//    {
-//        if( Enemy==None )
-//            Return;
-//        Target = Enemy;
-//        KFM.RangedAttack(Target);
-//    }
-//Begin:
-//    if( Pawn.Physics==PHYS_Falling )
-//        WaitForLanding();
-//    While( KFM.bShotAnim )
-//        Sleep(0.25);
-//    if( HidingSpots==None )
-//        HidingSpots = FindRandomDest();
-//    if( HidingSpots==None )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    if( ActorReachable(HidingSpots) )
-//    {
-//        MoveTarget = HidingSpots;
-//        HidingSpots = None;
-//    }
-//    else FindBestPathToward(HidingSpots,True,False);
-//    if( MoveTarget==None )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
-//        MoveToward(MoveTarget,Enemy,,False);
-//    else MoveToward(MoveTarget,MoveTarget,,False);
-//    if( HidingSpots==None || !PlayerSeesMe() )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    GoTo'Begin';
-//}
-//State SyrRetreat
-//{
-//Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
-//
-//    function BeginState()
-//    {
-//        HidingSpots = None;
-//        Enemy = None;
-//        SetTimer(0.1,True);
-//    }
-//    event SeePlayer(Pawn SeenPlayer)
-//    {
-//        SetEnemy(SeenPlayer);
-//    }
-//    function Timer()
-//    {
-//        if( Enemy==None )
-//            Return;
-//        Target = Enemy;
-//        KFM.RangedAttack(Target);
-//    }
-//    function FindHideSpot()
-//    {
-//        local NavigationPoint N,BN;
-//        local float Dist,BDist,MDist;
-//        local vector EnemyDir;
-//
-//        if( Enemy==None )
-//        {
-//            HidingSpots = FindRandomDest();
-//            Return;
-//        }
-//        EnemyDir = Normal(Enemy.Location-Pawn.Location);
-//        For( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
-//        {
-//            MDist = VSize(N.Location-Pawn.Location);
-//            if( MDist<2500 && !FastTrace(N.Location,Enemy.Location) && FindPathToward(N)!=None )
-//            {
-//                Dist = VSize(N.Location-Enemy.Location)/FMax(MDist/800.f,1.5);
-//                if( (EnemyDir Dot Normal(Enemy.Location-N.Location))<0.2 )
-//                    Dist/=10;
-//                if( BN==None || BDist<Dist )
-//                {
-//                    BN = N;
-//                    BDist = Dist;
-//                }
-//            }
-//        }
-//        if( BN==None )
-//            HidingSpots = FindRandomDest();
-//        else HidingSpots = BN;
-//    }
-//Begin:
-//    if( Pawn.Physics==PHYS_Falling )
-//        WaitForLanding();
-//    While( KFM.bShotAnim )
-//        Sleep(0.25);
-//    if( HidingSpots==None )
-//        FindHideSpot();
-//    if( HidingSpots==None )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    if( ActorReachable(HidingSpots) )
-//    {
-//        MoveTarget = HidingSpots;
-//        HidingSpots = None;
-//    }
-//    else FindBestPathToward(HidingSpots,True,False);
-//    if( MoveTarget==None )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
-//        MoveToward(MoveTarget,Enemy,,False);
-//    else MoveToward(MoveTarget,MoveTarget,,False);
-//    if( HidingSpots==None )
-//        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-//    GoTo'Begin';
-//}
-//function bool PlayerSeesMe()
-//{
-//    local Controller C;
-//
-//    For( C=Level.ControllerList; C!=None; C=C.NextController )
-//    {
-//        if( C.bIsPlayer && C.Pawn!=None && C.Pawn!=Pawn && LineOfSightTo(C.Pawn) )
-//            Return True;
-//    }
-//    Return False;
-//}
 
 //The rest of this is Retail Code that we'll keep
 // Used to set a timeout for the WaitForAnim state. This is a bit of a hack fix
