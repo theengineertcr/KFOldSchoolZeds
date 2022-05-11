@@ -27,6 +27,28 @@ var class <KFGibOS> MonsterLowerTorsoGiblet;
 //KFMod Variables
 var Vector LastBloodHitDirection;
 
+// High damage was taken, make em fall over.
+function bool FlipOver()
+{
+	if( Physics==PHYS_Falling )
+	{
+		SetPhysics(PHYS_Walking);
+	}
+
+	bShotAnim = true;
+	SetAnimAction('KnockDown');
+	Acceleration = vect(0, 0, 0);
+	Velocity.X = 0;
+	Velocity.Y = 0;
+	//This prevents them from looking at the player while downed,
+	//But it also makes them suddeny look away from the player
+	//TODO: Figure out what to do with this
+	//KFMonsterController(Controller).Focus = None;
+	Controller.GoToState('WaitForAnim');
+	KFMonsterController(Controller).bUseFreezeHack = True;
+	Return True;
+}
+
 //Old-ify this
 simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> DamageType, Rotator r )
 {
@@ -479,7 +501,7 @@ simulated function ProcessHitFX()
 // defines spawning of giblets through the tick function, and the latter via the
 // DecapFX Function. Also, swap out all instances of KFSpawnGiblet with SpawnGiblet.
 // TODO: Redefine DecapFX to use old giblets, which would require getting all
-// Relevant KFMod Brain Gib and Splash classes
+// Relevant KFMod Brain Gib and Splash classes(Done!)
 simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bSpawnDetachedHead, optional bool bNoBrainBits )
 {
 	local float GibPerterbation;
@@ -966,38 +988,23 @@ function DoorAttack(Actor A)
 		//`DoorBash` to `Claw`
 		SetAnimAction('Claw');
 		
+		//TODO: Maybe bring the state back?
 		//Doorbashing state doesn't exist
 		//GotoState('DoorBashing');
 		
-		//They used this sound only for attacking doors,
-		//All other instances have been commented out
+		//Play the Clawing noise here
 		PlaySound(sound'Claw2s', SLOT_None);
 		return;
 	}
 }
 
-//Retail is the exact same as KFMod(except Claw2s), no changes needed
-function RangedAttack(Actor A)
-{
-	if ( bShotAnim || Physics == PHYS_Swimming)
-		return;
-	else if ( CanAttack(A) )
-	{
-		bShotAnim = true;
-		SetAnimAction('Claw');
-		//PlaySound(sound'Claw2s', SLOT_None); KFTODO: Replace this
-		Controller.bPreparingMove = true;
-		Acceleration = vect(0,0,0);
-		return;
-	}
-}
 
 //Oldify this
 function ClawDamageTarget()
 {
 	local vector PushDir;
-	//Were not going to remove the new Melee
-	//Damage calculations for balance reasons
+	//Were going to use the Retail zeds
+	//Damage calculations for convenience
 	local float UsedMeleeDamage;
 
 	if( MeleeDamage > 1 )
@@ -1133,15 +1140,20 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
 
 	bRecentHit = Level.TimeSeconds - LastPainTime < 0.2;
 
-	//KFMod didn't have this
-	//LastDamageAmount = Damage;
+	//Adding this back
+	LastDamageAmount = Damage;
 
-	//KFMod didn't have this
+	//Adding this back
 	//Call the modified version of the original Pawn playhit
-	//OldPlayHit(Damage, InstigatedBy, HitLocation, DamageType,Momentum);
+	//So that the Zeds can play their hitanims
+	//We don't want this called when a zed is knocked down,
+	//Is there a way I can do this without using bShotAnim?
+	if(!bShotAnim)
+		OldPlayHit(Damage, InstigatedBy, HitLocation, DamageType,Momentum);
+
 	
-	//KFMod called Playhit here
-	Super.PlayHit(Damage,InstigatedBy,HitLocation,DamageType,Momentum);
+	//KFMod called Playhit here but we dont want it
+	//Super.PlayHit(Damage,InstigatedBy,HitLocation,DamageType,Momentum);
 
 	if ( Damage <= 0 )
 		return;
@@ -1246,12 +1258,13 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
 		SetOverlayMaterial( DamageType.default.DamageOverlayMaterial, DamageType.default.DamageOverlayTime, false );
 }
 
+// Need to Readd this
 //// OldPlayHit is not in KFMod, nullify it
 // Modified version of the original Pawn playhit. Set up because we want our blood puffs to be directional based
 // On the momentum of the bullet, not out from the center of the player
-function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
-{
-}
+//function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
+//{
+//}
 
 // Need this to get the HeadStub removed when Ragdoll is gone
 // Overridden to handle making attached explosives explode when this pawn dies
