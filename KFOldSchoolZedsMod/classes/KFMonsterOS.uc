@@ -42,8 +42,9 @@ function bool FlipOver()
     Velocity.Y = 0;
     //This prevents them from looking at the player while downed,
     //But it also makes them suddeny look away from the player
-    //TODO: Figure out what to do with this
-    //KFMonsterController(Controller).Focus = None;
+    //TODO: Figure out what to do with this(Done!)
+    KFMonsterController(Controller).Focus = None;
+    KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     Controller.GoToState('WaitForAnim');
     KFMonsterController(Controller).bUseFreezeHack = True;
     Return True;
@@ -786,7 +787,8 @@ simulated function Tick(float DeltaTime)
     {
         TickFX(DeltaTime);
         //Old code for zeds to look at the targets theyre aggroed to
-        if( LookTarget!=None )
+        //Don't move your heads while your dead, that's creepy.
+        if( LookTarget!=None && Health >= 1 )
         {
             R = Normalize(rotator(LookTarget.Location-Location)-Rotation);
             R.Pitch = 0;

@@ -1,5 +1,4 @@
 # Gameplay Tweaks
- - Prevent zeds from turning their whole body to face the player when knocked down(turn off targetting?)
  - Make Fleshpound Avoid Area's only spawn when enraged and make Avoid Area extend a couple of meters infront of Fleshpounds to make zeds "Clear the way" 
    - Currently, Fleshpound Avoid Area has been temporarily removed until this is done.
 
@@ -13,6 +12,7 @@
 - Check for compatibility with Scrake [Spin Fix Mut](https://steamcommunity.com/sharedfiles/filedetails/?id=2046199794) (Or other muts e.g. Hard Pat, Texture mods etc... (?))
 
 ## Finished / Fixed
+- Prevent zeds from turning their whole body to face the player when knocked down(turn off targetting?)
 - Fleshpound Chaingunner no longer skips stun animation
 - Fix implemented for Chaingunner skipping Firing end animations
 - Clot to use clawing animations on door instead of grappling
