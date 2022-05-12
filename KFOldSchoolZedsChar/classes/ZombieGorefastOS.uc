@@ -18,7 +18,8 @@ class ZombieGoreFastOS extends ZombieGoreFastBaseOS
 //----------------------------------------------------------------------------
 
 //Issues:
-//None?
+//Stops running after a short while
+//TODO:Make Gorefasts keep charging at the player until they are dead
 
 simulated function PostNetReceive()
 {
@@ -141,12 +142,12 @@ state RunningState
         }
         else
         {
-            SetGroundSpeed(OriginalGroundSpeed * 1.875); //Was 1.5 in KFMod, dont touch for balance reasons
+            SetGroundSpeed(OriginalGroundSpeed * 1.875); //Was 1.5 in KFMod
             bRunning = true;
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
+            NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
 
@@ -162,7 +163,7 @@ state RunningState
         
         //RunAttackTimeout=0;
 
-        NetUpdateTime = Level.TimeSeconds - 1; //This wasn't in KFMod but we'll keep it
+        NetUpdateTime = Level.TimeSeconds - 1;
     }
 
     function RemoveHead()
@@ -174,7 +175,18 @@ state RunningState
     //Old zeds don't support charging(full body anims), so all charging code removed
     function RangedAttack(Actor A)
     {
-        Super.RangedAttack(A);
+    	if ( bShotAnim || Physics == PHYS_Swimming)
+    		return;
+    	else if ( CanAttack(A) )
+    	{
+    		bShotAnim = true;
+            SetAnimAction('Claw');
+            Controller.bPreparingMove = true;
+            Acceleration = vect(0,0,0);
+            // Once we attack stop running
+            GoToState('');
+    		return;
+    	}
     }
 
     //Added in code to increase Head Hitbox whenever Gorefasts
@@ -192,18 +204,8 @@ state RunningState
             HeadScale=default.HeadScale;
             OnlineHeadshotScale=default.OnlineHeadshotScale;
         }
-        // Keep moving toward the target until the timer runs out (anim finishes)
-        //if( RunAttackTimeout > 0 )
-        //{
-        //    RunAttackTimeout -= DeltaTime;
-        //
-        //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
-        //    {
-        //        RunAttackTimeout = 0;
-        //        GoToState('');
-        //    }
-        //}
     
+        //Gorefasts dont attack and move
         // Keep the gorefast moving toward its target when attacking
         if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
         {
@@ -216,13 +218,13 @@ state RunningState
         global.Tick(DeltaTime);
     }
 
-//KFMod doesn't do a CheckCharge, but we'll keep it
+
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 ) //KFMod had <400 instead of <700
+    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 ) 
     {
-        Sleep(0.5+ FRand() * 0.5); //KFMod didn't have the *0.5 at the end, but we'll keep it
+        Sleep(0.5+ FRand() * 0.5); 
         //log("Still charging");
         GoTo('CheckCharge');
     }
@@ -237,19 +239,7 @@ CheckCharge:
 state RunningToMarker extends RunningState
 {
     simulated function Tick(float DeltaTime)
-    {
-        // Keep moving toward the target until the timer runs out (anim finishes)
-        //if( RunAttackTimeout > 0 )
-        //{
-        //    RunAttackTimeout -= DeltaTime;
-        //
-        //    if( RunAttackTimeout <= 0 && !bZedUnderControl )
-        //    {
-        //        RunAttackTimeout = 0;
-        //        GoToState('');
-        //    }
-        //}
-    
+    {     
         // Keep the gorefast moving toward its target when attacking
         if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
         {
