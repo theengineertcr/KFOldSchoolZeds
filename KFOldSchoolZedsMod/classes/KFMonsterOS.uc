@@ -985,12 +985,12 @@ function DoorAttack(Actor A)
     else if ( CanAttack(A) ) // Used retail 'A!=None' instead of KFMod's 'CanAttack(A)'
     {
         bShotAnim = true;
-        //`DoorBash` to `Claw`
-        SetAnimAction('Claw');
+        //Reverted to Doorbash
+        SetAnimAction('DoorBash');
         
-        //TODO: Maybe bring the state back?
-        //Doorbashing state doesn't exist
-        //GotoState('DoorBashing');
+        //After reviewing, DoorBashing does exist, just unused(?)
+        //We'll bring it back regardless
+        GotoState('DoorBashing');
         
         //Play the Clawing noise here
         PlaySound(sound'Claw2s', SLOT_None);
@@ -1148,7 +1148,8 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     //So that the Zeds can play their hitanims
     //We don't want this called when a zed is knocked down,
     //Is there a way I can do this without using bShotAnim?
-    if(!bShotAnim)
+    //Now checks FreezeHack instead which works much better
+    if(KFMonsterController(Controller).bUseFreezeHack == False)
         OldPlayHit(Damage, InstigatedBy, HitLocation, DamageType,Momentum);
 
     
