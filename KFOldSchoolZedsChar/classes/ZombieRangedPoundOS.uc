@@ -49,6 +49,28 @@ function bool CanGetOutOfWay()
     return false;
 }
 
+// High damage was taken, make em fall over.
+function bool FlipOver()
+{
+    if( Physics==PHYS_Falling )
+    {
+        SetPhysics(PHYS_Walking);
+    }
+
+    bShotAnim = true;
+    //Ranged Pound has a unique animation for getting stunned
+    GoToState('');
+    SetAnimAction('RangedKnockDown');    
+    HandleWaitForAnim('RangedKnockDown');
+    Acceleration = vect(0, 0, 0);
+    Velocity.X = 0;
+    Velocity.Y = 0;
+    KFMonsterController(Controller).Focus = None;
+    KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
+    Controller.GoToState('WaitForAnim');
+    KFMonsterController(Controller).bUseFreezeHack = True;
+    Return True;
+}
 
 //-----------------------------------------------------------------------------
 // PostBeginPlay
@@ -147,7 +169,7 @@ simulated Function PostNetBeginPlay()
 function RangedAttack(Actor A)
 {
     local float Dist; //That distance check that was used for Siren
-    local int LastFireTime; //Husk variable
+    local int LastFireTime; //Husk variable // Don't know if we need this
 
     if ( bShotAnim )
         return;        
@@ -171,7 +193,7 @@ function RangedAttack(Actor A)
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastChainGunTime<Level.TimeSeconds )
     {
-        if ( !Controller.LineOfSightTo(A) || FRand()> 0.85 )
+        if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't know the point of this FRand so it can go away
         {
             LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0); //Level.TimeSeconds+FRand()*4;
             Return;
@@ -182,8 +204,8 @@ function RangedAttack(Actor A)
         bShotAnim = true;
         Acceleration = vect(0,0,0);
         SetAnimAction('RangedPreFireMG'); //PreFireMG
-
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
+        
         //Tweak the amount of bullets he fires so its more predictable
         MGFireCounter =  MGFireBurst + Rand(10); //Rand(60) + 35;
         GoToState('FireChaingun');
@@ -320,13 +342,13 @@ state FireChaingun
                 Controller.Focus = None;
             }
 
-            //if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
-            //{
+            if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
+            {
             //    // Randomly send out a message about Patriarch shooting chain gun(3% chance)
             //       Wanted to keep this, but the line "what else does that bastard have up his sleeve" 
-            //       Bothers me. Maybe players don't care about this, so I should add it in next patch?
-            //    PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
-            //}
+            //       Bothers me. Maybe players don't care about this, so I should add it in next patch?(Added)
+                PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
+            }
 
             bFireAtWill = True;
             bShotAnim = true;
@@ -451,7 +473,7 @@ simulated function PostNetReceive()
 simulated function int DoAnimAction( name AnimName )
 {
     //Removed boss anims and replaced with Ranged
-    if( AnimName=='PoundPunch2' || AnimName=='RangedHitF' || AnimName=='RangedFireMG'  )
+    if( AnimName=='PoundPunch2' || AnimName=='RangedHitF' /*|| AnimName=='RangedFireMG'*/  ) //Removing RangedFireMG may have potentially fixed the bug with him not playing end anims
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
@@ -494,7 +516,6 @@ simulated event SetAnimAction(name NewAction)
     {
         AnimAction = NewAction;
         bResetAnimAct = True;
-
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -516,7 +537,7 @@ simulated function HandleWaitForAnim( name NewAnim )
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     //Removed the extra patty anims
-    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' ) 
+    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown') 
     {
         return true;
     }
@@ -524,16 +545,6 @@ simulated function bool AnimNeedsWait(name TestAnim)
     return false;
 }
 
-
-// We can Flipover as were considered "Husks"
-// High damage was taken, make em fall over.
-function bool FlipOver()
-{
-    //Ranged Pound has a unique animation for getting stunned
-    SetAnimAction('RangedKnockDown');
-    return true;
-    super.FlipOver();
-}
 
 //Overhauled with Husk code
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
