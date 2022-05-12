@@ -118,7 +118,7 @@ function RangedAttack(Actor A)
     Dist = VSize(A.Location - Location);
     
     if ( bShotAnim || Physics == PHYS_Swimming)
-        return; //Makes it so the Scrake has to be closer before he can saw the player
+        return; //DistBeforeSaw added here
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
     {
         bShotAnim = true;
@@ -128,6 +128,15 @@ function RangedAttack(Actor A)
         GoToState('SawingLoop');
     }
 
+    //Do more melee damage on the slower attack
+    //And do less on the faster attack
+    if(AnimAction == MeleeAnims[0])
+        MeleeDamage = default.MeleeDamage*0.85;
+    else if(AnimAction == MeleeAnims[1])
+        MeleeDamage = default.MeleeDamage*1.15;
+    else
+        MeleeDamage = default.MeleeDamage;
+        
     //Code that handles running when low on health, we need it
     //As we want retail Scrake behaviour, even if the Mod didn't have it
     if( !bShotAnim && !bDecapitated )
