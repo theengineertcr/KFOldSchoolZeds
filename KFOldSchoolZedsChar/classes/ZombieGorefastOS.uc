@@ -175,18 +175,18 @@ state RunningState
     //Old zeds don't support charging(full body anims), so all charging code removed
     function RangedAttack(Actor A)
     {
-    	if ( bShotAnim || Physics == PHYS_Swimming)
-    		return;
-    	else if ( CanAttack(A) )
-    	{
-    		bShotAnim = true;
+        if ( bShotAnim || Physics == PHYS_Swimming)
+            return;
+        else if ( CanAttack(A) )
+        {
+            bShotAnim = true;
             SetAnimAction('Claw');
             Controller.bPreparingMove = true;
             Acceleration = vect(0,0,0);
             // Once we attack stop running
             GoToState('');
-    		return;
-    	}
+            return;
+        }
     }
 
     //Added in code to increase Head Hitbox whenever Gorefasts
