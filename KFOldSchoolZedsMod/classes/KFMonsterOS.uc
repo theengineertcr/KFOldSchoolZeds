@@ -985,12 +985,13 @@ function DoorAttack(Actor A)
     else if ( CanAttack(A) ) // Used retail 'A!=None' instead of KFMod's 'CanAttack(A)'
     {
         bShotAnim = true;
-        //Reverted to Doorbash
-        SetAnimAction('DoorBash');
+        //DoorBash causes issues, just claw for now
+        SetAnimAction('Claw');
         
         //After reviewing, DoorBashing does exist, just unused(?)
         //We'll bring it back regardless
-        GotoState('DoorBashing');
+        //This causes issues, so dont use it
+        //GotoState('DoorBashing');
         
         //Play the Clawing noise here
         PlaySound(sound'Claw2s', SLOT_None);
