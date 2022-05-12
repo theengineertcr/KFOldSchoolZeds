@@ -4,24 +4,23 @@
 
 # Bugs
 - FleshPound dealing continuous damage post-rage(online?) https://www.youtube.com/watch?v=ItSdKJu7KXE 
-    - Potentially to do with a Vanilla Fleshpound bug where the Fleshpound stands aimlessly next to a player without attempting to melee them. In this case, however, the Fleshpound's melee distance is so short that He gets close enough to the player to bump into and obliterate them. Fix: Increase melee range?
+    - Attempted fix is now in place.
 - Zeds have buggier pathing compared to KF zeds for an unknown reason(Seen around KF-Offices typical hallway camp spot)
-
 
 # Miscellaneous
 - Check for compatibility with Scrake [Spin Fix Mut](https://steamcommunity.com/sharedfiles/filedetails/?id=2046199794) (Or other muts e.g. Hard Pat, Texture mods etc... (?))
 
 ## Finished / Fixed
-- Prevent zeds from turning their whole body to face the player when knocked down(turn off targetting?)
+- Zeds no longer turn their body while knocked down
 - Fleshpound Chaingunner no longer skips stun animation
-- Fix implemented for Chaingunner skipping Firing end animations
-- Clot to use clawing animations on door instead of grappling
+- Potential fix implemented for Chaingunner skipping Firing end animations
+- Clot uses clawing animations on door instead of grappling
 - Gorefast no longer stops charging after a short while of being in his charge state
-- HitAnim immunity to be ignored while zed is melee attacking the player
-- Scrake melee attack 1 should be preferred when raged on Suicidal+
-  - Attack 1 deals 15% less damage as its faster and hits twice in quick succession
+- Scrake's prefer to use their faster sawing attack(attack 1) when enraged on Suicidal+
+  - Attack 1 deals 15% less damage as it's faster and hits twice in quick succession
   - Attack 2 deals 15% more damage as it hits a 5 frames slower compared to Attack 1
-- Zeds not playing TakeHit animations
-- Rename all zed names to to "Zed Name 2.5"
-- Hitanimation immunity while knocked down
-- Format all code into proper 4x indentations for better Github readability
+- Zeds will now play hurt anims even whilst melee attacking  
+- Zeds no longer play hurt animations while knocked down  
+- Zeds now play TakeHit animations
+- All zeds menunames renamed to "Zed Name 2.5"
+- All code formatted into 4x indentations

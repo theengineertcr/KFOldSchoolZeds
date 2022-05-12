@@ -16,7 +16,6 @@ class ZombieFleshpoundOS extends ZombieFleshpoundBaseOS
 //----------------------------------------------------------------------------
 
 //Issues:
-//Rage anim timeout doesn't work
 //Head hitbox is wonky.
 
 //Dont touch this retail code
@@ -433,6 +432,7 @@ Ignores StartCharging;
             }
         }
 
+        // This doesn't work...
         // Keep the flesh pound moving toward its target when attacking
         if( Role == ROLE_Authority && bShotAnim)
         {
@@ -445,8 +445,25 @@ Ignores StartCharging;
         //Not sure if we need this tick as it isn't in KFMod code?
         global.Tick(Delta);
     }
-
-    //We'll keep this modern code as the bumping thing does affect gameplay to some extent
+    
+    //Attempt to fix Charging into players bug
+    function RangedAttack(Actor A)
+    {
+        local float Dist;
+        
+        Dist = VSize(A.Location - Location);
+        
+        if ( bShotAnim || Physics == PHYS_Swimming)
+            return;
+        else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
+        {
+            bShotAnim = true;
+            SetAnimAction('Claw');
+            PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
+            return;
+        }
+    }
+    //We'll keep this even though it wasnt there in KFMod
     function Bump( Actor Other )
     {
         local float RageBumpDamage;
@@ -518,6 +535,24 @@ Ignores StartCharging;
 
         global.Tick(Delta);
     }
+    
+    //Attempt to fix Charging into players bug
+    function RangedAttack(Actor A)
+    {
+        local float Dist;
+        
+        Dist = VSize(A.Location - Location);
+        
+        if ( bShotAnim || Physics == PHYS_Swimming)
+            return;
+        else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
+        {
+            bShotAnim = true;
+            SetAnimAction('Claw');
+            PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
+            return;
+        }
+    }    
 }
 
 //Unchanged
