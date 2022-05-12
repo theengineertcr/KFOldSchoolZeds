@@ -66,55 +66,35 @@ event Bump(actor Other)
     }
 }
 
-// Overhauled with KFMod Code
+// KFMod doesn't have this
 // Blend his attacks so he can hit you in mid air.
-simulated function int DoAnimAction( name AnimName )
-{
-    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
-    {
-        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
-        PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
-    }
-    Return Super.DoAnimAction(AnimName);
-}
-
-//Retail code we dont want
-//simulated event SetAnimAction(name NewAction)
+//simulated function int DoAnimAction( name AnimName )
 //{
-//    local int meleeAnimIndex;
-//
-//    if( NewAction=='' )
-//        Return;
-//    if(NewAction == 'Claw')
+//    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
 //    {
-//        meleeAnimIndex = Rand(2);
-//        if( Physics == PHYS_Falling )
-//        {
-//            NewAction = MeleeAirAnims[meleeAnimIndex];
-//        }
-//        else
-//        {
-//            NewAction = meleeAnims[meleeAnimIndex];
-//        }
-//        CurrentDamtype = ZombieDamType[meleeAnimIndex];
+//        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+//        PlayAnim(AnimName,, 0.0, 1);
+//        Return 1;
 //    }
-//    ExpectingChannel = DoAnimAction(NewAction);
-//
-//    if( AnimNeedsWait(NewAction) )
-//    {
-//        bWaitForAnim = true;
-//    }
-//
-//    if( Level.NetMode!=NM_Client )
-//    {
-//        AnimAction = NewAction;
-//        bResetAnimAct = True;
-//        ResetAnimActTime = Level.TimeSeconds+0.3;
-//    }
+//    Return Super.DoAnimAction(AnimName);
 //}
 
-//Retail code we dont want
+//KFMod SetAnimAction
+// Blend his attacks so he can hit you in mid air.
+simulated event SetAnimAction(name NewAction)
+{
+  Super.SetAnimAction(NewAction);
+
+        if ( AnimAction == 'ZombieLeapAttack' || AnimAction == 'LeapAttack3'
+            || AnimAction == 'ZombieLeapAttack')
+        {
+          AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+          PlayAnim(NewAction,, 0.0, 1);
+        }
+
+}
+
+//Retail code not in KFMod
 // The animation is full body and should set the bWaitForAnim flag
 //simulated function bool AnimNeedsWait(name TestAnim)
 //{

@@ -67,18 +67,45 @@ event Bump(actor Other)
     }
 }
 
-// Overhauled with KFMod Code
+// KFMod doesn't have this
 // Blend his attacks so he can hit you in mid air.
-simulated function int DoAnimAction( name AnimName )
+//simulated function int DoAnimAction( name AnimName )
+//{
+//    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
+//    {
+//        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+//        PlayAnim(AnimName,, 0.0, 1);
+//        Return 1;
+//    }
+//    Return Super.DoAnimAction(AnimName);
+//}
+
+//KFMod SetAnimAction
+// Blend his attacks so he can hit you in mid air.
+simulated event SetAnimAction(name NewAction)
 {
-    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
-    {
-        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
-        PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
-    }
-    Return Super.DoAnimAction(AnimName);
+  Super.SetAnimAction(NewAction);
+
+        if ( AnimAction == 'ZombieLeapAttack' || AnimAction == 'LeapAttack3'
+            || AnimAction == 'ZombieLeapAttack')
+        {
+          AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
+          PlayAnim(NewAction,, 0.0, 1);
+        }
+
 }
+
+//Retail code not in KFMod
+// The animation is full body and should set the bWaitForAnim flag
+//simulated function bool AnimNeedsWait(name TestAnim)
+//{
+//    if( TestAnim == 'ZombieSpring' /*|| TestAnim == 'DoorBash'*/ ) //Crawlers don't use Doorbash anims
+//    {
+//        return true;
+//    }
+//
+//    return false;
+//}
 
 function bool FlipOver()
 {
@@ -149,19 +176,20 @@ defaultproperties
     MovementAnims(1)="ZombieScuttle"
     MovementAnims(2)="ZombieScuttle"
     MovementAnims(3)="ZombieScuttle"    
-    WalkAnims(0)="ZombieScuttle"
-    WalkAnims(1)="ZombieScuttle"
-    WalkAnims(2)="ZombieScuttle"
-    WalkAnims(3)="ZombieScuttle"
+    WalkAnims(0)="ZombieLeap"
+    WalkAnims(1)="ZombieLeap"
+    WalkAnims(2)="ZombieLeap"
+    WalkAnims(3)="ZombieLeap"
 
     //All of these used the ZombieSpring anim in KFMod
-    HitAnims(0)="ZombieSpring"//"HitF"
-    HitAnims(1)="ZombieSpring"//"HitF"
-    HitAnims(2)="ZombieSpring"//"HitF"
-    KFHitFront="ZombieSpring"//"HitF"
-    KFHitBack="ZombieSpring"//"HitF"
-    KFHitLeft="ZombieSpring"//"HitF"
-    KFHitRight="ZombieSpring"//"HitF"
+    //Bad idea, don't use any anims when getting hit
+    HitAnims(0)=None//"HitF"
+    HitAnims(1)=None//"HitF"
+    HitAnims(2)=None//"HitF"
+    KFHitFront=None//"HitF"
+    KFHitBack=None//"HitF"
+    KFHitLeft=None//"HitF"
+    KFHitRight=None//"HitF"
 
     MeleeAnims(0)="ZombieLeapAttack"
     MeleeAnims(1)="ZombieLeapAttack"//"ZombieLeapAttack2"//Swapped to Old Anim
