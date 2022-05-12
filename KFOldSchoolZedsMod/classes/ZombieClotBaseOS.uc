@@ -80,8 +80,9 @@ defaultproperties
     MotionDetectorThreat=0.34
     
     //Clots only had one grapple animation
-    MeleeAnims(0)="ClotGrapple"
-    MeleeAnims(1)="ClotGrapple"
+    //Exception for Doorbashing to work properly
+    MeleeAnims(0)="Claw"
+    MeleeAnims(1)="Claw2"    
     MeleeAnims(2)="ClotGrapple"
     
     //"Clot_Trip" to "ClotRag"

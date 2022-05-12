@@ -1,6 +1,4 @@
 # Gameplay Tweaks
- - Clot to use clawing animations on door instead of grappling
-   - Review each Zed's door attack behavior in general to make sure they're using the correct animation
  - Prevent zeds from turning their whole body to face the player when knocked down(turn off targetting?)
  - Make Fleshpound Avoid Area's only spawn when enraged and make Avoid Area extend a couple of meters infront of Fleshpounds. 
    - Currently, Fleshpound Avoid Area has been temporarily removed until this is done.
@@ -14,6 +12,7 @@
 - Check for compatibility with Scrake [Spin Fix Mut](https://steamcommunity.com/sharedfiles/filedetails/?id=2046199794) (Or other muts e.g. Hard Pat, Texture mods etc... (?))
 
 ## Finished
+- Clot to use clawing animations on door instead of grappling
 - Gorefast no longer stops charging after a short while of being in his charge state
 - HitAnim immunity to be ignored while zed is melee attacking the player
 - Scrake melee attack 1 should be preferred when raged on Suicidal+

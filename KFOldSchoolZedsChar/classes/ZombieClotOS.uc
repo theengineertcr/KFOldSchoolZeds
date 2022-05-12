@@ -58,6 +58,22 @@ function ClawDamageTarget()
     }
 }
 
+
+function DoorAttack(Actor A)
+{
+    if ( bShotAnim || Physics == PHYS_Swimming)
+        return;
+    else if ( CanAttack(A) )
+    {
+        bShotAnim = true;
+        //Bash that door
+        SetAnimAction('DoorBash');
+        //Play the Clawing noise here
+        PlaySound(sound'Claw2s', SLOT_None);
+        return;
+    }
+}
+
 function RangedAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
@@ -75,6 +91,45 @@ function RangedAttack(Actor A)
         Controller.MoveTimer = 1.5;        
     }
 }
+
+//We need clots to attack doors, not grapple them
+simulated event SetAnimAction(name NewAction)
+{
+    local int meleeAnimIndex;
+
+    if( NewAction=='' )
+        Return;
+    if(NewAction == 'Claw')
+    {
+        meleeAnimIndex = Rand(3);
+        NewAction = meleeAnims[2];
+        CurrentDamtype = ZombieDamType[meleeAnimIndex];
+    }
+    else if( NewAction == 'DoorBash' )
+    {
+       NewAction = meleeAnims[rand(2)];
+       CurrentDamtype = ZombieDamType[Rand(3)];
+    }
+
+    ExpectingChannel = DoAnimAction(NewAction);
+
+    if( AnimNeedsWait(NewAction) )
+    {
+        bWaitForAnim = true;
+    }
+    else
+    {
+        bWaitForAnim = false;
+    }
+
+    if( Level.NetMode!=NM_Client )
+    {
+        AnimAction = NewAction;
+        bResetAnimAct = True;
+        ResetAnimActTime = Level.TimeSeconds+0.3;
+    }
+}
+
 
 ////This wasn't in KFMod, but we need it for voicelines
 simulated function int DoAnimAction( name AnimName )
