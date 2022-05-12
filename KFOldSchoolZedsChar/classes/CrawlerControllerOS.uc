@@ -77,7 +77,10 @@ function bool FireWeaponAt(Actor A)
     else
     {
         //TODO - base off land time rather than launch time?
-        if((LastPounceTime + (4.5 - (FRand() * 3.0))) < Level.TimeSeconds )
+        //Use KFMod values here, we want the Crawler to behave as he did back then
+        //There really isn't a point to using them as "reskins" anyway right?
+        //Now, fear the relentless wrath of the old Crawler!
+        if( LastPounceTime+1 < Level.TimeSeconds )
         {
             aFacing=Normal(Vector(Pawn.Rotation));
             // Get the vector from A to B
@@ -91,21 +94,7 @@ function bool FireWeaponAt(Actor A)
                 {
                     if(ZombieCrawlerOS(Pawn).DoPounce()==true ) //ZombieCrawler to ZombieCrawlerOS
                         LastPounceTime = Level.TimeSeconds;
-                }
-                //Old KFMod code were bringing back for newrot
-                //Bad idea, it spins them around like crazy
-                //else
-                //{
-                //    //TODO: if the DoPounce borks, undo rot change?
-                //    //      or can we guarantee no borkage?
-                //    if(frand() < 0.5 )
-                //        newrot = pawn.Rotation + rot(0, 10920,0);//8190,0);
-                //    else
-                //        newrot = pawn.Rotation + rot(0,54616,0); // 57346,0);
-                //    pawn.SetRotation( newrot );
-                //    if(ZombieCrawlerOS(Pawn).DoPounce()==true ) //ZombieCrawler to ZombieCrawlerOS
-                //        LastPounceTime = Level.TimeSeconds;
-                //}            
+                }      
             }
         }
     }
