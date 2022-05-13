@@ -10,7 +10,7 @@
    - Attempted fix is now in place.
    - May have to do with the Spin Damage? Mayeb temporarily disable attack 3 to see if that's the case?
  - Zeds have buggier pathing compared to KF zeds for an unknown reason(Seen around KF-Offices typical hallway camp spot)
- - Many Zed head hitboxes online are broken/don't work properly.
+ - Many Zed head hitboxes (local & online) are broken/don't work properly.
  
 # Miscellaneous
  - Check for compatibility with Scrake [Spin Fix Mut](https://steamcommunity.com/sharedfiles/filedetails/?id=2046199794) (Or other muts e.g. Hard Pat, Texture mods etc... (?))

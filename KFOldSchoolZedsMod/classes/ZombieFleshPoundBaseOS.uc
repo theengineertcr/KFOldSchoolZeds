@@ -92,8 +92,8 @@ defaultproperties
     GroundSpeed=130.000000
     WaterSpeed=120.000000
     MeleeDamage=35
-    SpinDamConst=20.000000
-    SpinDamRand=20.000000
+    SpinDamConst=5.000000
+    SpinDamRand=4.000000
     Health=1500//2000
     HealthMax=1500
     PlayerCountHealthScale=0.25
@@ -139,5 +139,6 @@ defaultproperties
     HeadHeight=2.5//1.0
     HeadScale=3.5//1.3
     OnlineHeadshotOffset=(X=22,Y=0,Z=68)
-    OnlineHeadshotScale=3.7
+    //After consideration, Headscale as been reduced
+    OnlineHeadshotScale=2.5//3.7
 }

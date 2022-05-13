@@ -36,6 +36,48 @@ simulated function PostNetBeginPlay()
     super.PostNetBeginPlay();
 }
 
+//-----------------------------------------------------------------------------
+// PostBeginPlay
+//-----------------------------------------------------------------------------
+// SpinDamage now deals different damage depending on difficulty
+simulated function PostBeginPlay()
+{
+    if( Role < ROLE_Authority )
+    {
+        return;
+    }
+
+    // Difficulty Scaling
+    // Minigun damage, Accuracy, Shots per burst and rate of fire set here
+    // Carried over BurnDamageScale from Husk, since he is meant to replace him after all
+    if (Level.Game != none)
+    {
+        if( Level.Game.GameDifficulty < 2.0 )
+        {
+            SpinDamConst = default.SpinDamConst * 0.8;
+            SpinDamRand = default.SpinDamRand  * 0.5;
+        }
+        else if( Level.Game.GameDifficulty < 4.0 )
+        {
+            SpinDamConst = default.SpinDamConst * 1.0;
+            SpinDamRand = default.SpinDamRand  * 1.0;        
+        }
+        else if( Level.Game.GameDifficulty < 5.0 )
+        {
+            SpinDamConst = default.SpinDamConst * 1.2;
+            SpinDamRand = default.SpinDamRand  * 1.25;    
+        }
+        else // Hardest difficulty
+        {
+            SpinDamConst = default.SpinDamConst * 1.6;
+            SpinDamRand = default.SpinDamRand  * 1.25;         
+        }
+     
+    }
+
+    super.PostBeginPlay();
+}
+
 //Not sure what the SetMindControlled function does, so were keeping it
 // This zed has been taken control of. Boost its health and speed
 function SetMindControlled(bool bNewMindControlled)
@@ -255,6 +297,13 @@ function RangedAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
+    else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
+    {
+            bShotAnim = true;
+            SetAnimAction('Claw');
+            PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
+            return;
+    }        
     else if ( CanAttack(A) )
     {
         bShotAnim = true;
