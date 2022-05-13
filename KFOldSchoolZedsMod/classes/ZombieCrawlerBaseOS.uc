@@ -207,7 +207,9 @@ defaultproperties
 
     HeadHeight=2.5
     HeadScale=1.5//1.05
-    OnlineHeadshotOffset=(X=28,Y=0,Z=7)
-    OnlineHeadshotScale=1.75//1.2    
+    //Saw someone headshot a Crawler while shooting above them
+    //So this is going down until I can get a chance to test myself
+    OnlineHeadshotOffset=(X=28,Y=0,Z=3)
+    OnlineHeadshotScale=1.5//1.2    
     CollisionRadius=26.000000    
 }

@@ -136,5 +136,6 @@ defaultproperties
     HeadHeight=3.0//2.5
     HeadScale=1.3//2.75//1.0
     OnlineHeadshotOffset=(X=6,Y=0,Z=41)
-    OnlineHeadshotScale=1.3//1.2    
+    //Slightly increased just incase
+    OnlineHeadshotScale=1.5//1.3//1.2    
 }

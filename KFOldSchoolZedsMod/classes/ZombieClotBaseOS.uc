@@ -109,6 +109,8 @@ defaultproperties
     CollisionHeight=50
     
     //Online Headshot values
+    //Maybe the offset?
     OnlineHeadshotOffset=(X=20,Y=0,Z=37)
-    OnlineHeadshotScale=1.3
+    //Upped this slightly just incase
+    OnlineHeadshotScale=1.5
 }

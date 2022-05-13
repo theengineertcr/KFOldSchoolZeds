@@ -91,7 +91,7 @@ defaultproperties
     //TODO:Maybe do a distance check to make him only attack when he's glued to the target?
     //Balance Round 1 Melee Range felt too long, reduced from 95 to 60, DistBeforeSaw to 2.5
     MeleeRange=60//95.000000//40.0
-    DistBeforeSaw=2.5
+    DistBeforeSaw=0.0
     GroundSpeed=85.000000
     WaterSpeed=75.000000
     Health=1000//1500
@@ -121,7 +121,8 @@ defaultproperties
     Prepivot=(Z=3.0)
 
     OnlineHeadshotOffset=(X=22,Y=5,Z=58)
-    OnlineHeadshotScale=1.5
+    //Slightly increased just incase
+    OnlineHeadshotScale=1.75//1.5
     HeadHeight=5.5//2.2
     HeadScale=1.5//1.1
     CollisionRadius=26

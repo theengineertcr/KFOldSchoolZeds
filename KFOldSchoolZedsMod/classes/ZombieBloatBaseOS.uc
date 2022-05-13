@@ -106,6 +106,7 @@ defaultproperties
     HeadHeight=2.5//2.5
     HeadScale=1.5    
     
+    //Not sure if this too high or too low?
     OnlineHeadshotOffset=(X=5,Y=0,Z=70)
     OnlineHeadshotScale=1.5        
 }

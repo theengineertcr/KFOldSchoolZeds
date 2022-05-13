@@ -81,7 +81,8 @@ defaultproperties
     HeadHeight=2.75//2.5
     HeadScale=1.5    
     OnlineHeadshotOffset=(X=5,Y=0,Z=53)
-    OnlineHeadshotScale=1.5    
+    //Increased
+    OnlineHeadshotScale=2.0//1.5    
     CollisionRadius=26.000000    
     
     bUseExtendedCollision=true
