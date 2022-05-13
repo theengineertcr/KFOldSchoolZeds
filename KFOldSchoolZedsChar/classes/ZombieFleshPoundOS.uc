@@ -295,22 +295,19 @@ simulated function DeviceGoNormal()
 
 function RangedAttack(Actor A)
 {
+    local float Dist;
+        
+    Dist = VSize(A.Location - Location);
+
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
-    else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
+    else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius || CanAttack(A))
     {
             bShotAnim = true;
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
             return;
     }        
-    else if ( CanAttack(A) )
-    {
-        bShotAnim = true;
-        SetAnimAction('Claw');
-        PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
-        return;
-    }
 }
 
 // Sets the FP in a berserk charge state until he either strikes his target, or hits timeout
