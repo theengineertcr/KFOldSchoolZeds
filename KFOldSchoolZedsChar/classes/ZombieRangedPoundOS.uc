@@ -20,7 +20,7 @@ class ZombieRangedPoundOS extends ZombieRangedPoundBaseOS
 //----------------------------------------------------------------------------
 
 
-//We'll keep this modern code
+//We'll keep this retail code
 function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPosition, float fTimeEnd  )
 {
     local vector NewVelocity;
