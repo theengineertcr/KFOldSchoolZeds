@@ -64,7 +64,7 @@ defaultproperties
     Mass=600.000000
     MeleeAnims(0)="PoundAttack1"
     MeleeAnims(1)="PoundAttack2"
-    MeleeAnims(2)="PoundAttack3"
+    MeleeAnims(2)="PoundAttack1" //PoundAttack3 Causes issues, removed.
     IdleHeavyAnim="PoundIdle"
     IdleRifleAnim="PoundIdle"
     IdleCrouchAnim="PoundIdle"
