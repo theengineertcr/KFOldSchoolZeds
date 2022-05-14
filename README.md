@@ -14,13 +14,13 @@ Select the Killing Floor 2.5 Gametype and start a game.
 
 Package name is KFOldSchoolZedsChar, Specimen names are:
 
-	ZombieClot_OS
-	ZombieBloat_OS
-	ZombieGorefast_OS
-	ZombieCrawler_OS
-	ZombieStalker_OS
-	ZombieSiren_OS
-	ZombieRangedPound_OS
-	ZombieScrake_OS
-	ZombieFleshpound_OS
-	ZombieBoss_OS
+    ZombieClot_OS
+    ZombieBloat_OS
+    ZombieGorefast_OS
+    ZombieCrawler_OS
+    ZombieStalker_OS
+    ZombieSiren_OS
+    ZombieRangedPound_OS
+    ZombieScrake_OS
+    ZombieFleshpound_OS
+    ZombieBoss_OS
