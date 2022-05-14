@@ -21,6 +21,7 @@ Package name is KFOldSchoolZedsChar, Specimen names are:
 	ZombieStalker_OS
 	ZombieSiren_OS
 	ZombieRangedPound_OS
+	ZombieRangedPoundGL_OS
 	ZombieScrake_OS
 	ZombieFleshpound_OS
 	ZombieBoss_OS
