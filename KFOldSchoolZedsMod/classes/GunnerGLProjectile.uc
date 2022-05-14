@@ -1,16 +1,60 @@
+
 // Bouncy bombs for the GL!
 class GunnerGLProjectile extends SPGrenadeProjectile;
 
-#exec OBJ LOAD FILE=KF_IJC_Summer_Weps.usx
+#exec OBJ LOAD FILE=KFOldSchoolStatics.usx
 #exec OBJ LOAD FILE=ProjectileSounds.uax
 #exec OBJ LOAD FILE=KF_GrenadeSnd.uax
 #exec OBJ LOAD FILE=KF_IJC_HalloweenSnd.uax
 
+var float LastSeenOrRelevantTime;
+
+//Don't disintegrate
+simulated function Disintegrate(vector HitLocation, vector HitNormal)
+{
+}
+
+//PostBeginPlay
+simulated function PostBeginPlay()
+{
+    local vector Dir;
+
+    if ( Level.NetMode != NM_DedicatedServer )
+    {
+        if ( !PhysicsVolume.bWaterVolume )
+        {
+            SmokeTrail = Spawn(SmokeTrailEmitterClass,self);
+        }
+    }
+
+    OrigLoc = Location;
+
+    if( !bKillMomentum )
+    {
+        Dir = vector(Rotation);
+        Velocity = Speed * Dir;
+        Velocity.Z += TossZ;
+    }
+
+    if (PhysicsVolume.bWaterVolume)
+    {
+        Velocity=0.6*Velocity;
+    }
+    super(Projectile).PostBeginPlay();
+
+    SetTimer(ExplodeTimer, false);
+}
+
+//Don't explode when you've taken damage
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
+{
+}
+
 simulated function ProcessTouch(Actor Other, Vector HitLocation)
 {
-	// Don't let it hit this player, or blow up on another player
+    // Don't let it hit this player, or blow up on another player
     if ( Other == none || Other == Instigator || Other.Base == Instigator )
-		return;
+        return;
 
     // Don't collide with bullet whip attachments
     if( KFBulletWhipAttachment(Other) != none )
@@ -48,15 +92,18 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 
     if( !bKillMomentum )
     {
-	   Explode(HitLocation,Normal(HitLocation-Other.Location));
-	}
+       Explode(HitLocation,Normal(HitLocation-Other.Location));
+    }
 }
+
+//TODO: Make grenades stop moving after it reaches 1.5 seconds until it explodes?
+//Aftermath: After wasting a lot of time trying to figure this out, we'll just lower dampen factor
 
 defaultproperties
 {
     ArmDistSquared=0 //Does not need to be armed//90000 // 6 meters
     Speed=1000
-    MaxSpeed=1500
+    MaxSpeed=10000//In the future, we'll make his projectiles speed up when he's far away, so keep it high//1500
     Damage=75// No need to be that high //325
     DamageRadius=175// Halved radius //350
     MomentumTransfer=75000.000000
@@ -64,8 +111,9 @@ defaultproperties
     LifeSpan=10.000000
     ImpactDamage=25
     ExplodeTimer=3.5
-    DampenFactor=0.5
-    DampenFactorParallel=0.8
+    //lowered these
+    DampenFactor=0.4//0.5
+    DampenFactorParallel=0.6//0.8
     bBounce=True
     TossZ=150    
     DrawScale=4.0
@@ -73,7 +121,23 @@ defaultproperties
     //References are buggy, so screw 'em
     ImpactSound=Sound'KF_GrenadeSnd.Nade_HitSurf'
     AmbientSound=Sound'KF_IJC_HalloweenSnd.KF_FlarePistol_Projectile_Loop'
+    
     //Place Holder Model until I get a visual reference on Quake 2 Grenades
-    StaticMesh=StaticMesh'KF_IJC_Summer_Weps.SPGrenade_proj'
+    //We went with Quake style nades instead
+    StaticMesh=StaticMesh'KFOldSchoolStatics.GunPoundProj'
     ExplosionSound=Sound'KF_GrenadeSnd.Nade_Explode_1'
+    
+    // Make our nade glow red!
+    LightType=LT_Pulse
+    LightPeriod=8.0
+    LightPhase=0.0
+    LightBrightness=160.0
+    LightRadius=4.000000
+    LightHue=0
+    LightSaturation=0
+    LightCone=16
+    bDynamicLight=True    
+    
+    //Always be bright
+    bUnlit=True
 }
