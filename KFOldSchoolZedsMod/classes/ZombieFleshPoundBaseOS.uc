@@ -138,6 +138,7 @@ defaultproperties
     CollisionHeight=44
     HeadHeight=2.5//1.0
     HeadScale=3.5//1.3
+    //Maybe increase this?
     OnlineHeadshotOffset=(X=22,Y=0,Z=68)
     //After consideration, Headscale online has been reduced
     OnlineHeadshotScale=2.4//3.7

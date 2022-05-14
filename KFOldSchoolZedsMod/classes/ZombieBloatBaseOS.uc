@@ -104,9 +104,11 @@ defaultproperties
     ColHeight=22//22
 
     HeadHeight=2.5//2.5
-    HeadScale=1.5    
+    //Increased
+    HeadScale=1.6    
     
     //Not sure if this too high or too low?
-    OnlineHeadshotOffset=(X=5,Y=0,Z=70)
-    OnlineHeadshotScale=1.5        
+    //Increased
+    OnlineHeadshotOffset=(X=5,Y=0,Z=68) //Z=70
+    OnlineHeadshotScale=2.2 // 1.5        
 }
