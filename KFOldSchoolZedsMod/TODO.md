@@ -1,7 +1,7 @@
 # Gameplay Tweaks
  - Make Fleshpound Avoid Area's only spawn when enraged and make Avoid Area extend a couple of meters infront of Fleshpounds to make zeds "Clear the way" 
    - Currently, Fleshpound Avoid Area has been temporarily removed until this is done.
- - Fleshpound/Ranged Pound head hitboxes too generous
+ - Fleshpound/Ranged Pound online head hitboxes too generous in size or too low on the model.
  - Bloat acid stays for far too long, make it go away earlier.
 
 # Bugs
@@ -16,6 +16,7 @@
  - Check for compatibility with Scrake [Spin Fix Mut](https://steamcommunity.com/sharedfiles/filedetails/?id=2046199794) (Or other muts e.g. Hard Pat, Texture mods etc... (?))
 
 ## Finished / Fixed
+ - Fleshpound Spin Attack Removed
  - Fleshpound deals less damage on Spin attack
  - Zeds no longer turn their body while knocked down
  - Fleshpound Chaingunner no longer skips stun animation
