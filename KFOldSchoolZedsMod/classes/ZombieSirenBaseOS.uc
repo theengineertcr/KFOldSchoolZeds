@@ -82,7 +82,7 @@ defaultproperties
     DistBeforeScream=200
     ScreamRadius=900//700//800
     ScreamDamage=8 // 10
-    ScreamDamageType=Class'KFMod.SirenScreamDamage'
+    ScreamDamageType=Class'KFOldSchoolZedsMod.SirenScreamDamageOS'
     ScreamForce=-150000//-300000
     RotMag=(Pitch=150,Yaw=150,Roll=150)
     RotRate=500
