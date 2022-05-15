@@ -18,15 +18,27 @@ class ZombieGoreFastOS extends ZombieGoreFastBaseOS
 //----------------------------------------------------------------------------
 
 //Issues:
-//Stops running after a short while
-//TODO:Make Gorefasts keep charging at the player until they are dead
+// Online head hitboxes dont scale while charging
 
 simulated function PostNetReceive()
 {
     if( !bZapped )
     {
+        //Attempt to fix his headscale not increasing while charging online
         if (bRunning)
+        {
             MovementAnims[0]='ZombieRun';
+            
+            //If he's not attacking, increase his HeadScale
+            if( !bShotAnim )
+            {
+                OnlineHeadshotScale = 3.0; 
+            }
+            else
+            {
+                OnlineHeadshotScale = default.OnlineHeadshotScale;
+            }                
+        }
         else MovementAnims[0]=default.MovementAnims[0];
     }
 }
@@ -116,7 +128,13 @@ function RangedAttack(Actor A)
 {
     Super.RangedAttack(A);
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
+    {
         GoToState('RunningState');
+        
+        //Additional increase here just incase
+        OnlineHeadshotScale = 3.0;
+    }
+    //TODO: Figure out if we need to revert back to original here as well?
 }
 
 state RunningState
@@ -194,6 +212,7 @@ state RunningState
     //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
+        //For some reason, this does not work on Network games
         if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
         {
             HeadScale=3.0;
