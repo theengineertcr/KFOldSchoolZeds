@@ -1,4 +1,3 @@
-
 // Bouncy bombs for the GL!
 class GunnerGLProjectile extends SPGrenadeProjectile;
 
@@ -26,6 +25,27 @@ simulated function PostBeginPlay()
             SmokeTrail = Spawn(SmokeTrailEmitterClass,self);
         }
     }
+    
+	// Difficulty Scaling
+	if (Level.Game != none)
+	{
+        if( Level.Game.GameDifficulty < 2.0 )
+        {
+            Damage = default.Damage * 0.5;
+        }
+        else if( Level.Game.GameDifficulty < 4.0 )
+        {
+            Damage = default.Damage * 1.0;
+        }
+        else if( Level.Game.GameDifficulty < 5.0 )
+        {
+            Damage = default.Damage * 1.33;
+        }
+        else // Hardest difficulty
+        {
+            Damage = default.Damage * 1.66;
+        }
+	}    
 
     OrigLoc = Location;
 
@@ -101,19 +121,21 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 
 defaultproperties
 {
-    ArmDistSquared=0 //Does not need to be armed//90000 // 6 meters
-    Speed=1000
-    MaxSpeed=10000//In the future, we'll make his projectiles speed up when he's far away, so keep it high//1500
-    Damage=75// No need to be that high //325
-    DamageRadius=175// Halved radius //350
+    ArmDistSquared=0 //Does not need to be armed //90000 // 6 meters
+    Speed=1200//1500
+    MaxSpeed=10000//In the future, we'll make his projectiles speed up when he's far away, so keep it high
+    Damage=75 //Decreased to use difficulty for adjusting damage
+    DamageRadius=350// Reverted to default from 175 
     MomentumTransfer=75000.000000
-    MyDamageType=Class'KFMod.DamTypeSPGrenade'
+    MyDamageType=Class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
     LifeSpan=10.000000
-    ImpactDamage=25
-    ExplodeTimer=3.5
-    //lowered these
-    DampenFactor=0.4//0.5
-    DampenFactorParallel=0.6//0.8
+    //Doesn't impact enemies
+    ImpactDamage=0
+    //Decreased
+    ExplodeTimer=2.0
+    //lowered further
+    DampenFactor=0.3// 0.4 //0.5
+    DampenFactorParallel=0.3// 0.6 //0.8
     bBounce=True
     TossZ=150    
     DrawScale=4.0

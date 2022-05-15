@@ -159,8 +159,28 @@ function RangedAttack(Actor A)
     local int LastFireTime; //Husk variable // Don't know if we need this
 
     if ( bShotAnim )
-        return;        
+        return;
+        
     Dist = VSize(A.Location-Location);
+    
+    //Is there a better way to do this?
+    //All I want to do is tie Projectile speed to distance
+    //So he doesn't overshoot or undershoot, creating classes
+    //With different variables seems very efficient and I don't
+    //Get how I'm supposed to do this...
+    
+    if (Dist < 400)
+    {
+        GunnerProjClass = class'GunnerGLProjectileS';
+    }    
+    else if(Dist < 800) 
+    {
+        GunnerProjClass = class'GunnerGLProjectileM';
+    }
+    else
+    {
+        GunnerProjClass = class'GunnerGLProjectile';
+    }
     
     //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
@@ -178,14 +198,8 @@ function RangedAttack(Actor A)
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);    
     }
-    else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 1500 )
+    else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2000 )
     {
-        if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't know the point of this FRand so it can go away
-        {
-            LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0); //Level.TimeSeconds+FRand()*4;
-            Return;
-        }
-
         LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
 
         bShotAnim = true;
@@ -198,7 +212,7 @@ function RangedAttack(Actor A)
          
         //Ding ding ding! You won the lottery, and your prize is certain death!
         if(FRand() < 0.1 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
-            GLFireCounter =  GLFireBurst + 2 + Rand(4);
+            GLFireCounter =  GLFireBurst + 2 + Rand(5);
             
         GoToState('FireGrenades');
     }    
@@ -260,7 +274,7 @@ function FireGLShot()
 
     GetAxes(Rotation,X,Y,Z);
     FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    GunnerProjClass = Class'KFOldSchoolZedsMod.GunnerGLProjectile';
+    //GunnerProjClass = Class'KFOldSchoolZedsMod.GunnerGLProjectile';
     
     if ( !SavedFireProperties.bInitialized )
     {
@@ -270,7 +284,7 @@ function FireGLShot()
         SavedFireProperties.MaxRange = 65535;
         SavedFireProperties.bTossed = False;
         SavedFireProperties.bTrySplash = true;
-        SavedFireProperties.bLeadTarget = True;
+        SavedFireProperties.bLeadTarget = true;
         SavedFireProperties.bInstantHit = False;
         SavedFireProperties.bInitialized = True;
     }
