@@ -6,9 +6,6 @@
 class ZombieRangedPoundOS extends ZombieRangedPoundBaseOS
     abstract;
 
-//Issues
-//Does not always play the FireMGEnd animation after he's finished firing,
-//Resulting in him walking weirdly towards the player. Try to suss it out using logs?
 
 // Load all relevant texture, sound, and other packages
 #exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
@@ -18,6 +15,12 @@ class ZombieRangedPoundOS extends ZombieRangedPoundBaseOS
 //----------------------------------------------------------------------------
 // NOTE: Most Variables are declared in the base class to eliminate hitching
 //----------------------------------------------------------------------------
+
+//Variables that remembers our MG Stats in PostBeginPlay
+var float SetMGDamage;
+var float SetMGAccuracy;
+var float SetMGFireRate;
+var int SetMGFireBurst;
 
 
 //We'll keep this retail code
@@ -96,39 +99,42 @@ simulated function PostBeginPlay()
     {
         if( Level.Game.GameDifficulty < 2.0 )
         {
+            BurnDamageScale = default.BurnDamageScale * 2.0;            
             MGDamage = default.MGDamage * 0.75;//0.5//0.375
-            BurnDamageScale = default.BurnDamageScale * 2.0;
             MGAccuracy = default.MGAccuracy * 1.25;
-            MGFireBurst = default.MGFireBurst * 0.5;
+            MGFireBurst = default.MGFireBurst * 0.7;
             MGFireRate = default.MGFireRate * 1.5;
         }
         else if( Level.Game.GameDifficulty < 4.0 )
         {
-            MGDamage = default.MGDamage * 1.0;
             BurnDamageScale = default.BurnDamageScale * 1.0;
+            MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 1.0;
             MGFireBurst = default.MGFireBurst * 1.0;
             MGFireRate = default.MGFireRate * 1.0;            
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
-            MGDamage = default.MGDamage * 1.5;
             BurnDamageScale = default.BurnDamageScale * 0.75;
-            MGAccuracy = default.MGAccuracy * 0.75;//875
-            MGFireBurst = default.MGFireBurst * 1.3;
+            MGDamage = default.MGDamage * 1.5;            
+            MGAccuracy = default.MGAccuracy * 0.9; //Too accurate
+            MGFireBurst = default.MGFireBurst * 1.33;
             MGFireRate = default.MGFireRate * 0.833333;        
         }
         else // Hardest difficulty
         {
-            MGDamage = default.MGDamage * 2.0;
             BurnDamageScale = default.BurnDamageScale * 0.5;
-            MGAccuracy = default.MGAccuracy * 0.5;
-            MGFireBurst = default.MGFireBurst * 1.6;
+            MGDamage = default.MGDamage * 2.0;
+            MGAccuracy = default.MGAccuracy * 0.80;
+            MGFireBurst = default.MGFireBurst * 1.67;
             MGFireRate = default.MGFireRate * 0.68; //0.583333            
         }
-     
-    }
-
+        
+        SetMGDamage = MGDamage;
+        SetMGAccuracy = MGAccuracy;
+        SetMGFireBurst = MGFireBurst;
+        SetMGFireRate = MGFireRate;
+    }    
     super.PostBeginPlay();
 }
 
@@ -193,9 +199,10 @@ function RangedAttack(Actor A)
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastChainGunTime<Level.TimeSeconds )
     {
-        if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't know the point of this FRand so it can go away
+        if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't need this FRand so it can go away
         {
-            LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0); //Level.TimeSeconds+FRand()*4;
+            //Maybe lower this further?
+            LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *1.0); //Level.TimeSeconds+FRand()*4;
             Return;
         }
 
@@ -206,8 +213,26 @@ function RangedAttack(Actor A)
         SetAnimAction('RangedPreFireMG'); //PreFireMG
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
         
+        //Unlucky you, you won a ticket straight to hell!
+        if(FRand() > 0.10 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
+        {
+            MGFireBurst = ( MGFireBurst + 15 + Rand(26));
+            MGDamage = ( MGDamage + Rand(4));
+            MGFireRate = (MGFireRate * 0.95);            
+            //Decrease accuracy during this
+            MGAccuracy = (MGAccuracy * 1.10);
+        }
+        else
+        {
+            MGFireBurst = SetMGFireBurst;
+            MGDamage= SetMGDamage;
+            MGAccuracy = SetMGAccuracy;
+            MGFireRate = SetMGFireRate;
+        }
+        
         //Tweak the amount of bullets he fires so its more predictable
-        MGFireCounter =  MGFireBurst + Rand(10); //Rand(60) + 35;
+        MGFireCounter =  MGFireBurst; //Rand(60) + 35;        
+        
         GoToState('FireChaingun');
     }    
 }
@@ -215,7 +240,7 @@ function RangedAttack(Actor A)
 simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
-    local float hitDist;
+    local float hitDist; 
     
     //Play Old L85 fire sound
     PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);    
@@ -392,9 +417,11 @@ state FireChaingun
         //TODO Figure out a way to make it so KFMonsters dont take damage(Done!)
         //Make it so only Humans, Glass, and Doors take damage 
         if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)))
-            A.TakeDamage(MGDamage+Rand(3),Self,HL,Dir*500,Class'DamTypeBurned'); //Make MGDamage deal DamTypeBurned //Formerly "DamageType"
-        else
-            return;
+        {
+            //Just take MGDamage, otherwise people get killed quickly
+            A.TakeDamage(MGDamage,Self,HL,Dir*500,Class'DamTypeBurned');
+        }
+        else    return;
     }
 
     function bool NeedToTurnFor( rotator targ )

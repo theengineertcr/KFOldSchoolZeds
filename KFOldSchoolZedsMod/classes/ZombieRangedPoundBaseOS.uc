@@ -105,9 +105,9 @@ defaultproperties
     ZapThreshold=0.75
     MGFireInterval=5.5
     MGDamage=2.0//2.0//6.0 This was too much
-    MGAccuracy=0.04//0.06//0.08
+    MGAccuracy=0.06 //0.06//0.08// Rebalanced
     MGFireRate=0.06//0.05 
-    MGFireBurst=10//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
+    MGFireBurst=15//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
     
     bCannibal = False // No animation for him.
     MenuName="Flesh Pound Chaingunner"
