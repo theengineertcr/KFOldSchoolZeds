@@ -8,7 +8,9 @@ Copy all of the contents within the zip file into your Killing Floor directory.
 
 ## Usage
 
-Select the Killing Floor 2.5 Gametype and start a game. Or for a dedicated server:
+Select the Killing Floor 2.5 Gametype and start a game.
+
+Cmdline for dedicated servers:
 
 ```cpp
 Game=KFOldSchoolZedsChar.KFGameTypeOS
