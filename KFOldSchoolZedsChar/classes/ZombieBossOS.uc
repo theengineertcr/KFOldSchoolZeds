@@ -805,18 +805,9 @@ Begin:
             GoToState('');
         }
 
-        // Give some randomness to the patriarch's firing
-        if( Level.TimeSeconds > MGFireDuration )
-        {
-            Sleep(0.5 + FRand() * 0.75);
-            MGFireDuration = Level.TimeSeconds + (0.75 + FRand() * 0.5);
-        }
-        else
-        {
-            if( bFireAtWill )
-                FireMGShot();
-            Sleep(0.05);
-        }
+        if( bFireAtWill )
+            FireMGShot();
+        Sleep(0.05);
     }
 }
 
@@ -1333,7 +1324,7 @@ simulated function PostNetReceive()
 //Overhauled with KFMod Code
 simulated function int DoAnimAction( name AnimName )
 {
-    if( AnimName=='MeleeImpale' || AnimName=='MeleeClaw' || AnimName=='BossHitF' || AnimName=='FireMG'  )
+    if( AnimName=='MeleeImpale' || AnimName=='MeleeClaw' || AnimName=='BossHitF' /* || AnimName=='FireMG' */  ) //Removing FireMG fixes bug with boss walking in FireMG anim
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
