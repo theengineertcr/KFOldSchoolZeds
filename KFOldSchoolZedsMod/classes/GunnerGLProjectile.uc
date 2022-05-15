@@ -26,9 +26,9 @@ simulated function PostBeginPlay()
         }
     }
     
-	// Difficulty Scaling
-	if (Level.Game != none)
-	{
+    // Difficulty Scaling
+    if (Level.Game != none)
+    {
         if( Level.Game.GameDifficulty < 2.0 )
         {
             Damage = default.Damage * 0.5;
@@ -45,7 +45,7 @@ simulated function PostBeginPlay()
         {
             Damage = default.Damage * 1.66;
         }
-	}    
+    }    
 
     OrigLoc = Location;
 
