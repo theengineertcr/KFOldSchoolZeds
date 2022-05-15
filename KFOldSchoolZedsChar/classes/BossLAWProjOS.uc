@@ -8,9 +8,11 @@ class BossLAWProjOS extends BossLAWProj;
 
 //Load the sound package
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KillingFloorStatics.usx
 
 
 defaultproperties
 {
+     StaticMesh=StaticMesh'KillingFloorStatics.LAWRocket'
      ExplosionSound=Sound'KFOldSchoolZeds_Sounds.Shared.TankFire01'
 }
