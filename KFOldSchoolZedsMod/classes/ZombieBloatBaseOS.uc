@@ -102,13 +102,8 @@ defaultproperties
     CollisionHeight=44.000000//previously  44
     ColOffset=(Z=60)//(Z=60)
     ColHeight=22//22
-
-    HeadHeight=2.5//2.5
-    //Increased
-    HeadScale=1.6    
     
-    //Not sure if this too high or too low?
-    //Increased
-    OnlineHeadshotOffset=(X=5,Y=0,Z=68) //Z=70
-    OnlineHeadshotScale=2.2 // 1.5        
+    //Updated
+    OnlineHeadshotOffset=(X=25,Y=-5,Z=70)
+    OnlineHeadshotScale=1.0 // 1.5
 }

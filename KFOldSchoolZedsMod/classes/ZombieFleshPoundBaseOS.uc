@@ -136,10 +136,7 @@ defaultproperties
 
     CollisionRadius=26
     CollisionHeight=44
-    HeadHeight=2.5//1.0
-    HeadScale=3.5//1.3
-    //Maybe increase this?
-    OnlineHeadshotOffset=(X=22,Y=0,Z=68)
-    //After consideration, Headscale online has been reduced
-    OnlineHeadshotScale=2.4//3.7
+    //Updated
+    OnlineHeadshotOffset=(X=35,Y=-6,Z=68) // Z=50 when charging
+    OnlineHeadshotScale=1.2//3.7
 }

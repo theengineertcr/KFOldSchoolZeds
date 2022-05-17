@@ -1262,13 +1262,108 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
         SetOverlayMaterial( DamageType.default.DamageOverlayMaterial, DamageType.default.DamageOverlayTime, false );
 }
 
-// Need to Readd this
-//// OldPlayHit is not in KFMod, nullify it
-// Modified version of the original Pawn playhit. Set up because we want our blood puffs to be directional based
-// On the momentum of the bullet, not out from the center of the player
-//function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
-//{
-//}
+
+// Screw the broken solo headshots, use the online headshots value in solo
+// If there's a way to trim this down, do so down the line
+function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
+{
+	local coords C;
+	local vector HeadLoc, B, M, diff;
+	local float t, DotMM, Distance;
+	local int look;
+	local bool bUseAltHeadShotLocation;
+	local bool bWasAnimating;
+
+	if (HeadBone == '')
+		return False;
+
+	// If we are a dedicated server estimate what animation is most likely playing on the client
+	if (Level.NetMode == NM_DedicatedServer)
+	{
+		if (Physics == PHYS_Falling)
+			PlayAnim(AirAnims[0], 1.0, 0.0);
+		else if (Physics == PHYS_Walking)
+		{
+			// Only play the idle anim if we're not already doing a different anim.
+			// This prevents anims getting interrupted on the server and borking things up - Ramm
+
+			if( !IsAnimating(0) && !IsAnimating(1) )
+			{
+				if (bIsCrouched)
+				{
+					PlayAnim(IdleCrouchAnim, 1.0, 0.0);
+				}
+				else
+				{
+					bUseAltHeadShotLocation=true;
+				}
+			}
+			else
+			{
+				bWasAnimating = true;
+			}
+
+			if ( bDoTorsoTwist )
+			{
+				SmoothViewYaw = Rotation.Yaw;
+				SmoothViewPitch = ViewPitch;
+
+				look = (256 * ViewPitch) & 65535;
+				if (look > 32768)
+					look -= 65536;
+
+				SetTwistLook(0, look);
+			}
+		}
+		else if (Physics == PHYS_Swimming)
+			PlayAnim(SwimAnims[0], 1.0, 0.0);
+
+		if( !bWasAnimating )
+		{
+			SetAnimFrame(0.5);
+		}
+	}
+
+	if( bUseAltHeadShotLocation )
+	{
+		HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
+		AdditionalScale *= OnlineHeadshotScale;
+	}
+	else
+	{
+		HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
+		AdditionalScale *= OnlineHeadshotScale;
+	}
+	//ServerHeadLocation = HeadLoc;
+
+	// Express snipe trace line in terms of B + tM
+	B = loc;
+	M = ray * (2.0 * CollisionHeight + 2.0 * CollisionRadius);
+
+	// Find Point-Line Squared Distance
+	diff = HeadLoc - B;
+	t = M Dot diff;
+	if (t > 0)
+	{
+		DotMM = M dot M;
+		if (t < DotMM)
+		{
+			t = t / DotMM;
+			diff = diff - (t * M);
+		}
+		else
+		{
+			t = 1;
+			diff -= M;
+		}
+	}
+	else
+		t = 0;
+
+	Distance = Sqrt(diff Dot diff);
+
+	return (Distance < (HeadRadius * HeadScale * AdditionalScale));
+}
 
 // Need this to get the HeadStub removed when Ragdoll is gone
 // Overridden to handle making attached explosives explode when this pawn dies

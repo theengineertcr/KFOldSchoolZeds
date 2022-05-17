@@ -126,16 +126,13 @@ defaultproperties
     CollisionRadius=26.000000
     //Increasing this makes her float, use Prepivot to move her down
     CollisionHeight=50.000000
-    //Hacky fix but fuck it
-    PrePivot=(X=20,Z=-13)    
+    PrePivot=(Z=-13)    
     bUseExtendedCollision=true
     ColOffset=(Z=48)
     ColRadius=25
-    ColHeight=5
+    ColHeight=5    
     
-    HeadHeight=3.0//2.5
-    HeadScale=1.3//2.75//1.0
-    OnlineHeadshotOffset=(X=6,Y=0,Z=41)
-    //Slightly increased just incase
-    OnlineHeadshotScale=1.5//1.3//1.2    
+    //Updated
+    OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
+    OnlineHeadshotScale=1.0//1.3//1.2  
 }

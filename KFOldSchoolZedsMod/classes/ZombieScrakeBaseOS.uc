@@ -118,13 +118,13 @@ defaultproperties
     ColOffset=(Z=55)
     ColRadius=29
     ColHeight=18
-    Prepivot=(Z=3.0)
+    Prepivot=(Z=0.0)
 
-    OnlineHeadshotOffset=(X=22,Y=5,Z=58)
-    //Slightly increased just incase
-    OnlineHeadshotScale=1.75//1.5
-    HeadHeight=5.5//2.2
-    HeadScale=1.5//1.1
+    //Updated
+    OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
+    OnlineHeadshotScale=1.2//1.5
+    
+
     CollisionRadius=26
-    CollisionHeight=44    
+    CollisionHeight=46    
 }

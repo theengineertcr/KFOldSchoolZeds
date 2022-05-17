@@ -205,11 +205,9 @@ defaultproperties
     SpineBone1=
     SpineBone2=    
 
-    HeadHeight=2.5
-    HeadScale=1.5//1.05
-    //Saw someone headshot a Crawler while shooting above them
-    //So this is going down until I can get a chance to test myself
-    OnlineHeadshotOffset=(X=28,Y=0,Z=3)
-    OnlineHeadshotScale=1.5//1.2    
+    
+    //Updated
+    OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
+    OnlineHeadshotScale=1.0
     CollisionRadius=26.000000    
 }

@@ -1,8 +1,7 @@
 //=============================================================================
-// Ranged Fleshpound! An alternative to the Husk, using a bloody gatling gun!
+// Explosives Gunner Pound! Basically the Ogre from Quake, without the Chainsaw(yet!)
 //=============================================================================
-// TODO:We still want Firebugs to be a counter to the RangedPound, so we'll make him fire
-// Incendiary rounds and Rangedpounds counter Firebugs by being Fire resistant.
+
 //=============================================================================
 // Killing Floor Source
 // Copyright (C) 2009 Tripwire Interactive LLC
@@ -157,9 +156,8 @@ defaultproperties
 
     CollisionRadius=26
     CollisionHeight=44
-    HeadHeight=2.5
-    HeadScale=3.5
-    OnlineHeadshotOffset=(X=22,Y=0,Z=68)
-    //After consideration, Headscale online has been reduced
-    OnlineHeadshotScale=2.4//1.3    
+
+    //Updated
+    OnlineHeadshotOffset=(X=30,Y=8,Z=67)
+    OnlineHeadshotScale=1.5//1.3   
 }

@@ -77,9 +77,8 @@ defaultproperties
     //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
     
     CollisionRadius=26.000000
-    HeadHeight=2.0//2.5
-    HeadScale=1.3//1.1
-    OnlineHeadshotOffset=(X=18,Y=0,Z=33)
+    
+    OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
     //Slightly increased just incase
-    OnlineHeadshotScale=1.6//1.4//1.2    
+    OnlineHeadshotScale=1.0//1.4//1.2    
 }

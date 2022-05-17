@@ -99,18 +99,12 @@ defaultproperties
     //bUseExtendedCollision=False
     //ColOffset=(Z=48)    
     //ColRadius=25
-    //ColHeight=30//5    
-    ////We want to concern ourselves mainly with these 4 values
-    //HeadLoc = HeadHeight * HeadScale * AdditionalScale * C.XAxis
-    HeadHeight=5.0//2.0
-    //HeadScale is multiplied onto headradius...
-    HeadScale=1.1    
+    //ColHeight=30//5
+    
     CollisionRadius=26.000000
     CollisionHeight=50
     
-    //Online Headshot values
-    //Maybe the offset?
-    OnlineHeadshotOffset=(X=20,Y=0,Z=37)
-    //Upped this slightly just incase
-    OnlineHeadshotScale=1.5
+    //Updated
+    OnlineHeadshotOffset=(X=25,Y=-7,Z=45)
+    OnlineHeadshotScale=1.0
 }
