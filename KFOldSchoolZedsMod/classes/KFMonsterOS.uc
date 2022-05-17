@@ -1267,102 +1267,102 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
 // If there's a way to trim this down, do so down the line
 function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
 {
-	local coords C;
-	local vector HeadLoc, B, M, diff;
-	local float t, DotMM, Distance;
-	local int look;
-	local bool bUseAltHeadShotLocation;
-	local bool bWasAnimating;
+    local coords C;
+    local vector HeadLoc, B, M, diff;
+    local float t, DotMM, Distance;
+    local int look;
+    local bool bUseAltHeadShotLocation;
+    local bool bWasAnimating;
 
-	if (HeadBone == '')
-		return False;
+    if (HeadBone == '')
+        return False;
 
-	// If we are a dedicated server estimate what animation is most likely playing on the client
-	if (Level.NetMode == NM_DedicatedServer)
-	{
-		if (Physics == PHYS_Falling)
-			PlayAnim(AirAnims[0], 1.0, 0.0);
-		else if (Physics == PHYS_Walking)
-		{
-			// Only play the idle anim if we're not already doing a different anim.
-			// This prevents anims getting interrupted on the server and borking things up - Ramm
+    // If we are a dedicated server estimate what animation is most likely playing on the client
+    if (Level.NetMode == NM_DedicatedServer)
+    {
+        if (Physics == PHYS_Falling)
+            PlayAnim(AirAnims[0], 1.0, 0.0);
+        else if (Physics == PHYS_Walking)
+        {
+            // Only play the idle anim if we're not already doing a different anim.
+            // This prevents anims getting interrupted on the server and borking things up - Ramm
 
-			if( !IsAnimating(0) && !IsAnimating(1) )
-			{
-				if (bIsCrouched)
-				{
-					PlayAnim(IdleCrouchAnim, 1.0, 0.0);
-				}
-				else
-				{
-					bUseAltHeadShotLocation=true;
-				}
-			}
-			else
-			{
-				bWasAnimating = true;
-			}
+            if( !IsAnimating(0) && !IsAnimating(1) )
+            {
+                if (bIsCrouched)
+                {
+                    PlayAnim(IdleCrouchAnim, 1.0, 0.0);
+                }
+                else
+                {
+                    bUseAltHeadShotLocation=true;
+                }
+            }
+            else
+            {
+                bWasAnimating = true;
+            }
 
-			if ( bDoTorsoTwist )
-			{
-				SmoothViewYaw = Rotation.Yaw;
-				SmoothViewPitch = ViewPitch;
+            if ( bDoTorsoTwist )
+            {
+                SmoothViewYaw = Rotation.Yaw;
+                SmoothViewPitch = ViewPitch;
 
-				look = (256 * ViewPitch) & 65535;
-				if (look > 32768)
-					look -= 65536;
+                look = (256 * ViewPitch) & 65535;
+                if (look > 32768)
+                    look -= 65536;
 
-				SetTwistLook(0, look);
-			}
-		}
-		else if (Physics == PHYS_Swimming)
-			PlayAnim(SwimAnims[0], 1.0, 0.0);
+                SetTwistLook(0, look);
+            }
+        }
+        else if (Physics == PHYS_Swimming)
+            PlayAnim(SwimAnims[0], 1.0, 0.0);
 
-		if( !bWasAnimating )
-		{
-			SetAnimFrame(0.5);
-		}
-	}
+        if( !bWasAnimating )
+        {
+            SetAnimFrame(0.5);
+        }
+    }
 
-	if( bUseAltHeadShotLocation )
-	{
-		HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
-		AdditionalScale *= OnlineHeadshotScale;
-	}
-	else
-	{
-		HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
-		AdditionalScale *= OnlineHeadshotScale;
-	}
-	//ServerHeadLocation = HeadLoc;
+    if( bUseAltHeadShotLocation )
+    {
+        HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
+        AdditionalScale *= OnlineHeadshotScale;
+    }
+    else
+    {
+        HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
+        AdditionalScale *= OnlineHeadshotScale;
+    }
+    //ServerHeadLocation = HeadLoc;
 
-	// Express snipe trace line in terms of B + tM
-	B = loc;
-	M = ray * (2.0 * CollisionHeight + 2.0 * CollisionRadius);
+    // Express snipe trace line in terms of B + tM
+    B = loc;
+    M = ray * (2.0 * CollisionHeight + 2.0 * CollisionRadius);
 
-	// Find Point-Line Squared Distance
-	diff = HeadLoc - B;
-	t = M Dot diff;
-	if (t > 0)
-	{
-		DotMM = M dot M;
-		if (t < DotMM)
-		{
-			t = t / DotMM;
-			diff = diff - (t * M);
-		}
-		else
-		{
-			t = 1;
-			diff -= M;
-		}
-	}
-	else
-		t = 0;
+    // Find Point-Line Squared Distance
+    diff = HeadLoc - B;
+    t = M Dot diff;
+    if (t > 0)
+    {
+        DotMM = M dot M;
+        if (t < DotMM)
+        {
+            t = t / DotMM;
+            diff = diff - (t * M);
+        }
+        else
+        {
+            t = 1;
+            diff -= M;
+        }
+    }
+    else
+        t = 0;
 
-	Distance = Sqrt(diff Dot diff);
+    Distance = Sqrt(diff Dot diff);
 
-	return (Distance < (HeadRadius * HeadScale * AdditionalScale));
+    return (Distance < (HeadRadius * HeadScale * AdditionalScale));
 }
 
 // Need this to get the HeadStub removed when Ragdoll is gone
