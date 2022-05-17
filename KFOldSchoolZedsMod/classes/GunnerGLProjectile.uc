@@ -125,7 +125,7 @@ defaultproperties
     Speed=1200//1500
     MaxSpeed=10000//In the future, we'll make his projectiles speed up when he's far away, so keep it high
     Damage=75 //Decreased to use difficulty for adjusting damage
-    DamageRadius=350// Reverted to default from 175 
+    DamageRadius=300// Balance - Slightly reduced
     MomentumTransfer=75000.000000
     MyDamageType=Class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
     LifeSpan=10.000000
