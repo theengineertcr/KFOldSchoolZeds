@@ -24,22 +24,26 @@ simulated function PostNetReceive()
 {
     if( !bZapped )
     {
-        //Attempt to fix his headscale not increasing while charging online
+        //Not sure if repositioning the head Hitboxes is a great idea, but we'll do it anyway
         if (bRunning)
         {
             MovementAnims[0]='ZombieRun';
             
-            //If he's not attacking, increase his HeadScale
+            //If he's not attacking, increase his Z's Offset
             if( !bShotAnim )
             {
-                OnlineHeadshotScale = 3.0; 
+                OnlineHeadshotOffset.Z=30;
             }
             else
             {
-                OnlineHeadshotScale = default.OnlineHeadshotScale;
+                OnlineHeadshotOffset.Z=45;
             }                
         }
-        else MovementAnims[0]=default.MovementAnims[0];
+        else
+        {
+            MovementAnims[0]=default.MovementAnims[0];
+            OnlineHeadshotOffset.Z=45;
+        }
     }
 }
 
@@ -132,7 +136,7 @@ function RangedAttack(Actor A)
         GoToState('RunningState');
         
         //Additional increase here just incase
-        OnlineHeadshotScale = 3.0;
+        //OnlineHeadshotScale = 3.0;
     }
     //TODO: Figure out if we need to revert back to original here as well?
 }
@@ -212,27 +216,27 @@ state RunningState
     //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
+        local int i;
+        
         //For some reason, this does not work on Network games
-        if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
+        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
         {
-            HeadScale=3.0;
-            OnlineHeadshotScale=3.0;
+            OnlineHeadshotOffset.Z=30;
         }
         else
         {
-            HeadScale=default.HeadScale;
-            OnlineHeadshotScale=default.OnlineHeadshotScale;
+            OnlineHeadshotOffset.Z=45;
         }
     
         //Gorefasts dont attack and move
         // Keep the gorefast moving toward its target when attacking
-        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-        {
-            if( LookTarget!=None )
-            {
-                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-            }
-        }
+        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        //{
+        //    if( LookTarget!=None )
+        //    {
+        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+        //    }
+        //}
     
         global.Tick(DeltaTime);
     }
@@ -258,15 +262,27 @@ CheckCharge:
 state RunningToMarker extends RunningState
 {
     simulated function Tick(float DeltaTime)
-    {     
-        // Keep the gorefast moving toward its target when attacking
-        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+    {
+        local int i;
+        
+        //For some reason, this does not work on Network games
+        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
         {
-            if( LookTarget!=None )
-            {
-                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-            }
+            OnlineHeadshotOffset.Z=30;
         }
+        else
+        {
+            OnlineHeadshotOffset.Z=45;
+        }
+        
+        // Keep the gorefast moving toward its target when attacking
+        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        //{
+        //    if( LookTarget!=None )
+        //    {
+        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+        //    }
+        //}
     
         global.Tick(DeltaTime);
     }
@@ -297,8 +313,6 @@ defaultproperties
     //-------------------------------------------------------------------------------
     // NOTE: Most Default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    //EventClasses aren't a thing in KFMod
-    //EventClasses(0)="KFChar.ZombieGorefast_STANDARD"
     
     //Use KFMod Controller
     ControllerClass=Class'KFOldSchoolZedsChar.GorefastControllerOS'

@@ -31,9 +31,24 @@ simulated function PostNetBeginPlay()
 simulated function PostNetReceive()
 {
     if (bCharging)
+    {
         MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
+        
+        //If he's not attacking, increase his Z's Offset
+        if( !bShotAnim )
+        {
+            OnlineHeadshotOffset.Z=39;
+        }
+        else
+        {
+            OnlineHeadshotOffset.Z=57;
+        }             
+    }
     else if( !(bCrispified && bBurnified) )
+    {
         MovementAnims[0]=default.MovementAnims[0];
+        OnlineHeadshotOffset.Z=57;
+    }
 }
 
 //Not sure what the SetMindControlled function does, so were keeping it
@@ -131,11 +146,9 @@ function RangedAttack(Actor A)
     //Do more melee damage on the slower attack
     //And do less on the faster attack
     if(AnimAction == MeleeAnims[0])
-        MeleeDamage = default.MeleeDamage*0.85;
+        MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 0.85), 1 );
     else if(AnimAction == MeleeAnims[1])
-        MeleeDamage = default.MeleeDamage*1.15;
-    else
-        MeleeDamage = default.MeleeDamage;
+         MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 1.15), 1 );
         
     //Code that handles running when low on health, we need it
     //As we want retail Scrake behaviour, even if the Mod didn't have it
@@ -228,6 +241,36 @@ state RunningState
             GoToState('SawingLoop');
         }
     }
+    
+    //Added in code to increase Head Hitbox whenever Gorefasts
+    //Do their running animation because during that specific
+    //Animation, they can't be headshot
+    simulated function Tick(float DeltaTime)
+    {
+        local int i;
+        
+        //For some reason, this does not work on Network games
+        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
+        {
+            OnlineHeadshotOffset.Z=39;
+        }
+        else
+        {
+            OnlineHeadshotOffset.Z=57;
+        }
+    
+        //Gorefasts dont attack and move
+        // Keep the gorefast moving toward its target when attacking
+        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
+        //{
+        //    if( LookTarget!=None )
+        //    {
+        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+        //    }
+        //}
+    
+        global.Tick(DeltaTime);
+    }    
 }
 
 // State where the zed is charging to a marked location.
@@ -270,33 +313,6 @@ State SawingLoop
         Super.AnimEnd(Channel);
         if( Controller!=None && Controller.Enemy!=None )
             RangedAttack(Controller.Enemy); // Keep on attacking if possible.
-    }
-
-    //Removed unnecessary code and added in some to increase Head Hitbox
-    //Whenever he's doing his running animation because whenever he's
-    //Doing that specific animation, he can't be headshot
-    simulated function Tick(float DeltaTime)
-    {
-        if( MovementAnims[0] == 'ZombieRun' && !bShotAnim)
-        {
-            HeadScale=3.3;
-            OnlineHeadshotScale=3.5;
-        }
-        else
-        {
-            HeadScale=default.HeadScale;
-            OnlineHeadshotScale=default.OnlineHeadshotScale;
-        }
-        // Keep the scrake moving toward its target when attacking
-        if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-        {
-            if( LookTarget!=None )
-            {
-                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-            }
-        }
-    
-        global.Tick(DeltaTime);
     }
 
     function EndState()

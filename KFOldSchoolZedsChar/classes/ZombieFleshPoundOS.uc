@@ -48,8 +48,6 @@ simulated function PostBeginPlay()
     }
 
     // Difficulty Scaling
-    // Minigun damage, Accuracy, Shots per burst and rate of fire set here
-    // Carried over BurnDamageScale from Husk, since he is meant to replace him after all
     if (Level.Game != none)
     {
         if( Level.Game.GameDifficulty < 2.0 )
@@ -469,8 +467,20 @@ Ignores StartCharging;
 
     function Tick( float Delta )
     {
+        local int i;
+        
         if( !bShotAnim )
         {
+            //For some reason, this does not work on Network games
+            if( MovementAnims[i] == 'PoundRun' )
+            {
+                OnlineHeadshotOffset.Z=50;
+            }
+            else
+            {
+                OnlineHeadshotOffset.Z=68;
+            }        
+            
             SetGroundSpeed(OriginalGroundSpeed * 2.3);//2.0;
             if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
             {
@@ -480,13 +490,13 @@ Ignores StartCharging;
 
         // This doesn't work...
         // Keep the flesh pound moving toward its target when attacking
-        if( Role == ROLE_Authority && bShotAnim)
-        {
-            if( LookTarget!=None )
-            {
-                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-            }
-        }
+        //if( Role == ROLE_Authority && bShotAnim)
+        //{
+        //    if( LookTarget!=None )
+        //    {
+        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+        //    }
+        //}
         
         //Not sure if we need this tick as it isn't in KFMod code?
         global.Tick(Delta);
@@ -519,7 +529,7 @@ Ignores StartCharging;
 
         // Hurt/Kill enemies that we run into while raging
         // Added additional "ZombieFleshPoundOS(Other)==None" just incase people play with Old and Retail zeds
-        if( !bShotAnim && KFMonst!=None && ( ZombieFleshPound(Other)==None || ZombieFleshPoundOS(Other)==None ) && Pawn(Other).Health>0 )
+        if( !bShotAnim && KFMonst!=None && ZombieFleshPound(Other)==None && ZombieFleshPoundOS(Other)==None && Pawn(Other).Health>0 )
         {
             // Random chance of doing obliteration damage
             if( FRand() < 0.4 )
@@ -561,8 +571,21 @@ Ignores StartCharging;
 
     function Tick( float Delta )
     {
+        local int i;
+
+        
         if( !bShotAnim )
         {
+            //For some reason, this does not work on Network games
+            if( MovementAnims[i] == 'PoundRun' )
+            {
+                OnlineHeadshotOffset.Z=50;
+            }
+            else
+            {
+                OnlineHeadshotOffset.Z=68;
+            }
+            
             SetGroundSpeed(OriginalGroundSpeed * 2.3);
             if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
             {
@@ -571,13 +594,13 @@ Ignores StartCharging;
         }
 
         // Keep the flesh pound moving toward its target when attacking
-        if( Role == ROLE_Authority && bShotAnim)
-        {
-            if( LookTarget!=None )
-            {
-                Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-            }
-        }
+        //if( Role == ROLE_Authority && bShotAnim)
+        //{
+        //    if( LookTarget!=None )
+        //    {
+        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+        //    }
+        //}
 
         global.Tick(Delta);
     }
@@ -609,6 +632,14 @@ simulated function PostNetReceive()
         bClientCharge = bChargingPlayer;
         if (bChargingPlayer)
         {
+            if(!bShotAnim)
+            {
+                OnlineHeadshotOffset.Z=50;
+            }
+            else
+            {
+                OnlineHeadshotOffset.Z=68;
+            }
             MovementAnims[0]=ChargingAnim;
             MeleeAnims[0]='FPRageAttack';
             MeleeAnims[1]='FPRageAttack';
@@ -621,6 +652,7 @@ simulated function PostNetReceive()
             MeleeAnims[0]=default.MeleeAnims[0];
             MeleeAnims[1]=default.MeleeAnims[1];
             MeleeAnims[2]=default.MeleeAnims[2];
+            OnlineHeadshotOffset.Z=68;            
             DeviceGoNormal();
         }
     }
