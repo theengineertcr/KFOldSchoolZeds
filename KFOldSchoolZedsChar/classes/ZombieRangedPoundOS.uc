@@ -214,7 +214,8 @@ function RangedAttack(Actor A)
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
         
         //Unlucky you, you won a ticket straight to hell!
-        if(FRand() > 0.10 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
+        //Lowered chance for this to be triggered
+        if(FRand() > 0.05 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
         {
             MGFireBurst = ( MGFireBurst + 15 + Rand(26));
             MGDamage = ( MGDamage + Rand(4));

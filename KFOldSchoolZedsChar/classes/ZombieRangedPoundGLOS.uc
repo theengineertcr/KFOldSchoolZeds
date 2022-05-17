@@ -208,11 +208,12 @@ function RangedAttack(Actor A)
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
         
         //How many nades to fire
-         GLFireCounter =  GLFireBurst + Rand(2);
+         GLFireCounter =  GLFireBurst; // Balance 1 - Removed the random extra grenades
          
         //Ding ding ding! You won the lottery, and your prize is certain death!
-        if(FRand() < 0.1 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
-            GLFireCounter =  GLFireBurst + 2 + Rand(5);
+        // Lowered the chance because this attack is pretty deadly
+        if(FRand() < 0.05 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
+            GLFireCounter =  GLFireBurst + 3 + Rand(4);
             
         GoToState('FireGrenades');
     }    
@@ -374,15 +375,6 @@ state FireGrenades
 
                 Controller.Target = Controller.Enemy;
             }
-
-            //No lines
-            //if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
-            //{
-            //    // Randomly send out a message about Patriarch shooting chain gun(3% chance)
-            //       Wanted to keep this, but the line "what else does that bastard have up his sleeve" 
-            //       Bothers me. Maybe players don't care about this, so I should add it in next patch?(Added)
-            //    PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
-            //}
 
             bFireAtWill = True;
             bShotAnim = true;
