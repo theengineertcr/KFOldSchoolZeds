@@ -10,6 +10,7 @@ class KF25OSMut extends Mutator
 //Do we want Ranged pounds or gunners in our game?
 var config bool bEnableRangedPound;
 var config bool bEnableGunnerPound;
+var config bool bEnableRandomSkins;
 
 //=======================================
 //          PostBeginPlay
@@ -31,9 +32,13 @@ event PostBeginPlay()
     }
 
     // change vanilla monster collection
-    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection)
+    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection && !bEnableRandomSkins)
     {
       KF.MonsterCollection = class'KFMonstersCollectionOS';
+    }
+    else if(bEnableRandomSkins)
+    {
+        KF.MonsterCollection = class'KFMonstersCollectionMixOS';
     }
 
     // shut down default event system
@@ -48,6 +53,10 @@ event PostBeginPlay()
     {
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZedsChar.ZombieRangedPound_OS";
     }
+    else if(bEnableRandomSkins)
+    {
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZedsChar.ZombieRangedPoundMix_OS";
+    }    
     else
     {
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZedsChar.ZombieBloat_OS";
@@ -58,6 +67,10 @@ event PostBeginPlay()
     if(bEnableGunnerPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
     {
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZedsChar.ZombieRangedPoundGL_OS";
+    }
+    else if(bEnableRandomSkins)
+    {
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZedsChar.ZombieRangedPoundGLMix_OS";
     }
     else
     {
@@ -85,6 +98,7 @@ static function FillPlayInfo(PlayInfo PlayInfo)
   //TODO: Make it so you can't have both of these checked at the same time
   PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableGunnerPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
+  PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);  
 }
 
 
@@ -93,9 +107,11 @@ static event string GetDescriptionText(string Property)
   switch (Property)
   {
     case "bEnableRangedPound":
-      return "Enables the Fleshpound Chaingunner.";
+      return "Enables the Fleshpound Chaingunner";
     case "bEnableGunnerPound":
       return "Enables the Fleshpound Explosives Gunner";
+    case "bEnableRandomSkins":
+    return "Zeds use random skins";
     default:
       return super(Info).GetDescriptionText(Property);
   }
