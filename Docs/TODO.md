@@ -6,17 +6,14 @@
 
 - [ ] Make Fleshpound Avoid Area's only spawn when enraged and make Avoid Area extend a couple of meters infront of Fleshpounds to make zeds "Clear the way"
   - Currently, Fleshpound Avoid Area has been temporarily removed until this is done.
-- [ ] Fleshpound / Ranged Pound head hitboxes too generous
 - [ ] Bloat acid stays for far too long, make it go away earlier.
 
 ## Bugs
-
-- FleshPound dealing continuous damage post-rage(online?) <https://www.youtube.com/watch?v=ItSdKJu7KXE>
-  - Attempted fix is now in place.
-  - May have to do with the Spin Damage? Maybe temporarily disable attack 3 to see if that's the case?(Done)
-- Zeds have buggier pathing compared to KF zeds for an unknown reason(Seen around KF-Offices typical hallway camp spot)
-- Many Zed head hitboxes (local & online) are broken/don't work properly.
-- Bloat puke can be seen through walls(KFMod code issues).
+- Zeds have buggier pathing compared to KF zeds for an unknown reason. They get stuck more often and lost.
+- Bloat puke can be seen through walls(KFMod issue).
+- RangedPound will skip into his fire state if he enters it while playing his pain animations.
+- Projectile weapons such as the Crossbow will not deal headshot damage nor apply headshot multiplier on certain zeds e.g the Fleshpound.
+   - What's strange about this is that, the Crossbow WILL deal 1200 damage on headshots, but only apply it on the body.
 
 ## Miscellaneous
 
@@ -24,7 +21,8 @@
 
 <!-- Move this to Changelog! -->
 ### Finished / Fixed
-
+- [x] Fleshpound no longer uses attack 3 due to animations not playing online and dealing obscene amounts of damage from SpinState
+- [x] All Zeds use dedicated hitboxes offline due to them being improperly offset for certain zeds e.g RangedPound.
 - [x] Fleshpound deals less damage on Spin attack
 - [x] Zeds no longer turn their body while knocked down
 - [x] Fleshpound Chaingunner no longer skips stun animation
