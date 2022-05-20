@@ -24,25 +24,13 @@ simulated function PostNetReceive()
 {
     if( !bZapped )
     {
-        //Not sure if repositioning the head Hitboxes is a great idea, but we'll do it anyway
         if (bRunning)
         {
-            MovementAnims[0]='ZombieRun';
-            
-            //If he's not attacking, increase his Z's Offset
-            if( !bShotAnim )
-            {
-                OnlineHeadshotOffset.Z=30;
-            }
-            else
-            {
-                OnlineHeadshotOffset.Z=45;
-            }                
+            MovementAnims[0]='ZombieRun';           
         }
         else
         {
             MovementAnims[0]=default.MovementAnims[0];
-            OnlineHeadshotOffset.Z=45;
         }
     }
 }
@@ -134,9 +122,6 @@ function RangedAttack(Actor A)
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
     {
         GoToState('RunningState');
-        
-        //Additional increase here just incase
-        //OnlineHeadshotScale = 3.0;
     }
     //TODO: Figure out if we need to revert back to original here as well?
 }
@@ -169,6 +154,8 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
+            //Push the head down to where it is
+            OnlineHeadshotOffset.Z=30;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -183,6 +170,8 @@ state RunningState
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
         
+        //Push the head back up
+        OnlineHeadshotOffset.Z=45;
         //RunAttackTimeout=0;
 
         NetUpdateTime = Level.TimeSeconds - 1;
@@ -211,36 +200,6 @@ state RunningState
         }
     }
 
-    //Added in code to increase Head Hitbox whenever Gorefasts
-    //Do their running animation because during that specific
-    //Animation, they can't be headshot
-    simulated function Tick(float DeltaTime)
-    {
-        local int i;
-        
-        //For some reason, this does not work on Network games
-        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
-        {
-            OnlineHeadshotOffset.Z=30;
-        }
-        else
-        {
-            OnlineHeadshotOffset.Z=45;
-        }
-    
-        //Gorefasts dont attack and move
-        // Keep the gorefast moving toward its target when attacking
-        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-        //{
-        //    if( LookTarget!=None )
-        //    {
-        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-        //    }
-        //}
-    
-        global.Tick(DeltaTime);
-    }
-
 
 Begin:
     GoTo('CheckCharge');
@@ -261,32 +220,6 @@ CheckCharge:
 // State where the zed is charging to a marked location.
 state RunningToMarker extends RunningState
 {
-    simulated function Tick(float DeltaTime)
-    {
-        local int i;
-        
-        //For some reason, this does not work on Network games
-        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
-        {
-            OnlineHeadshotOffset.Z=30;
-        }
-        else
-        {
-            OnlineHeadshotOffset.Z=45;
-        }
-        
-        // Keep the gorefast moving toward its target when attacking
-        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-        //{
-        //    if( LookTarget!=None )
-        //    {
-        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-        //    }
-        //}
-    
-        global.Tick(DeltaTime);
-    }
-
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
