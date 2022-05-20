@@ -27,6 +27,9 @@ var class <KFGibOS> MonsterLowerTorsoGiblet;
 //KFMod Variables
 var Vector LastBloodHitDirection;
 
+//Headshot scaling for solo
+var float SoloHeadScale;
+
 // High damage was taken, make em fall over.
 function bool FlipOver()
 {
@@ -1332,7 +1335,7 @@ function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
     else
     {
         HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
-        AdditionalScale *= OnlineHeadshotScale;
+        AdditionalScale *= SoloHeadScale;
     }
     //ServerHeadLocation = HeadLoc;
 
