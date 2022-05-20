@@ -586,6 +586,16 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType,HitIndex);
 }
 
+//If he plays pain anims just before he enters minigun state, he skips his MGFire animation
+//So we'll prevent him from playing pain anims just before he starts firing
+function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
+{
+    if(LastChainGunTime<Level.TimeSeconds + 1)
+        return;
+    else
+        super.OldPlayHit(Damage,InstigatedBy,HitLocation,damageType,Momentum,HitIndex);
+}
+
 //Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {//should be derived and used.

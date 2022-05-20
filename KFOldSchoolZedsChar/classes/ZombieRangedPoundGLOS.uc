@@ -533,6 +533,16 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin');
 }
 
+//If he plays pain anims just before he enters GL state, he skips his MGFire animation
+//So we'll prevent him from playing pain anims just before he starts firing
+function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
+{
+    if(LastGLTime<Level.TimeSeconds + 1)
+        return;
+    else
+        super.OldPlayHit(Damage,InstigatedBy,HitLocation,damageType,Momentum,HitIndex);
+}
+
 defaultproperties
 {
     //-------------------------------------------------------------------------------
