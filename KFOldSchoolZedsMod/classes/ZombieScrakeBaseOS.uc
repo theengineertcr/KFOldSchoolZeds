@@ -120,9 +120,11 @@ defaultproperties
     ColHeight=18
     Prepivot=(Z=0.0)
 
+    SoloHeadScale=1.3
+
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
-    OnlineHeadshotScale=1.2//1.5
+    OnlineHeadshotScale=1.5//1.5
     
 
     CollisionRadius=26

@@ -78,7 +78,9 @@ defaultproperties
     
     CollisionRadius=26.000000
     
+    SoloHeadScale=1.1
+    
     OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
     //Slightly increased just incase
-    OnlineHeadshotScale=1.0//1.4//1.2    
+    OnlineHeadshotScale=1.2//1.4//1.2    
 }

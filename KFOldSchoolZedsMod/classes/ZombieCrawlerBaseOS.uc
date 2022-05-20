@@ -205,9 +205,10 @@ defaultproperties
     SpineBone1=
     SpineBone2=    
 
+    SoloHeadScale=1.1
     
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
-    OnlineHeadshotScale=1.0
+    OnlineHeadshotScale=1.1
     CollisionRadius=26.000000    
 }

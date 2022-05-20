@@ -136,7 +136,12 @@ defaultproperties
 
     CollisionRadius=26
     CollisionHeight=44
+    
+    //Headshot doesn't work properly with Projectile weapons and I don't want to scale this up
+    //TODO:Do a quick patch, then investigate this further
+    SoloHeadScale=1.4
+    
     //Updated
-    OnlineHeadshotOffset=(X=35,Y=-6,Z=68) // Z=50 when charging
-    OnlineHeadshotScale=1.2//3.7
+    OnlineHeadshotOffset=(X=32,Y=-6,Z=68) // Z=50 when charging
+    OnlineHeadshotScale=1.5
 }

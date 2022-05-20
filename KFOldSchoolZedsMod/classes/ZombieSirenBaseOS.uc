@@ -132,7 +132,9 @@ defaultproperties
     ColRadius=25
     ColHeight=5    
     
+    SoloHeadScale=1.2
+    
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
-    OnlineHeadshotScale=1.0//1.3//1.2  
+    OnlineHeadshotScale=1.2//1.3//1.2  
 }

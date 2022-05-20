@@ -78,9 +78,11 @@ defaultproperties
     bCannibal = true
     MenuName="Gorefast 2.5"//"Gorefast"
     
+    SoloHeadScale=1.1
+    
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-5,Z=45)
-    OnlineHeadshotScale=1.0
+    OnlineHeadshotScale=1.35
     CollisionRadius=26.000000    
     
     bUseExtendedCollision=true
