@@ -27,7 +27,9 @@
    - [ ] Health values
    - [ ] Speed values
 - [ ] Option to turn off health scaling
-- [ ] Make Fleshpound and Scrake head lower into body when Begin and go back to default when End
+- [ ] Make Fleshpound and Scrake head lower into body when charging Begin and go back to default when End
+- [ ] Make Patty Headshot offset lower when Knockdown or Healing Begin and reset to default when End either state
+- [ ] Lower Zed Head Offset when Felldown() and go back to default when Stoodup()
 
 ## Bugs
 - Zeds have buggier pathing compared to KF zeds for an unknown reason. They get stuck and lost more often.
