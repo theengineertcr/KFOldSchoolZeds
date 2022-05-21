@@ -1,10 +1,11 @@
-//Mutator that replaces zeds with their 2.5 counterpart
+// Mutator that replaces zeds with their 2.5 counterpart
+// GitHub: https://github.com/theengineertcr/KFOldSchoolZeds
 class KF25OSMut extends Mutator
     config(KF25OSMut);
 
 
-//We've taken this code from CssHDMut
-//Credits to Shtoyan for the source!
+// We've taken this code from CssHDMut:
+// https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
 
 //Do we want Ranged pounds or gunners in our game?
@@ -194,13 +195,15 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //Don't be active with other muts
+    // Don't be active with other muts
     GroupName="KF-MonsterMut"
     FriendlyName="KFMod 2.5 Zeds"
     Description="Replaces zeds with their 2.5 counter-parts."
+
     bAlwaysRelevant=true
     RemoteRole=ROLE_SimulatedProxy
     bAddToServerPackages=True
+
     bEnableRangedPound=True
     bEnableExplosivesPound=False
     bEnableRandomSkins=False
