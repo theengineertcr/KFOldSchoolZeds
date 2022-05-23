@@ -14,7 +14,7 @@ class ZombieRangedPound_OS extends ZombieRangedPoundOS;
 
 defaultproperties
 {
-    ////Detached Limbs don't exist    
+    ////Detached Limbs don't exist
     //DetachedArmClass=class'SeveredArmPatriarch'
     //DetachedSpecialArmClass=class'SeveredRocketArmPatriarch'
     //DetachedLegClass=class'SeveredLegPatriarch'
@@ -24,15 +24,15 @@ defaultproperties
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Rangedpound'
     Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
     Skins(1)=Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex'
-    Skins(2)=Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin'    
+    Skins(2)=Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin'
 
     //Use KFMod Sounds
     //Removed cuz it was buggy
     AmbientSound=None
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
-    //Dont think we need this?        
+
+    //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Kev_HitPlayer_Fist'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'

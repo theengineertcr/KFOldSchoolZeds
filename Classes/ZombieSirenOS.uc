@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -57,7 +57,7 @@ function RangedAttack(Actor A)
         LastFireTime = Level.TimeSeconds;
         SetAnimAction('Claw');
         //We can bring this sound back
-        PlaySound(sound'Claw2s', SLOT_Interact); 
+        PlaySound(sound'Claw2s', SLOT_Interact);
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
     }    //Sirens cant move while screaming anymore, making them less of a risk,

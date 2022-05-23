@@ -23,13 +23,13 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
     else
         MinSpeed = 150;
 
-        if( (Level.NetMode != NM_DedicatedServer) && !Level.bDropDetail )
-        {
-            if ( GibGroupClass.default.BloodGibClass != None )
-                Spawn( GibGroupClass.default.BloodGibClass,,, Location, Rotator(-HitNormal) );
-            if ( (LifeSpan < 7.3)  && (Level.DetailMode != DM_Low) )
-                PlaySound(HitSounds[Rand(2)]);
-        }
+    if( (Level.NetMode != NM_DedicatedServer) && !Level.bDropDetail )
+    {
+        if ( GibGroupClass.default.BloodGibClass != None )
+            Spawn( GibGroupClass.default.BloodGibClass,,, Location, Rotator(-HitNormal) );
+        if ( (LifeSpan < 7.3)  && (Level.DetailMode != DM_Low) )
+            PlaySound(HitSounds[Rand(2)]);
+    }
 
     if( Speed < 20 )
     {

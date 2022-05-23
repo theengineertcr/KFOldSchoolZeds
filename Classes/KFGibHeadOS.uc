@@ -1,9 +1,9 @@
 // Chunky bits of flesh
 class KFGibHeadOS extends KFGibOS;
 
-    //Load necessary meshes and textures
-    #exec OBJ LOAD FILE=KillingFloorStatics.usx
-    #exec OBJ LOAD FILE=KillingFloorTextures.utx
+//Load necessary meshes and textures
+#exec OBJ LOAD FILE=KillingFloorStatics.usx
+#exec OBJ LOAD FILE=KillingFloorTextures.utx
 
 defaultproperties
 {

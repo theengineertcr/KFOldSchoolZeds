@@ -18,20 +18,20 @@ defaultproperties
     //DetachedHeadClass="SeveredHeadClot"
 
     //Use KFMod Models and Textures
-    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale1'    
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale1'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin'
 
     //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Clot.Clot_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Clot_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     //KFMod Zeds don't use challenge sounds
     ChallengeSound(0)=None
     ChallengeSound(1)=None

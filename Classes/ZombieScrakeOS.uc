@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Chainsaw Zombie Monster for KF Invasion gametype
@@ -33,7 +33,7 @@ simulated function PostNetReceive()
     if (bCharging)
     {
         MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
-        
+
         //If he's not attacking, increase his Z's Offset
         if( !bShotAnim )
         {
@@ -42,7 +42,7 @@ simulated function PostNetReceive()
         else
         {
             OnlineHeadshotOffset.Z=57;
-        }             
+        }
     }
     else if( !(bCrispified && bBurnified) )
     {
@@ -131,7 +131,7 @@ function RangedAttack(Actor A)
     local float Dist;
 
     Dist = VSize(A.Location - Location);
-    
+
     if ( bShotAnim || Physics == PHYS_Swimming)
         return; //DistBeforeSaw added here
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
@@ -149,7 +149,7 @@ function RangedAttack(Actor A)
         MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 0.85), 1 );
     else if(AnimAction == MeleeAnims[1])
          MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 1.15), 1 );
-        
+
     //Code that handles running when low on health, we need it
     //As we want retail Scrake behaviour, even if the Mod didn't have it
     if( !bShotAnim && !bDecapitated )
@@ -221,12 +221,12 @@ state RunningState
     {
         //Retail variable
         local float Dist;
-        
+
         Dist = VSize(A.Location - Location);
         //Get even closer before doing an attack so you can get a
         //Guaranteed hit on the player!
         DistBeforeSaw = 20.0;
-        
+
         if ( bShotAnim || Physics == PHYS_Swimming)
             return; //Added it here just incase
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
@@ -241,14 +241,14 @@ state RunningState
             GoToState('SawingLoop');
         }
     }
-    
+
     //Added in code to increase Head Hitbox whenever Gorefasts
     //Do their running animation because during that specific
     //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
         local int i;
-        
+
         //For some reason, this does not work on Network games
         if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
         {
@@ -258,7 +258,7 @@ state RunningState
         {
             OnlineHeadshotOffset.Z=57;
         }
-    
+
         //Gorefasts dont attack and move
         // Keep the gorefast moving toward its target when attacking
         //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
@@ -268,9 +268,9 @@ state RunningState
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
         //}
-    
+
         global.Tick(DeltaTime);
-    }    
+    }
 }
 
 // State where the zed is charging to a marked location.
@@ -459,6 +459,6 @@ defaultproperties
     // NOTE: Most Default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
-    //Use KFMod Controller    
+    //Use KFMod Controller
     ControllerClass=Class'SawZombieControllerOS'
 }

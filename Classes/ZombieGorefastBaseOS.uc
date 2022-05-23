@@ -39,8 +39,8 @@ defaultproperties
     //SeveredLegAttachScale=0.9
     //SeveredArmAttachScale=0.9
     //AmbientGlow=0
-    
-    //Values that don't need to be changed    
+
+    //Values that don't need to be changed
     MeleeAnims(0)="GoreAttack1"
     MeleeAnims(1)="GoreAttack2"
     MeleeAnims(2)="GoreAttack1"
@@ -56,9 +56,9 @@ defaultproperties
     IdleRifleAnim="GoreIdle"
     Mass=350.000000
     RotationRate=(Yaw=45000,Roll=0)
-    
+
     //We'll keep these values the same as the retail version
-    //As this mod was made purely for the visual aspect, not gameplay    
+    //As this mod was made purely for the visual aspect, not gameplay
     //Exception:Zed cannot charge anymore, so range has been increased.
     MeleeDamage=15
     damageForce=5000
@@ -71,25 +71,25 @@ defaultproperties
     PlayerCountHealthScale=0.15
     PlayerNumHeadHealthScale=0.0
     HeadHealth=25
-    CrispUpThreshhold=8    
+    CrispUpThreshhold=8
     MotionDetectorThreat=0.5
 
     //A connoisseur of flesh, despite being jawless
     bCannibal = true
     MenuName="Gorefast 2.5"//"Gorefast"
-    
+
     // Old melee
     damageConst = 100
     damageRand = 10
-    
+
     SoloHeadScale=1.1
-    
+
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-5,Z=45)
     OnlineHeadshotScale=1.35
-    
+
     bUseExtendedCollision=true
     ColOffset=(Z=52)
     ColRadius=25
-    ColHeight=10    
+    ColHeight=10
 }

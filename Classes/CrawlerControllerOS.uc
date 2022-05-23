@@ -63,7 +63,7 @@ function bool FireWeaponAt(Actor A)
     local float RelativeDir;
     //Were bringing back this old KFMod variable
     //local rotator newrot;
-    
+
     if ( A == None )
         A = Enemy;
     if ( (A == None) || (Focus != A) )
@@ -94,7 +94,7 @@ function bool FireWeaponAt(Actor A)
                 {
                     if(ZombieCrawlerOS(Pawn).DoPounce()==true ) //ZombieCrawler to ZombieCrawlerOS
                         LastPounceTime = Level.TimeSeconds;
-                }      
+                }
             }
         }
     }
@@ -113,6 +113,4 @@ function bool NotifyLanded(vector HitNormal)
     return super.NotifyLanded(HitNormal);
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

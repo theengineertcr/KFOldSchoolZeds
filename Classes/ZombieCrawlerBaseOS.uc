@@ -125,21 +125,21 @@ defaultproperties
     //SeveredArmAttachScale=0.8
     ZombieFlag=2
     bDoTorsoTwist=False
-    
+
     //Values that don't need to be changed
-    bCannibal = true    
-    Intelligence=BRAINS_Mammal    
+    bCannibal = true
+    Intelligence=BRAINS_Mammal
     bStunImmune=True
     damageForce=5000
     IdleHeavyAnim="ZombieLeapIdle"
-    IdleRifleAnim="ZombieLeapIdle"    
+    IdleRifleAnim="ZombieLeapIdle"
     TakeoffAnims(0)= "ZombieSpring"
     TakeoffAnims(1)= "ZombieSpring"
     TakeoffAnims(2)= "ZombieSpring"
     TakeoffAnims(3)= "ZombieSpring"
     AirAnims(0)="ZombieSpring"
-    
-    AirAnims(3)="ZombieSpring"    
+
+    AirAnims(3)="ZombieSpring"
     AirStillAnim="ZombieSpring"
     IdleCrouchAnim="ZombieLeapIdle"
     IdleWeaponAnim="ZombieLeapIdle"
@@ -147,7 +147,7 @@ defaultproperties
     CollisionHeight=25.000000
     bCrawler = true
     bOrientOnSlope = true
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     MeleeDamage=6
@@ -160,7 +160,7 @@ defaultproperties
     PounceSpeed=330.000000   // 300
     MotionDetectorThreat=0.34
     CrispUpThreshhold=10
-    
+
     //All of these need to be ZombieLeapIdle
     //Previous comment obsolete, bad idea from the old code That makes Crawlers
     //Walk while doing idle anims. Swap with ZombieScuttle instead.
@@ -170,12 +170,12 @@ defaultproperties
     LandAnims(1)="ZombieScuttle"
     LandAnims(2)="ZombieScuttle"
     LandAnims(3)="ZombieScuttle"
-    
+
     //All of these need to be ZombieScuttle
     MovementAnims(0)="ZombieScuttle"
     MovementAnims(1)="ZombieScuttle"
     MovementAnims(2)="ZombieScuttle"
-    MovementAnims(3)="ZombieScuttle"    
+    MovementAnims(3)="ZombieScuttle"
     WalkAnims(0)="ZombieLeap"
     WalkAnims(1)="ZombieLeap"
     WalkAnims(2)="ZombieLeap"
@@ -196,17 +196,17 @@ defaultproperties
     MeleeAnims(2)="LeapAttack3"//"ZombieLeapAttack2"//Swapped to Old Anim
 
     TakeoffStillAnim="ZombieLeap"//"ZombieLeapIdle"//Swapped to Old Anim
-    
+
     //Use Old Ragdoll
     KFRagdollName="CrawlerRag"
     MenuName="Crawler 2.5"//"Crawler"
-    
+
     //KFMod had this so were bringing it here
     SpineBone1=
-    SpineBone2=    
+    SpineBone2=
 
     SoloHeadScale=1.1
-    
+
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
     OnlineHeadshotScale=1.1

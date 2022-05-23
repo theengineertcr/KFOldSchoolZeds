@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -17,7 +17,7 @@ class ZombieStalkerOS extends ZombieStalkerBaseOS
 
 //Issues:
 //None currently, but we may need to overhaul the Commando
-//Spotting to take into account the distance at which a 
+//Spotting to take into account the distance at which a
 //Commando can see a cloaked Stalker. Otherwise, a level 0
 //And a level 6 Commando will see the red overlay at the
 //Same distance.
@@ -74,11 +74,11 @@ simulated function Tick(float DeltaTime)
             bUnlit = false;
             CloakStalker();
         }
-        
+
         //The rest of this is Retail code, not needed
         //TODO:After consideration, we might need this, least
         //The bit for the StalkerViewDistance for Commandos.
-        
+
         //if( LocalKFHumanPawn != none && LocalKFHumanPawn.Health > 0 && LocalKFHumanPawn.ShowStalkers() &&
         //    VSizeSquared(Location - LocalKFHumanPawn.Location) < LocalKFHumanPawn.GetStalkerViewDistanceMulti() * 640000.0 ) // 640000 = 800 Units
         //{
@@ -101,7 +101,7 @@ simulated function CloakStalker()
         return;
     }
 
-    //Stalkers shouldn't glow for Commandos when headless    
+    //Stalkers shouldn't glow for Commandos when headless
     if ( bSpotted && !bDecapitated )
     {
         if( Level.NetMode == NM_DedicatedServer )
@@ -112,7 +112,7 @@ simulated function CloakStalker()
         bUnlit = true;
         return;
     }
-    //Updated if statement to include !bCloaked, otherwise the 
+    //Updated if statement to include !bCloaked, otherwise the
     //Invisible bitch flickers whenever the function is called
     if ( !bDecapitated && !bCrispified && !bCloaked) // No head, no cloak, honey.  updated :  Being charred means no cloak either :D
     {
@@ -121,7 +121,7 @@ simulated function CloakStalker()
 
         if( Level.NetMode == NM_DedicatedServer )
             Return;
-        
+
         //Use KFMod textures
         Skins[0] = Shader 'KFOldSchoolZeds_Textures.StalkerHairShader';
         Skins[1] = Shader 'KFOldSchoolZeds_Textures.StalkerCloakShader';
@@ -166,16 +166,16 @@ simulated function UnCloakStalker()
         }
         if( Level.NetMode == NM_DedicatedServer )
             Return;
-            
+
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
-        Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';    
+        Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
 
         //KFMod Code
         if (PlayerShadow != none)
-            PlayerShadow.bShadowActive = true;        
+            PlayerShadow.bShadowActive = true;
 
         bAcceptsProjectors = true;
-        
+
         //Use KFMod textures
         SetOverlayMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb', 0.25, true);
     }

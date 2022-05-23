@@ -92,7 +92,7 @@ state OnGround
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
         PlaySound(ImpactSound, SLOT_Misc);
         //KFMod Code
-        PlayAnim('hit');        
+        PlayAnim('hit');
         bCheckedSurface = false;
         SetTimer(RestTime, false);
     }
@@ -101,7 +101,7 @@ state OnGround
 //KFModified
 singular function SplashGlobs(int NumGloblings)
 {
-    local int g; 
+    local int g;
     //Use KFMod Bloat Vomit
     local KFBloatVomitOS NewGlob;
     local Vector VNorm;
@@ -223,7 +223,7 @@ defaultproperties
      //Dont use modern chunks
      StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
      //Use BioGlob's Impact and Explosion sound
-     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'     
+     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'
      ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
      bBlockHitPointTraces=false
 }

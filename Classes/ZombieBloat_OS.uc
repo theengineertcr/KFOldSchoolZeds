@@ -12,7 +12,7 @@ class ZombieBloat_OS extends ZombieBloatOS;
 
 defaultproperties
 {
-    ////Detached Limbs don't exist    
+    ////Detached Limbs don't exist
     //DetachedArmClass=class'SeveredArmBloat'
     //DetachedLegClass=class'SeveredLegBloat'
     //DetachedHeadClass=class'SeveredHeadBloat'
@@ -29,13 +29,13 @@ defaultproperties
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Bloat.Bloat_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
-    //Dont think we need this?    
+
+    //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Bloat_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     //KFMod Zeds don't use challenge sounds
     ChallengeSound(0)=None
     ChallengeSound(1)=None

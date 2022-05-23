@@ -48,7 +48,7 @@ defaultproperties
     //SeveredHeadAttachScale=1.0
     //SeveredLegAttachScale=0.7
     //SeveredArmAttachScale=1.0
-    
+
     //Values that don't need to be changed
     MeleeAnims(0)="Siren_Bite"
     MeleeAnims(1)="Siren_Bite"//"Siren_Bite2"//Only had one bite anim in the Mod
@@ -74,7 +74,7 @@ defaultproperties
     IdleWeaponAnim="Siren_Idle"
     IdleRestAnim="Siren_Idle"
     RotationRate=(Yaw=45000,Roll=0)
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     //This is an exception for the Siren as she no longer can move
@@ -97,7 +97,7 @@ defaultproperties
     HealthMax=300
     PlayerCountHealthScale=0.10
     PlayerNumHeadHealthScale=0.05
-    HeadHealth=200    
+    HeadHealth=200
     ShakeEffectScalar=1.0
     ShakeTime=2.0
     ShakeFadeTime=0.25
@@ -107,7 +107,7 @@ defaultproperties
     MotionDetectorThreat=2.0
     ZapThreshold=0.5
     ZappedDamageMod=1.5
-    
+
     KFRagdollName="SirenRag"//"Siren_Trip"//Old Ragdoll
 
     //Yet to make this
@@ -122,16 +122,16 @@ defaultproperties
 
     MenuName="Siren 2.5"//"Siren"
     bCanDistanceAttackDoors=True
-    
-    PrePivot=(Z=-13)    
+
+    PrePivot=(Z=-13)
     bUseExtendedCollision=true
     ColOffset=(Z=48)
     ColRadius=25
-    ColHeight=5    
-    
+    ColHeight=5
+
     SoloHeadScale=1.2
-    
+
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
-    OnlineHeadshotScale=1.2//1.3//1.2  
+    OnlineHeadshotScale=1.2//1.3//1.2
 }

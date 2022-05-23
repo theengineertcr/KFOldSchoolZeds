@@ -84,12 +84,12 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
     local float DismemberProbability;
     //local int RandBone; //Unreferenced
     local bool bDidSever;
-    
+
     //KFMod Variables
     //local float PertDummy; //Unreferenced
     local bool bExtraGib;
-    
-    //log("DamageFX bonename = "$boneName$" "$Level.TimeSeconds$" Damage "$Damage);    
+
+    //log("DamageFX bonename = "$boneName$" "$Level.TimeSeconds$" Damage "$Damage);
 
     // Added back in the /**/ from `Health <= 0 /*|| DamageType == class 'DamTypeCrossbowHeadshot'*/`
     // Otherwise, Zeds would lose limbs even if they werent dead if they were headshot by crossbow
@@ -174,7 +174,7 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
                         }
                         break;
                 }
-            }                
+            }
         }
 
         if ( DamageType.default.bNeverSevers || class'GameInfo'.static.UseLowGore()
@@ -191,7 +191,7 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
         HitFxTicker = HitFxTicker + 1;
         if( HitFxTicker > ArrayCount(HitFX)-1 )
             HitFxTicker = 0;
-        
+
         //KFMod Code
         if ( bExtraGib )
         {
@@ -224,14 +224,14 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     if(bDecapitated)
     {
         HideBone('bip01 head');
-      
+
         if (HeadStub == none && HeadStubClass != none)
         {
             HeadStub = Spawn(HeadStubClass,Self);
             AttachToBone( HeadStub,'Bip01 head');
         }
     }
-    
+
     //KFMod Code
     if (Gored>0)
     {
@@ -248,7 +248,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
             HideBone('Bip01');
             bHidden = true;
         }
-    }    
+    }
 
     AmbientSound = None;
     bCanTeleport = false; // sjs - fix karma going crazy when corpses land on teleporters
@@ -307,7 +307,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
                     LD = spawn(class'LavaDeath', , , Location + vect(0, 0, 10), Rotation );
                     if ( LD != None )
                         LD.SetBase(self);
-                    //We have this sound in KFOldSchoolZeds_Sounds, plug it in    
+                    //We have this sound in KFOldSchoolZeds_Sounds, plug it in
                     PlaySound( sound'KFOldSchoolZeds_Sounds.BExplosion5', SLOT_None, 1.5*TransientSoundVolume );
                 }
             }
@@ -353,7 +353,7 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
     {
         //This was commented out for some reason, were bringing it back
         SetPhysics(PHYS_None);
-        
+
         SetCollision(false, false, false);
         //Not sure if we need this, commenting it out
         //if( !bDestroyNextTick )
@@ -363,18 +363,18 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
         //Some KFMod code, may cause issues
         if ( !IsAnimating(0) )
             LandThump();
-        Super.Landed(HitNormal);        
+        Super.Landed(HitNormal);
     }
 
     simulated function Timer()
-    {    
+    {
         //KFMod Code from here on
         if( Level.NetMode==NM_DedicatedServer )
         {
             Destroy();
             Return;
         }
-        
+
         if( Physics!=PHYS_None )
         {
             if( VSize(Velocity)>10 )
@@ -382,7 +382,7 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
                 SetTimer(1,False);
                 Return;
             }
-            Disable('TakeDamage');            
+            Disable('TakeDamage');
             SetPhysics(PHYS_None);
             SetTimer(30,False);
             if(PlayerShadow != None)
@@ -390,11 +390,11 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
         }
         else if( (Level.TimeSeconds-LastRenderTime)>40 || Level.bDropDetail )
             Destroy();
-        else SetTimer(5,False);        
+        else SetTimer(5,False);
     }
 
     simulated function BeginState()
-    {    
+    {
         //KFMod Code
         if( Controller!=None )
             Controller.Destroy();
@@ -413,7 +413,7 @@ simulated function ProcessHitFX()
     local class<xEmitter> HitEffects[4];
     local int i,j;
     local float GibPerterbation;
-    
+
     // KFMod version defines i and j at the start as 0 for some reason
     j = 0 ;
     i = 0 ;
@@ -445,7 +445,7 @@ simulated function ProcessHitFX()
             //AttachEmitterEffect( BleedingEmitterClass, HitFX[SimHitFxTicker].bone, boneCoords.Origin, HitFX[SimHitFxTicker].rotDir );
             //Old Code brought back
             AttachEffect( GibGroupClass.static.GetBloodEmitClass(), HitFX[SimHitFxTicker].bone, boneCoords.Origin, HitFX[SimHitFxTicker].rotDir );
-            
+
             HitFX[SimHitFxTicker].damtype.static.GetHitEffects( HitEffects, Health );
 
             if( !PhysicsVolume.bWaterVolume ) // don't attach effects under water
@@ -459,7 +459,7 @@ simulated function ProcessHitFX()
                 }
             }
         }
-        
+
         //Replace all instances of gibs spawned here with KFMod gibs(Done!)
         //Gibbing sounds are in KFOldSchoolZeds_Sounds
         //Note: Old zeds limbs get destroyed, not amputated, so we won't add meshes of each limb
@@ -557,7 +557,7 @@ simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bS
     {
         HideBone(HeadBone);
     }
-    
+
     // Plug in headless anims if we have them
     // TODO: Old zeds don't have Headless walk anims, maybe get rid of this?
     //for( i = 0; i < 4; i++ )
@@ -572,7 +572,7 @@ simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bS
     if ( !bSpawnDetachedHead && !bNoBrainBits && EffectIsRelevant(DecapLocation,false) )
     {
         //Gibs replaced, KFSpawnGiblet swapped with SpawnGiblet as
-        //KFSpawnGiblet has an optional Variable velocity, which we don't need        
+        //KFSpawnGiblet has an optional Variable velocity, which we don't need
         SpawnGiblet( class'KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
         SpawnGiblet( class'KFGibBrainbOS',DecapLocation, self.Rotation, GibPerterbation) ;
         SpawnGiblet( class'KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
@@ -584,7 +584,7 @@ simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bS
 // Decapitation effects for melee attacks
 // Neck bone in this function uses wrong name, change it to the appropriate one(Done!)
 // Additional Note: Melee decapitation results in a head flying off, KFMod doesn't have this
-// And as such Decapitated head models will not be added 
+// And as such Decapitated head models will not be added
 simulated function SpecialHideHead()
 {
     local int BoneScaleSlot;
@@ -599,16 +599,16 @@ simulated function SpecialHideHead()
         // Note: Original code had 2 additional properties after self,
         // ('',Location) Not sure what they do but can add them later?
         HeadStub = Spawn(HeadStubClass,self);
-        
+
         //Headstub isn't scaled down, and we don't care about the SeveredHead
         //SeveredHead.SetDrawScale(SeveredHeadAttachScale);
-        
+
         // `Neck` to `Bip01 Head`
         boneCoords = GetBoneCoords( 'Bip01 Head' );
-        
+
         // Blood spurting from the neck didn't exist back then, so we don't need it
         // AttachEmitterEffect( NeckSpurtNoGibEmitterClass, 'Bip01 Neck', boneCoords.Origin, rot(0,0,0) );
-        
+
         //Attach the stub to the Head
         //Maybe swap to neck?
         AttachToBone(HeadStub, 'Bip01 Head');
@@ -830,7 +830,7 @@ simulated function Tick(float DeltaTime)
             SetBoneDirection('Bip01 Head',R*-1.8,,0.5);
         }
         else SetBoneDirection('Bip01 Head',rot(0,0,0),,0.5);
-        
+
         if ( bBurnified && !bBurnApplied )
         {
             if ( !bGibbed )
@@ -848,7 +848,7 @@ simulated function Tick(float DeltaTime)
             ZombieCrispUp();
             bAshen = False;
         }
-        
+
         //KFMod Code
         if(bDecapitated && !bPlayBrainSplash )
         {
@@ -921,7 +921,7 @@ simulated function Tick(float DeltaTime)
 
                 SpawnGiblet(MonsterLegGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
                 SpawnGiblet(MonsterLegGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
-                
+
                 //Use ObliteratedEffectClass?
                 GibbedExplosion = Spawn(class'GibExplosionOS',self,, SplatLocation );
             //    bPlayGibSplash = true;
@@ -931,7 +931,7 @@ simulated function Tick(float DeltaTime)
             //Use KFMod BrainSplash
             SplatExplosion = Spawn(class 'BrainSplashOS',self,, SplatLocation );
             bPlayGoreSplash = true;
-        }        
+        }
     }
 
     if ( DECAP )
@@ -1017,12 +1017,12 @@ function DoorAttack(Actor A)
         bShotAnim = true;
         //DoorBash causes issues, just claw for now
         SetAnimAction('Claw');
-        
+
         //After reviewing, DoorBashing does exist, just unused(?)
         //We'll bring it back regardless
         //This causes issues, so dont use it
         //GotoState('DoorBashing');
-        
+
         //Play the Clawing noise here
         PlaySound(sound'Claw2s', SLOT_None);
         return;
@@ -1043,14 +1043,14 @@ function ClawDamageTarget()
     {
        UsedMeleeDamage = MeleeDamage;
     }
-    
+
     if(!bUseOldMeleeDamage)
     {
         if(Controller!=none && Controller.Target!=none)
             PushDir = (damageForce * Normal(Controller.Target.Location - Location));
         else PushDir = damageForce * vector(Rotation);
         // Melee damage is +/- 10% of default
-        if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) ) 
+        if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) )
             PlayZombieAttackHitSound(); // Bringing back this old function!
     }
     else
@@ -1123,7 +1123,7 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
                 Died(instigatedBy.Controller,damageType,hitlocation);
                 else Died(None,damageType,hitlocation);
         }
-               
+
         // log(Gored);
 
     }
@@ -1136,7 +1136,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector mo
     // Added this back
     // Client check for Gore FX
     BodyPartRemoval(Damage,instigatedBy,hitlocation,momentum,damageType);
-    
+
     //KFMod Code to make ragdolls fly if they died to an explosive damage
     //Modernized to also be effected by new Explosives
     if( Health-Damage <= 0 && DamageType!=class'DamTypeFrag' && DamageType!=class'DamTypePipeBomb'
@@ -1158,7 +1158,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector mo
     {
         Momentum = vect(0,0,0);
     }
-    
+
     Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
 }
 
@@ -1190,7 +1190,6 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     if(KFMonsterController(Controller).bUseFreezeHack == False)
         OldPlayHit(Damage, InstigatedBy, HitLocation, DamageType,Momentum);
 
-    
     //KFMod called Playhit here but we dont want it
     //Super.PlayHit(Damage,InstigatedBy,HitLocation,DamageType,Momentum);
 
@@ -1575,7 +1574,7 @@ event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
 
 defaultproperties
 {
-    // Variables naming each bone in KFMod did not exist, 
+    // Variables naming each bone in KFMod did not exist,
     // They were set by their exact names in each function
     // TODO: Determine what the names of these bones should be
     RootBone=None//Unknown, only called once in Retail KFMonster for a function not in old KFMonster, GetExposureTo
@@ -1583,7 +1582,7 @@ defaultproperties
     SpineBone1="Bip01 Spine1"//PostNetBeginPlay hints this
     SpineBone2=None//No reference, but may potentially be "Bip01 Spine2", used in hiding upper body when gored
     FireRootBone="Bip01 Spine"// Playhit function hints this
-    
+
     //These names were guessed and may be wrong
     LeftShoulderBone="Bip01 L Clavicle"
     RightShoulderBone="Bip01 R Clavicle"
@@ -1600,16 +1599,16 @@ defaultproperties
     // After investigating, I have no fucking idea where the fuck this is used nor
     // do I care, all I know is that it's basically the FireRootBone
     ExtCollAttachBoneName="Bip01 Spine"
-    
+
     //KFMod's piece of flesh that gets attached
     //To the neck after a zed loses his head
     HeadStubClass=Class'GibHeadStumpOS'
-    
+
     // Obliteration is no longer a local variable in Tick called GibbedExplosion,
     // So we need to define it here. Look into SpawnGibs function as well.
     //// NO LONGER USED BUT WE'LL KEEP IT
     ObliteratedEffectClass=GibExplosionOS//TODO:Port this over from KFMod
-    
+
     // The Giblets that spawn after an obliteration, KFMod ones
      MonsterHeadGiblet=Class'ClotGibHeadOS'
      MonsterThighGiblet=Class'ClotGibThighOS'
@@ -1617,34 +1616,34 @@ defaultproperties
      MonsterLegGiblet=Class'ClotGibLegOS'
      MonsterTorsoGiblet=Class'ClotGibTorsoOS'
      MonsterLowerTorsoGiblet=Class'ClotGibLowerTorsoOS'
-     
+
      //How Heavy a zed is
      Mass=300.000000//100.000000 in parent
-     
+
      //Gib group containing Blood Splatter
      GibGroupClass=Class'KFNoGibGroupOS'
-     
+
      //Time to wait before spawning BloodStreak decal when ragdoll impacts ground
      BloodStreakInterval=0.500000//0.250000 in Retail
-     
+
      //Blood Spurt Class
      ProjectileBloodSplatClass=class'KFBloodPuffOS'
-     
+
      //Use my own Controller Class
      ControllerClass=Class'KFMonsterControllerOS'
-     
+
      //Values relating to the Head
      HeadHealth=25
-     PlayerNumHeadHealthScale=0.0     
+     PlayerNumHeadHealthScale=0.0
      HeadHeight=2.0
      HeadScale=1.1
-     HeadRadius=7.0     
-     
+     HeadRadius=7.0
+
      //At some point we'll add the MaleZombieSoundsGroup, don't forget
-     
+
      //False by default
      //bUseOldMeleeDamage=false
-     
+
      ////KarmaParamsSkel
      Begin Object Class=KarmaParamsSkel Name=PawnKParams
          KConvulseSpacing=(Max=2.200000)
@@ -1659,7 +1658,7 @@ defaultproperties
          KImpactThreshold=250.000000
      End Object
      KParams=PawnKParams
-     
+
      //////////////////////////////////////////////////////
      //This portion deals with the ragdoll after a zed dies
      //We want their corpses to stay like they did in KFMod
@@ -1673,13 +1672,13 @@ defaultproperties
      RagImpactSounds(2)=Sound'KFOldSchoolZeds_Sounds.Shared.Breakbone_03'
      RagImpactSoundInterval=0.500000
      //Other Ragdoll properties
-     RagDeathVel=150.000000     
+     RagDeathVel=150.000000
      RagShootStrength=6000.000000
      RagDeathUpKick=170.000000
      RagGravScale=1.500000
      RagSpinScale=2.500000
-     //This is something introduced in Retail, might have to 
+     //This is something introduced in Retail, might have to
      //Do an overhaul on play dying just for this?
      RagMaxSpinAmount=1.000000
-     ////////////////////////////////////////////////////// 
+     //////////////////////////////////////////////////////
 }

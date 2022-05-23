@@ -29,12 +29,12 @@ defaultproperties
     Mesh=SkeletalMesh'KFCharacterModels.Shade'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
     Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB'
-    
+
     //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Crawler.Crawler_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Crawler_HitPlayer'
 
@@ -47,4 +47,3 @@ defaultproperties
     ChallengeSound(2)=None
     ChallengeSound(3)=None
 }
-

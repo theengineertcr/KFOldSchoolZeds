@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -42,7 +42,7 @@ function ClawDamageTarget()
 
         if( !bDecapitated && KFP != none )
         {
-            //Had to change this or the Clot will grab Berserkers 
+            //Had to change this or the Clot will grab Berserkers
             //TODO:Make this Custom perk friendly somehow?
             if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
             {
@@ -88,7 +88,7 @@ function RangedAttack(Actor A)
         Acceleration = Normal(A.Location-Location)*600;
         Controller.GoToState('WaitForAnim');
         Controller.MoveTarget = A;
-        Controller.MoveTimer = 1.5;        
+        Controller.MoveTimer = 1.5;
     }
 }
 

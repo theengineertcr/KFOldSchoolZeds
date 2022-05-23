@@ -47,7 +47,7 @@ defaultproperties
 {
     //These values were not set in KFMod
     //DrawScale=1.05
-    //AmbientGlow=0    
+    //AmbientGlow=0
     //StunTime=0.3 Was used in Balance Round 1(removed for Round 2)
     //StunsRemaining=1 //Added in Balance Round 2//This may effect balance(?)
     //SoundVolume=175
@@ -57,7 +57,7 @@ defaultproperties
     ZombieFlag=3
     //AttackChargeRate=2.5
     //ExhaustEffectClass=class'KFMOD.ChainSawExhaust'
-    
+
     //Values that don't need to be changed
     bMeleeStunImmune = true
     MeleeAnims(0)="SawZombieAttack1"
@@ -78,12 +78,12 @@ defaultproperties
     bFatAss=True
     Mass=500.000000
     RotationRate=(Yaw=45000,Roll=0)
-    bUseExtendedCollision=True    
+    bUseExtendedCollision=True
     DamageToMonsterScale=8.0
     PoundRageBumpDamScale=0.01
-    
+
     //We'll keep these values the same as the retail version
-    //As this mod was made purely for the visual aspect, not gameplay    
+    //As this mod was made purely for the visual aspect, not gameplay
     MeleeDamage=20
     damageForce=-100000//-75000//-400000 //Exception - his loop attack is bloody useless, give it a little force increase
     ScoringValue=75
@@ -106,14 +106,14 @@ defaultproperties
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
     Intelligence=BRAINS_Mammal
-    
+
     KFRagdollName="SawZombieRag"//"Scrake_Trip"//Used KFMod ragdoll
     //He doesn't cut them up just for fun, he's hungry too!
     bCannibal = true
     MenuName="Scrake 2.5"//"Scrake"
     SoundRadius=200.000000//100.0//Used KFMod value
     AmbientSoundScaling=1.800000//KFMod variable
-    
+
     //These might need to be changed
     ColOffset=(Z=55)
     ColRadius=29

@@ -2,7 +2,7 @@
 //Were in hot water going this far up, avoid touching anything!
 class GibOS extends Gib
     abstract;
-    
+
 //Variables being Obscured, but as long as it works...
 //We won't tweak the names of these unless necessary
 var() class<xEmitter> TrailClass;
@@ -30,14 +30,14 @@ simulated function Destroyed()
 //    DesiredRotation = RotRand();
 //    RotationRate.Yaw = spinRate * 2 *FRand() - spinRate;
 //    RotationRate.Pitch = spinRate * 2 *FRand() - spinRate;
-//    RotationRate.Roll = spinRate * 2 *FRand() - spinRate;    
+//    RotationRate.Roll = spinRate * 2 *FRand() - spinRate;
 //}
 
 simulated function Landed( Vector HitNormal )
 {
     HitWall( HitNormal, None );
 }
-  
+
 simulated function HitWall( Vector HitNormal, Actor Wall )
 {
     local float Speed, MinSpeed;
@@ -60,7 +60,7 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
         }
     }
 
-    if( Speed < 20 ) 
+    if( Speed < 20 )
     {
          if( !bFlaming && !Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != None )
             Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
@@ -97,7 +97,7 @@ defaultproperties
      DampenFactor=0.650000
      //Retail KF doesn't use proper gib landing SFX, so we set them here
      HitSounds(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets1'
-     HitSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets2'     
+     HitSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets2'
      Physics=PHYS_Falling
      RemoteRole=ROLE_None
      LifeSpan=8.000000

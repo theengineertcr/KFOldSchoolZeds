@@ -72,8 +72,8 @@ defaultproperties
      mRandTextures=True
      mNumTileColumns=4
      mNumTileRows=4
-     LifeSpan=3.500000    
-     // Texture originally from UT2004     
+     LifeSpan=3.500000
+     // Texture originally from UT2004
      Skins(0)=Texture'KFOldSchoolZeds_Textures.Shared.BloodJetc'
-     Style=STY_Alpha     
+     Style=STY_Alpha
 }

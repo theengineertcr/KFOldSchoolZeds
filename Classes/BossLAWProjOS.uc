@@ -12,7 +12,7 @@ class BossLAWProjOS extends BossLAWProj;
 
 //Increase speed, damage, and radius on higher difficulty
 simulated function PostBeginPlay()
-{   
+{
     // Difficulty Scaling
     if (Level.Game != none)
     {
@@ -71,13 +71,13 @@ simulated function PostBeginPlay()
             }
         }
     }
-    
+
     super.PostBeginPlay();
 }
 
 defaultproperties
 {
-     DrawScale=1.0     
+     DrawScale=1.0
      StaticMesh=StaticMesh'KillingFloorStatics.LAWRocket'
      ExplosionSound=Sound'KFOldSchoolZeds_Sounds.Shared.TankFire01'
 }

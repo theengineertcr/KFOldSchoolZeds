@@ -67,6 +67,4 @@ Moving:
         SoakStop("STUCK IN CHARGING!");
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

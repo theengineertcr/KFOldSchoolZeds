@@ -26,7 +26,7 @@ defaultproperties
     //DetachedLegClass=class'SeveredLegGorefast'
     //DetachedHeadClass=class'SeveredHeadGorefast'
 
-    //Use KFMod Models and Textures    
+    //Use KFMod Models and Textures
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.GoreFast'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
 
@@ -34,8 +34,8 @@ defaultproperties
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Gorefast.Gorefast_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
-    //Dont think we need this?    
+
+    //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Gorefast_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
@@ -47,4 +47,3 @@ defaultproperties
     ChallengeSound(2)=None
     ChallengeSound(3)=None
 }
-

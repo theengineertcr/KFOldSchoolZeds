@@ -45,8 +45,6 @@ simulated function PostBeginPlay()
     SetDrawScale((Rand(2)-0.6));
 
     Super.PostBeginPlay();
-    
-
 }
 
 defaultproperties

@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -25,7 +25,7 @@ simulated function PostNetBeginPlay()
     //Also, extend AvoidArea box more forward so zeds
     //In front have chance to move away once Zeds notice
     //That he's pissed off. Or, just remove it entirely.
-    
+
     //if (AvoidArea == None && bChargingPlayer )
     //    AvoidArea = Spawn(class'FleshPoundAvoidArea',self);
     //if (AvoidArea != None)
@@ -58,19 +58,18 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 4.0 )
         {
             SpinDamConst = default.SpinDamConst * 1.0;
-            SpinDamRand = default.SpinDamRand  * 1.0;        
+            SpinDamRand = default.SpinDamRand  * 1.0;
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             SpinDamConst = default.SpinDamConst * 1.2;
-            SpinDamRand = default.SpinDamRand  * 1.25;    
+            SpinDamRand = default.SpinDamRand  * 1.25;
         }
         else // Hardest difficulty
         {
             SpinDamConst = default.SpinDamConst * 1.6;
-            SpinDamRand = default.SpinDamRand  * 1.25;         
+            SpinDamRand = default.SpinDamRand  * 1.25;
         }
-     
     }
 
     super.PostBeginPlay();
@@ -287,14 +286,14 @@ simulated function DeviceGoRed()
 simulated function DeviceGoNormal()
 {
     //TODO:Make sure it uses the correct texture
-    Skins[1]=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter';    
+    Skins[1]=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter';
     Skins[2]=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader';
 }
 
 function RangedAttack(Actor A)
 {
     local float Dist;
-        
+
     Dist = VSize(A.Location - Location);
 
     if ( bShotAnim || Physics == PHYS_Swimming)
@@ -305,7 +304,7 @@ function RangedAttack(Actor A)
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
             return;
-    }        
+    }
 }
 
 // Sets the FP in a berserk charge state until he either strikes his target, or hits timeout
@@ -468,7 +467,7 @@ Ignores StartCharging;
     function Tick( float Delta )
     {
         local int i;
-        
+
         if( !bShotAnim )
         {
             //For some reason, this does not work on Network games
@@ -479,8 +478,8 @@ Ignores StartCharging;
             else
             {
                 OnlineHeadshotOffset.Z=68;
-            }        
-            
+            }
+
             SetGroundSpeed(OriginalGroundSpeed * 2.3);//2.0;
             if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
             {
@@ -497,18 +496,18 @@ Ignores StartCharging;
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
         //}
-        
+
         //Not sure if we need this tick as it isn't in KFMod code?
         global.Tick(Delta);
     }
-    
+
     //Attempt to fix Charging into players bug
     function RangedAttack(Actor A)
     {
         local float Dist;
-        
+
         Dist = VSize(A.Location - Location);
-        
+
         if ( bShotAnim || Physics == PHYS_Swimming)
             return;
         else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
@@ -573,7 +572,6 @@ Ignores StartCharging;
     {
         local int i;
 
-        
         if( !bShotAnim )
         {
             //For some reason, this does not work on Network games
@@ -585,7 +583,7 @@ Ignores StartCharging;
             {
                 OnlineHeadshotOffset.Z=68;
             }
-            
+
             SetGroundSpeed(OriginalGroundSpeed * 2.3);
             if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
             {
@@ -604,14 +602,14 @@ Ignores StartCharging;
 
         global.Tick(Delta);
     }
-    
+
     //Attempt to fix Charging into players bug
     function RangedAttack(Actor A)
     {
         local float Dist;
-        
+
         Dist = VSize(A.Location - Location);
-        
+
         if ( bShotAnim || Physics == PHYS_Swimming)
             return;
         else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
@@ -621,7 +619,7 @@ Ignores StartCharging;
             PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
             return;
         }
-    }    
+    }
 }
 
 //Unchanged
@@ -652,7 +650,7 @@ simulated function PostNetReceive()
             MeleeAnims[0]=default.MeleeAnims[0];
             MeleeAnims[1]=default.MeleeAnims[1];
             MeleeAnims[2]=default.MeleeAnims[2];
-            OnlineHeadshotOffset.Z=68;            
+            OnlineHeadshotOffset.Z=68;
             DeviceGoNormal();
         }
     }
@@ -844,13 +842,13 @@ simulated event SetAnimAction(name NewAction)
         }
         else AnimAction = NewAction;
 
-        if ( PlayAnim(AnimAction,,0.1) && AnimAction != KFHitFront 
+        if ( PlayAnim(AnimAction,,0.1) && AnimAction != KFHitFront
             && AnimAction != KFHitBack
             && AnimAction != KFHitLeft
             && AnimAction != KFHitRight
             && AnimAction != 'PoundAttack1'
-            && AnimAction != 'PoundAttack2' 
-            && AnimAction != 'FPRageAttack' ) 
+            && AnimAction != 'PoundAttack2'
+            && AnimAction != 'FPRageAttack' )
         {
             if ( Physics != PHYS_None )
                 bWaitForAnim = true;

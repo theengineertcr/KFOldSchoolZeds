@@ -168,6 +168,4 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

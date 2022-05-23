@@ -6,9 +6,9 @@
 // Spawns Trail on PostBeginPlay.
 class GibHeadStumpOS extends KFGibOS;
 
-    // Load the texture and static mesh
-    #exec OBJ LOAD FILE=22Patch.usx
-    #exec OBJ LOAD FILE=22CharTex.utx
+// Load the texture and static mesh
+#exec OBJ LOAD FILE=22Patch.usx
+#exec OBJ LOAD FILE=22CharTex.utx
 
 simulated function PostBeginPlay()
 {
@@ -22,7 +22,7 @@ defaultproperties
      TrailClass=Class'KFGibJetOS'
      DampenFactor=0.300000
      DrawType=DT_StaticMesh
-     
+
      // This Mesh never changed, so don't change it
      StaticMesh=StaticMesh'22Patch.Severed_Head'
      RemoteRole=ROLE_SimulatedProxy

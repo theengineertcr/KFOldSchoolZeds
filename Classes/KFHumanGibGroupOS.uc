@@ -1,5 +1,5 @@
 // ✔
-// A group of gibs, how nice. Make sure this class  
+// A group of gibs, how nice. Make sure this class
 // Uses all of the KFMod Gibs and Blood puffs
 class KFHumanGibGroupOS extends xPawnGibGroup;
 
@@ -14,7 +14,7 @@ defaultproperties
      Gibs(5)=Class'KFGibHeadOS'
      Gibs(6)=Class'KFGibHeadbOS'
      Gibs(7)=Class'KFGibHeadOS'
-     
+
      //KFMod Blood Puffs
      BloodHitClass=Class'KFBloodPuffOS'
      LowGoreBloodHitClass=Class'KFBloodPuffOS'

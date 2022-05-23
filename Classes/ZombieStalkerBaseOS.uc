@@ -24,7 +24,7 @@ var float NextCheckTime;
 
 defaultproperties
 {
-    //These values were not set in KFMod    
+    //These values were not set in KFMod
     //DrawScale=1.1
     //Prepivot=(Z=5.0)
     //SeveredHeadAttachScale=1.0
@@ -32,7 +32,7 @@ defaultproperties
     //SeveredArmAttachScale=0.8
     //AmbientGlow=0
     //KFRagdollName="Stalker_Trip"
-    
+
     //Values that don't need to be changed
     MovementAnims(0)="ZombieRun"
     MovementAnims(1)="ZombieRun"
@@ -44,12 +44,12 @@ defaultproperties
     WalkAnims(3)="ZombieRun"
     IdleCrouchAnim="StalkerIdle"
     IdleWeaponAnim="StalkerIdle"
-    IdleRestAnim="StalkerIdle"    
+    IdleRestAnim="StalkerIdle"
     IdleHeavyAnim="StalkerIdle"
-    IdleRifleAnim="StalkerIdle"    
+    IdleRifleAnim="StalkerIdle"
     CrispUpThreshhold=10
     RotationRate=(Yaw=45000,Roll=0)
-    PuntAnim="ClotPunt"    
+    PuntAnim="ClotPunt"
     MeleeAnims(0)="StalkerSpinAttack"
     MeleeAnims(1)="StalkerAttack1"
     MeleeAnims(2)="JumpAttack"
@@ -59,9 +59,9 @@ defaultproperties
 
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
-    MeleeRange=30.000000    
+    MeleeRange=30.000000
     MeleeDamage=9
-    damageForce=5000    
+    damageForce=5000
     ScoringValue=15
     GroundSpeed=200.000000
     WaterSpeed=180.000000
@@ -73,12 +73,12 @@ defaultproperties
     //She was a cannibal in KFMod, so keep feasting on their corpses, please.
     bCannibal=True
     MenuName="Stalker 2.5"//"Stalker"
-    
+
     //Have yet to make this, will do it later
     //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
     SoloHeadScale=1.1
-    
+
     OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
     //Slightly increased just incase
-    OnlineHeadshotScale=1.2//1.4//1.2    
+    OnlineHeadshotScale=1.2//1.4//1.2
 }

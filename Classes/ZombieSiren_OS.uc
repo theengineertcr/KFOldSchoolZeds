@@ -31,4 +31,3 @@ defaultproperties
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Siren_Die'
 }
-

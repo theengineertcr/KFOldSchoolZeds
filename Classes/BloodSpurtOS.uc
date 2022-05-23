@@ -22,7 +22,7 @@ simulated function PostNetBeginPlay()
 {
     if ( Level.NetMode != NM_DedicatedServer )
         WallSplat();
-    else 
+    else
         LifeSpan = 0.2;
 }
 
@@ -33,7 +33,7 @@ simulated function WallSplat()
 
     if ( Level.bDropDetail || (!bMustShow && (FRand() > 0.8)) || (BloodDecalClass == None) )
         return;
-    
+
     if ( HitDir == vect(0,0,0) )
     {
         if ( Owner != None )
@@ -42,22 +42,22 @@ simulated function WallSplat()
             HitDir.Z = -1;
     }
     HitDir = Normal(HitDir);
-    
+
     WallActor = Trace(WallHit, WallNormal, Location + 350 * HitDir, Location, false);
-    if ( WallActor != None )    
+    if ( WallActor != None )
         spawn(BloodDecalClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
 }
 
 static function PrecacheContent(LevelInfo Level)
 {
     local int i;
-    
+
     Super.PrecacheContent(Level);
     if ( Default.BloodDecalClass != None )
     {
         for ( i=0; i<3; i++ )
             Level.AddPrecacheMaterial(Default.splats[i]);
-    }    
+    }
 }
 
 defaultproperties

@@ -26,6 +26,4 @@ function tick(float DeltaTime)
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

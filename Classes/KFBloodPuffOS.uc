@@ -4,8 +4,8 @@
 //=============================================================================
 class KFBloodPuffOS extends BloodSmallHit;
 
-    // Load the texture package
-    #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+// Load the texture package
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {

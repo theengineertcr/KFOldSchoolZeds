@@ -16,11 +16,11 @@ defaultproperties
 {
     // Use the KFMod GibGroup and GibJet
      GibGroupClass=Class'KFHumanGibGroupOS'
-     TrailClass=Class'KFGibJetOS'     
+     TrailClass=Class'KFGibJetOS'
      DampenFactor=0.300000
      DrawType=DT_StaticMesh
-     
-     // Updated to use the 2.5 Meshes 
+
+     // Updated to use the 2.5 Meshes
      StaticMesh=StaticMesh'KFOldSchoolStatics.ClotGibHead'
      // This Texture never changed, so don't change it
      Skins(0)=Texture'22CharTex.GibletsSkin'

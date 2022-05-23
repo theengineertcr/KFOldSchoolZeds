@@ -269,7 +269,7 @@ function FightEnemy(bool bCanCharge)
         }
         else
         {
-            //ZombieBoss to ZombieBossOS        
+            //ZombieBoss to ZombieBossOS
             // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
             ZombieBossOS(Pawn).SneakCount++;
             GoalString = "InitialHunt";
@@ -589,6 +589,4 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

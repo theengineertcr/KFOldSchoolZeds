@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // A "mini" patty that fires incendiary rounds as a Husk replacement
@@ -60,11 +60,11 @@ function bool FlipOver()
     // {
     //     SetPhysics(PHYS_Walking);
     // }
-    // 
+    //
     // bShotAnim = true;
     // //Ranged Pound has a unique animation for getting stunned
     // GoToState('');
-    // SetAnimAction('RangedKnockDown');    
+    // SetAnimAction('RangedKnockDown');
     // HandleWaitForAnim('RangedKnockDown');
     // Acceleration = vect(0, 0, 0);
     // Velocity.X = 0;
@@ -90,7 +90,7 @@ simulated function PostBeginPlay()
     // Difficulty Scaling
     // Grenade Launcher fired amount and rate of fire are set here
     // TODO: Implement these variables
-    
+
     if (Level.Game != none)
     {
         if( Level.Game.GameDifficulty < 2.0 )
@@ -101,19 +101,19 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 4.0 )
         {
             GLFireBurst = default.GLFireBurst * 1.0;
-            GLFireRate = default.GLFireRate * 1.0;            
+            GLFireRate = default.GLFireRate * 1.0;
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             GLFireBurst = default.GLFireBurst * 1.5;
-            GLFireRate = default.GLFireRate * 0.8;        
+            GLFireRate = default.GLFireRate * 0.8;
         }
         else // Hardest difficulty
         {
             GLFireBurst = default.GLFireBurst * 2.0;
-            GLFireRate = default.GLFireRate * 0.5;     
+            GLFireRate = default.GLFireRate * 0.5;
         }
-     
+
     }
 
     super.PostBeginPlay();
@@ -160,11 +160,11 @@ function RangedAttack(Actor A)
 
     if ( bShotAnim )
         return;
-        
+
     Dist = VSize(Controller.Target.Location-Location);
-    
+
     class'GunnerGLProjectile'.default.Speed = Dist;
-    
+
     //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
     {
@@ -179,7 +179,7 @@ function RangedAttack(Actor A)
         SetAnimAction('Claw');
         PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
         Controller.bPreparingMove = true;
-        Acceleration = vect(0,0,0);    
+        Acceleration = vect(0,0,0);
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 )
     {
@@ -189,24 +189,24 @@ function RangedAttack(Actor A)
         Acceleration = vect(0,0,0);
         SetAnimAction('RangedPreFireMG'); //PreFireMG
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
-        
+
         //How many nades to fire
          GLFireCounter =  GLFireBurst; // Balance 1 - Removed the random extra grenades
-         
+
         //Ding ding ding! You won the lottery, and your prize is certain death!
         // Lowered the chance because this attack is pretty deadly
         if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0) // Don't hurt the little babies who play on Easy Modo
             GLFireCounter =  GLFireBurst + 3 + Rand(4);
-            
+
         GoToState('FireGrenades');
-    }    
+    }
 }
 
 simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
-    
+
     Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
     if( mTracer==None )
         mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
@@ -247,7 +247,7 @@ function FireGLShot()
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
     local KFMonsterController KFMonstControl;
-    
+
     GLFireCounter--;
 
     if( Controller!=None && KFDoorMover(Controller.Target)!=None )
@@ -258,7 +258,7 @@ function FireGLShot()
     GetAxes(Rotation,X,Y,Z);
     FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
     //GunnerProjClass = Class'GunnerGLProjectile';
-    
+
     if ( !SavedFireProperties.bInitialized )
     {
         SavedFireProperties.AmmoClass = Class'SkaarjAmmo';
@@ -271,14 +271,14 @@ function FireGLShot()
         SavedFireProperties.bInstantHit = False;
         SavedFireProperties.bInitialized = True;
     }
-    
+
     ToggleAuxCollision(false);
-    
+
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
-    
+
     Spawn(GunnerProjClass,,,FireStart,FireRotation);
     PlaySound(sound'KF_M79Snd.M79_Fire',SLOT_Misc,2,,1400,0.9+FRand()*0.2); 
-    
+
     ToggleAuxCollision(true);
 }
 
@@ -287,17 +287,17 @@ simulated function AnimEnd( int Channel )
 {
     local name  Sequence;
     local float Frame, Rate;
-    
+
     if( Level.NetMode==NM_Client && bGLing )
     {
         GetAnimParams( Channel, Sequence, Frame, Rate );
-    
+
         if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
         {
             Super.AnimEnd(Channel);
             return;
         }
-    
+
         PlayAnim('RangedFireMG'); //Rangedpound Anims
         bWaitForAnim = true;
         bShotAnim = true;
@@ -320,18 +320,18 @@ state FireGrenades
         local float Dist;
         local float Speed;
         local float Timer;
-        local float TossZ; 
-        
+        local float TossZ;
+
         Dist = VSize(Controller.Target.Location-Location);
-        
+
         Speed = Dist + 250;
         Timer = Dist / 1250;
-        TossZ = Dist / 22;     
-        
+        TossZ = Dist / 22;
+
         class'GunnerGLProjectile'.default.Speed = Speed;
         class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
-        
+
         super.Tick(DeltaTime);
     }
 
@@ -409,7 +409,7 @@ Begin:
             HandleWaitForAnim('RangedFireMGEnd'); //Ranged Anims
             GoToState('');
         }
-        
+
         if( bFireAtWill )
             FireGLShot();
         Sleep(GLFireRate); //0.05//Uses our own fire rate set in the base file
@@ -518,7 +518,7 @@ simulated function HandleWaitForAnim( name NewAnim )
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     //Removed the extra patty anims
-    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown') 
+    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown')
     {
         return true;
     }
@@ -551,7 +551,7 @@ defaultproperties
     //-------------------------------------------------------------------------------
     // NOTE: Most Default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    
+
     //Use Rangedpound controller
     ControllerClass=Class'RangedPoundGLZombieControllerOS'
     GunnerProjClass=Class'GunnerGLProjectile'

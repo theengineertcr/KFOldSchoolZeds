@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -548,9 +548,9 @@ simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
-    
+
     //Get Old L85 fire sound
-    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);    
+    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('tip').Origin;
     if( mTracer==None )
         mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer are similar
@@ -1287,7 +1287,7 @@ simulated function PostNetReceive()
         Switch( SyringeCount )
         {    //Use KFMod Syringe bones
             Case 1:
-                SetBoneScale(3,0,'SyringeBoneOne'); 
+                SetBoneScale(3,0,'SyringeBoneOne');
                 Break;
             Case 2:
                 SetBoneScale(3,0,'SyringeBoneOne');
@@ -1520,7 +1520,7 @@ function DoorAttack(Actor A)
         SetAnimAction('PreFireMG'); //('PreFireMissile');
         HandleWaitForAnim('PreFireMG');
         //Not sure if we need this
-        MGFireCounter = Rand(20);        
+        MGFireCounter = Rand(20);
         GoToState('FireMissile');
     }
 }

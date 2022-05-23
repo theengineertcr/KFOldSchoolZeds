@@ -85,7 +85,7 @@ defaultproperties
     //AmbientGlow=0
     //SoundVolume=75
     //bForceSkelUpdate=true
-    
+
     //Values that don't need to be changed
     bMeleeStunImmune = true
     bFatAss=True
@@ -120,7 +120,7 @@ defaultproperties
     LandAnims(3)="JumpLanded"
     AirStillAnim="JumpInAir"
     TakeoffStillAnim="JumpTakeOff"
-    ChargingAnim="RunF"    
+    ChargingAnim="RunF"
     IdleHeavyAnim="BossIdle"
     IdleRifleAnim="BossIdle"
     IdleCrouchAnim="BossIdle"
@@ -133,7 +133,7 @@ defaultproperties
     bNetNotify=False
     bUseExtendedCollision=True
     DamageToMonsterScale=5.0
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     ScoringValue=500
@@ -160,11 +160,11 @@ defaultproperties
     bHarpoonToBodyStuns=false
     ClawMeleeDamageRange=85//50
     ImpaleMeleeDamageRange=45//75
-    
+
     TurnLeftAnim="BossHitF"//"TurnLeft"
     TurnRightAnim="BossHitF"//"TurnRight"
     MenuName="Patriarch 2.5"//"Patriarch"
-    
+
     //This may need to be changed
     ColOffset=(Z=65)//(Z=50)
     ColRadius=27
@@ -175,10 +175,10 @@ defaultproperties
     ZombieFlag=3
 
     KFRagdollName="BossRag"//"Patriarch_Trip" Use KFMod ragdoll
-    
+
     SoloHeadScale=1.5
-    
+
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-6,Z=70) //Z=75
-    OnlineHeadshotScale=1.5//1.2    
+    OnlineHeadshotScale=1.5//1.2
 }

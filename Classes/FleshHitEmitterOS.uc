@@ -1,9 +1,10 @@
 // ✔
 class FleshHitEmitterOS extends KFHitEmitterOS;
-     // Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
-     // So we'll load that package instead. Also, load the texture package
-     #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-     #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+// Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
+// So we'll load that package instead. Also, load the texture package
+
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
