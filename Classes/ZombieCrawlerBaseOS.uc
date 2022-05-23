@@ -123,8 +123,8 @@ defaultproperties
     //SeveredHeadAttachScale=1.1
     //SeveredLegAttachScale=0.85
     //SeveredArmAttachScale=0.8
-    //ZombieFlag=2
-    //bDoTorsoTwist=False
+    ZombieFlag=2
+    bDoTorsoTwist=False
     
     //Values that don't need to be changed
     bCannibal = true    
@@ -210,5 +210,4 @@ defaultproperties
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
     OnlineHeadshotScale=1.1
-    CollisionRadius=26.000000    
 }

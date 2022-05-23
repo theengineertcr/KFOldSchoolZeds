@@ -176,9 +176,6 @@ defaultproperties
 
     KFRagdollName="BossRag"//"Patriarch_Trip" Use KFMod ragdoll
     
-    CollisionRadius=26
-    CollisionHeight=44
-    
     SoloHeadScale=1.5
     
     //Updated

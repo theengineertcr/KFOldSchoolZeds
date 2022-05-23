@@ -50,7 +50,7 @@ defaultproperties
 {
     //These values were not set in KFMod
     //DrawScale=1.4
-    //ZombieFlag=1
+    ZombieFlag=1
     //AmmunitionClass=Class'KFMod.BZombieAmmo'
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
@@ -71,14 +71,14 @@ defaultproperties
 
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
-    ScoringValue=17    
-    GroundSpeed=115.0
-    WaterSpeed=102.000000
-    Health=600//700
-    HealthMax=600//700
+    ScoringValue=125
+    GroundSpeed=75.0
+    WaterSpeed=75.000000
+    Health=1250//700
+    HealthMax=1250//700
     PlayerCountHealthScale=0.10//0.15
     PlayerNumHeadHealthScale=0.05
-    HeadHealth=200//250
+    HeadHealth=655//250
     MeleeDamage=15
     JumpZ=320.000000
     bHarpoonToHeadStuns=true
@@ -87,8 +87,9 @@ defaultproperties
     MeleeRange=30.0//55.000000
     damageForce=70000
     Intelligence=BRAINS_Mammal
-    MotionDetectorThreat=1.0
-    ZapThreshold=0.75
+    MotionDetectorThreat=2.0
+    ZapThreshold=1.25
+    ZappedDamageMod=1.25
     GLFireInterval=5.5
     GLFireRate=0.75
     GLFireBurst=2
@@ -149,13 +150,11 @@ defaultproperties
     bCanDistanceAttackDoors=False
     
     //These might need to be changed    
-    ColOffset=(Z=52) 
-    ColRadius=36
-    ColHeight=35//46
+    ColOffset=(Z=65)//(Z=50)
+    ColRadius=27
+    ColHeight=25//40
     PrePivot=(Z=0)
 
-    CollisionRadius=26
-    CollisionHeight=44
 
     SoloHeadScale=1.55
 

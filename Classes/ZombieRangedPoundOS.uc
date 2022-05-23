@@ -99,8 +99,8 @@ simulated function PostBeginPlay()
     {
         if( Level.Game.GameDifficulty < 2.0 )
         {
-            BurnDamageScale = default.BurnDamageScale * 2.0;            
-            MGDamage = default.MGDamage * 0.75;//0.5//0.375
+            BurnDamageScale = default.BurnDamageScale * 2.0;
+            MGDamage = default.MGDamage * 0.5;
             MGAccuracy = default.MGAccuracy * 1.25;
             MGFireBurst = default.MGFireBurst * 0.7;
             MGFireRate = default.MGFireRate * 1.5;
@@ -116,7 +116,7 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             BurnDamageScale = default.BurnDamageScale * 0.75;
-            MGDamage = default.MGDamage * 1.5;            
+            MGDamage = default.MGDamage * 1.0;            
             MGAccuracy = default.MGAccuracy * 0.9; //Too accurate
             MGFireBurst = default.MGFireBurst * 1.33;
             MGFireRate = default.MGFireRate * 0.833333;        
@@ -124,7 +124,7 @@ simulated function PostBeginPlay()
         else // Hardest difficulty
         {
             BurnDamageScale = default.BurnDamageScale * 0.5;
-            MGDamage = default.MGDamage * 2.0;
+            MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.80;
             MGFireBurst = default.MGFireBurst * 1.67;
             MGFireRate = default.MGFireRate * 0.68; //0.583333            
@@ -190,13 +190,26 @@ function RangedAttack(Actor A)
     }
     else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
     {
-        bShotAnim = true;
-        LastFireTime = Level.TimeSeconds;
-        SetAnimAction('Claw');
-        PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
-        Controller.bPreparingMove = true;
-        Acceleration = vect(0,0,0);    
-    }
+        if( Level.Game.GameDifficulty <= 4 )
+        {
+            bShotAnim = true;
+            LastFireTime = Level.TimeSeconds;
+            SetAnimAction('Claw');
+            PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
+            Controller.bPreparingMove = true;
+            Acceleration = vect(0,0,0); 
+        }
+        else
+        {
+            bShotAnim = true;
+            Acceleration = vect(0,0,0);
+            SetAnimAction('RangedPreFireMG'); //PreFireMG
+            HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
+            MGDamage = MGDamage + Rand(4);
+            MGFireCounter =  MGFireBurst;
+            GoToState('FireChaingun');
+        }
+    }    
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastChainGunTime<Level.TimeSeconds )
     {
         if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't need this FRand so it can go away
@@ -215,13 +228,13 @@ function RangedAttack(Actor A)
         
         //Unlucky you, you won a ticket straight to hell!
         //Lowered chance for this to be triggered
-        if(FRand() > 0.05 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
+        if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0  || Level.Game.GameDifficulty >= 5.0 && Dist < 300 + CollisionRadius + A.CollisionRadius) // Don't hurt the little babies who play on Easy Modo
         {
-            MGFireBurst = ( MGFireBurst + 15 + Rand(26));
-            MGDamage = ( MGDamage + Rand(4));
-            MGFireRate = (MGFireRate * 0.95);            
+            MGFireBurst =  MGFireBurst + 20 + Rand(30);
+            MGDamage = MGDamage + Rand(4);
+            MGFireRate = MGFireRate * 0.95;
             //Decrease accuracy during this
-            MGAccuracy = (MGAccuracy * 1.10);
+            MGAccuracy = MGAccuracy * 1.10;
         }
         else
         {

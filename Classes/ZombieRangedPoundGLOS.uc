@@ -56,24 +56,24 @@ function bool CanGetOutOfWay()
 // High damage was taken, make em fall over.
 function bool FlipOver()
 {
-    if( Physics==PHYS_Falling )
-    {
-        SetPhysics(PHYS_Walking);
-    }
-
-    bShotAnim = true;
-    //Ranged Pound has a unique animation for getting stunned
-    GoToState('');
-    SetAnimAction('RangedKnockDown');    
-    HandleWaitForAnim('RangedKnockDown');
-    Acceleration = vect(0, 0, 0);
-    Velocity.X = 0;
-    Velocity.Y = 0;
-    KFMonsterController(Controller).Focus = None;
-    KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
-    Controller.GoToState('WaitForAnim');
-    KFMonsterController(Controller).bUseFreezeHack = True;
-    Return True;
+    // if( Physics==PHYS_Falling )
+    // {
+    //     SetPhysics(PHYS_Walking);
+    // }
+    // 
+    // bShotAnim = true;
+    // //Ranged Pound has a unique animation for getting stunned
+    // GoToState('');
+    // SetAnimAction('RangedKnockDown');    
+    // HandleWaitForAnim('RangedKnockDown');
+    // Acceleration = vect(0, 0, 0);
+    // Velocity.X = 0;
+    // Velocity.Y = 0;
+    // KFMonsterController(Controller).Focus = None;
+    // KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
+    // Controller.GoToState('WaitForAnim');
+    // KFMonsterController(Controller).bUseFreezeHack = True;
+    Return False;
 }
 
 //-----------------------------------------------------------------------------
@@ -155,32 +155,15 @@ simulated Function PostNetBeginPlay()
 //Need to overhaul this(Done!)
 function RangedAttack(Actor A)
 {
-    local float Dist; //That distance check that was used for Siren
+    local float Dist;
     local int LastFireTime; //Husk variable // Don't know if we need this
 
     if ( bShotAnim )
         return;
         
-    Dist = VSize(A.Location-Location);
+    Dist = VSize(Controller.Target.Location-Location);
     
-    //Is there a better way to do this?
-    //All I want to do is tie Projectile speed to distance
-    //So he doesn't overshoot or undershoot, creating classes
-    //With different variables seems very efficient and I don't
-    //Get how I'm supposed to do this...
-    
-    if (Dist < 400)
-    {
-        GunnerProjClass = class'GunnerGLProjectileS';
-    }    
-    else if(Dist < 800) 
-    {
-        GunnerProjClass = class'GunnerGLProjectileM';
-    }
-    else
-    {
-        GunnerProjClass = class'GunnerGLProjectile';
-    }
+    class'GunnerGLProjectile'.default.Speed = Dist;
     
     //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
@@ -198,7 +181,7 @@ function RangedAttack(Actor A)
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);    
     }
-    else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2000 )
+    else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 )
     {
         LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
 
@@ -212,7 +195,7 @@ function RangedAttack(Actor A)
          
         //Ding ding ding! You won the lottery, and your prize is certain death!
         // Lowered the chance because this attack is pretty deadly
-        if(FRand() < 0.05 && Level.Game.GameDifficulty >= 4.0) // Don't hurt the little babies who play on Easy Modo
+        if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0) // Don't hurt the little babies who play on Easy Modo
             GLFireCounter =  GLFireBurst + 3 + Rand(4);
             
         GoToState('FireGrenades');
@@ -272,10 +255,9 @@ function FireGLShot()
         Controller.Target.TakeDamage(22,Self,Location,vect(0,0,0),Class'DamTypeVomit');
         return;
     }
-
     GetAxes(Rotation,X,Y,Z);
     FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    //GunnerProjClass = Class'KFOldSchoolZeds.GunnerGLProjectile';
+    //GunnerProjClass = Class'GunnerGLProjectile';
     
     if ( !SavedFireProperties.bInitialized )
     {
@@ -285,7 +267,7 @@ function FireGLShot()
         SavedFireProperties.MaxRange = 65535;
         SavedFireProperties.bTossed = False;
         SavedFireProperties.bTrySplash = true;
-        SavedFireProperties.bLeadTarget = true;
+        SavedFireProperties.bLeadTarget = false;
         SavedFireProperties.bInstantHit = False;
         SavedFireProperties.bInitialized = True;
     }
@@ -331,6 +313,26 @@ state FireGrenades
     {
         Controller.Target = A;
         Controller.Focus = A;
+    }
+
+    simulated function Tick(float DeltaTime)
+    {
+        local float Dist;
+        local float Speed;
+        local float Timer;
+        local float TossZ; 
+        
+        Dist = VSize(Controller.Target.Location-Location);
+        
+        Speed = Dist + 250;
+        Timer = Dist / 1250;
+        TossZ = Dist / 22;     
+        
+        class'GunnerGLProjectile'.default.Speed = Speed;
+        class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
+        class'GunnerGLProjectile'.default.TossZ = TossZ;
+        
+        super.Tick(DeltaTime);
     }
 
     function EndState()
@@ -543,6 +545,7 @@ function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<D
         super.OldPlayHit(Damage,InstigatedBy,HitLocation,damageType,Momentum,HitIndex);
 }
 
+
 defaultproperties
 {
     //-------------------------------------------------------------------------------
@@ -550,6 +553,6 @@ defaultproperties
     //-------------------------------------------------------------------------------
     
     //Use Rangedpound controller
-    ControllerClass=Class'KFOldSchoolZeds.RangedPoundGLZombieControllerOS'
-    GunnerProjClass=Class'KFOldSchoolZeds.GunnerGLProjectile'
+    ControllerClass=Class'RangedPoundGLZombieControllerOS'
+    GunnerProjClass=Class'GunnerGLProjectile'
 }

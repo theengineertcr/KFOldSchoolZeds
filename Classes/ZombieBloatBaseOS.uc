@@ -33,8 +33,8 @@ defaultproperties
     //AmbientSoundScaling=8.0
     //SoundVolume=200
     //AmbientGlow=0
-    //CollisionRadius=26.000000
-    //ZombieFlag=1
+    CollisionRadius=26.000000
+    ZombieFlag=1
     //SeveredHeadAttachScale=1.7
     //SeveredLegAttachScale=1.3
     //SeveredArmAttachScale=1.1
@@ -62,7 +62,9 @@ defaultproperties
     RotationRate=(Yaw=45000,Roll=0)    
     bCanDistanceAttackDoors=True
     bUseExtendedCollision=True
-    ColRadius=27
+    ColOffset=(Z=60.000000)
+    ColRadius=27.000000
+    ColHeight=22.000000
     Intelligence=BRAINS_Stupid    
     
     //We'll keep these values the same as the retail version
@@ -100,12 +102,10 @@ defaultproperties
 
     //Tweak these, we dont want a floating fatty!
     CollisionHeight=44.000000//previously  44
-    ColOffset=(Z=60)//(Z=60)
-    ColHeight=22//22
     
     SoloHeadScale=1.2
     
     //Updated
-    OnlineHeadshotOffset=(X=25,Y=-5,Z=70)
-    OnlineHeadshotScale=1.2// Increased
+    OnlineHeadshotOffset=(X=28,Y=-5,Z=70)
+    OnlineHeadshotScale=1.3// Increased
 }

@@ -53,7 +53,7 @@ defaultproperties
     //AmbientGlow=0    
     //StunTime=0.3 //Was used in Balance Round 1(removed for Round 2)
     //StunsRemaining=1 //Added in Balance Round 2
-    //ZombieFlag=3
+    ZombieFlag=3
     //SeveredHeadAttachScale=1.5
     //SeveredLegAttachScale=1.2
     //SeveredArmAttachScale=1.3
@@ -75,7 +75,6 @@ defaultproperties
     RagDeathVel=100.000000
     RagDeathUpKick=100.000000
     bBoss=True
-    bUseExtendedCollision=True
     DamageToMonsterScale=5.0
     
     //We'll keep these values the same as the retail version
@@ -129,13 +128,12 @@ defaultproperties
     //Skins(1)=Shader'KFCharacters.FPAmberBloomShader'
     
     //These might need to be changed    
-    ColOffset=(Z=52)
-    ColRadius=36
-    ColHeight=35//46
+    bUseExtendedCollision=True
+    ColOffset=(Z=52.000000)
+    ColRadius=36.000000
+    ColHeight=35.000000
     PrePivot=(Z=0) //Y-15?
 
-    CollisionRadius=26
-    CollisionHeight=44
     
     //Headshot doesn't work properly with Projectile weapons and I don't want to scale this up
     //TODO:Do a quick patch, then investigate this further

@@ -95,14 +95,10 @@ defaultproperties
     //This makes him float, we don't want that
     //Prepivot=(Z=5.0)
     
-    //Avoid using extended collisions
-    //bUseExtendedCollision=False
-    //ColOffset=(Z=48)    
-    //ColRadius=25
-    //ColHeight=30//5
-    
-    CollisionRadius=26.000000
-    CollisionHeight=50
+    bUseExtendedCollision=True
+    ColOffset=(Z=48.000000)
+    ColRadius=25.000000
+    ColHeight=5.000000
     
     SoloHeadScale=1.1
     

@@ -87,7 +87,6 @@ defaultproperties
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-5,Z=45)
     OnlineHeadshotScale=1.35
-    CollisionRadius=26.000000    
     
     bUseExtendedCollision=true
     ColOffset=(Z=52)

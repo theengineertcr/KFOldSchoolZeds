@@ -122,10 +122,10 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 defaultproperties
 {
     ArmDistSquared=0 //Does not need to be armed //90000 // 6 meters
-    Speed=1200//1500
+    Speed=1//1500
     MaxSpeed=10000//In the future, we'll make his projectiles speed up when he's far away, so keep it high
     Damage=75 //Decreased to use difficulty for adjusting damage
-    DamageRadius=300// Balance - Slightly reduced
+    DamageRadius=350// Balance - Slightly reduced
     MomentumTransfer=75000.000000
     MyDamageType=Class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
     LifeSpan=10.000000
@@ -134,7 +134,7 @@ defaultproperties
     //Decreased
     ExplodeTimer=2.0
     //lowered further
-    DampenFactor=0.3// 0.4 //0.5
+    DampenFactor=0.4// 0.4 //0.5
     DampenFactorParallel=0.3// 0.6 //0.8
     bBounce=True
     TossZ=150    
@@ -154,7 +154,7 @@ defaultproperties
     LightPeriod=8.0
     LightPhase=0.0
     LightBrightness=160.0
-    LightRadius=4.000000
+    LightRadius=6.000000
     LightHue=0
     LightSaturation=0
     LightCone=16

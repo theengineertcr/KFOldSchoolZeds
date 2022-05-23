@@ -54,7 +54,7 @@ defaultproperties
     //SeveredHeadAttachScale=1.0
     //SeveredLegAttachScale=1.1
     //SeveredArmAttachScale=1.1
-    //ZombieFlag=3
+    ZombieFlag=3
     //AttackChargeRate=2.5
     //ExhaustEffectClass=class'KFMOD.ChainSawExhaust'
     
@@ -125,8 +125,4 @@ defaultproperties
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
     OnlineHeadshotScale=1.5//1.5
-    
-
-    CollisionRadius=26
-    CollisionHeight=46    
 }

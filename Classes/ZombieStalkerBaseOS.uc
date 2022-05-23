@@ -73,11 +73,9 @@ defaultproperties
     //She was a cannibal in KFMod, so keep feasting on their corpses, please.
     bCannibal=True
     MenuName="Stalker 2.5"//"Stalker"
+    
     //Have yet to make this, will do it later
     //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
-    
-    CollisionRadius=26.000000
-    
     SoloHeadScale=1.1
     
     OnlineHeadshotOffset=(X=25,Y=-8,Z=28)

@@ -63,7 +63,7 @@ defaultproperties
 {
     //These values were not set in KFMod
     //DrawScale=1.4
-    //ZombieFlag=1
+    ZombieFlag=1
     //AmmunitionClass=Class'KFMod.BZombieAmmo'
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
@@ -105,7 +105,7 @@ defaultproperties
     ZapThreshold=0.75
     MGFireInterval=5.5
     MGDamage=2.0//2.0//6.0 This was too much
-    MGAccuracy=0.06 //0.06//0.08// Rebalanced
+    MGAccuracy=0.04 //0.06//0.08// Rebalanced
     MGFireRate=0.06//0.05 
     MGFireBurst=15//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
     
@@ -164,13 +164,10 @@ defaultproperties
     bCanDistanceAttackDoors=False
     
     //These might need to be changed    
-    ColOffset=(Z=52) 
-    ColRadius=36
-    ColHeight=35//46
+    ColOffset=(Z=65)//(Z=50)
+    ColRadius=27
+    ColHeight=25//40
     PrePivot=(Z=0)
-
-    CollisionRadius=26
-    CollisionHeight=44
     
     SoloHeadScale=1.55
     

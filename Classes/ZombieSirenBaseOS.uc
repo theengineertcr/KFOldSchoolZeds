@@ -44,7 +44,7 @@ defaultproperties
     //ExtCollAttachBoneName="Collision_Attach"
     //DrawScale=1.05
     //AmbientGlow=0
-    //ZombieFlag=1
+    ZombieFlag=1
     //SeveredHeadAttachScale=1.0
     //SeveredLegAttachScale=0.7
     //SeveredArmAttachScale=1.0
@@ -123,9 +123,6 @@ defaultproperties
     MenuName="Siren 2.5"//"Siren"
     bCanDistanceAttackDoors=True
     
-    CollisionRadius=26.000000
-    //Increasing this makes her float, use Prepivot to move her down
-    CollisionHeight=50.000000
     PrePivot=(Z=-13)    
     bUseExtendedCollision=true
     ColOffset=(Z=48)
