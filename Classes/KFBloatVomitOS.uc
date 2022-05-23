@@ -130,7 +130,7 @@ simulated function Destroyed()
     {
         //Spawn(class'xEffects.GoopSmoke');
         //Use KFMod VomGroundSplash
-        Spawn(class'KFOldSchoolZeds.VomGroundSplashOS');
+        Spawn(class'VomGroundSplashOS');
     }
     if ( Fear != None )
         Fear.Destroy();
@@ -164,7 +164,7 @@ auto state Flying
             SetGoopLevel(CoreGoopLevel);
         }
         //Use KFMod VomitDecal
-        spawn(class'KFOldSchoolZeds.VomitDecalOS',,,, rotator(-HitNormal));
+        spawn(class'VomitDecalOS',,,, rotator(-HitNormal));
 
         bCollideWorld = false;
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
@@ -212,7 +212,7 @@ defaultproperties
      Damage=4.000000
      MomentumTransfer=2000.000000
      //Use KFMod DamTypeVomit
-     MyDamageType=Class'KFOldSchoolZeds.DamTypeVomitOS'
+     MyDamageType=Class'DamTypeVomitOS'
      bDynamicLight=False
      LifeSpan=1.000000//8.000000 Old value used
      //Use KFMod's texture, even though it wont be useful

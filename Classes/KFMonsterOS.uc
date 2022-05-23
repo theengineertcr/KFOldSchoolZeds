@@ -473,7 +473,7 @@ simulated function ProcessHitFX()
             {
                 case 'Bip01 L Thigh':
                 case 'Bip01 R Thigh':
-                    Spawn(class'KFOldSchoolZeds.BrainSplashOS',,,boneCoords.Origin,Self.Rotation); //KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation); //KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_Calf), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     SpawnGiblet( GetGibClass(EGT_Calf), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound1', SLOT_Misc,255);
@@ -481,7 +481,7 @@ simulated function ProcessHitFX()
                     break;
                 case 'Bip01 R Forearm':
                 case 'Bip01 L Forearm':
-                    Spawn(class'KFOldSchoolZeds.BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_UpperArm), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     SpawnGiblet( GetGibClass(EGT_Forearm), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound2', SLOT_Misc,255);
@@ -489,7 +489,7 @@ simulated function ProcessHitFX()
                     GibCountUpperArm--;
                     break;
                 case 'Bip01 Head':
-                    Spawn(class'KFOldSchoolZeds.BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_Head), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound2', SLOT_Misc,255);
                     GibCountTorso--;
@@ -573,9 +573,9 @@ simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bS
     {
         //Gibs replaced, KFSpawnGiblet swapped with SpawnGiblet as
         //KFSpawnGiblet has an optional Variable velocity, which we don't need        
-        SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
-        SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainbOS',DecapLocation, self.Rotation, GibPerterbation) ;
-        SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
+        SpawnGiblet( class'KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
+        SpawnGiblet( class'KFGibBrainbOS',DecapLocation, self.Rotation, GibPerterbation) ;
+        SpawnGiblet( class'KFGibBrainOS',DecapLocation, self.Rotation, GibPerterbation) ;
     }
     // Use KFMod's Brainsplash
     SplatExplosion = Spawn(class 'BrainSplashOS',self,, DecapLocation );
@@ -863,10 +863,10 @@ simulated function Tick(float DeltaTime)
             }
             if ( EffectIsRelevant(Location,false) )
             {
-                //KFMod to KFOldSchoolZeds
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainbOS',SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                // use our classes
+                SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet( class'KFGibBrainbOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
             }
             //Use KFMod BrainSplash
             SplatExplosion = Spawn(class 'BrainSplashOS',self,, SplatLocation );
@@ -895,17 +895,17 @@ simulated function Tick(float DeltaTime)
                         if ( EffectIsRelevant(Location,false) && Gored < 5 )
             {
                 //Use KFMod classes
-                Spawn(class'KFOldSchoolZeds.BrainSplashOS',,,SplatLocation,Self.Rotation);
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainbOS',SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet( class 'KFOldSchoolZeds.KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                Spawn(class'BrainSplashOS',,,SplatLocation,Self.Rotation);
+                SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet( class'KFGibBrainbOS',SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
             }
             else if ( EffectIsRelevant(Location,false) && Gored == 5 )
             {
             //    Log("CHUNKED UP!");
 
                                 //Use KFMod's BodySplash
-                                Spawn(class'KFOldSchoolZeds.BodySplashOS',,,SplatLocation,Self.Rotation);
+                                Spawn(class'BodySplashOS',,,SplatLocation,Self.Rotation);
 
                 if (!bDecapitated)
                     SpawnGiblet(MonsterHeadGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
@@ -1557,7 +1557,7 @@ event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
            return;
         }
         //Use KFMod BloodStreak
-        Streak = spawn(class 'KFOldSchoolZeds.KFBloodStreakDecalOS',,, WallHit, rotator(-WallNormal));
+        Streak = spawn(class'KFBloodStreakDecalOS',,, WallHit, rotator(-WallNormal));
 
         LastStreakTime = Level.TimeSeconds;
     }
@@ -1603,7 +1603,7 @@ defaultproperties
     
     //KFMod's piece of flesh that gets attached
     //To the neck after a zed loses his head
-    HeadStubClass=Class'KFOldSchoolZeds.GibHeadStumpOS'
+    HeadStubClass=Class'GibHeadStumpOS'
     
     // Obliteration is no longer a local variable in Tick called GibbedExplosion,
     // So we need to define it here. Look into SpawnGibs function as well.
@@ -1611,27 +1611,27 @@ defaultproperties
     ObliteratedEffectClass=GibExplosionOS//TODO:Port this over from KFMod
     
     // The Giblets that spawn after an obliteration, KFMod ones
-     MonsterHeadGiblet=Class'KFOldSchoolZeds.ClotGibHeadOS'
-     MonsterThighGiblet=Class'KFOldSchoolZeds.ClotGibThighOS'
-     MonsterArmGiblet=Class'KFOldSchoolZeds.ClotGibArmOS'
-     MonsterLegGiblet=Class'KFOldSchoolZeds.ClotGibLegOS'
-     MonsterTorsoGiblet=Class'KFOldSchoolZeds.ClotGibTorsoOS'
-     MonsterLowerTorsoGiblet=Class'KFOldSchoolZeds.ClotGibLowerTorsoOS'
+     MonsterHeadGiblet=Class'ClotGibHeadOS'
+     MonsterThighGiblet=Class'ClotGibThighOS'
+     MonsterArmGiblet=Class'ClotGibArmOS'
+     MonsterLegGiblet=Class'ClotGibLegOS'
+     MonsterTorsoGiblet=Class'ClotGibTorsoOS'
+     MonsterLowerTorsoGiblet=Class'ClotGibLowerTorsoOS'
      
      //How Heavy a zed is
      Mass=300.000000//100.000000 in parent
      
      //Gib group containing Blood Splatter
-     GibGroupClass=Class'KFOldSchoolZeds.KFNoGibGroupOS'
+     GibGroupClass=Class'KFNoGibGroupOS'
      
      //Time to wait before spawning BloodStreak decal when ragdoll impacts ground
      BloodStreakInterval=0.500000//0.250000 in Retail
      
      //Blood Spurt Class
-     ProjectileBloodSplatClass=class'KFOldSchoolZeds.KFBloodPuffOS'
+     ProjectileBloodSplatClass=class'KFBloodPuffOS'
      
      //Use my own Controller Class
-     ControllerClass=Class'KFOldSchoolZeds.KFMonsterControllerOS'
+     ControllerClass=Class'KFMonsterControllerOS'
      
      //Values relating to the Head
      HeadHealth=25
@@ -1658,7 +1658,7 @@ defaultproperties
          KRestitution=0.300000
          KImpactThreshold=250.000000
      End Object
-     KParams=KarmaParamsSkel'KFOldSchoolZeds.KFMonsterOS.PawnKParams'     
+     KParams=PawnKParams
      
      //////////////////////////////////////////////////////
      //This portion deals with the ragdoll after a zed dies

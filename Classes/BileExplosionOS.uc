@@ -49,7 +49,7 @@ defaultproperties
          StartVelocityRange=(X=(Min=-50.000000,Max=50.000000),Y=(Min=-50.000000,Max=50.000000),Z=(Min=-100.000000,Max=400.000000))
          MaxAbsVelocity=(X=100.000000,Y=100.000000)
      End Object
-     Emitters(0)=SpriteEmitter'KFOldSchoolZeds.BileExplosionOS.BileExplosionEmitter'
+     Emitters(0)=BileExplosionEmitter
 
      LifeSpan=1.500000
 }

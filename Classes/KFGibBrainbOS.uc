@@ -8,8 +8,8 @@ class KFGibBrainbOS extends KFGibOS;
 defaultproperties
 {
     // Use the KFMod GibGroup and GibJet
-     GibGroupClass=Class'KFOldSchoolZeds.KFHumanGibGroupOS'
-     TrailClass=Class'KFOldSchoolZeds.KFGibJetOS'
+     GibGroupClass=Class'KFHumanGibGroupOS'
+     TrailClass=Class'KFGibJetOS'
      DrawType=DT_StaticMesh
      StaticMesh=StaticMesh'KillingFloorStatics.Gib2'     
      LifeSpan=6.000000

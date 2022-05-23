@@ -62,7 +62,7 @@ static function PrecacheContent(LevelInfo Level)
 
 defaultproperties
 {
-     BloodDecalClass=Class'KFOldSchoolZeds.BloodSplatterOS'
+     BloodDecalClass=Class'BloodSplatterOS'
      // Use Relevant Splat Textures found in KFOldSchool_XEffects
      Splats(0)=Texture'KFOldSchool_XEffects.BloodSplat1'
      Splats(1)=Texture'KFOldSchool_XEffects.BloodSplat2'

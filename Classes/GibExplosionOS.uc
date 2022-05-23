@@ -44,6 +44,5 @@ defaultproperties
          StartVelocityRange=(X=(Min=-200.000000,Max=200.000000),Y=(Min=-100.000000,Max=100.000000),Z=(Min=300.000000,Max=500.000000))
      End Object
      // This class uses this emitter, make sure that's known     
-     Emitters(0)=SpriteEmitter'KFOldSchoolZeds.GibExplosionOS.SpriteEmitter43'
-
+     Emitters(0)=SpriteEmitter43
 }

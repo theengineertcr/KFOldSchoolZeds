@@ -47,7 +47,7 @@ simulated function WallSplat()
 defaultproperties
 {
      // Use Old Splatterclass
-     SplatterClass=Class'KFOldSchoolZeds.BloodSplatterOS'
+     SplatterClass=Class'BloodSplatterOS'
      mRegenPause=True
      mRegenOnTime(0)=1.000000
      mRegenOnTime(1)=2.000000

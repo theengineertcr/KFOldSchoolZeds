@@ -10,7 +10,7 @@ class KFBloodPuffOS extends BloodSmallHit;
 defaultproperties
 {
      // Use the KFMod BloodSplatter
-     BloodDecalClass=Class'KFOldSchoolZeds.KFBloodSplatterDecalOS'
+     BloodDecalClass=Class'KFBloodSplatterDecalOS'
      //KFX to KFOldSchoolZeds_Textures
      Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
      Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodSplat2'

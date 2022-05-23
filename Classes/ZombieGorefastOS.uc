@@ -248,5 +248,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
     
     //Use KFMod Controller
-    ControllerClass=Class'KFOldSchoolZeds.GorefastControllerOS'
+    ControllerClass=Class'GorefastControllerOS'
 }

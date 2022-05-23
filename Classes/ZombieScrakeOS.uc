@@ -460,5 +460,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
 
     //Use KFMod Controller    
-    ControllerClass=Class'KFOldSchoolZeds.SawZombieControllerOS'
+    ControllerClass=Class'SawZombieControllerOS'
 }

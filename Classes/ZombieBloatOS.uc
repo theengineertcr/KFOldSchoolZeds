@@ -286,5 +286,5 @@ defaultproperties
     //EventClasses(0)="KFChar.ZombieBloat_STANDARD"
     
     //Use the Old BloatZombieController
-    ControllerClass=Class'KFOldSchoolZeds.BloatZombieControllerOS'
+    ControllerClass=Class'BloatZombieControllerOS'
 }

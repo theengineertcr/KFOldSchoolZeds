@@ -12,7 +12,7 @@ class KFVomitJetOS extends BloodJetOS;
 defaultproperties
 {
     //Use KFModified version of BioDecal
-     SplatterClass=Class'KFOldSchoolZeds.BioDecalOS'
+     SplatterClass=Class'BioDecalOS'
      mMaxParticles=50
      mSpeedRange(0)=100.000000
      mSpeedRange(1)=180.000000

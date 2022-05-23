@@ -624,5 +624,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
     
     //Use Rangedpound controller
-    ControllerClass=Class'KFOldSchoolZeds.RangedPoundZombieControllerOS'
+    ControllerClass=Class'RangedPoundZombieControllerOS'
 }

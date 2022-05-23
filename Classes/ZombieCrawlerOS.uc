@@ -125,5 +125,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
 
     //Use the Old CrawlerController
-    ControllerClass=Class'KFOldSchoolZeds.CrawlerControllerOS'
+    ControllerClass=Class'CrawlerControllerOS'
 }

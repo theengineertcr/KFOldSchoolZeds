@@ -18,8 +18,8 @@ simulated function PostBeginPlay()
 defaultproperties
 {
     // Use the KFMod GibGroup and GibJet
-     GibGroupClass=Class'KFOldSchoolZeds.KFHumanGibGroupOS'
-     TrailClass=Class'KFOldSchoolZeds.KFGibJetOS'
+     GibGroupClass=Class'KFHumanGibGroupOS'
+     TrailClass=Class'KFGibJetOS'
      DampenFactor=0.300000
      DrawType=DT_StaticMesh
      

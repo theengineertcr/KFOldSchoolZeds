@@ -896,5 +896,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
 
     //Use KFMod controller
-    ControllerClass=Class'KFOldSchoolZeds.FleshpoundZombieControllerOS'
+    ControllerClass=Class'FleshpoundZombieControllerOS'
 }

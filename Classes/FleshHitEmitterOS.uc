@@ -12,6 +12,7 @@ defaultproperties
      ImpactSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact1'
      ImpactSounds(2)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact2'
      ImpactSounds(3)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact3'
+
      Begin Object Class=SpriteEmitter Name=SpriteEmitter0
          FadeOut=True
          RespawnDeadParticles=False
@@ -50,7 +51,7 @@ defaultproperties
          StartVelocityRange=(Z=(Min=120.000000,Max=150.000000))
      End Object
      // This class uses this emitter, make sure that's known
-     Emitters(0)=SpriteEmitter'KFOldSchoolZeds.FleshHitEmitterOS.SpriteEmitter0'
+     Emitters(0)=SpriteEmitter0
 
      LifeSpan=1.000000
 }

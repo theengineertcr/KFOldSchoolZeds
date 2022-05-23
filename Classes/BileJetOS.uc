@@ -23,20 +23,20 @@ simulated function timer()
     FireRotation = rotation;
 
     //Use KFMod classes
-    Spawn(class'KFOldSchoolZeds.KFVomitJetOS',,,FireStart, FireRotation);
-    Spawn(Class'KFOldSchoolZeds.KFBloatVomitOS',,,FireStart,FireRotation);
+    Spawn(class'KFVomitJetOS',,,FireStart, FireRotation);
+    Spawn(Class'KFBloatVomitOS',,,FireStart,FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * Y;
     FireRotation.Yaw += 400;
-    spawn(Class'KFOldSchoolZeds.KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * Z;
     FireRotation.Pitch += 400;
-    spawn(Class'KFOldSchoolZeds.KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * X;
     FireRotation.Roll += 400;
-    spawn(Class'KFOldSchoolZeds.KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
 }
 
 defaultproperties

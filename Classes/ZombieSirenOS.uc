@@ -231,5 +231,5 @@ defaultproperties
     //-------------------------------------------------------------------------------
 
     //Use Old SirenZombieController
-    ControllerClass=class'KFOldSchoolZeds.SirenZombieControllerOS'
+    ControllerClass=class'SirenZombieControllerOS'
 }

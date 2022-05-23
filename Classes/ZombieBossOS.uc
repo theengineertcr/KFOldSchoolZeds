@@ -1666,5 +1666,5 @@ defaultproperties
     // NOTE: Most Default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
-    ControllerClass=Class'KFOldSchoolZeds.BossZombieControllerOS'
+    ControllerClass=Class'BossZombieControllerOS'
 }

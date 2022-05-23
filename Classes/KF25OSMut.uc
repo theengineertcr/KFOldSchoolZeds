@@ -69,11 +69,11 @@ event PostBeginPlay()
         KF.SpecialEventMonsterCollections[i] = KF.MonsterCollection;
     }    
     
-    Pounds[0] = "KFOldSchoolZeds.ZombieRangedPound_OS";
-    Pounds[1] = "KFOldSchoolZeds.ZombieRangedPoundGL_OS";
+    Pounds[0] = string(class'ZombieRangedPound_OS');
+    Pounds[1] = string(class'ZombieRangedPoundGL_OS');
     
-    PoundsMix[0] = "KFOldSchoolZeds.ZombieRangedPoundMix_OS";
-    PoundsMix[1] = "KFOldSchoolZeds.ZombieRangedPoundGLMix_OS";
+    PoundsMix[0] = string(class'ZombieRangedPoundMix_OS');
+    PoundsMix[1] = string(class'ZombieRangedPoundGLMix_OS');
     
     MyRand = Rand(2);    
     
@@ -93,21 +93,21 @@ event PostBeginPlay()
         if(!bEnableExplosivesPound && bEnableRangedPound)
         {
             if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPound_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPound_OS');
             else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundMix_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundMix_OS');
         }
         else if( !bEnableRangedPound && bEnableExplosivesPound)
         {
             if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundGL_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGL_OS');
             else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundGLMix_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGLMix_OS');
         }    
     }
     else
     {
-        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieBloat_OS";
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieBloat_OS');
     }
    
 

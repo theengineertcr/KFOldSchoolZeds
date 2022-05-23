@@ -8,8 +8,8 @@ class KFGibHeadOS extends KFGibOS;
 defaultproperties
 {
      // Use the KFMod version of KFHumanGibGroup & GibJet
-     GibGroupClass=Class'KFOldSchoolZeds.KFHumanGibGroupOS'
-     TrailClass=Class'KFOldSchoolZeds.KFGibJetOS'
+     GibGroupClass=Class'KFHumanGibGroupOS'
+     TrailClass=Class'KFGibJetOS'
      DrawType=DT_StaticMesh
      // Same model as in KFMod, no need to change
      StaticMesh=StaticMesh'KillingFloorStatics.Gib1'
