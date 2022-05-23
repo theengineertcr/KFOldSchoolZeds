@@ -41,17 +41,17 @@ simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
 
-	// Old difficulty scaling
-	if (Level.Game != none && !bDiffAdjusted )
-	{
+    // Old difficulty scaling
+    if (Level.Game != none && !bDiffAdjusted )
+    {
         if(bUseOldMeleeDamage)
         {
             damageConst *= (Level.Game.GameDifficulty / 3);
             damageRand *= (Level.Game.GameDifficulty / 3);
         }
 
-		bDiffAdjusted = true;
-	}
+        bDiffAdjusted = true;
+    }
 }
 
 
