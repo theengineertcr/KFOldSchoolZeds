@@ -16,7 +16,7 @@ class ZombieStalkerOS extends ZombieStalkerBaseOS
 //----------------------------------------------------------------------------
 
 //Issues:
-//None currently, but we may need to overhaul the Commando
+//none currently, but we may need to overhaul the Commando
 //Spotting to take into account the distance at which a
 //Commando can see a cloaked Stalker. Otherwise, a level 0
 //And a level 6 Commando will see the red overlay at the
@@ -39,9 +39,9 @@ simulated function Tick(float DeltaTime)
     //It was a local variable here in KFMod, so we'll add it
     Local KFHumanPawn HP;
 
-    Super.Tick(DeltaTime);
+    super.Tick(DeltaTime);
     if( Level.NetMode==NM_DedicatedServer )
-        Return; // Servers aren't intrested in this info.
+        return; // Servers aren't intrested in this info.
 
     //We want this for zapped effects
     if( bZapped )
@@ -53,7 +53,7 @@ simulated function Tick(float DeltaTime)
     {
         NextCheckTime = Level.TimeSeconds + 0.8; //0.5; in retail
         //Old KFMod code
-        ForEach VisibleCollidingActors(Class'KFHumanPawn',HP,800,Location)
+        ForEach VisibleCollidingActors(class'KFHumanPawn',HP,800,Location)
         {
             if( HP.Health<=0 || !HP.ShowStalkers() ) //!HP.GetVeteran().Static.ShowStalkers()
                 continue;
@@ -61,16 +61,16 @@ simulated function Tick(float DeltaTime)
             // If he's a commando, we've been spotted.
             if( !bSpotted )
             {
-                bSpotted = True;
+                bSpotted = true;
                 Skins[0] = Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB';
                 Skins[1] = Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB';
             }
-            Return;
+            return;
         }
         // if we're uberbrite, turn down the light
         if( bSpotted )
         {
-            bSpotted = False;
+            bSpotted = false;
             bUnlit = false;
             CloakStalker();
         }
@@ -82,7 +82,7 @@ simulated function Tick(float DeltaTime)
         //if( LocalKFHumanPawn != none && LocalKFHumanPawn.Health > 0 && LocalKFHumanPawn.ShowStalkers() &&
         //    VSizeSquared(Location - LocalKFHumanPawn.Location) < LocalKFHumanPawn.GetStalkerViewDistanceMulti() * 640000.0 ) // 640000 = 800 Units
         //{
-        //    bSpotted = True;
+        //    bSpotted = true;
         //}
         //else
         //{
@@ -120,7 +120,7 @@ simulated function CloakStalker()
         bCloaked = true;
 
         if( Level.NetMode == NM_DedicatedServer )
-            Return;
+            return;
 
         //Use KFMod textures
         Skins[0] = Shader 'KFOldSchoolZeds_Textures.StalkerHairShader';
@@ -165,7 +165,7 @@ simulated function UnCloakStalker()
             KFGameType(Level.Game).bDidStalkerInvisibleMessage = true;
         }
         if( Level.NetMode == NM_DedicatedServer )
-            Return;
+            return;
 
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
         Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
@@ -212,7 +212,7 @@ simulated function UnSetZappedBehavior()
     if( Level.Netmode != NM_DedicatedServer )
     {
         NextCheckTime = Level.TimeSeconds;
-        SetOverlayMaterial(None, 0.0f, true);
+        SetOverlayMaterial(none, 0.0f, true);
     }
 }
 
@@ -241,7 +241,7 @@ function SetZapped(float ZapAmount, Pawn Instigator)
 
 function RemoveHead()
 {
-    Super.RemoveHead();
+    super.RemoveHead();
 
     if (!bCrispified)
     {
@@ -253,7 +253,7 @@ function RemoveHead()
 
 simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
-    Super.PlayDying(DamageType,HitLoc);
+    super.PlayDying(DamageType,HitLoc);
 
     if(bUnlit)
         bUnlit=!bUnlit;
@@ -277,9 +277,9 @@ function bool DoJump( bool bUpdating )
     {
         if ( Role == ROLE_Authority )
         {
-            if ( (Level.Game != None) && (Level.Game.GameDifficulty > 2) )
+            if ( (Level.Game != none) && (Level.Game.GameDifficulty > 2) )
                 MakeNoise(0.1 * Level.Game.GameDifficulty);
-            if ( bCountJumps && (Inventory != None) )
+            if ( bCountJumps && (Inventory != none) )
                 Inventory.OwnerEvent('Jumped');
         }
         if ( Physics == PHYS_Spider )
@@ -288,15 +288,15 @@ function bool DoJump( bool bUpdating )
             Velocity.Z = 0;
         else if ( bIsWalking )
         {
-            Velocity.Z = Default.JumpZ;
-            Velocity.X = (Default.JumpZ * 0.6);
+            Velocity.Z = default.JumpZ;
+            Velocity.X = (default.JumpZ * 0.6);
         }
         else
         {
             Velocity.Z = JumpZ;
             Velocity.X = (JumpZ * 0.6);
         }
-        if ( (Base != None) && !Base.bWorldGeometry )
+        if ( (Base != none) && !Base.bWorldGeometry )
         {
             Velocity.Z += Base.Velocity.Z;
             Velocity.X += Base.Velocity.X;
@@ -321,6 +321,6 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 }

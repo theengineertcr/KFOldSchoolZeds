@@ -8,15 +8,15 @@ class KFGibHeadbOS extends KFGibOS;
 defaultproperties
 {
      // Use the KFMod version of KFHumanGibGroup & GibJet
-     GibGroupClass=Class'KFHumanGibGroupOS'
-     TrailClass=Class'KFGibJetOS'
+     GibGroupClass=class'KFHumanGibGroupOS'
+     TrailClass=class'KFGibJetOS'
      DrawType=DT_StaticMesh
      // Same model as in KFMod, no need to change
      StaticMesh=StaticMesh'KillingFloorStatics.Gib2'
      DrawScale=0.500000
      // Same Texture as in KFMod, no need to change
      Skins(0)=Texture'KillingFloorTextures.Statics.GibsSKin'
-     bUnlit=False
+     bUnlit=false
      TransientSoundVolume=25.000000
      CollisionRadius=5.000000
      CollisionHeight=2.500000

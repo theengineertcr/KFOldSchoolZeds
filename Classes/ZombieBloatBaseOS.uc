@@ -44,9 +44,9 @@ defaultproperties
     MeleeAnims(1)="BloatChop2"
     MeleeAnims(2)="BloatChop2"
     damageForce=70000
-    bFatAss=True
+    bFatAss=true
     PuntAnim="BloatPunt"
-    AmmunitionClass=Class'KFMod.BZombieAmmo'
+    AmmunitionClass=class'KFMod.BZombieAmmo'
     IdleHeavyAnim="BloatIdle"
     IdleRifleAnim="BloatIdle"
     MovementAnims(0)="WalkBloat"
@@ -60,8 +60,8 @@ defaultproperties
     IdleRestAnim="BloatIdle"
     Mass=400.000000
     RotationRate=(Yaw=45000,Roll=0)
-    bCanDistanceAttackDoors=True
-    bUseExtendedCollision=True
+    bCanDistanceAttackDoors=true
+    bUseExtendedCollision=true
     ColOffset=(Z=60.000000)
     ColRadius=27.000000
     ColHeight=22.000000
@@ -94,7 +94,7 @@ defaultproperties
     KFRagdollName="BloatRag"
 
     //Looks like Shreks a little hungry
-    bCannibal=True
+    bCannibal=true
 
     MenuName="Bloat 2.5"
 

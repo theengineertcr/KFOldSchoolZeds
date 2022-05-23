@@ -71,11 +71,11 @@ function bool FlipOver()
     //This prevents them from looking at the player while downed,
     //But it also makes them suddeny look away from the player
     //TODO: Figure out what to do with this(Done!)
-    KFMonsterController(Controller).Focus = None;
+    KFMonsterController(Controller).Focus = none;
     KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     Controller.GoToState('WaitForAnim');
-    KFMonsterController(Controller).bUseFreezeHack = True;
-    Return True;
+    KFMonsterController(Controller).bUseFreezeHack = true;
+    return true;
 }
 
 //Old-ify this
@@ -128,7 +128,7 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
             {
                 HitFX[HitFxTicker].bSever = true;
                 bDidSever = true;
-                if ( boneName == 'None' )
+                if ( boneName == 'none' )
                 {
                     //`FireRootBone` to `Bip01 R Forearm`
                     //ExtraGib added
@@ -136,7 +136,7 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
                     bExtraGib = true;
                 }
             } //else if overhauled
-            else if( (Damage*DamageType.Default.GibModifier > 50+120*FRand()-9999999999) && (Damage >= 0) ) // total gib prob
+            else if( (Damage*DamageType.default.GibModifier > 50+120*FRand()-9999999999) && (Damage >= 0) ) // total gib prob
             {
                 HitFX[HitFxTicker].bSever = true;
                 boneName = 'Bip01 R Forearm';
@@ -146,10 +146,10 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
             {
 
                 //boneCoords = GetBoneCoords( HitFX[SimHitFxTicker].bone );
-                //Spawn(class'KFMod.BrainSplash',,,boneCoords.Origin,Self.Rotation);     //hacked
+                //Spawn(class'KFMod.BrainSplash',,,boneCoords.Origin,self.Rotation);     //hacked
 
 
-                DismemberProbability = Abs( (Health - Damage*DamageType.Default.GibModifier) / 130.0f );
+                DismemberProbability = Abs( (Health - Damage*DamageType.default.GibModifier) / 130.0f );
                 switch( boneName )
                 {
                     case 'Bip01 L Thigh':
@@ -227,7 +227,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 
         if (HeadStub == none && HeadStubClass != none)
         {
-            HeadStub = Spawn(HeadStubClass,Self);
+            HeadStub = Spawn(HeadStubClass,self);
             AttachToBone( HeadStub,'Bip01 head');
         }
     }
@@ -250,14 +250,14 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
         }
     }
 
-    AmbientSound = None;
+    AmbientSound = none;
     bCanTeleport = false; // sjs - fix karma going crazy when corpses land on teleporters
     bReplicateMovement = false;
     bTearOff = true;
     bPlayedDeath = true;
     StopBurnFX();
 
-    if (CurrentCombo != None)
+    if (CurrentCombo != none)
         CurrentCombo.Destroy();
 
     HitDamageType = DamageType; // these are replicated to other clients
@@ -273,19 +273,19 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 
     ProcessHitFX() ;
 
-    if ( DamageType != None )
+    if ( DamageType != none )
     {
         if ( DamageType.default.bSkeletize )
         {
-            SetOverlayMaterial(DamageType.Default.DamageOverlayMaterial, 4.0, true);
+            SetOverlayMaterial(DamageType.default.DamageOverlayMaterial, 4.0, true);
             if (!bSkeletized)
             {
-                if ( (Level.NetMode != NM_DedicatedServer) && (SkeletonMesh != None) )
+                if ( (Level.NetMode != NM_DedicatedServer) && (SkeletonMesh != none) )
                 {
                     if ( DamageType.default.bLeaveBodyEffect )
                     {
                         BE = spawn(class'MiscEmmiter',self);
-                        if ( BE != None )
+                        if ( BE != none )
                         {
                             BE.DamageType = DamageType;
                             BE.HitLoc = HitLoc;
@@ -305,17 +305,17 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
                 if ( (Level.NetMode != NM_DedicatedServer) && (DamageType == class'FellLava') )
                 {
                     LD = spawn(class'LavaDeath', , , Location + vect(0, 0, 10), Rotation );
-                    if ( LD != None )
+                    if ( LD != none )
                         LD.SetBase(self);
                     //We have this sound in KFOldSchoolZeds_Sounds, plug it in
                     PlaySound( sound'KFOldSchoolZeds_Sounds.BExplosion5', SLOT_None, 1.5*TransientSoundVolume );
                 }
             }
         }
-        else if ( DamageType.Default.DeathOverlayMaterial != None )
-            SetOverlayMaterial(DamageType.Default.DeathOverlayMaterial, DamageType.default.DeathOverlayTime, true);
-        else if ( (DamageType.Default.DamageOverlayMaterial != None) && (Level.DetailMode != DM_Low) && !Level.bDropDetail )
-            SetOverlayMaterial(DamageType.Default.DamageOverlayMaterial, 2*DamageType.default.DamageOverlayTime, true);
+        else if ( DamageType.default.DeathOverlayMaterial != none )
+            SetOverlayMaterial(DamageType.default.DeathOverlayMaterial, DamageType.default.DeathOverlayTime, true);
+        else if ( (DamageType.default.DamageOverlayMaterial != none) && (Level.DetailMode != DM_Low) && !Level.bDropDetail )
+            SetOverlayMaterial(DamageType.default.DamageOverlayMaterial, 2*DamageType.default.DamageOverlayTime, true);
     }
 
     // stop shooting
@@ -331,7 +331,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     //This is the only time Zeds Goto the Dying state
     //Make sure it goes to the KFMod version
     GotoState('ZombieDyingOS');
-    if ( BE != None )
+    if ( BE != none )
         return;
     PlayDyingAnimation(DamageType, HitLoc);
 }
@@ -363,7 +363,7 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
         //Some KFMod code, may cause issues
         if ( !IsAnimating(0) )
             LandThump();
-        Super.Landed(HitNormal);
+        super.Landed(HitNormal);
     }
 
     simulated function Timer()
@@ -372,35 +372,35 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
         if( Level.NetMode==NM_DedicatedServer )
         {
             Destroy();
-            Return;
+            return;
         }
 
         if( Physics!=PHYS_None )
         {
             if( VSize(Velocity)>10 )
             {
-                SetTimer(1,False);
-                Return;
+                SetTimer(1,false);
+                return;
             }
             Disable('TakeDamage');
             SetPhysics(PHYS_None);
-            SetTimer(30,False);
-            if(PlayerShadow != None)
+            SetTimer(30,false);
+            if(PlayerShadow != none)
                 PlayerShadow.bShadowActive = false;
         }
         else if( (Level.TimeSeconds-LastRenderTime)>40 || Level.bDropDetail )
             Destroy();
-        else SetTimer(5,False);
+        else SetTimer(5,false);
     }
 
     simulated function BeginState()
     {
         //KFMod Code
-        if( Controller!=None )
+        if( Controller!=none )
             Controller.Destroy();
         if( Level.NetMode==NM_DedicatedServer )
-            SetTimer(1,False);
-        SetTimer(5,False);
+            SetTimer(1,false);
+        SetTimer(5,false);
      }
 }
 
@@ -433,7 +433,7 @@ simulated function ProcessHitFX()
             return;
         }
 
-        if( (HitFX[SimHitFxTicker].damtype == None) || (Level.bDropDetail && (Level.TimeSeconds - LastRenderTime > 3) && !IsHumanControlled()) )
+        if( (HitFX[SimHitFxTicker].damtype == none) || (Level.bDropDetail && (Level.TimeSeconds - LastRenderTime > 3) && !IsHumanControlled()) )
             continue;
 
         //log("Processing effects for damtype "$HitFX[SimHitFxTicker].damtype);
@@ -452,7 +452,7 @@ simulated function ProcessHitFX()
             {
                 for( i = 0; i < ArrayCount(HitEffects); i++ )
                 {
-                    if( HitEffects[i] == None )
+                    if( HitEffects[i] == none )
                         continue;
 
                       AttachEffect( HitEffects[i], HitFX[SimHitFxTicker].bone, boneCoords.Origin, HitFX[SimHitFxTicker].rotDir );
@@ -467,13 +467,13 @@ simulated function ProcessHitFX()
         if( HitFX[SimHitFxTicker].bSever )
         {
             GibPerterbation = HitFX[SimHitFxTicker].damtype.default.GibPerterbation;
-            bFlaming = HitFX[SimHitFxTicker].DamType.Default.bFlaming;
+            bFlaming = HitFX[SimHitFxTicker].DamType.default.bFlaming;
 
             switch( HitFX[SimHitFxTicker].bone )
             {
                 case 'Bip01 L Thigh':
                 case 'Bip01 R Thigh':
-                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation); //KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,self.Rotation); //KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_Calf), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     SpawnGiblet( GetGibClass(EGT_Calf), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound1', SLOT_Misc,255);
@@ -481,7 +481,7 @@ simulated function ProcessHitFX()
                     break;
                 case 'Bip01 R Forearm':
                 case 'Bip01 L Forearm':
-                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,self.Rotation);//KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_UpperArm), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     SpawnGiblet( GetGibClass(EGT_Forearm), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound2', SLOT_Misc,255);
@@ -489,7 +489,7 @@ simulated function ProcessHitFX()
                     GibCountUpperArm--;
                     break;
                 case 'Bip01 Head':
-                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,Self.Rotation);//KFMod Brainsplash
+                    Spawn(class'BrainSplashOS',,,boneCoords.Origin,self.Rotation);//KFMod Brainsplash
                     SpawnGiblet( GetGibClass(EGT_Head), boneCoords.Origin, HitFX[SimHitFxTicker].rotDir, GibPerterbation );
                     PlaySound(sound'KFOldSchoolZeds_Sounds.Shared.Gibbing_Sound2', SLOT_Misc,255);
                     GibCountTorso--;
@@ -789,10 +789,10 @@ simulated function Tick(float DeltaTime)
     if ( bResetAnimAct && ResetAnimActTime<Level.TimeSeconds )
     {
         AnimAction = '';
-        bResetAnimAct = False;
+        bResetAnimAct = false;
     }
 
-    if ( Controller != None )
+    if ( Controller != none )
     {
         LookTarget = Controller.Enemy;
     }
@@ -816,7 +816,7 @@ simulated function Tick(float DeltaTime)
         TickFX(DeltaTime);
         //Old code for zeds to look at the targets theyre aggroed to
         //Don't move your heads while your dead, that's creepy.
-        if( LookTarget!=None && Health >= 1 )
+        if( LookTarget!=none && Health >= 1 )
         {
             R = Normalize(rotator(LookTarget.Location-Location)-Rotation);
             R.Pitch = 0;
@@ -846,7 +846,7 @@ simulated function Tick(float DeltaTime)
         if ( bAshen && Level.NetMode == NM_Client && !class'GameInfo'.static.UseLowGore() )
         {
             ZombieCrispUp();
-            bAshen = False;
+            bAshen = false;
         }
 
         //KFMod Code
@@ -858,7 +858,7 @@ simulated function Tick(float DeltaTime)
             HideBone('bip01 head');
             if (HeadStub == none && HeadStubClass != none)
             {
-                HeadStub = Spawn(HeadStubClass,Self,'',Location);
+                HeadStub = Spawn(HeadStubClass,self,'',Location);
                 AttachToBone( HeadStub,'Bip01 head');
             }
             if ( EffectIsRelevant(Location,false) )
@@ -895,7 +895,7 @@ simulated function Tick(float DeltaTime)
                         if ( EffectIsRelevant(Location,false) && Gored < 5 )
             {
                 //Use KFMod classes
-                Spawn(class'BrainSplashOS',,,SplatLocation,Self.Rotation);
+                Spawn(class'BrainSplashOS',,,SplatLocation,self.Rotation);
                 SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
                 SpawnGiblet( class'KFGibBrainbOS',SplatLocation, self.Rotation, GibPerterbation ) ;
                 SpawnGiblet( class'KFGibBrainOS',SplatLocation, self.Rotation, GibPerterbation ) ;
@@ -905,7 +905,7 @@ simulated function Tick(float DeltaTime)
             //    Log("CHUNKED UP!");
 
                                 //Use KFMod's BodySplash
-                                Spawn(class'BodySplashOS',,,SplatLocation,Self.Rotation);
+                                Spawn(class'BodySplashOS',,,SplatLocation,self.Rotation);
 
                 if (!bDecapitated)
                     SpawnGiblet(MonsterHeadGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
@@ -957,7 +957,7 @@ simulated function Tick(float DeltaTime)
         if( RemainingZap <= 0 )
         {
             RemainingZap = 0;
-            bZapped = False;
+            bZapped = false;
             ZappedBy = none;
             // The Zed can take more zap each time they get zapped
             ZapThreshold *= ZapResistanceScale;
@@ -1012,7 +1012,7 @@ function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
-    else if ( CanAttack(A) ) // Used retail 'A!=None' instead of KFMod's 'CanAttack(A)'
+    else if ( CanAttack(A) ) // Used retail 'A!=none' instead of KFMod's 'CanAttack(A)'
     {
         bShotAnim = true;
         //DoorBash causes issues, just claw for now
@@ -1108,20 +1108,20 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
         if ((Health - Damage) < (0-(Threshold * HealthMax)) && (Health - Damage) > (0-((Threshold * 1.2) * HealthMax)) )
             Gored = rand(4)+1;
                 else // Expand DamTypes as needed.
-        if ((Health - Damage) <= (0-(1.0 * HealthMax))) 
+        if ((Health - Damage) <= (0-(1.0 * HealthMax)))
             {
                 if( damageType == class 'DamTypeFrag' || damageType == class 'DamTypeLAW' ||
                 damageType == class 'DamTypeM79Grenade' || damageType == class 'DamTypeM203Grenade' ||
-                damageType == class 'DamTypePipeBomb' || damageType == class 'DamTypeSealSquealExplosion') 
+                damageType == class 'DamTypePipeBomb' || damageType == class 'DamTypeSealSquealExplosion')
                     Gored = 5;
             }
         if(Gored > 0)
         {
             // Sorry, not even zombies are getting back up from this.
             //Health = 0;
-            if( instigatedBy!=None )
+            if( instigatedBy!=none )
                 Died(instigatedBy.Controller,damageType,hitlocation);
-                else Died(None,damageType,hitlocation);
+                else Died(none,damageType,hitlocation);
         }
 
         // log(Gored);
@@ -1159,7 +1159,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector mo
         Momentum = vect(0,0,0);
     }
 
-    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
+    super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
 }
 
 // Need to old-ify this
@@ -1187,22 +1187,22 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     //We don't want this called when a zed is knocked down,
     //Is there a way I can do this without using bShotAnim?
     //Now checks FreezeHack instead which works much better
-    if(KFMonsterController(Controller).bUseFreezeHack == False)
+    if(KFMonsterController(Controller).bUseFreezeHack == false)
         OldPlayHit(Damage, InstigatedBy, HitLocation, DamageType,Momentum);
 
     //KFMod called Playhit here but we dont want it
-    //Super.PlayHit(Damage,InstigatedBy,HitLocation,DamageType,Momentum);
+    //super.PlayHit(Damage,InstigatedBy,HitLocation,DamageType,Momentum);
 
     if ( Damage <= 0 )
         return;
 
-    if( Health>0 && Damage>(float(Default.Health)/1.5) )
+    if( Health>0 && Damage>(float(default.Health)/1.5) )
         FlipOver();
 
     PC = PlayerController(Controller);
     bShowEffects = ( (Level.NetMode != NM_Standalone) || (Level.TimeSeconds - LastRenderTime < 2.5)
-                    || ((InstigatedBy != None) && (PlayerController(InstigatedBy.Controller) != None))
-                    || (PC != None) );
+                    || ((InstigatedBy != none) && (PlayerController(InstigatedBy.Controller) != none))
+                    || (PC != none) );
     if ( !bShowEffects )
         return;
 
@@ -1212,7 +1212,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     }
 
     HitRay = vect(0,0,0);
-    if( InstigatedBy != None )
+    if( InstigatedBy != none )
         HitRay = Normal(HitLocation-(InstigatedBy.Location+(vect(0,0,1)*InstigatedBy.EyeHeight)));
 
     if( DamageType.default.bLocationalHit )
@@ -1236,7 +1236,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     if( DamageType.default.bAlwaysSevers && DamageType.default.bSpecial )
         HitBone = 'head';
 
-    if( InstigatedBy != None )
+    if( InstigatedBy != none )
         HitNormal = Normal( Normal(InstigatedBy.Location-HitLocation) + VRand() * 0.2 + vect(0,0,2.8) );
     else
         HitNormal = Normal( Vect(0,0,1) + VRand() * 0.2 + vect(0,0,2.8) );
@@ -1245,7 +1245,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
 
     //Overhauled to use KFMod's code
     //SplatRot becomes obsolete
-    if ( DamageType.Default.bCausesBlood && DamageType != class 'Burned' )
+    if ( DamageType.default.bCausesBlood && DamageType != class 'Burned' )
     {
         if ( class'GameInfo'.static.UseLowGore() )
         {
@@ -1255,7 +1255,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
                 BloodHit = BloodSpurtOS(Spawn( GibGroupClass.default.LowGoreBloodHitClass,InstigatedBy,, HitLocation ));
         }
         else BloodHit = BloodSpurtOS(Spawn(GibGroupClass.default.BloodHitClass,InstigatedBy,, HitLocation, Rotator(HitNormal)));
-        if ( BloodHit != None )
+        if ( BloodHit != none )
         {
             BloodHit.bMustShow = !bRecentHit;
             if ( Momentum != vect(0,0,0) )
@@ -1265,7 +1265,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
             }
             else
             {
-                if ( InstigatedBy != None )
+                if ( InstigatedBy != none )
                     BloodHit.HitDir = Location - InstigatedBy.Location;
                 else
                     BloodHit.HitDir = Location - HitLocation;
@@ -1287,12 +1287,12 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
     }
     // KFMod Code
     // hack for Gibbing  :D
-    if ( (DamageType.name == 'DamTypeShotgun' || DamageType.name == 'DamTypeDBShotgun' || DamageType.name == 'DamTypeFrag') && (Health < 0) && (InstigatedBy != None) && (VSize(InstigatedBy.Location - Location) < 350) )
+    if ( (DamageType.name == 'DamTypeShotgun' || DamageType.name == 'DamTypeDBShotgun' || DamageType.name == 'DamTypeFrag') && (Health < 0) && (InstigatedBy != none) && (VSize(InstigatedBy.Location - Location) < 350) )
         DoDamageFX( HitBone, 800*Damage, DamageType, Rotator(HitNormal) );
     else
         DoDamageFX( HitBone, Damage, DamageType, Rotator(HitNormal) );
 
-    if (DamageType.default.DamageOverlayMaterial != None && Damage > 0 ) // additional check in case shield absorbed
+    if (DamageType.default.DamageOverlayMaterial != none && Damage > 0 ) // additional check in case shield absorbed
         SetOverlayMaterial( DamageType.default.DamageOverlayMaterial, DamageType.default.DamageOverlayTime, false );
 }
 
@@ -1309,7 +1309,7 @@ function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
     local bool bWasAnimating;
 
     if (HeadBone == '')
-        return False;
+        return false;
 
     // If we are a dedicated server estimate what animation is most likely playing on the client
     if (Level.NetMode == NM_DedicatedServer)
@@ -1407,22 +1407,22 @@ simulated function Destroyed()
 
     for( i=0; i<Attached.length; i++ )
     {
-        if( Emitter(Attached[i])!=None && Attached[i].IsA('DismembermentJet') )
+        if( Emitter(Attached[i])!=none && Attached[i].IsA('DismembermentJet') )
         {
             Emitter(Attached[i]).Kill();
             Attached[i].LifeSpan = 2;
         }
 
         // Make attached explosives blow up when this pawn dies
-        if( SealSquealProjectile(Attached[i])!=None )
+        if( SealSquealProjectile(Attached[i])!=none )
         {
             SealSquealProjectile(Attached[i]).HandleBasePawnDestroyed();
         }
     }
 
-    if( MyExtCollision!=None )
+    if( MyExtCollision!=none )
         MyExtCollision.Destroy();
-    if( PlayerShadow != None )
+    if( PlayerShadow != none )
         PlayerShadow.Destroy();
 
     if ( FlamingFXs != none )
@@ -1468,7 +1468,7 @@ simulated function Destroyed()
     if (HeadStub != none)
         HeadStub.Destroy();
     RemoveFlamingEffects();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 // Old Zeds use a different texture when burnt, so swap out
@@ -1548,7 +1548,7 @@ event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
     WallActor = Trace(WallHit, WallNormal, pos - impactNorm * 16, pos + impactNorm * 16, false);
 
     //Added no blood for low gore
-    if ( WallActor != None && Level.TimeSeconds > LastStreakTime + BloodStreakInterval && !class'GameInfo'.static.UseLowGore() )
+    if ( WallActor != none && Level.TimeSeconds > LastStreakTime + BloodStreakInterval && !class'GameInfo'.static.UseLowGore() )
     {
         if ( StreakDist < 1400 ) //0.75m
         {
@@ -1577,10 +1577,10 @@ defaultproperties
     // Variables naming each bone in KFMod did not exist,
     // They were set by their exact names in each function
     // TODO: Determine what the names of these bones should be
-    RootBone=None//Unknown, only called once in Retail KFMonster for a function not in old KFMonster, GetExposureTo
+    RootBone=none//Unknown, only called once in Retail KFMonster for a function not in old KFMonster, GetExposureTo
     HeadBone="Bip01 Head"//PostNetBeginPlay hints this
     SpineBone1="Bip01 Spine1"//PostNetBeginPlay hints this
-    SpineBone2=None//No reference, but may potentially be "Bip01 Spine2", used in hiding upper body when gored
+    SpineBone2=none//No reference, but may potentially be "Bip01 Spine2", used in hiding upper body when gored
     FireRootBone="Bip01 Spine"// Playhit function hints this
 
     //These names were guessed and may be wrong
@@ -1602,7 +1602,7 @@ defaultproperties
 
     //KFMod's piece of flesh that gets attached
     //To the neck after a zed loses his head
-    HeadStubClass=Class'GibHeadStumpOS'
+    HeadStubClass=class'GibHeadStumpOS'
 
     // Obliteration is no longer a local variable in Tick called GibbedExplosion,
     // So we need to define it here. Look into SpawnGibs function as well.
@@ -1610,27 +1610,27 @@ defaultproperties
     ObliteratedEffectClass=GibExplosionOS//TODO:Port this over from KFMod
 
     // The Giblets that spawn after an obliteration, KFMod ones
-     MonsterHeadGiblet=Class'ClotGibHeadOS'
-     MonsterThighGiblet=Class'ClotGibThighOS'
-     MonsterArmGiblet=Class'ClotGibArmOS'
-     MonsterLegGiblet=Class'ClotGibLegOS'
-     MonsterTorsoGiblet=Class'ClotGibTorsoOS'
-     MonsterLowerTorsoGiblet=Class'ClotGibLowerTorsoOS'
+     MonsterHeadGiblet=class'ClotGibHeadOS'
+     MonsterThighGiblet=class'ClotGibThighOS'
+     MonsterArmGiblet=class'ClotGibArmOS'
+     MonsterLegGiblet=class'ClotGibLegOS'
+     MonsterTorsoGiblet=class'ClotGibTorsoOS'
+     MonsterLowerTorsoGiblet=class'ClotGibLowerTorsoOS'
 
      //How Heavy a zed is
      Mass=300.000000//100.000000 in parent
 
      //Gib group containing Blood Splatter
-     GibGroupClass=Class'KFNoGibGroupOS'
+     GibGroupClass=class'KFNoGibGroupOS'
 
      //Time to wait before spawning BloodStreak decal when ragdoll impacts ground
      BloodStreakInterval=0.500000//0.250000 in Retail
 
-     //Blood Spurt Class
+     //Blood Spurt class
      ProjectileBloodSplatClass=class'KFBloodPuffOS'
 
-     //Use my own Controller Class
-     ControllerClass=Class'KFMonsterControllerOS'
+     //Use my own Controller class
+     ControllerClass=class'KFMonsterControllerOS'
 
      //Values relating to the Head
      HeadHealth=25
@@ -1641,18 +1641,18 @@ defaultproperties
 
      //At some point we'll add the MaleZombieSoundsGroup, don't forget
 
-     //False by default
+     //false by default
      //bUseOldMeleeDamage=false
 
      ////KarmaParamsSkel
-     Begin Object Class=KarmaParamsSkel Name=PawnKParams
+     Begin Object class=KarmaParamsSkel Name=PawnKParams
          KConvulseSpacing=(Max=2.200000)
          KLinearDamping=0.150000
          KAngularDamping=0.050000
          KBuoyancy=1.000000
-         KStartEnabled=True
+         KStartEnabled=true
          KVelDropBelowThreshold=50.000000
-         bHighDetailOnly=False
+         bHighDetailOnly=false
          KFriction=0.600000
          KRestitution=0.300000
          KImpactThreshold=250.000000

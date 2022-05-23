@@ -25,7 +25,7 @@ defaultproperties
 
     //Use KFMod Sounds
     //Removed cuz it was buggy
-    AmbientSound=None
+    AmbientSound=none
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 

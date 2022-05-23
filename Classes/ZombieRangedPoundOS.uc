@@ -28,7 +28,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 {
     local vector NewVelocity;
 
-    NewVelocity = Super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
 
     if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
     {
@@ -68,11 +68,11 @@ function bool FlipOver()
     Acceleration = vect(0, 0, 0);
     Velocity.X = 0;
     Velocity.Y = 0;
-    KFMonsterController(Controller).Focus = None;
+    KFMonsterController(Controller).Focus = none;
     KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     Controller.GoToState('WaitForAnim');
-    KFMonsterController(Controller).bUseFreezeHack = True;
-    Return True;
+    KFMonsterController(Controller).bUseFreezeHack = true;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -153,11 +153,11 @@ simulated function bool HitCanInterruptAction()
 //Needed Retail Code
 simulated function Destroyed()
 {
-    if( mTracer!=None )
+    if( mTracer!=none )
         mTracer.Destroy();
-    if( mMuzzleFlash!=None )
+    if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Needed Retail Code
@@ -167,7 +167,7 @@ simulated Function PostNetBeginPlay()
     AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
-    bNetNotify = True;
+    bNetNotify = true;
 }
 
 
@@ -216,7 +216,7 @@ function RangedAttack(Actor A)
         {
             //Maybe lower this further?
             LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *1.0); //Level.TimeSeconds+FRand()*4;
-            Return;
+            return;
         }
 
         LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
@@ -259,13 +259,13 @@ simulated function AddTraceHitFX( vector HitPos )
     //Play Old L85 fire sound
     PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    if( mTracer==None )
-        mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
+    if( mTracer==none )
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
     else mTracer.SetLocation(Start);
-    if( mMuzzleFlash==None )
+    if( mMuzzleFlash==none )
     {
         //Swap with NewMinigunMFlash(Done!)
-        mMuzzleFlash = Spawn(Class'NewMinigunMFlashOS');
+        mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'FireBone'); //tip to FireBone
     }
     else mMuzzleFlash.SpawnParticle(1);
@@ -285,7 +285,7 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
-    Instigator = Self;
+    Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
@@ -305,7 +305,7 @@ simulated function AnimEnd( int Channel )
 
         if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
         {
-            Super.AnimEnd(Channel);
+            super.AnimEnd(Channel);
             return;
         }
 
@@ -314,7 +314,7 @@ simulated function AnimEnd( int Channel )
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
     }
-    else Super.AnimEnd(Channel);
+    else super.AnimEnd(Channel);
 }
 
 //We'll use retail code(modified) instead of KFMod code for this
@@ -329,7 +329,7 @@ state FireChaingun
     function EndState()
     {
         TraceHitPos = vect(0,0,0);
-        bMinigunning = False;
+        bMinigunning = false;
 
         AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
@@ -341,10 +341,10 @@ state FireChaingun
 
     function BeginState()
     {
-        bFireAtWill = False;
+        bFireAtWill = false;
         Acceleration = vect(0,0,0);
         MGLostSightTimeout = 0.0;
-        bMinigunning = True;
+        bMinigunning = true;
     }
 
     function AnimEnd( int Channel )
@@ -370,7 +370,7 @@ state FireChaingun
                 else
                 {
                     MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                    Controller.Focus = None;
+                    Controller.Focus = none;
                 }
 
                 Controller.Target = Controller.Enemy;
@@ -378,7 +378,7 @@ state FireChaingun
             else
             {
                 MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                Controller.Focus = None;
+                Controller.Focus = none;
             }
 
             if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
@@ -389,7 +389,7 @@ state FireChaingun
                 PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
             }
 
-            bFireAtWill = True;
+            bFireAtWill = true;
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
@@ -408,7 +408,7 @@ state FireChaingun
 
 
         Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-        if( Controller.Focus!=None )
+        if( Controller.Focus!=none )
             R = rotator(Controller.Focus.Location-Start);
         else R = rotator(Controller.FocalPoint-Start);
         if( NeedToTurnFor(R) )
@@ -419,11 +419,11 @@ state FireChaingun
 
         // Have to turn of hit point collision so trace doesn't hit the Human Pawn's bullet whiz cylinder
         bBlockHitPointTraces = false;
-        A = Trace(HL,HN,End,Start,True);
+        A = Trace(HL,HN,End,Start,true);
         bBlockHitPointTraces = true;
 
-        if( A==None )
-            Return;
+        if( A==none )
+            return;
         TraceHitPos = HL;
         if( Level.NetMode!=NM_DedicatedServer )
             AddTraceHitFX(HL);
@@ -433,7 +433,7 @@ state FireChaingun
         if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)))
         {
             //Just take MGDamage, otherwise people get killed quickly
-            A.TakeDamage(MGDamage,Self,HL,Dir*500,Class'DamTypeBurned');
+            A.TakeDamage(MGDamage,self,HL,Dir*500,class'DamTypeBurned');
         }
         else    return;
     }
@@ -448,7 +448,7 @@ state FireChaingun
     }
 
 Begin:
-    While( True )
+    While( true )
     {
         Acceleration = vect(0,0,0);
 
@@ -518,9 +518,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //We need this retail Code
@@ -529,7 +529,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -556,7 +556,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -596,7 +596,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Damage *= BurnDamageScale;
     }
 
-    Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType,HitIndex);
+    super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType,HitIndex);
 }
 
 //If he plays pain anims just before he enters minigun state, he skips his MGFire animation
@@ -620,9 +620,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use Rangedpound controller
-    ControllerClass=Class'RangedPoundZombieControllerOS'
+    ControllerClass=class'RangedPoundZombieControllerOS'
 }

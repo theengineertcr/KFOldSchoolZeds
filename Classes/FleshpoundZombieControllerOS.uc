@@ -37,10 +37,10 @@ state ZombieHunt
 //Unchanged KFMod Code
 function TimedFireWeaponAtEnemy()
 {
-    if ( (Enemy == None) || FireWeaponAt(Enemy) )
+    if ( (Enemy == none) || FireWeaponAt(Enemy) )
         SetCombatTimer();
     else
-        SetTimer(0.01, True);
+        SetTimer(0.01, true);
 }
 
 state SpinAttack
@@ -167,7 +167,7 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump;
 
     function BeginState()
     {
-        bUseFreezeHack = False;
+        bUseFreezeHack = false;
     }
 
     // The rage anim has ended, clear the flags and let the AI do its thing
@@ -175,12 +175,12 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump;
     {
         if( bUseFreezeHack )
         {
-            if( Pawn!=None )
+            if( Pawn!=none )
             {
-                Pawn.AccelRate = Pawn.Default.AccelRate;
-                Pawn.GroundSpeed = Pawn.Default.GroundSpeed;
+                Pawn.AccelRate = Pawn.default.AccelRate;
+                Pawn.GroundSpeed = Pawn.default.GroundSpeed;
             }
-            bUseFreezeHack = False;
+            bUseFreezeHack = false;
             AnimEnd(0);
         }
     }
@@ -202,7 +202,7 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump;
 
         if( bUseFreezeHack )
         {
-            MoveTarget = None;
+            MoveTarget = none;
             MoveTimer = -1;
             Pawn.Acceleration = vect(0,0,0);
             Pawn.GroundSpeed = 1;
@@ -211,12 +211,12 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump;
     }
     function EndState()
     {
-        if( Pawn!=None )
+        if( Pawn!=none )
         {
-            Pawn.AccelRate = Pawn.Default.AccelRate;
-            Pawn.GroundSpeed = Pawn.Default.GroundSpeed;
+            Pawn.AccelRate = Pawn.default.AccelRate;
+            Pawn.GroundSpeed = Pawn.default.GroundSpeed;
         }
-        bUseFreezeHack = False;
+        bUseFreezeHack = false;
     }
 
 Begin:

@@ -29,7 +29,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 {
     local vector NewVelocity;
 
-    NewVelocity = Super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
 
     if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
     {
@@ -69,11 +69,11 @@ function bool FlipOver()
     // Acceleration = vect(0, 0, 0);
     // Velocity.X = 0;
     // Velocity.Y = 0;
-    // KFMonsterController(Controller).Focus = None;
+    // KFMonsterController(Controller).Focus = none;
     // KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     // Controller.GoToState('WaitForAnim');
-    // KFMonsterController(Controller).bUseFreezeHack = True;
-    Return False;
+    // KFMonsterController(Controller).bUseFreezeHack = true;
+    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -134,11 +134,11 @@ simulated function bool HitCanInterruptAction()
 //Needed Retail Code
 simulated function Destroyed()
 {
-    if( mTracer!=None )
+    if( mTracer!=none )
         mTracer.Destroy();
-    if( mMuzzleFlash!=None )
+    if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Needed Retail Code
@@ -148,7 +148,7 @@ simulated Function PostNetBeginPlay()
     AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
-    bNetNotify = True;
+    bNetNotify = true;
 }
 
 
@@ -208,13 +208,13 @@ simulated function AddTraceHitFX( vector HitPos )
     local float hitDist;
 
     Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    if( mTracer==None )
-        mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
+    if( mTracer==none )
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
     else mTracer.SetLocation(Start);
-    if( mMuzzleFlash==None )
+    if( mMuzzleFlash==none )
     {
         //Swap with NewMinigunMFlash(Done!)
-        mMuzzleFlash = Spawn(Class'NewMinigunMFlashOS');
+        mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'FireBone'); //tip to FireBone
     }
     else mMuzzleFlash.SpawnParticle(1);
@@ -234,7 +234,7 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
-    Instigator = Self;
+    Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
@@ -250,26 +250,26 @@ function FireGLShot()
 
     GLFireCounter--;
 
-    if( Controller!=None && KFDoorMover(Controller.Target)!=None )
+    if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
-        Controller.Target.TakeDamage(22,Self,Location,vect(0,0,0),Class'DamTypeVomit');
+        Controller.Target.TakeDamage(22,self,Location,vect(0,0,0),class'DamTypeVomit');
         return;
     }
     GetAxes(Rotation,X,Y,Z);
     FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    //GunnerProjClass = Class'GunnerGLProjectile';
+    //GunnerProjClass = class'GunnerGLProjectile';
 
     if ( !SavedFireProperties.bInitialized )
     {
-        SavedFireProperties.AmmoClass = Class'SkaarjAmmo';
+        SavedFireProperties.AmmoClass = class'SkaarjAmmo';
         SavedFireProperties.ProjectileClass = GunnerProjClass;
         SavedFireProperties.WarnTargetPct = 1;
         SavedFireProperties.MaxRange = 65535;
-        SavedFireProperties.bTossed = False;
+        SavedFireProperties.bTossed = false;
         SavedFireProperties.bTrySplash = true;
         SavedFireProperties.bLeadTarget = false;
-        SavedFireProperties.bInstantHit = False;
-        SavedFireProperties.bInitialized = True;
+        SavedFireProperties.bInstantHit = false;
+        SavedFireProperties.bInitialized = true;
     }
 
     ToggleAuxCollision(false);
@@ -294,7 +294,7 @@ simulated function AnimEnd( int Channel )
 
         if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
         {
-            Super.AnimEnd(Channel);
+            super.AnimEnd(Channel);
             return;
         }
 
@@ -303,7 +303,7 @@ simulated function AnimEnd( int Channel )
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
     }
-    else Super.AnimEnd(Channel);
+    else super.AnimEnd(Channel);
 }
 
 //We'll use retail code(modified) instead of KFMod code for this
@@ -338,7 +338,7 @@ state FireGrenades
     function EndState()
     {
         TraceHitPos = vect(0,0,0);
-        bGLing = False;
+        bGLing = false;
 
         AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
@@ -350,9 +350,9 @@ state FireGrenades
 
     function BeginState()
     {
-        bFireAtWill = False;
+        bFireAtWill = false;
         Acceleration = vect(0,0,0);
-        bGLing = True;
+        bGLing = true;
     }
 
     function AnimEnd( int Channel )
@@ -378,7 +378,7 @@ state FireGrenades
                 Controller.Target = Controller.Enemy;
             }
 
-            bFireAtWill = True;
+            bFireAtWill = true;
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
@@ -397,7 +397,7 @@ state FireGrenades
     }
 
 Begin:
-    While( True )
+    While( true )
     {
         Acceleration = vect(0,0,0);
 
@@ -458,9 +458,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //We need this retail Code
@@ -469,7 +469,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -496,7 +496,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -549,10 +549,10 @@ function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<D
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use Rangedpound controller
-    ControllerClass=Class'RangedPoundGLZombieControllerOS'
-    GunnerProjClass=Class'GunnerGLProjectile'
+    ControllerClass=class'RangedPoundGLZombieControllerOS'
+    GunnerProjClass=class'GunnerGLProjectile'
 }

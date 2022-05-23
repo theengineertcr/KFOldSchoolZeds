@@ -24,7 +24,7 @@ defaultproperties
 
     //Use KFMod Sounds
     //Let's not have her breathe
-    AmbientSound=None
+    AmbientSound=none
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Siren.Siren_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'
 

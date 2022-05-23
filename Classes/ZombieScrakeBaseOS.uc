@@ -75,10 +75,10 @@ defaultproperties
     IdleRestAnim="SawZombieIdle"
     IdleHeavyAnim="SawZombieIdle"
     IdleRifleAnim="SawZombieIdle"
-    bFatAss=True
+    bFatAss=true
     Mass=500.000000
     RotationRate=(Yaw=45000,Roll=0)
-    bUseExtendedCollision=True
+    bUseExtendedCollision=true
     DamageToMonsterScale=8.0
     PoundRageBumpDamScale=0.01
 

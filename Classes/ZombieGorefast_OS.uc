@@ -15,7 +15,7 @@ class ZombieGorefast_OS extends ZombieGorefastOS;
 //The desired animation right here
 event PreBeginPlay()
 {
-    Super.PreBeginPlay();
+    super.PreBeginPlay();
     LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.BloatSet');
 }
 
@@ -42,8 +42,8 @@ defaultproperties
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 }

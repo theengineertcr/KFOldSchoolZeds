@@ -64,9 +64,9 @@ function bool FireWeaponAt(Actor A)
     //Were bringing back this old KFMod variable
     //local rotator newrot;
 
-    if ( A == None )
+    if ( A == none )
         A = Enemy;
-    if ( (A == None) || (Focus != A) )
+    if ( (A == none) || (Focus != A) )
         return false;
 
     if(CanAttack(A))

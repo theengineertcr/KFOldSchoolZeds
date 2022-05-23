@@ -7,18 +7,18 @@ class GibExplosionOS extends FleshHitEmitterOS;
 
 defaultproperties
 {
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter43
-         FadeOut=True
-         RespawnDeadParticles=False
-         SpawnOnlyInDirectionOfNormal=True
-         SpinParticles=True
-         UseSizeScale=True
-         UseRegularSizeScale=False
-         UniformSize=True
-         ScaleSizeYByVelocity=True
-         ScaleSizeZByVelocity=True
-         BlendBetweenSubdivisions=True
-         UseRandomSubdivision=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter43
+         FadeOut=true
+         RespawnDeadParticles=false
+         SpawnOnlyInDirectionOfNormal=true
+         SpinParticles=true
+         UseSizeScale=true
+         UseRegularSizeScale=false
+         UniformSize=true
+         ScaleSizeYByVelocity=true
+         ScaleSizeZByVelocity=true
+         BlendBetweenSubdivisions=true
+         UseRandomSubdivision=true
          Acceleration=(Z=-350.000000)
          ColorScale(0)=(Color=(R=255,A=255))
          ColorScale(1)=(RelativeTime=1.000000,Color=(R=255,A=255))

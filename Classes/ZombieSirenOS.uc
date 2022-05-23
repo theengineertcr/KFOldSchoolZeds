@@ -22,13 +22,13 @@ class ZombieSirenOS extends ZombieSirenBaseOS
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 //Same as KFMod
 function DoorAttack(Actor A)
 {
-    if ( bShotAnim || Physics == PHYS_Swimming || bDecapitated || A==None )
+    if ( bShotAnim || Physics == PHYS_Swimming || bDecapitated || A==none )
         return;
     bShotAnim = true;
     SetAnimAction('Siren_Scream');
@@ -86,8 +86,8 @@ simulated function SpawnTwoShots()
     if( Level.NetMode!=NM_Client )
     {
         // Deal Actual Damage.
-        if( Controller!=None && KFDoorMover(Controller.Target)!=None )
-            Controller.Target.TakeDamage(ScreamDamage*0.6,Self,Location,vect(0,0,0),ScreamDamageType);
+        if( Controller!=none && KFDoorMover(Controller.Target)!=none )
+            Controller.Target.TakeDamage(ScreamDamage*0.6,self,Location,vect(0,0,0),ScreamDamageType);
         else HurtRadius(ScreamDamage ,ScreamRadius, ScreamDamageType, ScreamForce, Location);
     }
 }
@@ -103,7 +103,7 @@ simulated function DoShakeEffect()
     if (Level.NetMode != NM_DedicatedServer)
     {
         PC = Level.GetLocalPlayerController();
-        if (PC != None && PC.ViewTarget != None)
+        if (PC != none && PC.ViewTarget != none)
         {
             Dist = VSize(Location - PC.ViewTarget.Location);
             if (Dist < ScreamRadius )
@@ -156,7 +156,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
     foreach VisibleCollidingActors( class 'Actor', Victims, DamageRadius, HitLocation )
     {
         // don't let blast damage affect fluid - VisibleCollisingActors doesn't really work for them - jag
-        // Or Karma actors in this case. Self inflicted Death due to flying chairs is uncool for a zombie of your stature.
+        // Or Karma actors in this case. self inflicted Death due to flying chairs is uncool for a zombie of your stature.
         if( (Victims != self) && !Victims.IsA('FluidSurfaceInfo') && !Victims.IsA('KFMonster') && !Victims.IsA('ExtendedZCollision') )
         {
             dir = Victims.Location - HitLocation;
@@ -178,7 +178,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
 
             Victims.TakeDamage(damageScale * UsedDamageAmount,Instigator, Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,(damageScale * Momentum * dir),DamageType);
 
-            if (Instigator != None && Vehicle(Victims) != None && Vehicle(Victims).Health > 0)
+            if (Instigator != none && Vehicle(Victims) != none && Vehicle(Victims).Health > 0)
                 Vehicle(Victims).DriverRadiusDamage(UsedDamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
         }
     }
@@ -189,12 +189,12 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
 // When siren loses her head she's got nothin' Kill her.
 function RemoveHead()
 {
-    Super.RemoveHead();
+    super.RemoveHead();
     if( FRand()<0.5 )
         KilledBy(LastDamagedBy);
     else
     {
-        bAboutToDie = True;
+        bAboutToDie = true;
         MeleeRange = -500;
         DeathTimer = Level.TimeSeconds+10*FRand();
     }
@@ -202,19 +202,19 @@ function RemoveHead()
 
 simulated function Tick( float Delta )
 {
-    Super.Tick(Delta);
+    super.Tick(Delta);
     if( bAboutToDie && Level.TimeSeconds>DeathTimer )
     {
         if( Health>0 && Level.NetMode!=NM_Client )
             KilledBy(LastDamagedBy);
-        bAboutToDie = False;
+        bAboutToDie = false;
     }
 }
 
 function PlayDyingSound()
 {
     if( !bAboutToDie )
-        Super.PlayDyingSound();
+        super.PlayDyingSound();
 }
 
 //Precache KFMod textures
@@ -227,7 +227,7 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use Old SirenZombieController

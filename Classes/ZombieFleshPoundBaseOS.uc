@@ -60,7 +60,7 @@ defaultproperties
 
     //Values that don't need to be changed
     bMeleeStunImmune = true
-    bFatAss=True
+    bFatAss=true
     Mass=600.000000
     MeleeAnims(0)="PoundAttack1"
     MeleeAnims(1)="PoundAttack2"
@@ -74,7 +74,7 @@ defaultproperties
     RotationRate=(Yaw=45000,Roll=0)
     RagDeathVel=100.000000
     RagDeathUpKick=100.000000
-    bBoss=True
+    bBoss=true
     DamageToMonsterScale=5.0
 
     //We'll keep these values the same as the retail version
@@ -128,7 +128,7 @@ defaultproperties
     //Skins(1)=Shader'KFCharacters.FPAmberBloomShader'
 
     //These might need to be changed
-    bUseExtendedCollision=True
+    bUseExtendedCollision=true
     ColOffset=(Z=52.000000)
     ColRadius=36.000000
     ColHeight=35.000000

@@ -6,22 +6,22 @@ class KFHumanGibGroupOS extends xPawnGibGroup;
 defaultproperties
 {
      //KFMod Gibs
-     Gibs(0)=Class'KFGibHeadOS'
-     Gibs(1)=Class'KFGibHeadbOS'
-     Gibs(2)=Class'KFGibHeadOS'
-     Gibs(3)=Class'KFGibHeadbOS'
-     Gibs(4)=Class'KFGibHeadOS'
-     Gibs(5)=Class'KFGibHeadOS'
-     Gibs(6)=Class'KFGibHeadbOS'
-     Gibs(7)=Class'KFGibHeadOS'
+     Gibs(0)=class'KFGibHeadOS'
+     Gibs(1)=class'KFGibHeadbOS'
+     Gibs(2)=class'KFGibHeadOS'
+     Gibs(3)=class'KFGibHeadbOS'
+     Gibs(4)=class'KFGibHeadOS'
+     Gibs(5)=class'KFGibHeadOS'
+     Gibs(6)=class'KFGibHeadbOS'
+     Gibs(7)=class'KFGibHeadOS'
 
      //KFMod Blood Puffs
-     BloodHitClass=Class'KFBloodPuffOS'
-     LowGoreBloodHitClass=Class'KFBloodPuffOS'
-     BloodGibClass=None
-     LowGoreBloodGibClass=Class'KFBloodPuffOS'
-     LowGoreBloodEmitClass=Class'KFBloodPuffOS'
-     BloodEmitClass=Class'KFBloodPuffOS'
-     NoBloodEmitClass=Class'KFBloodPuffOS'
-     NoBloodHitClass=Class'KFBloodPuffOS'
+     BloodHitClass=class'KFBloodPuffOS'
+     LowGoreBloodHitClass=class'KFBloodPuffOS'
+     BloodGibClass=none
+     LowGoreBloodGibClass=class'KFBloodPuffOS'
+     LowGoreBloodEmitClass=class'KFBloodPuffOS'
+     BloodEmitClass=class'KFBloodPuffOS'
+     NoBloodEmitClass=class'KFBloodPuffOS'
+     NoBloodHitClass=class'KFBloodPuffOS'
 }

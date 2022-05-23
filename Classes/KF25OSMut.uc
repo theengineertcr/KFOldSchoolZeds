@@ -202,10 +202,10 @@ defaultproperties
 
     bAlwaysRelevant=true
     RemoteRole=ROLE_SimulatedProxy
-    bAddToServerPackages=True
+    bAddToServerPackages=true
 
-    bEnableRangedPound=True
-    bEnableExplosivesPound=False
-    bEnableRandomSkins=False
-    bEnableOldMeleeDamage=False
+    bEnableRangedPound=true
+    bEnableExplosivesPound=false
+    bEnableRandomSkins=false
+    bEnableOldMeleeDamage=false
 }

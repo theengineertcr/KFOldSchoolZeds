@@ -26,10 +26,10 @@ simulated function PostNetBeginPlay()
     //In front have chance to move away once Zeds notice
     //That he's pissed off. Or, just remove it entirely.
 
-    //if (AvoidArea == None && bChargingPlayer )
+    //if (AvoidArea == none && bChargingPlayer )
     //    AvoidArea = Spawn(class'FleshPoundAvoidArea',self);
-    //if (AvoidArea != None)
-    //    AvoidArea.InitFor(Self);
+    //if (AvoidArea != none)
+    //    AvoidArea.InitFor(self);
 
     EnableChannelNotify ( 1,1);
     AnimBlendParams(1, 1.0, 0.0,, SpineBone1);
@@ -263,7 +263,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
        Damage *= 0.25;
     }
 
-    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType,HitIndex) ;
+    super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType,HitIndex) ;
 
     TwoSecondDamageTotal += OldHealth - Health; // Corrected issue where only the Base Health is counted toward the FP's Rage in Balance Round 6(second attempt)
 
@@ -324,7 +324,7 @@ function StartCharging()
     Velocity.X = 0;
     Velocity.Y = 0;
     Controller.GoToState('WaitForAnim');
-    KFMonsterControllerOS(Controller).bUseFreezeHack = True;
+    KFMonsterControllerOS(Controller).bUseFreezeHack = true;
     RageAnimDur = GetAnimDuration('PoundRage'); //FleshpoundZombieController to FleshpoundZombieControllerOS
     FleshpoundZombieControllerOS(Controller).SetPoundRageTimout(RageAnimDur);
     GoToState('BeginRaging');
@@ -447,7 +447,7 @@ Ignores StartCharging;
 
     function EndState()
     {
-        bChargingPlayer = False;
+        bChargingPlayer = false;
         bFrustrated = false;
 
         //FleshPoundZombieController to FleshpoundZombieControllerOS
@@ -491,7 +491,7 @@ Ignores StartCharging;
         // Keep the flesh pound moving toward its target when attacking
         //if( Role == ROLE_Authority && bShotAnim)
         //{
-        //    if( LookTarget!=None )
+        //    if( LookTarget!=none )
         //    {
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
@@ -527,8 +527,8 @@ Ignores StartCharging;
         KFMonst = KFMonster(Other);
 
         // Hurt/Kill enemies that we run into while raging
-        // Added additional "ZombieFleshPoundOS(Other)==None" just incase people play with Old and Retail zeds
-        if( !bShotAnim && KFMonst!=None && ZombieFleshPound(Other)==None && ZombieFleshPoundOS(Other)==None && Pawn(Other).Health>0 )
+        // Added additional "ZombieFleshPoundOS(Other)==none" just incase people play with Old and Retail zeds
+        if( !bShotAnim && KFMonst!=none && ZombieFleshPound(Other)==none && ZombieFleshPoundOS(Other)==none && Pawn(Other).Health>0 )
         {
             // Random chance of doing obliteration damage
             if( FRand() < 0.4 )
@@ -552,7 +552,7 @@ Ignores StartCharging;
         local bool RetVal,bWasEnemy;
 
         bWasEnemy = (Controller.Target==Controller.Enemy);
-        RetVal = Super.MeleeDamageTarget(hitdamage*1.75, pushdir*3);
+        RetVal = super.MeleeDamageTarget(hitdamage*1.75, pushdir*3);
         if( RetVal && bWasEnemy )
             GoToState('');
         return RetVal;
@@ -594,7 +594,7 @@ Ignores StartCharging;
         // Keep the flesh pound moving toward its target when attacking
         //if( Role == ROLE_Authority && bShotAnim)
         //{
-        //    if( LookTarget!=None )
+        //    if( LookTarget!=none )
         //    {
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
@@ -659,7 +659,7 @@ simulated function PostNetReceive()
 //Unchanged
 simulated function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
 {
-    Super.PlayDyingAnimation(DamageType,HitLoc);
+    super.PlayDyingAnimation(DamageType,HitLoc);
     if( Level.NetMode!=NM_DedicatedServer )
         DeviceGoNormal();
 }
@@ -714,9 +714,9 @@ function ClawDamageTarget()
     if ( MeleeDamageTarget( UsedMeleeDamage, PushDir))
     {
         HumanTarget = KFHumanPawn(Controller.Target);
-        if( HumanTarget!=None )
+        if( HumanTarget!=none )
             HumanTargetController = KFPlayerController(HumanTarget.Controller);
-        if( HumanTargetController!=None )
+        if( HumanTargetController!=none )
             HumanTargetController.ShakeView(RotMag, RotRate, RotTime, OffsetMag, OffsetRate, OffsetTime);
         PlayZombieAttackHitSound();//PlaySound(MeleeAttackHitSound, SLOT_Interact, 1.25);
     }
@@ -776,9 +776,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //Overhauled with old code
@@ -833,7 +833,7 @@ simulated event SetAnimAction(name NewAction)
             SetAnimAction(AnimAction);
             return;
         }
-        if( AnimAction=='PoundAttack3' && Controller!=None )
+        if( AnimAction=='PoundAttack3' && Controller!=none )
             Controller.GotoState('spinattack');
         else if(NewAction == 'ZombieFeed')
         {
@@ -858,22 +858,22 @@ simulated event SetAnimAction(name NewAction)
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 function bool SameSpeciesAs(Pawn P)
 {
     //Added a check for retail and KFMod FP
-    return (ZombieFleshPound(P)!=None || ZombieFleshPoundOS(P)!=None);
+    return (ZombieFleshPound(P)!=none || ZombieFleshPoundOS(P)!=none);
 }
 
 //Need this to get rid of AvoidArea's spawned by the FP
 simulated function Destroyed()
 {
-    if( AvoidArea!=None )
+    if( AvoidArea!=none )
         AvoidArea.Destroy();
 
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Precache KFMod textures.
@@ -890,9 +890,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use KFMod controller
-    ControllerClass=Class'FleshpoundZombieControllerOS'
+    ControllerClass=class'FleshpoundZombieControllerOS'
 }

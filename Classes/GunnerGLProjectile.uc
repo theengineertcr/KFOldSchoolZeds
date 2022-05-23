@@ -127,7 +127,7 @@ defaultproperties
     Damage=75 //Decreased to use difficulty for adjusting damage
     DamageRadius=350// Balance - Slightly reduced
     MomentumTransfer=75000.000000
-    MyDamageType=Class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
+    MyDamageType=class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
     LifeSpan=10.000000
     //Doesn't impact enemies
     ImpactDamage=0
@@ -136,7 +136,7 @@ defaultproperties
     //lowered further
     DampenFactor=0.4// 0.4 //0.5
     DampenFactorParallel=0.3// 0.6 //0.8
-    bBounce=True
+    bBounce=true
     TossZ=150
     DrawScale=4.0
 
@@ -158,8 +158,8 @@ defaultproperties
     LightHue=0
     LightSaturation=0
     LightCone=16
-    bDynamicLight=True
+    bDynamicLight=true
 
     //Always be bright
-    bUnlit=True
+    bUnlit=true
 }

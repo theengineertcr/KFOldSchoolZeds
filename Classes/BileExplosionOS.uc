@@ -7,22 +7,22 @@ class BileExplosionOS extends FleshHitEmitterOS;
 //Overhauled with KFMod settings
 defaultproperties
 {
-     Begin Object Class=SpriteEmitter Name=BileExplosionEmitter
-         UseCollision=True
-         UseCollisionPlanes=True
-         FadeOut=True
-         RespawnDeadParticles=False
-         SpawnOnlyInDirectionOfNormal=True
-         ZTest=False
-         SpinParticles=True
-         DampRotation=True
-         UseSizeScale=True
-         UseRegularSizeScale=False
-         UniformSize=True
-         ScaleSizeYByVelocity=True
-         ScaleSizeZByVelocity=True
-         BlendBetweenSubdivisions=True
-         UseRandomSubdivision=True
+     Begin Object class=SpriteEmitter Name=BileExplosionEmitter
+         UseCollision=true
+         UseCollisionPlanes=true
+         FadeOut=true
+         RespawnDeadParticles=false
+         SpawnOnlyInDirectionOfNormal=true
+         ZTest=false
+         SpinParticles=true
+         DampRotation=true
+         UseSizeScale=true
+         UseRegularSizeScale=false
+         UniformSize=true
+         ScaleSizeYByVelocity=true
+         ScaleSizeZByVelocity=true
+         BlendBetweenSubdivisions=true
+         UseRandomSubdivision=true
          Acceleration=(Z=-650.000000)
          DampingFactorRange=(X=(Min=0.000000,Max=0.000000),Y=(Min=0.000000,Max=0.000000),Z=(Min=0.000000,Max=0.000000))
          ColorScale(0)=(Color=(R=255,A=255))

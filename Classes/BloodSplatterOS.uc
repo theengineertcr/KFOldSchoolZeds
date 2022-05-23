@@ -12,7 +12,7 @@ var texture Splats[3];
 simulated function PostBeginPlay()
 {
     ProjTexture = splats[Rand(3)];
-    Super.PostBeginPlay();
+    super.PostBeginPlay();
 }
 
 defaultproperties
@@ -25,6 +25,6 @@ defaultproperties
      Splats(1)=Texture'KFOldSchool_XEffects.BloodSplat2'
      Splats(2)=Texture'KFOldSchool_XEffects.BloodSplat3'
      ProjTexture=Texture'KFOldSchool_XEffects.BloodSplat1'
-     bClipStaticMesh=True
+     bClipStaticMesh=true
      CullDistance=7000.000000
 }

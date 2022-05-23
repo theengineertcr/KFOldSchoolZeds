@@ -6,12 +6,12 @@ class NewMinigunMFlashOS extends Emitter;
 
 defaultproperties
 {
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter4
-         RespawnDeadParticles=False
-         SpinParticles=True
-         UniformSize=True
-         AutomaticInitialSpawning=False
-         BlendBetweenSubdivisions=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter4
+         RespawnDeadParticles=false
+         SpinParticles=true
+         UniformSize=true
+         AutomaticInitialSpawning=false
+         BlendBetweenSubdivisions=true
          CoordinateSystem=PTCS_Relative
          MaxParticles=3
          StartLocationOffset=(X=8.000000)
@@ -25,12 +25,12 @@ defaultproperties
      End Object
      Emitters(0)=SpriteEmitter4
 
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter5
-         RespawnDeadParticles=False
-         SpinParticles=True
-         UniformSize=True
-         AutomaticInitialSpawning=False
-         BlendBetweenSubdivisions=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter5
+         RespawnDeadParticles=false
+         SpinParticles=true
+         UniformSize=true
+         AutomaticInitialSpawning=false
+         BlendBetweenSubdivisions=true
          CoordinateSystem=PTCS_Relative
          MaxParticles=3
          StartLocationOffset=(X=16.000000)
@@ -44,12 +44,12 @@ defaultproperties
      End Object
      Emitters(1)=SpriteEmitter5
 
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter6
-         RespawnDeadParticles=False
-         SpinParticles=True
-         UniformSize=True
-         AutomaticInitialSpawning=False
-         BlendBetweenSubdivisions=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter6
+         RespawnDeadParticles=false
+         SpinParticles=true
+         UniformSize=true
+         AutomaticInitialSpawning=false
+         BlendBetweenSubdivisions=true
          CoordinateSystem=PTCS_Relative
          MaxParticles=3
          StartLocationOffset=(X=24.000000)
@@ -64,12 +64,12 @@ defaultproperties
      End Object
      Emitters(2)=SpriteEmitter6
 
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter7
-         RespawnDeadParticles=False
-         SpinParticles=True
-         UniformSize=True
-         AutomaticInitialSpawning=False
-         BlendBetweenSubdivisions=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter7
+         RespawnDeadParticles=false
+         SpinParticles=true
+         UniformSize=true
+         AutomaticInitialSpawning=false
+         BlendBetweenSubdivisions=true
          CoordinateSystem=PTCS_Relative
          MaxParticles=4
          StartLocationOffset=(X=32.000000)
@@ -84,6 +84,6 @@ defaultproperties
      End Object
      Emitters(3)=SpriteEmitter7
 
-     bNoDelete=False
-     bHardAttach=True
+     bNoDelete=false
+     bHardAttach=true
 }

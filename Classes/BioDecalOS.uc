@@ -9,7 +9,7 @@ simulated function BeginPlay()
     //Bringing this back
     if ( !Level.bDropDetail && (FRand() < 0.5) )
         ProjTexture = texture'KFOldSchool_XEffects.xbiosplat2';
-    Super.BeginPlay();
+    super.BeginPlay();
 }
 
 defaultproperties
@@ -17,6 +17,6 @@ defaultproperties
     LifeSpan=6
     DrawScale=+0.65
     ProjTexture=Texture'KFOldSchool_XEffects.xbiosplat'//Brought this back
-    bClipStaticMesh=True
+    bClipStaticMesh=true
     CullDistance=+7000.0
 }

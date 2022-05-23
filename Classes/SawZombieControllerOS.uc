@@ -28,9 +28,9 @@ state ZombieHunt
 //Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
-    if ( (Enemy == None) || FireWeaponAt(Enemy) )
+    if ( (Enemy == none) || FireWeaponAt(Enemy) )
         SetCombatTimer();
-    else SetTimer(0.01, True);
+    else SetTimer(0.01, true);
 }
 
 //More or less the same

@@ -75,16 +75,16 @@ event Bump(actor Other)
 //    {
 //        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
 //        PlayAnim(AnimName,, 0.0, 1);
-//        Return 1;
+//        return 1;
 //    }
-//    Return Super.DoAnimAction(AnimName);
+//    return super.DoAnimAction(AnimName);
 //}
 
 //KFMod SetAnimAction
 // Blend his attacks so he can hit you in mid air.
 simulated event SetAnimAction(name NewAction)
 {
-  Super.SetAnimAction(NewAction);
+  super.SetAnimAction(NewAction);
 
         if ( AnimAction == 'ZombieLeapAttack' || AnimAction == 'LeapAttack3'
             || AnimAction == 'ZombieLeapAttack')
@@ -109,7 +109,7 @@ simulated event SetAnimAction(name NewAction)
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 defaultproperties
@@ -124,12 +124,12 @@ defaultproperties
     //SeveredLegAttachScale=0.85
     //SeveredArmAttachScale=0.8
     ZombieFlag=2
-    bDoTorsoTwist=False
+    bDoTorsoTwist=false
 
     //Values that don't need to be changed
     bCannibal = true
     Intelligence=BRAINS_Mammal
-    bStunImmune=True
+    bStunImmune=true
     damageForce=5000
     IdleHeavyAnim="ZombieLeapIdle"
     IdleRifleAnim="ZombieLeapIdle"
@@ -183,13 +183,13 @@ defaultproperties
 
     //All of these used the ZombieSpring anim in KFMod
     //Bad idea, don't use any anims when getting hit
-    HitAnims(0)=None//"HitF"
-    HitAnims(1)=None//"HitF"
-    HitAnims(2)=None//"HitF"
-    KFHitFront=None//"HitF"
-    KFHitBack=None//"HitF"
-    KFHitLeft=None//"HitF"
-    KFHitRight=None//"HitF"
+    HitAnims(0)=none//"HitF"
+    HitAnims(1)=none//"HitF"
+    HitAnims(2)=none//"HitF"
+    KFHitFront=none//"HitF"
+    KFHitBack=none//"HitF"
+    KFHitLeft=none//"HitF"
+    KFHitRight=none//"HitF"
 
     MeleeAnims(0)="ZombieLeapAttack"
     MeleeAnims(1)="ZombieLeapAttack"//"ZombieLeapAttack2"//Swapped to Old Anim

@@ -24,24 +24,24 @@ simulated function timer()
 
     //Use KFMod classes
     Spawn(class'KFVomitJetOS',,,FireStart, FireRotation);
-    Spawn(Class'KFBloatVomitOS',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * Y;
     FireRotation.Yaw += 400;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * Z;
     FireRotation.Pitch += 400;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart = FireStart - 1.8 * CollisionRadius * X;
     FireRotation.Roll += 400;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
 }
 
 defaultproperties
 {
-     bHidden=True
+     bHidden=true
      LifeSpan=2.500000
      //Not in KFMod
      //BileRotation=(Pitch=2000,Yaw=65535,Roll=0)

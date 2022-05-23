@@ -15,7 +15,7 @@ class ZombieStalker_OS extends ZombieStalkerOS;
 //The desired animation right here
 event PreBeginPlay()
 {
-    Super.PreBeginPlay();
+    super.PreBeginPlay();
     LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.SirenSet');
 }
 
@@ -32,7 +32,7 @@ defaultproperties
     Skins(1) = Shader'KFOldSchoolZeds_Textures.StalkerCloakShader'//Shader'KFCharacters.CloakShader';
 
     //Use KFMod Sounds
-    AmbientSound=None
+    AmbientSound=none
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'
 
@@ -43,8 +43,8 @@ defaultproperties
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Death'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 }

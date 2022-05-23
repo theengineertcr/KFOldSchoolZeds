@@ -206,7 +206,7 @@ state RunningState
         {
             SetGroundSpeed(GetOriginalGroundSpeed());
         }
-        bCharging = False;
+        bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
     }
@@ -263,7 +263,7 @@ state RunningState
         // Keep the gorefast moving toward its target when attacking
         //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
         //{
-        //    if( LookTarget!=None )
+        //    if( LookTarget!=none )
         //    {
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
@@ -310,8 +310,8 @@ State SawingLoop
     }
     function AnimEnd( int Channel )
     {
-        Super.AnimEnd(Channel);
-        if( Controller!=None && Controller.Enemy!=None )
+        super.AnimEnd(Channel);
+        if( Controller!=none && Controller.Enemy!=none )
             RangedAttack(Controller.Enemy); // Keep on attacking if possible.
     }
 
@@ -320,7 +320,7 @@ State SawingLoop
         MeleeDamage = Max( DifficultyDamageModifer() * default.MeleeDamage, 1 );
 
         SetGroundSpeed(GetOriginalGroundSpeed());
-        bCharging = False;
+        bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
     }
@@ -341,7 +341,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Damage *= 0.5; // Was 0.5 in Balance Round 1, then 0.6 in Round 2, back to 0.5 in Round 3
     }
 
-    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
+    super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
 
     // Added in Balance Round 3 to make the Scrake "Rage" more reliably when his health gets low(limited to Suicidal and HoE in Round 7)
     if ( Level.Game.GameDifficulty >= 5.0 && !IsInState('SawingLoop') && !IsInState('RunningState') && float(Health) / HealthMax < 0.75 )
@@ -391,9 +391,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //Retail code we'll keep
@@ -402,7 +402,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -419,7 +419,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -456,9 +456,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use KFMod Controller
-    ControllerClass=Class'SawZombieControllerOS'
+    ControllerClass=class'SawZombieControllerOS'
 }

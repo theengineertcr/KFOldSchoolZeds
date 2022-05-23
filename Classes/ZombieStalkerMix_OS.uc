@@ -69,7 +69,7 @@ simulated function SetZappedBehavior()
 
 function RemoveHead()
 {
-    Super.RemoveHead();
+    super.RemoveHead();
 
     if (!bCrispified)
     {
@@ -80,7 +80,7 @@ function RemoveHead()
 
 simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
-    Super.PlayDying(DamageType,HitLoc);
+    super.PlayDying(DamageType,HitLoc);
     if (!bCrispified)
     {
         Skins[0] = ZedSkins[MyRand];

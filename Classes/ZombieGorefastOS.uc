@@ -118,7 +118,7 @@ function PlayZombieAttackHitSound()
 
 function RangedAttack(Actor A)
 {
-    Super.RangedAttack(A);
+    super.RangedAttack(A);
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
     {
         GoToState('RunningState');
@@ -166,7 +166,7 @@ state RunningState
         {
             SetGroundSpeed(GetOriginalGroundSpeed());
         }
-        bRunning = False;
+        bRunning = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
 
@@ -204,7 +204,7 @@ state RunningState
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 )
+    if( Controller!=none && Controller.Target!=none && VSize(Controller.Target.Location-Location)<700 )
     {
         Sleep(0.5+ FRand() * 0.5);
         //log("Still charging");
@@ -223,7 +223,7 @@ state RunningToMarker extends RunningState
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( bZedUnderControl || (Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700) )
+    if( bZedUnderControl || (Controller!=none && Controller.Target!=none && VSize(Controller.Target.Location-Location)<700) )
     {
         Sleep(0.5+ FRand() * 0.5);
         GoTo('CheckCharge');
@@ -244,9 +244,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use KFMod Controller
-    ControllerClass=Class'GorefastControllerOS'
+    ControllerClass=class'GorefastControllerOS'
 }

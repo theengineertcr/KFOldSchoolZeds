@@ -58,7 +58,7 @@ simulated function SetZappedBehavior()
 
 simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
-    Super.PlayDying(DamageType,HitLoc);
+    super.PlayDying(DamageType,HitLoc);
 
     Skins[2] = ZedSkins[MyRand];
     Skins[0] = HairSkins[HairRand];

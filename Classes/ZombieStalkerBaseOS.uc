@@ -53,9 +53,9 @@ defaultproperties
     MeleeAnims(0)="StalkerSpinAttack"
     MeleeAnims(1)="StalkerAttack1"
     MeleeAnims(2)="JumpAttack"
-    ZombieDamType(0)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(1)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(2)=Class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
 
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
@@ -71,11 +71,11 @@ defaultproperties
     MotionDetectorThreat=0.25
 
     //She was a cannibal in KFMod, so keep feasting on their corpses, please.
-    bCannibal=True
+    bCannibal=true
     MenuName="Stalker 2.5"//"Stalker"
 
     //Have yet to make this, will do it later
-    //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
+    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
     SoloHeadScale=1.1
 
     OnlineHeadshotOffset=(X=25,Y=-8,Z=28)

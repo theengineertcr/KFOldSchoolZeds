@@ -31,7 +31,7 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 //Retail code we're keeping
@@ -51,7 +51,7 @@ function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
-    else if ( A!=None )
+    else if ( A!=none )
     {
         bShotAnim = true;
         if( !bDecapitated )
@@ -87,7 +87,7 @@ function RangedAttack(Actor A)
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
     }
-    else if( (KFDoorMover(A)!=None || VSize(A.Location-Location)<=DistBeforePuke) && !bDecapitated )
+    else if( (KFDoorMover(A)!=none || VSize(A.Location-Location)<=DistBeforePuke) && !bDecapitated )
     {
         bShotAnim=true;
         SetAnimAction('ZombieBarf');
@@ -112,9 +112,9 @@ function SpawnTwoShots()
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
 
-    if( Controller!=None && KFDoorMover(Controller.Target)!=None )
+    if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
-        Controller.Target.TakeDamage(22,Self,Location,vect(0,0,0),Class'DamTypeVomit');
+        Controller.Target.TakeDamage(22,self,Location,vect(0,0,0),class'DamTypeVomit');
         return;
     }
 
@@ -122,29 +122,29 @@ function SpawnTwoShots()
     FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
     if ( !SavedFireProperties.bInitialized )
     {
-        SavedFireProperties.AmmoClass = Class'SkaarjAmmo';
-        SavedFireProperties.ProjectileClass = Class'KFBloatVomitOS';
+        SavedFireProperties.AmmoClass = class'SkaarjAmmo';
+        SavedFireProperties.ProjectileClass = class'KFBloatVomitOS';
         SavedFireProperties.WarnTargetPct = 1;
         SavedFireProperties.MaxRange = 500;
-        SavedFireProperties.bTossed = False;
-        SavedFireProperties.bTrySplash = False;
-        SavedFireProperties.bLeadTarget = True;
-        SavedFireProperties.bInstantHit = True;
-        SavedFireProperties.bInitialized = True;
+        SavedFireProperties.bTossed = false;
+        SavedFireProperties.bTrySplash = false;
+        SavedFireProperties.bLeadTarget = true;
+        SavedFireProperties.bInstantHit = true;
+        SavedFireProperties.bInitialized = true;
     }
 
     // Turn off extra collision before spawning vomit, otherwise spawn fails
     ToggleAuxCollision(false);
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
-    Spawn(Class'KFBloatVomitOS',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
 
     FireStart-=(0.5*CollisionRadius*Y);
     FireRotation.Yaw -= 1200;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
     // Turn extra collision back on
     ToggleAuxCollision(true);
 
@@ -156,7 +156,7 @@ simulated function Tick(float deltatime)
     local vector BileExplosionLoc;
     local BileExplosionOS GibBileExplosion;
 
-    Super.tick(deltatime);
+    super.tick(deltatime);
 
     if( Level.NetMode!=NM_DedicatedServer &&
     Gored>0 &&
@@ -240,8 +240,8 @@ State Dying
 
 function RemoveHead()
 {
-    bCanDistanceAttackDoors = False;
-    Super.RemoveHead();
+    bCanDistanceAttackDoors = false;
+    super.RemoveHead();
 }
 
 //KFMod Code
@@ -263,7 +263,7 @@ simulated function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation,
        Damage *= 0.25;
     }
 
-  Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
+  super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
 }
 
 
@@ -277,12 +277,12 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Event classes dont exist in KFMod
     //EventClasses(0)="KFChar.ZombieBloat_STANDARD"
 
     //Use the Old BloatZombieController
-    ControllerClass=Class'BloatZombieControllerOS'
+    ControllerClass=class'BloatZombieControllerOS'
 }

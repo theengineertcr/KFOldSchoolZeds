@@ -30,7 +30,7 @@ var bool bClientCloaked;
 var float LastCheckTimes;
 var int HealingLevels[3],HealingAmount;
 
-//This variable was in KFMod, but in the ZombieBossOS Class
+//This variable was in KFMod, but in the ZombieBossOS class
 //var BossHPNeedle CurrentNeedle;
 
 //Modern variables we dont need
@@ -88,7 +88,7 @@ defaultproperties
 
     //Values that don't need to be changed
     bMeleeStunImmune = true
-    bFatAss=True
+    bFatAss=true
     RagDeathVel=80.000000
     RagDeathUpKick=100.000000
     MeleeRange=10.000000
@@ -128,10 +128,10 @@ defaultproperties
     IdleRestAnim="BossIdle"
     Mass=1000.000000
     RotationRate=(Yaw=36000,Roll=0)
-    bBoss=True
-    bCanDistanceAttackDoors=True
-    bNetNotify=False
-    bUseExtendedCollision=True
+    bBoss=true
+    bCanDistanceAttackDoors=true
+    bNetNotify=false
+    bUseExtendedCollision=true
     DamageToMonsterScale=5.0
 
     //We'll keep these values the same as the retail version

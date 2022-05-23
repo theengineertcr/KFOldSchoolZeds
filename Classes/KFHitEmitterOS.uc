@@ -14,7 +14,7 @@ simulated function PostBeginPlay()
 {
     local vector MinVel, MaxVel;
 
-    Super.PostBeginPlay();
+    super.PostBeginPlay();
 
     if(Emitters.Length>0)
     {
@@ -65,8 +65,8 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     AutoDestroy=True
-     bNoDelete=False
+     AutoDestroy=true
+     bNoDelete=false
      LifeSpan=5.000000
      TransientSoundVolume=150.000000
      TransientSoundRadius=80.000000

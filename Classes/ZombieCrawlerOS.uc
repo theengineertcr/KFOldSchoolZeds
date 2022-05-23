@@ -16,7 +16,7 @@ class ZombieCrawlerOS extends ZombieCrawlerBaseOS
 //----------------------------------------------------------------------------
 
 //Issues:
-//None for now.
+//none for now.
 
 //For some reason, retail KF redefined the same functions in the base class here,
 //So we'll redefine them here as well, except for ZombieMoan since Zeds already have
@@ -74,16 +74,16 @@ event Bump(actor Other)
 //    {
 //        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
 //        PlayAnim(AnimName,, 0.0, 1);
-//        Return 1;
+//        return 1;
 //    }
-//    Return Super.DoAnimAction(AnimName);
+//    return super.DoAnimAction(AnimName);
 //}
 
 //KFMod SetAnimAction
 // Blend his attacks so he can hit you in mid air.
 simulated event SetAnimAction(name NewAction)
 {
-  Super.SetAnimAction(NewAction);
+  super.SetAnimAction(NewAction);
 
         if ( AnimAction == 'ZombieLeapAttack' || AnimAction == 'LeapAttack3'
             || AnimAction == 'ZombieLeapAttack')
@@ -108,7 +108,7 @@ simulated event SetAnimAction(name NewAction)
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 //Precache KFMod textures.
@@ -121,9 +121,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
     //Use the Old CrawlerController
-    ControllerClass=Class'CrawlerControllerOS'
+    ControllerClass=class'CrawlerControllerOS'
 }

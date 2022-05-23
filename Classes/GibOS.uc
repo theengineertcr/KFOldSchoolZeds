@@ -18,10 +18,10 @@ var() xEmitter Trail;
 
 simulated function Destroyed()
 {
-    if( Trail != None )
+    if( Trail != none )
         Trail.mRegen = false;
 
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Can't override final functions, their definition don't differ so don't touch it
@@ -35,7 +35,7 @@ simulated function Destroyed()
 
 simulated function Landed( Vector HitNormal )
 {
-    HitWall( HitNormal, None );
+    HitWall( HitNormal, none );
 }
 
 simulated function HitWall( Vector HitNormal, Actor Wall )
@@ -53,7 +53,7 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
     {
          if( (Level.NetMode != NM_DedicatedServer) && !Level.bDropDetail )
          {
-             if ( GibGroupClass.default.BloodHitClass != None )
+             if ( GibGroupClass.default.BloodHitClass != none )
                 Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
             if ( (LifeSpan < 7.3)  && (Level.DetailMode != DM_Low) )
                 PlaySound(HitSounds[Rand(2)]);
@@ -62,9 +62,9 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
 
     if( Speed < 20 )
     {
-         if( !bFlaming && !Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != None )
+         if( !bFlaming && !Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != none )
             Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
-        bBounce = False;
+        bBounce = false;
         SetPhysics(PHYS_None);
     }
 }
@@ -93,7 +93,7 @@ simulated function SpawnTrail()
 defaultproperties
 {
      //No XEffects class, just get xPawnGibGroup from wherever it currently is
-     GibGroupClass=Class'xPawnGibGroup'
+     GibGroupClass=class'xPawnGibGroup'
      DampenFactor=0.650000
      //Retail KF doesn't use proper gib landing SFX, so we set them here
      HitSounds(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets1'
@@ -101,11 +101,11 @@ defaultproperties
      Physics=PHYS_Falling
      RemoteRole=ROLE_None
      LifeSpan=8.000000
-     bUnlit=True
+     bUnlit=true
      TransientSoundVolume=0.170000
-     bCollideWorld=True
-     bUseCylinderCollision=True
-     bBounce=True
-     bFixedRotationDir=True
+     bCollideWorld=true
+     bUseCylinderCollision=true
+     bBounce=true
+     bFixedRotationDir=true
      Mass=30.000000
 }

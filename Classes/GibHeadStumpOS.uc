@@ -1,6 +1,6 @@
 // All gibs are supposed to be infinite, create a KFGibOS
 // In future if you really want them to be infinite,
-// Class is exactly the same, so could just add
+// class is exactly the same, so could just add
 // Lifespan = 0 for this if I really wanted to
 
 // Spawns Trail on PostBeginPlay.
@@ -18,8 +18,8 @@ simulated function PostBeginPlay()
 defaultproperties
 {
     // Use the KFMod GibGroup and GibJet
-     GibGroupClass=Class'KFHumanGibGroupOS'
-     TrailClass=Class'KFGibJetOS'
+     GibGroupClass=class'KFHumanGibGroupOS'
+     TrailClass=class'KFGibJetOS'
      DampenFactor=0.300000
      DrawType=DT_StaticMesh
 
@@ -31,7 +31,7 @@ defaultproperties
      DrawScale=0.600000
      // This Texture never changed, so don't change it
      Skins(0)=Texture'22CharTex.SeveredSkin'
-     bUnlit=False
+     bUnlit=false
      TransientSoundVolume=25.000000
      CollisionRadius=5.000000
      CollisionHeight=2.500000

@@ -57,9 +57,9 @@ defaultproperties
     HitAnims(1)="HitReactionF"
     HitAnims(2)="HitReactionF"
     damageForce=5000
-    ZombieDamType(0)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(1)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(2)=Class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
     IdleHeavyAnim="Siren_Idle"
     IdleRifleAnim="Siren_Idle"
     MovementAnims(0)="Siren_Walk"
@@ -82,7 +82,7 @@ defaultproperties
     DistBeforeScream=200
     ScreamRadius=900//700//800
     ScreamDamage=8 // 10
-    ScreamDamageType=Class'SirenScreamDamageOS'
+    ScreamDamageType=class'SirenScreamDamageOS'
     ScreamForce=-150000//-300000
     RotMag=(Pitch=150,Yaw=150,Roll=150)
     RotRate=500
@@ -111,17 +111,17 @@ defaultproperties
     KFRagdollName="SirenRag"//"Siren_Trip"//Old Ragdoll
 
     //Yet to make this
-    //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
+    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
 
     // these could need to be moved into children if children change them
     //KFMod zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 
     MenuName="Siren 2.5"//"Siren"
-    bCanDistanceAttackDoors=True
+    bCanDistanceAttackDoors=true
 
     PrePivot=(Z=-13)
     bUseExtendedCollision=true

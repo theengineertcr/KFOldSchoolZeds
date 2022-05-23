@@ -4,7 +4,7 @@ class KFMonsterControllerOS extends KFMonsterController;
 //Moantime differs in KFMod
 function PostBeginPlay()
 {
-    Super.PostBeginPlay();
+    super.PostBeginPlay();
     MoanTime = Level.TimeSeconds; //Level.TimeSeconds + 2 + (36*FRand());
 }
 
@@ -18,8 +18,8 @@ function tick(float DeltaTime)
     }
     if( bAboutToGetDoor )
     {
-        bAboutToGetDoor = False;
-        if( TargetDoor!=None )
+        bAboutToGetDoor = false;
+        if( TargetDoor!=none )
         {
             BreakUpDoor(TargetDoor, true);
         }

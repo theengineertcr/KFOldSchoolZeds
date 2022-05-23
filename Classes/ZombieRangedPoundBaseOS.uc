@@ -64,7 +64,7 @@ defaultproperties
     //These values were not set in KFMod
     //DrawScale=1.4
     ZombieFlag=1
-    //AmmunitionClass=Class'KFMod.BZombieAmmo'
+    //AmmunitionClass=class'KFMod.BZombieAmmo'
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
     //SoundVolume=200
@@ -74,10 +74,10 @@ defaultproperties
     //AmbientGlow=0
 
     //Values that don't need to be changed
-    bFatAss=True
+    bFatAss=true
     Mass=400.000000
     RotationRate=(Yaw=45000,Roll=0)
-    bUseExtendedCollision=True
+    bUseExtendedCollision=true
 
     //Skins set in event class ZombieRangedPound_OS
     //Skins(1)=Shader'KF_Specimens_Trip_T_Two.burns.burns_shdr'
@@ -109,7 +109,7 @@ defaultproperties
     MGFireRate=0.06//0.05
     MGFireBurst=15//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
 
-    bCannibal = False // No animation for him.
+    bCannibal = false // No animation for him.
     MenuName="Flesh Pound Chaingunner"
 
     //Use RangedIdle
@@ -161,7 +161,7 @@ defaultproperties
     MeleeAnims(2)="PoundPunch2"
 
     //Dont attack doors with the minigun
-    bCanDistanceAttackDoors=False
+    bCanDistanceAttackDoors=false
 
     //These might need to be changed
     ColOffset=(Z=65)//(Z=50)

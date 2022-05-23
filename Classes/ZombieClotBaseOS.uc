@@ -95,7 +95,7 @@ defaultproperties
     //This makes him float, we don't want that
     //Prepivot=(Z=5.0)
 
-    bUseExtendedCollision=True
+    bUseExtendedCollision=true
     ColOffset=(Z=48.000000)
     ColRadius=25.000000
     ColHeight=5.000000
