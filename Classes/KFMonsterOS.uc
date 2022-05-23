@@ -37,6 +37,10 @@ var bool bUseOldMeleeDamage;
 var int damageRand;
 var int damageConst;
 
+// contains textures for mixed zed variants
+var protected array<material> MixTexturePool;
+var protected array<material> MixHairPool;
+
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
@@ -1574,6 +1578,22 @@ event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
 
 defaultproperties
 {
+    MixTexturePool(0)=Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin'
+    MixTexturePool(1)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin'
+    MixTexturePool(2)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkinVariant2'
+    MixTexturePool(3)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
+    MixTexturePool(4)=Texture'KFOldSchoolZeds_Textures.Fleshpound.Poundskin'
+    MixTexturePool(5)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
+    MixTexturePool(6)=Texture'KFOldSchoolZeds_Textures.Gunpound.GunpoundSkin'
+    MixTexturePool(7)=Texture'KFOldSchoolZeds_Textures.Patriarch.PatriarchSkin'
+    MixTexturePool(8)=Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin'
+    MixTexturePool(9)=Texture'KFOldSchoolZeds_Textures.StalkerSkin'
+
+    MixHairPool(0)=FinalBlend'KFOldSchoolZeds_Textures.BossHairFB'
+    MixHairPool(1)=FinalBlend'KFOldSchoolZeds_Textures.CrawlerHairFB'
+    MixHairPool(2)=FinalBlend'KFOldSchoolZeds_Textures.SirenHairFB'
+    MixHairPool(3)=FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB'
+
     // Variables naming each bone in KFMod did not exist,
     // They were set by their exact names in each function
     // TODO: Determine what the names of these bones should be
