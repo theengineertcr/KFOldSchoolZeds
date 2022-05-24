@@ -1,27 +1,27 @@
 // ✔
-// A group of gibs, how nice. Make sure this class  
+// A group of gibs, how nice. Make sure this class
 // Uses all of the KFMod Gibs and Blood puffs
 class KFHumanGibGroupOS extends xPawnGibGroup;
 
 defaultproperties
 {
      //KFMod Gibs
-     Gibs(0)=Class'KFOldSchoolZeds.KFGibHeadOS'
-     Gibs(1)=Class'KFOldSchoolZeds.KFGibHeadbOS'
-     Gibs(2)=Class'KFOldSchoolZeds.KFGibHeadOS'
-     Gibs(3)=Class'KFOldSchoolZeds.KFGibHeadbOS'
-     Gibs(4)=Class'KFOldSchoolZeds.KFGibHeadOS'
-     Gibs(5)=Class'KFOldSchoolZeds.KFGibHeadOS'
-     Gibs(6)=Class'KFOldSchoolZeds.KFGibHeadbOS'
-     Gibs(7)=Class'KFOldSchoolZeds.KFGibHeadOS'
-     
+     Gibs(0)=class'KFGibHeadOS'
+     Gibs(1)=class'KFGibHeadbOS'
+     Gibs(2)=class'KFGibHeadOS'
+     Gibs(3)=class'KFGibHeadbOS'
+     Gibs(4)=class'KFGibHeadOS'
+     Gibs(5)=class'KFGibHeadOS'
+     Gibs(6)=class'KFGibHeadbOS'
+     Gibs(7)=class'KFGibHeadOS'
+
      //KFMod Blood Puffs
-     BloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     LowGoreBloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     BloodGibClass=None
-     LowGoreBloodGibClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     LowGoreBloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     BloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     NoBloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     NoBloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
+     BloodHitClass=class'KFBloodPuffOS'
+     LowGoreBloodHitClass=class'KFBloodPuffOS'
+     BloodGibClass=none
+     LowGoreBloodGibClass=class'KFBloodPuffOS'
+     LowGoreBloodEmitClass=class'KFBloodPuffOS'
+     BloodEmitClass=class'KFBloodPuffOS'
+     NoBloodEmitClass=class'KFBloodPuffOS'
+     NoBloodHitClass=class'KFBloodPuffOS'
 }

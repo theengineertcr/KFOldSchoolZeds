@@ -29,7 +29,7 @@ simulated function PostNetBeginPlay()
     SetTimer(LifeSpan - 1.0,false);
     if ( Level.NetMode != NM_DedicatedServer )
         WallSplat();
-    Super.PostNetBeginPlay();
+    super.PostNetBeginPlay();
 }
 
 simulated function WallSplat()
@@ -40,15 +40,15 @@ simulated function WallSplat()
     if ( FRand() > 0.8 )
         return;
     WallActor = Trace(WallHit, WallNormal, Location + vect(0,0,-200), Location, false);
-    if ( WallActor != None )
+    if ( WallActor != none )
         spawn(SplatterClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
 }
 
 defaultproperties
 {
      // Use Old Splatterclass
-     SplatterClass=Class'KFOldSchoolZeds.BloodSplatterOS'
-     mRegenPause=True
+     SplatterClass=class'BloodSplatterOS'
+     mRegenPause=true
      mRegenOnTime(0)=1.000000
      mRegenOnTime(1)=2.000000
      mRegenOffTime(0)=0.400000
@@ -65,15 +65,15 @@ defaultproperties
      mMassRange(0)=0.400000
      mMassRange(1)=0.500000
      mAirResistance=0.600000
-     mRandOrient=True
+     mRandOrient=true
      mSizeRange(0)=1.500000
      mSizeRange(1)=2.500000
      mGrowthRate=12.000000
-     mRandTextures=True
+     mRandTextures=true
      mNumTileColumns=4
      mNumTileRows=4
-     LifeSpan=3.500000    
-     // Texture originally from UT2004     
+     LifeSpan=3.500000
+     // Texture originally from UT2004
      Skins(0)=Texture'KFOldSchoolZeds_Textures.Shared.BloodJetc'
-     Style=STY_Alpha     
+     Style=STY_Alpha
 }

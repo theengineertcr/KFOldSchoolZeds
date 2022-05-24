@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // A "mini" patty that fires incendiary rounds as a Husk replacement
@@ -28,7 +28,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 {
     local vector NewVelocity;
 
-    NewVelocity = Super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
 
     if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
     {
@@ -63,16 +63,16 @@ function bool FlipOver()
     bShotAnim = true;
     //Ranged Pound has a unique animation for getting stunned
     GoToState('');
-    SetAnimAction('RangedKnockDown');    
+    SetAnimAction('RangedKnockDown');
     HandleWaitForAnim('RangedKnockDown');
     Acceleration = vect(0, 0, 0);
     Velocity.X = 0;
     Velocity.Y = 0;
-    KFMonsterController(Controller).Focus = None;
+    KFMonsterController(Controller).Focus = none;
     KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     Controller.GoToState('WaitForAnim');
-    KFMonsterController(Controller).bUseFreezeHack = True;
-    Return True;
+    KFMonsterController(Controller).bUseFreezeHack = true;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -111,15 +111,15 @@ simulated function PostBeginPlay()
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 1.0;
             MGFireBurst = default.MGFireBurst * 1.0;
-            MGFireRate = default.MGFireRate * 1.0;            
+            MGFireRate = default.MGFireRate * 1.0;
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             BurnDamageScale = default.BurnDamageScale * 0.75;
-            MGDamage = default.MGDamage * 1.0;            
+            MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.9; //Too accurate
             MGFireBurst = default.MGFireBurst * 1.33;
-            MGFireRate = default.MGFireRate * 0.833333;        
+            MGFireRate = default.MGFireRate * 0.833333;
         }
         else // Hardest difficulty
         {
@@ -127,14 +127,14 @@ simulated function PostBeginPlay()
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.80;
             MGFireBurst = default.MGFireBurst * 1.67;
-            MGFireRate = default.MGFireRate * 0.68; //0.583333            
+            MGFireRate = default.MGFireRate * 0.68; //0.583333
         }
-        
+
         SetMGDamage = MGDamage;
         SetMGAccuracy = MGAccuracy;
         SetMGFireBurst = MGFireBurst;
         SetMGFireRate = MGFireRate;
-    }    
+    }
     super.PostBeginPlay();
 }
 
@@ -153,11 +153,11 @@ simulated function bool HitCanInterruptAction()
 //Needed Retail Code
 simulated function Destroyed()
 {
-    if( mTracer!=None )
+    if( mTracer!=none )
         mTracer.Destroy();
-    if( mMuzzleFlash!=None )
+    if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Needed Retail Code
@@ -167,7 +167,7 @@ simulated Function PostNetBeginPlay()
     AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
-    bNetNotify = True;
+    bNetNotify = true;
 }
 
 
@@ -178,9 +178,9 @@ function RangedAttack(Actor A)
     local int LastFireTime; //Husk variable // Don't know if we need this
 
     if ( bShotAnim )
-        return;        
+        return;
     Dist = VSize(A.Location-Location);
-    
+
     //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
     {
@@ -197,7 +197,7 @@ function RangedAttack(Actor A)
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
             Controller.bPreparingMove = true;
-            Acceleration = vect(0,0,0); 
+            Acceleration = vect(0,0,0);
         }
         else
         {
@@ -209,14 +209,14 @@ function RangedAttack(Actor A)
             MGFireCounter =  MGFireBurst;
             GoToState('FireChaingun');
         }
-    }    
+    }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastChainGunTime<Level.TimeSeconds )
     {
         if ( !Controller.LineOfSightTo(A) /*|| FRand()> 0.85 */ ) // Don't need this FRand so it can go away
         {
             //Maybe lower this further?
             LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *1.0); //Level.TimeSeconds+FRand()*4;
-            Return;
+            return;
         }
 
         LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
@@ -225,7 +225,7 @@ function RangedAttack(Actor A)
         Acceleration = vect(0,0,0);
         SetAnimAction('RangedPreFireMG'); //PreFireMG
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
-        
+
         //Unlucky you, you won a ticket straight to hell!
         //Lowered chance for this to be triggered
         if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0  || Level.Game.GameDifficulty >= 5.0 && Dist < 300 + CollisionRadius + A.CollisionRadius) // Don't hurt the little babies who play on Easy Modo
@@ -243,29 +243,29 @@ function RangedAttack(Actor A)
             MGAccuracy = SetMGAccuracy;
             MGFireRate = SetMGFireRate;
         }
-        
+
         //Tweak the amount of bullets he fires so its more predictable
-        MGFireCounter =  MGFireBurst; //Rand(60) + 35;        
-        
+        MGFireCounter =  MGFireBurst; //Rand(60) + 35;
+
         GoToState('FireChaingun');
-    }    
+    }
 }
 
 simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
-    local float hitDist; 
-    
+    local float hitDist;
+
     //Play Old L85 fire sound
-    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);    
+    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    if( mTracer==None )
-        mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
+    if( mTracer==none )
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
     else mTracer.SetLocation(Start);
-    if( mMuzzleFlash==None )
+    if( mMuzzleFlash==none )
     {
         //Swap with NewMinigunMFlash(Done!)
-        mMuzzleFlash = Spawn(Class'NewMinigunMFlashOS');
+        mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'FireBone'); //tip to FireBone
     }
     else mMuzzleFlash.SpawnParticle(1);
@@ -285,7 +285,7 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
-    Instigator = Self;
+    Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
@@ -298,23 +298,23 @@ simulated function AnimEnd( int Channel )
 {
     local name  Sequence;
     local float Frame, Rate;
-    
+
     if( Level.NetMode==NM_Client && bMinigunning )
     {
         GetAnimParams( Channel, Sequence, Frame, Rate );
-    
+
         if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
         {
-            Super.AnimEnd(Channel);
+            super.AnimEnd(Channel);
             return;
         }
-    
+
         PlayAnim('RangedFireMG'); //Rangedpound Anims
         bWaitForAnim = true;
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
     }
-    else Super.AnimEnd(Channel);
+    else super.AnimEnd(Channel);
 }
 
 //We'll use retail code(modified) instead of KFMod code for this
@@ -329,7 +329,7 @@ state FireChaingun
     function EndState()
     {
         TraceHitPos = vect(0,0,0);
-        bMinigunning = False;
+        bMinigunning = false;
 
         AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
@@ -341,10 +341,10 @@ state FireChaingun
 
     function BeginState()
     {
-        bFireAtWill = False;
+        bFireAtWill = false;
         Acceleration = vect(0,0,0);
         MGLostSightTimeout = 0.0;
-        bMinigunning = True;
+        bMinigunning = true;
     }
 
     function AnimEnd( int Channel )
@@ -370,7 +370,7 @@ state FireChaingun
                 else
                 {
                     MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                    Controller.Focus = None;
+                    Controller.Focus = none;
                 }
 
                 Controller.Target = Controller.Enemy;
@@ -378,18 +378,18 @@ state FireChaingun
             else
             {
                 MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                Controller.Focus = None;
+                Controller.Focus = none;
             }
 
             if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
             {
             //    // Randomly send out a message about Patriarch shooting chain gun(3% chance)
-            //       Wanted to keep this, but the line "what else does that bastard have up his sleeve" 
+            //       Wanted to keep this, but the line "what else does that bastard have up his sleeve"
             //       Bothers me. Maybe players don't care about this, so I should add it in next patch?(Added)
                 PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
             }
 
-            bFireAtWill = True;
+            bFireAtWill = true;
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
@@ -403,12 +403,12 @@ state FireChaingun
         local vector Start,End,HL,HN,Dir;
         local rotator R;
         local Actor A;
-        
+
         MGFireCounter--;
 
 
         Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-        if( Controller.Focus!=None )
+        if( Controller.Focus!=none )
             R = rotator(Controller.Focus.Location-Start);
         else R = rotator(Controller.FocalPoint-Start);
         if( NeedToTurnFor(R) )
@@ -419,21 +419,21 @@ state FireChaingun
 
         // Have to turn of hit point collision so trace doesn't hit the Human Pawn's bullet whiz cylinder
         bBlockHitPointTraces = false;
-        A = Trace(HL,HN,End,Start,True);
+        A = Trace(HL,HN,End,Start,true);
         bBlockHitPointTraces = true;
 
-        if( A==None )
-            Return;
+        if( A==none )
+            return;
         TraceHitPos = HL;
         if( Level.NetMode!=NM_DedicatedServer )
             AddTraceHitFX(HL);
 
         //TODO Figure out a way to make it so KFMonsters dont take damage(Done!)
-        //Make it so only Humans, Glass, and Doors take damage 
+        //Make it so only Humans, Glass, and Doors take damage
         if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)))
         {
             //Just take MGDamage, otherwise people get killed quickly
-            A.TakeDamage(MGDamage,Self,HL,Dir*500,Class'DamTypeBurned');
+            A.TakeDamage(MGDamage,self,HL,Dir*500,class'DamTypeBurned');
         }
         else    return;
     }
@@ -448,7 +448,7 @@ state FireChaingun
     }
 
 Begin:
-    While( True )
+    While( true )
     {
         Acceleration = vect(0,0,0);
 
@@ -469,7 +469,7 @@ Begin:
             HandleWaitForAnim('RangedFireMGEnd'); //Ranged Anims
             GoToState('');
         }
-        
+
         if( bFireAtWill )
             FireMGShot();
         Sleep(MGFireRate); //0.05//Uses our own fire rate set in the base file
@@ -518,9 +518,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //We need this retail Code
@@ -529,7 +529,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -556,7 +556,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -578,7 +578,7 @@ simulated function HandleWaitForAnim( name NewAnim )
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     //Removed the extra patty anims
-    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown') 
+    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown')
     {
         return true;
     }
@@ -596,7 +596,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Damage *= BurnDamageScale;
     }
 
-    Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType,HitIndex);
+    super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType,HitIndex);
 }
 
 //If he plays pain anims just before he enters minigun state, he skips his MGFire animation
@@ -620,9 +620,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    
+
     //Use Rangedpound controller
-    ControllerClass=Class'KFOldSchoolZeds.RangedPoundZombieControllerOS'
+    ControllerClass=class'RangedPoundZombieControllerOS'
 }

@@ -48,7 +48,7 @@ defaultproperties
     //SeveredHeadAttachScale=1.0
     //SeveredLegAttachScale=0.7
     //SeveredArmAttachScale=1.0
-    
+
     //Values that don't need to be changed
     MeleeAnims(0)="Siren_Bite"
     MeleeAnims(1)="Siren_Bite"//"Siren_Bite2"//Only had one bite anim in the Mod
@@ -57,9 +57,9 @@ defaultproperties
     HitAnims(1)="HitReactionF"
     HitAnims(2)="HitReactionF"
     damageForce=5000
-    ZombieDamType(0)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(1)=Class'KFMod.DamTypeSlashingAttack'
-    ZombieDamType(2)=Class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
     IdleHeavyAnim="Siren_Idle"
     IdleRifleAnim="Siren_Idle"
     MovementAnims(0)="Siren_Walk"
@@ -74,7 +74,7 @@ defaultproperties
     IdleWeaponAnim="Siren_Idle"
     IdleRestAnim="Siren_Idle"
     RotationRate=(Yaw=45000,Roll=0)
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     //This is an exception for the Siren as she no longer can move
@@ -82,7 +82,7 @@ defaultproperties
     DistBeforeScream=200
     ScreamRadius=900//700//800
     ScreamDamage=8 // 10
-    ScreamDamageType=Class'KFOldSchoolZeds.SirenScreamDamageOS'
+    ScreamDamageType=class'SirenScreamDamageOS'
     ScreamForce=-150000//-300000
     RotMag=(Pitch=150,Yaw=150,Roll=150)
     RotRate=500
@@ -97,7 +97,7 @@ defaultproperties
     HealthMax=300
     PlayerCountHealthScale=0.10
     PlayerNumHeadHealthScale=0.05
-    HeadHealth=200    
+    HeadHealth=200
     ShakeEffectScalar=1.0
     ShakeTime=2.0
     ShakeFadeTime=0.25
@@ -107,31 +107,31 @@ defaultproperties
     MotionDetectorThreat=2.0
     ZapThreshold=0.5
     ZappedDamageMod=1.5
-    
+
     KFRagdollName="SirenRag"//"Siren_Trip"//Old Ragdoll
 
     //Yet to make this
-    //SoundGroupClass=Class'KFMod.KFFemaleZombieSounds'
+    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
 
     // these could need to be moved into children if children change them
     //KFMod zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 
     MenuName="Siren 2.5"//"Siren"
-    bCanDistanceAttackDoors=True
-    
-    PrePivot=(Z=-13)    
+    bCanDistanceAttackDoors=true
+
+    PrePivot=(Z=-13)
     bUseExtendedCollision=true
     ColOffset=(Z=48)
     ColRadius=25
-    ColHeight=5    
-    
+    ColHeight=5
+
     SoloHeadScale=1.2
-    
+
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
-    OnlineHeadshotScale=1.2//1.3//1.2  
+    OnlineHeadshotScale=1.2//1.3//1.2
 }

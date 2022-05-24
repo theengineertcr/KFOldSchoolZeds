@@ -9,9 +9,9 @@ simulated function PostBeginPlay()
 {
     local material ZedSkins[10];
     local int MyRand;
-    
+
     MyRand = Rand(10);
-    
+
     ZedSkins[0] = Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin';
     ZedSkins[1] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
     ZedSkins[2] = Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin';
@@ -22,12 +22,10 @@ simulated function PostBeginPlay()
     ZedSkins[7] = Texture'KFOldSchoolZeds_Textures.Gunpound.GunpoundSkin';
     ZedSkins[8] = Texture'KFOldSchoolZeds_Textures.Patriarch.PatriarchSkin';
     ZedSkins[9] = Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin';
-    
+
     Skins[0] = ZedSkins[MyRand];
-    
+
     super.PostBeginPlay();
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

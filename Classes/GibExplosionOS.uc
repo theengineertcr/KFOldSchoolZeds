@@ -7,18 +7,18 @@ class GibExplosionOS extends FleshHitEmitterOS;
 
 defaultproperties
 {
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter43
-         FadeOut=True
-         RespawnDeadParticles=False
-         SpawnOnlyInDirectionOfNormal=True
-         SpinParticles=True
-         UseSizeScale=True
-         UseRegularSizeScale=False
-         UniformSize=True
-         ScaleSizeYByVelocity=True
-         ScaleSizeZByVelocity=True
-         BlendBetweenSubdivisions=True
-         UseRandomSubdivision=True
+     Begin Object class=SpriteEmitter Name=SpriteEmitter43
+         FadeOut=true
+         RespawnDeadParticles=false
+         SpawnOnlyInDirectionOfNormal=true
+         SpinParticles=true
+         UseSizeScale=true
+         UseRegularSizeScale=false
+         UniformSize=true
+         ScaleSizeYByVelocity=true
+         ScaleSizeZByVelocity=true
+         BlendBetweenSubdivisions=true
+         UseRandomSubdivision=true
          Acceleration=(Z=-350.000000)
          ColorScale(0)=(Color=(R=255,A=255))
          ColorScale(1)=(RelativeTime=1.000000,Color=(R=255,A=255))
@@ -43,7 +43,6 @@ defaultproperties
          LifetimeRange=(Min=0.400000,Max=0.550000)
          StartVelocityRange=(X=(Min=-200.000000,Max=200.000000),Y=(Min=-100.000000,Max=100.000000),Z=(Min=300.000000,Max=500.000000))
      End Object
-     // This class uses this emitter, make sure that's known     
-     Emitters(0)=SpriteEmitter'KFOldSchoolZeds.GibExplosionOS.SpriteEmitter43'
-
+     // This class uses this emitter, make sure that's known
+     Emitters(0)=SpriteEmitter43
 }

@@ -25,7 +25,7 @@ simulated function PostBeginPlay()
             SmokeTrail = Spawn(SmokeTrailEmitterClass,self);
         }
     }
-    
+
     // Difficulty Scaling
     if (Level.Game != none)
     {
@@ -45,7 +45,7 @@ simulated function PostBeginPlay()
         {
             Damage = default.Damage * 1.66;
         }
-    }    
+    }
 
     OrigLoc = Location;
 
@@ -127,7 +127,7 @@ defaultproperties
     Damage=75 //Decreased to use difficulty for adjusting damage
     DamageRadius=350// Balance - Slightly reduced
     MomentumTransfer=75000.000000
-    MyDamageType=Class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
+    MyDamageType=class'KFMod.DamTypeFrag' //Use Frag Damtype so Demos resist
     LifeSpan=10.000000
     //Doesn't impact enemies
     ImpactDamage=0
@@ -136,19 +136,19 @@ defaultproperties
     //lowered further
     DampenFactor=0.4// 0.4 //0.5
     DampenFactorParallel=0.3// 0.6 //0.8
-    bBounce=True
-    TossZ=150    
+    bBounce=true
+    TossZ=150
     DrawScale=4.0
-    
+
     //References are buggy, so screw 'em
     ImpactSound=Sound'KF_GrenadeSnd.Nade_HitSurf'
     AmbientSound=Sound'KF_IJC_HalloweenSnd.KF_FlarePistol_Projectile_Loop'
-    
+
     //Place Holder Model until I get a visual reference on Quake 2 Grenades
     //We went with Quake style nades instead
     StaticMesh=StaticMesh'KFOldSchoolStatics.GunPoundProj'
     ExplosionSound=Sound'KF_GrenadeSnd.Nade_Explode_1'
-    
+
     // Make our nade glow red!
     LightType=LT_Pulse
     LightPeriod=8.0
@@ -158,8 +158,8 @@ defaultproperties
     LightHue=0
     LightSaturation=0
     LightCone=16
-    bDynamicLight=True    
-    
+    bDynamicLight=true
+
     //Always be bright
-    bUnlit=True
+    bUnlit=true
 }

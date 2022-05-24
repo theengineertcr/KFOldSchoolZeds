@@ -92,7 +92,7 @@ state OnGround
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
         PlaySound(ImpactSound, SLOT_Misc);
         //KFMod Code
-        PlayAnim('hit');        
+        PlayAnim('hit');
         bCheckedSurface = false;
         SetTimer(RestTime, false);
     }
@@ -101,15 +101,15 @@ state OnGround
 //KFModified
 singular function SplashGlobs(int NumGloblings)
 {
-    local int g; 
+    local int g;
     //Use KFMod Bloat Vomit
     local KFBloatVomitOS NewGlob;
     local Vector VNorm;
 
     for (g=0; g<NumGloblings; g++)
     {
-        NewGlob = Spawn(Class, self,, Location+GoopVolume*(CollisionHeight+4.0)*SurfaceNormal);
-        if (NewGlob != None)
+        NewGlob = Spawn(class, self,, Location+GoopVolume*(CollisionHeight+4.0)*SurfaceNormal);
+        if (NewGlob != none)
         {
             NewGlob.Velocity = (GloblingSpeed + FRand()*150.0) * (SurfaceNormal + VRand()*0.8);
             if (Physics == PHYS_Falling)
@@ -130,13 +130,13 @@ simulated function Destroyed()
     {
         //Spawn(class'xEffects.GoopSmoke');
         //Use KFMod VomGroundSplash
-        Spawn(class'KFOldSchoolZeds.VomGroundSplashOS');
+        Spawn(class'VomGroundSplashOS');
     }
-    if ( Fear != None )
+    if ( Fear != none )
         Fear.Destroy();
-    if (Trail != None)
+    if (Trail != none)
         Trail.Destroy();
-    //Super.Destroyed();
+    //super.Destroyed();
 }
 
 //KFModified
@@ -164,7 +164,7 @@ auto state Flying
             SetGoopLevel(CoreGoopLevel);
         }
         //Use KFMod VomitDecal
-        spawn(class'KFOldSchoolZeds.VomitDecalOS',,,, rotator(-HitNormal));
+        spawn(class'VomitDecalOS',,,, rotator(-HitNormal));
 
         bCollideWorld = false;
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
@@ -186,15 +186,15 @@ auto state Flying
         {
             bOnMover = true;
             SetBase(Wall);
-            if (Base == None)
+            if (Base == none)
                 BlowUp(Location);
         }
     }
 
     simulated function ProcessTouch(Actor Other, Vector HitLocation)
     {
-        if( ExtendedZCollision(Other)!=None )
-            Return;
+        if( ExtendedZCollision(Other)!=none )
+            return;
         if (Other != Instigator && (Other.IsA('Pawn') || Other.IsA('DestroyableObjective') || Other.bProjTarget))
             HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation );
         else if ( Other != Instigator && Other.bBlockActors )
@@ -212,18 +212,18 @@ defaultproperties
      Damage=4.000000
      MomentumTransfer=2000.000000
      //Use KFMod DamTypeVomit
-     MyDamageType=Class'KFOldSchoolZeds.DamTypeVomitOS'
-     bDynamicLight=False
+     MyDamageType=class'DamTypeVomitOS'
+     bDynamicLight=false
      LifeSpan=1.000000//8.000000 Old value used
      //Use KFMod's texture, even though it wont be useful
      Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
      CollisionRadius=0.000000//2.000000 Old Values used here
      CollisionHeight=0.000000//2.000000
-     bUseCollisionStaticMesh=False
+     bUseCollisionStaticMesh=false
      //Dont use modern chunks
      StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
      //Use BioGlob's Impact and Explosion sound
-     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'     
+     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'
      ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
      bBlockHitPointTraces=false
 }

@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -26,7 +26,7 @@ simulated function PostNetReceive()
     {
         if (bRunning)
         {
-            MovementAnims[0]='ZombieRun';           
+            MovementAnims[0]='ZombieRun';
         }
         else
         {
@@ -118,7 +118,7 @@ function PlayZombieAttackHitSound()
 
 function RangedAttack(Actor A)
 {
-    Super.RangedAttack(A);
+    super.RangedAttack(A);
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 ) //VSize was 300 in KFMod, dont change though
     {
         GoToState('RunningState');
@@ -166,10 +166,10 @@ state RunningState
         {
             SetGroundSpeed(GetOriginalGroundSpeed());
         }
-        bRunning = False;
+        bRunning = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
-        
+
         //Push the head back up
         OnlineHeadshotOffset.Z=45;
         //RunAttackTimeout=0;
@@ -204,9 +204,9 @@ state RunningState
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700 ) 
+    if( Controller!=none && Controller.Target!=none && VSize(Controller.Target.Location-Location)<700 )
     {
-        Sleep(0.5+ FRand() * 0.5); 
+        Sleep(0.5+ FRand() * 0.5);
         //log("Still charging");
         GoTo('CheckCharge');
     }
@@ -223,7 +223,7 @@ state RunningToMarker extends RunningState
 Begin:
     GoTo('CheckCharge');
 CheckCharge:
-    if( bZedUnderControl || (Controller!=None && Controller.Target!=None && VSize(Controller.Target.Location-Location)<700) )
+    if( bZedUnderControl || (Controller!=none && Controller.Target!=none && VSize(Controller.Target.Location-Location)<700) )
     {
         Sleep(0.5+ FRand() * 0.5);
         GoTo('CheckCharge');
@@ -244,9 +244,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    
+
     //Use KFMod Controller
-    ControllerClass=Class'KFOldSchoolZeds.GorefastControllerOS'
+    ControllerClass=class'GorefastControllerOS'
 }

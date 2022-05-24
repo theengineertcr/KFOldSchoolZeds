@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // A "mini" patty that fires incendiary rounds as a Husk replacement
@@ -29,7 +29,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 {
     local vector NewVelocity;
 
-    NewVelocity = Super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
 
     if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
     {
@@ -60,20 +60,20 @@ function bool FlipOver()
     // {
     //     SetPhysics(PHYS_Walking);
     // }
-    // 
+    //
     // bShotAnim = true;
     // //Ranged Pound has a unique animation for getting stunned
     // GoToState('');
-    // SetAnimAction('RangedKnockDown');    
+    // SetAnimAction('RangedKnockDown');
     // HandleWaitForAnim('RangedKnockDown');
     // Acceleration = vect(0, 0, 0);
     // Velocity.X = 0;
     // Velocity.Y = 0;
-    // KFMonsterController(Controller).Focus = None;
+    // KFMonsterController(Controller).Focus = none;
     // KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     // Controller.GoToState('WaitForAnim');
-    // KFMonsterController(Controller).bUseFreezeHack = True;
-    Return False;
+    // KFMonsterController(Controller).bUseFreezeHack = true;
+    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ simulated function PostBeginPlay()
     // Difficulty Scaling
     // Grenade Launcher fired amount and rate of fire are set here
     // TODO: Implement these variables
-    
+
     if (Level.Game != none)
     {
         if( Level.Game.GameDifficulty < 2.0 )
@@ -101,19 +101,19 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 4.0 )
         {
             GLFireBurst = default.GLFireBurst * 1.0;
-            GLFireRate = default.GLFireRate * 1.0;            
+            GLFireRate = default.GLFireRate * 1.0;
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             GLFireBurst = default.GLFireBurst * 1.5;
-            GLFireRate = default.GLFireRate * 0.8;        
+            GLFireRate = default.GLFireRate * 0.8;
         }
         else // Hardest difficulty
         {
             GLFireBurst = default.GLFireBurst * 2.0;
-            GLFireRate = default.GLFireRate * 0.5;     
+            GLFireRate = default.GLFireRate * 0.5;
         }
-     
+
     }
 
     super.PostBeginPlay();
@@ -134,11 +134,11 @@ simulated function bool HitCanInterruptAction()
 //Needed Retail Code
 simulated function Destroyed()
 {
-    if( mTracer!=None )
+    if( mTracer!=none )
         mTracer.Destroy();
-    if( mMuzzleFlash!=None )
+    if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Needed Retail Code
@@ -148,7 +148,7 @@ simulated Function PostNetBeginPlay()
     AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
-    bNetNotify = True;
+    bNetNotify = true;
 }
 
 
@@ -160,11 +160,11 @@ function RangedAttack(Actor A)
 
     if ( bShotAnim )
         return;
-        
+
     Dist = VSize(Controller.Target.Location-Location);
-    
+
     class'GunnerGLProjectile'.default.Speed = Dist;
-    
+
     //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
     {
@@ -179,7 +179,7 @@ function RangedAttack(Actor A)
         SetAnimAction('Claw');
         PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
         Controller.bPreparingMove = true;
-        Acceleration = vect(0,0,0);    
+        Acceleration = vect(0,0,0);
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 )
     {
@@ -189,32 +189,32 @@ function RangedAttack(Actor A)
         Acceleration = vect(0,0,0);
         SetAnimAction('RangedPreFireMG'); //PreFireMG
         HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
-        
+
         //How many nades to fire
          GLFireCounter =  GLFireBurst; // Balance 1 - Removed the random extra grenades
-         
+
         //Ding ding ding! You won the lottery, and your prize is certain death!
         // Lowered the chance because this attack is pretty deadly
         if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0) // Don't hurt the little babies who play on Easy Modo
             GLFireCounter =  GLFireBurst + 3 + Rand(4);
-            
+
         GoToState('FireGrenades');
-    }    
+    }
 }
 
 simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
-    
+
     Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    if( mTracer==None )
-        mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
+    if( mTracer==none )
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
     else mTracer.SetLocation(Start);
-    if( mMuzzleFlash==None )
+    if( mMuzzleFlash==none )
     {
         //Swap with NewMinigunMFlash(Done!)
-        mMuzzleFlash = Spawn(Class'NewMinigunMFlashOS');
+        mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'FireBone'); //tip to FireBone
     }
     else mMuzzleFlash.SpawnParticle(1);
@@ -234,7 +234,7 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
-    Instigator = Self;
+    Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
@@ -247,38 +247,38 @@ function FireGLShot()
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
     local KFMonsterController KFMonstControl;
-    
+
     GLFireCounter--;
 
-    if( Controller!=None && KFDoorMover(Controller.Target)!=None )
+    if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
-        Controller.Target.TakeDamage(22,Self,Location,vect(0,0,0),Class'DamTypeVomit');
+        Controller.Target.TakeDamage(22,self,Location,vect(0,0,0),class'DamTypeVomit');
         return;
     }
     GetAxes(Rotation,X,Y,Z);
     FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    //GunnerProjClass = Class'GunnerGLProjectile';
-    
+    //GunnerProjClass = class'GunnerGLProjectile';
+
     if ( !SavedFireProperties.bInitialized )
     {
-        SavedFireProperties.AmmoClass = Class'SkaarjAmmo';
+        SavedFireProperties.AmmoClass = class'SkaarjAmmo';
         SavedFireProperties.ProjectileClass = GunnerProjClass;
         SavedFireProperties.WarnTargetPct = 1;
         SavedFireProperties.MaxRange = 65535;
-        SavedFireProperties.bTossed = False;
+        SavedFireProperties.bTossed = false;
         SavedFireProperties.bTrySplash = true;
         SavedFireProperties.bLeadTarget = false;
-        SavedFireProperties.bInstantHit = False;
-        SavedFireProperties.bInitialized = True;
+        SavedFireProperties.bInstantHit = false;
+        SavedFireProperties.bInitialized = true;
     }
-    
+
     ToggleAuxCollision(false);
-    
+
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
-    
+
     Spawn(GunnerProjClass,,,FireStart,FireRotation);
     PlaySound(sound'KF_M79Snd.M79_Fire',SLOT_Misc,2,,1400,0.9+FRand()*0.2); 
-    
+
     ToggleAuxCollision(true);
 }
 
@@ -287,23 +287,23 @@ simulated function AnimEnd( int Channel )
 {
     local name  Sequence;
     local float Frame, Rate;
-    
+
     if( Level.NetMode==NM_Client && bGLing )
     {
         GetAnimParams( Channel, Sequence, Frame, Rate );
-    
+
         if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
         {
-            Super.AnimEnd(Channel);
+            super.AnimEnd(Channel);
             return;
         }
-    
+
         PlayAnim('RangedFireMG'); //Rangedpound Anims
         bWaitForAnim = true;
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
     }
-    else Super.AnimEnd(Channel);
+    else super.AnimEnd(Channel);
 }
 
 //We'll use retail code(modified) instead of KFMod code for this
@@ -320,25 +320,25 @@ state FireGrenades
         local float Dist;
         local float Speed;
         local float Timer;
-        local float TossZ; 
-        
+        local float TossZ;
+
         Dist = VSize(Controller.Target.Location-Location);
-        
+
         Speed = Dist + 250;
         Timer = Dist / 1250;
-        TossZ = Dist / 22;     
-        
+        TossZ = Dist / 22;
+
         class'GunnerGLProjectile'.default.Speed = Speed;
         class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
-        
+
         super.Tick(DeltaTime);
     }
 
     function EndState()
     {
         TraceHitPos = vect(0,0,0);
-        bGLing = False;
+        bGLing = false;
 
         AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
@@ -350,9 +350,9 @@ state FireGrenades
 
     function BeginState()
     {
-        bFireAtWill = False;
+        bFireAtWill = false;
         Acceleration = vect(0,0,0);
-        bGLing = True;
+        bGLing = true;
     }
 
     function AnimEnd( int Channel )
@@ -378,7 +378,7 @@ state FireGrenades
                 Controller.Target = Controller.Enemy;
             }
 
-            bFireAtWill = True;
+            bFireAtWill = true;
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
@@ -397,7 +397,7 @@ state FireGrenades
     }
 
 Begin:
-    While( True )
+    While( true )
     {
         Acceleration = vect(0,0,0);
 
@@ -409,7 +409,7 @@ Begin:
             HandleWaitForAnim('RangedFireMGEnd'); //Ranged Anims
             GoToState('');
         }
-        
+
         if( bFireAtWill )
             FireGLShot();
         Sleep(GLFireRate); //0.05//Uses our own fire rate set in the base file
@@ -458,9 +458,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //We need this retail Code
@@ -469,7 +469,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -496,7 +496,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -518,7 +518,7 @@ simulated function HandleWaitForAnim( name NewAnim )
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     //Removed the extra patty anims
-    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown') 
+    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown')
     {
         return true;
     }
@@ -549,10 +549,10 @@ function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<D
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    
+
     //Use Rangedpound controller
-    ControllerClass=Class'RangedPoundGLZombieControllerOS'
-    GunnerProjClass=Class'GunnerGLProjectile'
+    ControllerClass=class'RangedPoundGLZombieControllerOS'
+    GunnerProjClass=class'GunnerGLProjectile'
 }

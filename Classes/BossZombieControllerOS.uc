@@ -20,10 +20,10 @@ function bool CanKillMeYet()
 //This function hasn't changed since KFMod, were keeping it
 function TimedFireWeaponAtEnemy()
 {
-    if ( (Enemy == None) || FireWeaponAt(Enemy) )
+    if ( (Enemy == none) || FireWeaponAt(Enemy) )
         SetCombatTimer();
     else
-        SetTimer(0.01, True);
+        SetTimer(0.01, true);
 }
 
 //Fix this
@@ -37,21 +37,21 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
     local bool bDefendMelee, bClean, bLeadTargetNow;
     local bool bWantsToAimAtFeet;
 
-    if ( FiredAmmunition.ProjectileClass != None )
+    if ( FiredAmmunition.ProjectileClass != none )
         projspeed = FiredAmmunition.ProjectileClass.default.speed;
 
     // make sure bot has a valid target
-    if ( Target == None )
+    if ( Target == none )
     {
         Target = Enemy;
-        if ( Target == None )
+        if ( Target == none )
             return Rotation;
     }
     FireSpot = Target.Location;
     TargetDist = VSize(Target.Location - Pawn.Location);
 
     // perfect aim at stationary objects
-    if ( Pawn(Target) == None )
+    if ( Pawn(Target) == none )
     {
         if ( !FiredAmmunition.bTossed )
             return rotator(Target.Location - projstart);
@@ -74,7 +74,7 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
         // hack guess at projecting falling velocity of target
         if ( Target.Physics == PHYS_Falling )
         {
-            if ( Target.PhysicsVolume.Gravity.Z <= Target.PhysicsVolume.Default.Gravity.Z )
+            if ( Target.PhysicsVolume.Gravity.Z <= Target.PhysicsVolume.default.Gravity.Z )
                 TargetVel.Z = FMin(TargetVel.Z + FMax(-400, Target.PhysicsVolume.Gravity.Z * FMin(1,TargetDist/projSpeed)),0);
             else
                 TargetVel.Z = FMin(0, TargetVel.Z);
@@ -128,13 +128,13 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
         }
     }
 
-    if ( FiredAmmunition.bTrySplash && (Pawn(Target) != None) && (((Target.Physics == PHYS_Falling)
+    if ( FiredAmmunition.bTrySplash && (Pawn(Target) != none) && (((Target.Physics == PHYS_Falling)
         && (Pawn.Location.Z + 80 >= Target.Location.Z)) || ((Pawn.Location.Z + 19 >= Target.Location.Z)
         && (bDefendMelee || bWantsToAimAtFeet))) )
     {
         HitActor = Trace(HitLocation, HitNormal, FireSpot - vect(0,0,1) * (Target.CollisionHeight + 10), FireSpot, false);
 
-         bClean = (HitActor == None);
+         bClean = (HitActor == none);
         if ( !bClean )
         {
             FireSpot = HitLocation + vect(0,0,3);
@@ -154,7 +154,7 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
     {
         FireSpot = LastSeenPos;
          HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-        if ( HitActor != None )
+        if ( HitActor != none )
         {
             bCanFire = false;
             FireSpot += 2 * Target.CollisionHeight * HitNormal;
@@ -174,13 +174,13 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
         if ( Pawn.Location.Z >= LastSeenPos.Z )
             FireSpot.Z -= 0.4 * Enemy.CollisionHeight;
          HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-        if ( HitActor != None )
+        if ( HitActor != none )
         {
             FireSpot = LastSeenPos + 2 * Enemy.CollisionHeight * HitNormal;
             if ( Monster(Pawn).SplashDamage() && (Skill >= 4) )
             {
                  HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-                if ( HitActor != None )
+                if ( HitActor != none )
                     FireSpot += 2 * Enemy.CollisionHeight * HitNormal;
             }
             bCanFire = false;
@@ -203,7 +203,7 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
     FireDist = FMin(VSize(FireSpot-ProjStart), 400);
     FireSpot = ProjStart + FireDist * FireDir;
     HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-    if ( HitActor != None )
+    if ( HitActor != none )
     {
         if ( HitNormal.Z < 0.7 )
         {
@@ -212,13 +212,13 @@ function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int
             FireSpot = ProjStart + FireDist * FireDir;
             HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
         }
-        if ( HitActor != None )
+        if ( HitActor != none )
         {
             FireSpot += HitNormal * 2 * Target.CollisionHeight;
             if ( Skill >= 4 )
             {
                 HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-                if ( HitActor != None )
+                if ( HitActor != none )
                     FireSpot += Target.CollisionHeight * HitNormal;
             }
             FireDir = Normal(FireSpot - ProjStart);
@@ -237,7 +237,7 @@ function FightEnemy(bool bCanCharge)
     if( KFM.bShotAnim )
     {
         GoToState('WaitForAnim');
-        Return;
+        return;
     }
     if (KFM.MeleeRange != KFM.default.MeleeRange)
         KFM.MeleeRange = KFM.default.MeleeRange;
@@ -269,7 +269,7 @@ function FightEnemy(bool bCanCharge)
         }
         else
         {
-            //ZombieBoss to ZombieBossOS        
+            //ZombieBoss to ZombieBossOS
             // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
             ZombieBossOS(Pawn).SneakCount++;
             GoalString = "InitialHunt";
@@ -319,11 +319,11 @@ state InitialHunting extends Hunting
     {
         local float ZDif;
 
-        if( Pawn.CollisionRadius!=Pawn.Default.CollisionRadius || Pawn.CollisionHeight!=Pawn.Default.CollisionHeight )
+        if( Pawn.CollisionRadius!=Pawn.default.CollisionRadius || Pawn.CollisionHeight!=Pawn.default.CollisionHeight )
         {
-            ZDif = Pawn.Default.CollisionRadius-44;
+            ZDif = Pawn.default.CollisionRadius-44;
             Pawn.MoveSmooth(vect(0,0,1)*ZDif);
-            Pawn.SetCollisionSize(Pawn.Default.CollisionRadius,Pawn.Default.CollisionHeight);
+            Pawn.SetCollisionSize(Pawn.default.CollisionRadius,Pawn.default.CollisionHeight);
         }
 
         super.EndState();
@@ -372,9 +372,9 @@ Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle; //Startle is new, 
 
     function BeginState()
     {
-        HidingSpots = None;
-        Enemy = None;
-        SetTimer(0.1,True);
+        HidingSpots = none;
+        Enemy = none;
+        SetTimer(0.1,true);
     }
     event SeePlayer(Pawn SeenPlayer)
     {
@@ -382,8 +382,8 @@ Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle; //Startle is new, 
     }
     function Timer()
     {
-        if( Enemy==None )
-            Return;
+        if( Enemy==none )
+            return;
         Target = Enemy;
         KFM.RangedAttack(Target);
     }
@@ -392,22 +392,22 @@ Begin:
         WaitForLanding();
     While( KFM.bShotAnim )
         Sleep(0.25);
-    if( HidingSpots==None )
+    if( HidingSpots==none )
         HidingSpots = FindRandomDest();
-    if( HidingSpots==None )
+    if( HidingSpots==none )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
     if( ActorReachable(HidingSpots) )
     {
         MoveTarget = HidingSpots;
-        HidingSpots = None;
+        HidingSpots = none;
     }
-    else FindBestPathToward(HidingSpots,True,False);
-    if( MoveTarget==None )
+    else FindBestPathToward(HidingSpots,true,false);
+    if( MoveTarget==none )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-    if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
-        MoveToward(MoveTarget,Enemy,,False);
-    else MoveToward(MoveTarget,MoveTarget,,False);
-    if( HidingSpots==None || !PlayerSeesMe() )
+    if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
+        MoveToward(MoveTarget,Enemy,,false);
+    else MoveToward(MoveTarget,MoveTarget,,false);
+    if( HidingSpots==none || !PlayerSeesMe() )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
     GoTo'Begin';
 }
@@ -417,9 +417,9 @@ Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
 
     function BeginState()
     {
-        HidingSpots = None;
-        Enemy = None;
-        SetTimer(0.1,True);
+        HidingSpots = none;
+        Enemy = none;
+        SetTimer(0.1,true);
     }
     event SeePlayer(Pawn SeenPlayer)
     {
@@ -427,8 +427,8 @@ Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
     }
     function Timer()
     {
-        if( Enemy==None )
-            Return;
+        if( Enemy==none )
+            return;
         Target = Enemy;
         KFM.RangedAttack(Target);
     }
@@ -438,28 +438,28 @@ Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
         local float Dist,BDist,MDist;
         local vector EnemyDir;
 
-        if( Enemy==None )
+        if( Enemy==none )
         {
             HidingSpots = FindRandomDest();
-            Return;
+            return;
         }
         EnemyDir = Normal(Enemy.Location-Pawn.Location);
-        For( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
+        For( N=Level.NavigationPointList; N!=none; N=N.NextNavigationPoint )
         {
             MDist = VSize(N.Location-Pawn.Location);
-            if( MDist<2500 && !FastTrace(N.Location,Enemy.Location) && FindPathToward(N)!=None )
+            if( MDist<2500 && !FastTrace(N.Location,Enemy.Location) && FindPathToward(N)!=none )
             {
                 Dist = VSize(N.Location-Enemy.Location)/FMax(MDist/800.f,1.5);
                 if( (EnemyDir Dot Normal(Enemy.Location-N.Location))<0.2 )
                     Dist/=10;
-                if( BN==None || BDist<Dist )
+                if( BN==none || BDist<Dist )
                 {
                     BN = N;
                     BDist = Dist;
                 }
             }
         }
-        if( BN==None )
+        if( BN==none )
             HidingSpots = FindRandomDest();
         else HidingSpots = BN;
     }
@@ -468,22 +468,22 @@ Begin:
         WaitForLanding();
     While( KFM.bShotAnim )
         Sleep(0.25);
-    if( HidingSpots==None )
+    if( HidingSpots==none )
         FindHideSpot();
-    if( HidingSpots==None )
+    if( HidingSpots==none )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
     if( ActorReachable(HidingSpots) )
     {
         MoveTarget = HidingSpots;
-        HidingSpots = None;
+        HidingSpots = none;
     }
-    else FindBestPathToward(HidingSpots,True,False);
-    if( MoveTarget==None )
+    else FindBestPathToward(HidingSpots,true,false);
+    if( MoveTarget==none )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
-    if( Enemy!=None && VSize(Enemy.Location-Pawn.Location)<100 )
-        MoveToward(MoveTarget,Enemy,,False);
-    else MoveToward(MoveTarget,MoveTarget,,False);
-    if( HidingSpots==None )
+    if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
+        MoveToward(MoveTarget,Enemy,,false);
+    else MoveToward(MoveTarget,MoveTarget,,false);
+    if( HidingSpots==none )
         ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
     GoTo'Begin';
 }
@@ -491,12 +491,12 @@ function bool PlayerSeesMe()
 {
     local Controller C;
 
-    For( C=Level.ControllerList; C!=None; C=C.NextController )
+    For( C=Level.ControllerList; C!=none; C=C.NextController )
     {
-        if( C.bIsPlayer && C.Pawn!=None && C.Pawn!=Pawn && LineOfSightTo(C.Pawn) )
-            Return True;
+        if( C.bIsPlayer && C.Pawn!=none && C.Pawn!=Pawn && LineOfSightTo(C.Pawn) )
+            return true;
     }
-    Return False;
+    return false;
 }
 
 //The rest of this is Retail Code that we'll keep
@@ -523,12 +523,12 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     {
         if( bUseFreezeHack )
         {
-            if( Pawn!=None )
+            if( Pawn!=none )
             {
-                Pawn.AccelRate = Pawn.Default.AccelRate;
-                Pawn.GroundSpeed = Pawn.Default.GroundSpeed;
+                Pawn.AccelRate = Pawn.default.AccelRate;
+                Pawn.GroundSpeed = Pawn.default.GroundSpeed;
             }
-            bUseFreezeHack = False;
+            bUseFreezeHack = false;
         }
 
         AnimEnd(AnimWaitChannel);
@@ -574,7 +574,7 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
         if( bUseFreezeHack )
         {
-            MoveTarget = None;
+            MoveTarget = none;
             MoveTimer = -1;
             Pawn.Acceleration = vect(0,0,0);
             Pawn.GroundSpeed = 1;
@@ -589,6 +589,4 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

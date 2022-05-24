@@ -15,7 +15,7 @@ class ZombieGorefast_OS extends ZombieGorefastOS;
 //The desired animation right here
 event PreBeginPlay()
 {
-    Super.PreBeginPlay();
+    super.PreBeginPlay();
     LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.BloatSet');
 }
 
@@ -26,7 +26,7 @@ defaultproperties
     //DetachedLegClass=class'SeveredLegGorefast'
     //DetachedHeadClass=class'SeveredHeadGorefast'
 
-    //Use KFMod Models and Textures    
+    //Use KFMod Models and Textures
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.GoreFast'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
 
@@ -34,17 +34,16 @@ defaultproperties
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Gorefast.Gorefast_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
-    //Dont think we need this?    
+
+    //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Gorefast_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 }
-

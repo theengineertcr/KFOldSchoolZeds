@@ -7,6 +7,4 @@ class BloatZombieControllerOS extends KFMonsterControllerOS;
 
 // Randomly plays a different moan sound for the Zombie each time it is called. Gruesome!
 
-defaultproperties
-{
-}
+defaultproperties{}

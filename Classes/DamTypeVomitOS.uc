@@ -14,7 +14,7 @@ defaultproperties
      DeathString="%o was corroded by %k's vomit."
      FemaleSuicide="%o was corroded by some vomit."
      MaleSuicide="%o was corroded by some vomit."
-     bDetonatesGoop=True
+     bDetonatesGoop=true
 
      KDamageImpulse = 0   // STOP BLOWING AROUND THE KARMA OBJECTS WITH YOUR UPCHUCK, FATTY!
      bCheckForHeadShots=false

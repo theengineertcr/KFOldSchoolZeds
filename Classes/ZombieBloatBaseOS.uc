@@ -27,7 +27,7 @@ var float DistBeforePuke;
 
 defaultproperties
 {
-    //These values were not set in KFMod 
+    //These values were not set in KFMod
     //DrawScale=1.075
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
@@ -38,15 +38,15 @@ defaultproperties
     //SeveredHeadAttachScale=1.7
     //SeveredLegAttachScale=1.3
     //SeveredArmAttachScale=1.1
-    
+
     //Values that don't need to be changed
     MeleeAnims(0)="BloatChop2"
     MeleeAnims(1)="BloatChop2"
     MeleeAnims(2)="BloatChop2"
     damageForce=70000
-    bFatAss=True
+    bFatAss=true
     PuntAnim="BloatPunt"
-    AmmunitionClass=Class'KFMod.BZombieAmmo'
+    AmmunitionClass=class'KFMod.BZombieAmmo'
     IdleHeavyAnim="BloatIdle"
     IdleRifleAnim="BloatIdle"
     MovementAnims(0)="WalkBloat"
@@ -59,14 +59,14 @@ defaultproperties
     IdleWeaponAnim="BloatIdle"
     IdleRestAnim="BloatIdle"
     Mass=400.000000
-    RotationRate=(Yaw=45000,Roll=0)    
-    bCanDistanceAttackDoors=True
-    bUseExtendedCollision=True
+    RotationRate=(Yaw=45000,Roll=0)
+    bCanDistanceAttackDoors=true
+    bUseExtendedCollision=true
     ColOffset=(Z=60.000000)
     ColRadius=27.000000
     ColHeight=22.000000
-    Intelligence=BRAINS_Stupid    
-    
+    Intelligence=BRAINS_Stupid
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     //This is an exception for the Bloat as he no longer can move
@@ -82,29 +82,29 @@ defaultproperties
     PlayerNumHeadHealthScale=0.0
     HeadHealth=25
     MeleeDamage=14
-    JumpZ=320.000000    
-    BleedOutDuration=6.0    
+    JumpZ=320.000000
+    BleedOutDuration=6.0
     MotionDetectorThreat=1.0
     ZapThreshold=0.5
     ZappedDamageMod=1.5
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
-    
+
     //Use old ragdoll
     KFRagdollName="BloatRag"
-    
+
     //Looks like Shreks a little hungry
-    bCannibal=True
-    
+    bCannibal=true
+
     MenuName="Bloat 2.5"
 
     Prepivot=(Z=8.000000) //(Z=5.0)
 
     //Tweak these, we dont want a floating fatty!
     CollisionHeight=44.000000//previously  44
-    
+
     SoloHeadScale=1.2
-    
+
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-5,Z=70)
     OnlineHeadshotScale=1.3// Increased

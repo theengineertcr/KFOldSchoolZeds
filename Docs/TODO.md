@@ -1,6 +1,6 @@
 # To-Do
 
-> Return back to [README](../README.md#documentation)
+> return back to [README](../README.md#documentation)
 
 ## Gameplay Tweaks
 
@@ -12,7 +12,7 @@
 - [ ] Ranged Pounds that have LoS timed out from their attack should fire nearly immediately after making contact with the player.
 - [ ] Ranged Pound damage rebalance to be more similar to Husk(excessive damage currently being dealt)
 - [ ] Make RangedPound super attack only available on Suicidal+
-- [ ] Add option to disable Ranged Pound Super Attack
+- [ ] Add option to disable Ranged Pound super Attack
 - [ ] Give a whirring sound when Ranged Pound enters prefire animation so that it's less unexpected. Maybe play a voice line as well?
 - [ ] Create an alternative Minigun Pound variant that does not use Incendiary rounds
 - [ ] Make Gorefast prefer quicker attack on Suicidal+ while charging

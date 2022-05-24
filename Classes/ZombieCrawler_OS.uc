@@ -14,7 +14,7 @@ class ZombieCrawler_OS extends ZombieCrawlerOS;
 //Force it to use our anim set
 event PreBeginPlay()
 {
-    Super.PreBeginPlay();
+    super.PreBeginPlay();
     LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
 }
 
@@ -29,12 +29,12 @@ defaultproperties
     Mesh=SkeletalMesh'KFCharacterModels.Shade'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
     Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB'
-    
+
     //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Crawler.Crawler_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     //Dont think we need this?
     //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.Crawler_HitPlayer'
 
@@ -42,9 +42,8 @@ defaultproperties
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 }
-

@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Chainsaw Zombie Monster for KF Invasion gametype
@@ -33,7 +33,7 @@ simulated function PostNetReceive()
     if (bCharging)
     {
         MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
-        
+
         //If he's not attacking, increase his Z's Offset
         if( !bShotAnim )
         {
@@ -42,7 +42,7 @@ simulated function PostNetReceive()
         else
         {
             OnlineHeadshotOffset.Z=57;
-        }             
+        }
     }
     else if( !(bCrispified && bBurnified) )
     {
@@ -131,7 +131,7 @@ function RangedAttack(Actor A)
     local float Dist;
 
     Dist = VSize(A.Location - Location);
-    
+
     if ( bShotAnim || Physics == PHYS_Swimming)
         return; //DistBeforeSaw added here
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
@@ -149,7 +149,7 @@ function RangedAttack(Actor A)
         MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 0.85), 1 );
     else if(AnimAction == MeleeAnims[1])
          MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 1.15), 1 );
-        
+
     //Code that handles running when low on health, we need it
     //As we want retail Scrake behaviour, even if the Mod didn't have it
     if( !bShotAnim && !bDecapitated )
@@ -206,7 +206,7 @@ state RunningState
         {
             SetGroundSpeed(GetOriginalGroundSpeed());
         }
-        bCharging = False;
+        bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
     }
@@ -221,12 +221,12 @@ state RunningState
     {
         //Retail variable
         local float Dist;
-        
+
         Dist = VSize(A.Location - Location);
         //Get even closer before doing an attack so you can get a
         //Guaranteed hit on the player!
         DistBeforeSaw = 20.0;
-        
+
         if ( bShotAnim || Physics == PHYS_Swimming)
             return; //Added it here just incase
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
@@ -241,14 +241,14 @@ state RunningState
             GoToState('SawingLoop');
         }
     }
-    
+
     //Added in code to increase Head Hitbox whenever Gorefasts
     //Do their running animation because during that specific
     //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
         local int i;
-        
+
         //For some reason, this does not work on Network games
         if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
         {
@@ -258,19 +258,19 @@ state RunningState
         {
             OnlineHeadshotOffset.Z=57;
         }
-    
+
         //Gorefasts dont attack and move
         // Keep the gorefast moving toward its target when attacking
         //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
         //{
-        //    if( LookTarget!=None )
+        //    if( LookTarget!=none )
         //    {
         //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
         //    }
         //}
-    
+
         global.Tick(DeltaTime);
-    }    
+    }
 }
 
 // State where the zed is charging to a marked location.
@@ -310,8 +310,8 @@ State SawingLoop
     }
     function AnimEnd( int Channel )
     {
-        Super.AnimEnd(Channel);
-        if( Controller!=None && Controller.Enemy!=None )
+        super.AnimEnd(Channel);
+        if( Controller!=none && Controller.Enemy!=none )
             RangedAttack(Controller.Enemy); // Keep on attacking if possible.
     }
 
@@ -320,7 +320,7 @@ State SawingLoop
         MeleeDamage = Max( DifficultyDamageModifer() * default.MeleeDamage, 1 );
 
         SetGroundSpeed(GetOriginalGroundSpeed());
-        bCharging = False;
+        bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
     }
@@ -341,7 +341,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Damage *= 0.5; // Was 0.5 in Balance Round 1, then 0.6 in Round 2, back to 0.5 in Round 3
     }
 
-    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
+    super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
 
     // Added in Balance Round 3 to make the Scrake "Rage" more reliably when his health gets low(limited to Suicidal and HoE in Round 7)
     if ( Level.Game.GameDifficulty >= 5.0 && !IsInState('SawingLoop') && !IsInState('RunningState') && float(Health) / HealthMax < 0.75 )
@@ -391,9 +391,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //Retail code we'll keep
@@ -402,7 +402,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -419,7 +419,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -456,9 +456,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
-    //Use KFMod Controller    
-    ControllerClass=Class'KFOldSchoolZeds.SawZombieControllerOS'
+    //Use KFMod Controller
+    ControllerClass=class'SawZombieControllerOS'
 }

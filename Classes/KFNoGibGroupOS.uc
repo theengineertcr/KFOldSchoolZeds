@@ -3,18 +3,18 @@ class KFNoGibGroupOS extends xPawnGibGroup;
 
 defaultproperties
 {
-     Gibs(0)=None
-     Gibs(1)=None
-     Gibs(2)=None
-     Gibs(3)=None
-     Gibs(4)=None
-     Gibs(5)=None
-     BloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     LowGoreBloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     BloodGibClass=None
-     LowGoreBloodGibClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     LowGoreBloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     BloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     NoBloodEmitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
-     NoBloodHitClass=Class'KFOldSchoolZeds.KFBloodPuffOS'
+     Gibs(0)=none
+     Gibs(1)=none
+     Gibs(2)=none
+     Gibs(3)=none
+     Gibs(4)=none
+     Gibs(5)=none
+     BloodHitClass=class'KFBloodPuffOS'
+     LowGoreBloodHitClass=class'KFBloodPuffOS'
+     BloodGibClass=none
+     LowGoreBloodGibClass=class'KFBloodPuffOS'
+     LowGoreBloodEmitClass=class'KFBloodPuffOS'
+     BloodEmitClass=class'KFBloodPuffOS'
+     NoBloodEmitClass=class'KFBloodPuffOS'
+     NoBloodHitClass=class'KFBloodPuffOS'
 }

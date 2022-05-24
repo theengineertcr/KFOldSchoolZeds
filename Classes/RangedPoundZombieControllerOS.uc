@@ -14,9 +14,9 @@ var     name        AnimWaitingFor;     // The animation we are waiting to end i
 // Overridden to create a delay between when the Rangedpound fires his minigun
 function bool FireWeaponAt(Actor A)
 {
-    if ( A == None )
+    if ( A == none )
         A = Enemy;
-    if ( (A == None) || (Focus != A) )
+    if ( (A == none) || (Focus != A) )
         return false;
     Target = A;
 
@@ -34,10 +34,10 @@ function bool FireWeaponAt(Actor A)
 //Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
-    if ( (Enemy == None) || FireWeaponAt(Enemy) )
+    if ( (Enemy == none) || FireWeaponAt(Enemy) )
         SetCombatTimer();
     else
-        SetTimer(0.01, True);
+        SetTimer(0.01, true);
 }
 
 
@@ -102,12 +102,12 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     {
         if( bUseFreezeHack )
         {
-            if( Pawn!=None )
+            if( Pawn!=none )
             {
-                Pawn.AccelRate = Pawn.Default.AccelRate;
-                Pawn.GroundSpeed = Pawn.Default.GroundSpeed;
+                Pawn.AccelRate = Pawn.default.AccelRate;
+                Pawn.GroundSpeed = Pawn.default.GroundSpeed;
             }
-            bUseFreezeHack = False;
+            bUseFreezeHack = false;
         }
 
         AnimEnd(AnimWaitChannel);
@@ -153,7 +153,7 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
         if( bUseFreezeHack )
         {
-            MoveTarget = None;
+            MoveTarget = none;
             MoveTimer = -1;
             Pawn.Acceleration = vect(0,0,0);
             Pawn.GroundSpeed = 1;
@@ -168,6 +168,4 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

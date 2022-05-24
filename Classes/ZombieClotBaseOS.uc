@@ -51,7 +51,7 @@ defaultproperties
     //SeveredHeadAttachScale=0.8
     //SeveredLegAttachScale=0.8
     //SeveredArmAttachScale=0.8
-    
+
     //Values that don't need to be changed
     damageForce=5000
     MovementAnims(0)="ClotWalk"
@@ -65,7 +65,7 @@ defaultproperties
     bCannibal = true
     CrispUpThreshhold=9
     ClotGrabMessageDelay=12.0
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     ScoringValue=7
@@ -78,30 +78,30 @@ defaultproperties
     MeleeRange=20.0//30.000000
     Intelligence=BRAINS_Mammal
     MotionDetectorThreat=0.34
-    
+
     //Clots only had one grapple animation
     //Exception for Doorbashing to work properly
     MeleeAnims(0)="Claw"
-    MeleeAnims(1)="Claw2"    
+    MeleeAnims(1)="Claw2"
     MeleeAnims(2)="ClotGrapple"
-    
+
     //"Clot_Trip" to "ClotRag"
     KFRagdollName="ClotRag"
-   
+
     MenuName="Clot 2.5"
-    
+
     GrappleDuration=1.0//1.5 shortened to match with KFMod Grapple Duration    as were not going to destroy grapples upon death
-    
+
     //This makes him float, we don't want that
     //Prepivot=(Z=5.0)
-    
-    bUseExtendedCollision=True
+
+    bUseExtendedCollision=true
     ColOffset=(Z=48.000000)
     ColRadius=25.000000
     ColHeight=5.000000
-    
+
     SoloHeadScale=1.1
-    
+
     //Updated
     OnlineHeadshotOffset=(X=25,Y=-7,Z=45)
     OnlineHeadshotScale=1.2

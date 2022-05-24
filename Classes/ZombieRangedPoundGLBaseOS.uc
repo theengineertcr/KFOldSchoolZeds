@@ -51,20 +51,20 @@ defaultproperties
     //These values were not set in KFMod
     //DrawScale=1.4
     ZombieFlag=1
-    //AmmunitionClass=Class'KFMod.BZombieAmmo'
+    //AmmunitionClass=class'KFMod.BZombieAmmo'
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
-    //SoundVolume=200    
+    //SoundVolume=200
     //SeveredHeadAttachScale=0.9
     //SeveredLegAttachScale=0.9
     //SeveredArmAttachScale=0.9
     //AmbientGlow=0
-    
+
     //Values that don't need to be changed
-    bFatAss=True
+    bFatAss=true
     Mass=400.000000
-    RotationRate=(Yaw=45000,Roll=0)        
-    bUseExtendedCollision=True
+    RotationRate=(Yaw=45000,Roll=0)
+    bUseExtendedCollision=true
 
     //Skins set in event class ZombieRangedPound_OS
     //Skins(1)=Shader'KF_Specimens_Trip_T_Two.burns.burns_shdr'
@@ -93,14 +93,14 @@ defaultproperties
     GLFireInterval=5.5
     GLFireRate=0.75
     GLFireBurst=2
-    
-    AmmunitionClass=Class'KFMod.BZombieAmmo'
-    bCannibal = False // No animation for him.
+
+    AmmunitionClass=class'KFMod.BZombieAmmo'
+    bCannibal = false // No animation for him.
     MenuName="Flesh Pound Explosives Gunner"
 
     //Use RangedIdle
     IdleHeavyAnim="RangedIdle"
-    IdleRifleAnim="RangedIdle"    
+    IdleRifleAnim="RangedIdle"
     IdleCrouchAnim="RangedIdle"
     IdleWeaponAnim="RangedIdle"
     IdleRestAnim="RangedIdle"
@@ -135,30 +135,29 @@ defaultproperties
     LandAnims(2)="RangedJumpLanded"
     LandAnims(3)="RangedJumpLanded"
     AirStillAnim="RangedJumpInAir"
-    TakeoffStillAnim="RangedJumpTakeOff"    
+    TakeoffStillAnim="RangedJumpTakeOff"
     TurnLeftAnim="RangedBossHitF"//"TurnLeft"
     TurnRightAnim="RangedBossHitF"//"TurnRight"
-    
+
     KFRagdollName="FleshPoundRag"//use KFMod ragdoll
-    
+
     //Bonk them with the Minigun!
     MeleeAnims(0)="PoundPunch2"
     MeleeAnims(1)="PoundPunch2"
     MeleeAnims(2)="PoundPunch2"
-    
+
     //Dont attack doors with the minigun
-    bCanDistanceAttackDoors=False
-    
-    //These might need to be changed    
+    bCanDistanceAttackDoors=false
+
+    //These might need to be changed
     ColOffset=(Z=65)//(Z=50)
     ColRadius=27
     ColHeight=25//40
     PrePivot=(Z=0)
 
-
     SoloHeadScale=1.55
 
     //Updated
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
-    OnlineHeadshotScale=1.75//1.3   
+    OnlineHeadshotScale=1.75//1.3
 }

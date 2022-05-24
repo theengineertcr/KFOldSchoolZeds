@@ -40,9 +40,9 @@ event PostBeginPlay()
     local string PoundsMix[2];
     local int MyRand;
     local KFMonsterOS KFMOS;
-    
+
     super.PostBeginPlay();
-    
+
     //This BS doesn't work because I can't classify KFMos as a (Pawn) without erroring
     //KFMOS = KFMonsterOS(Pawn);
     KF = KFGameType(Level.Game);
@@ -67,49 +67,49 @@ event PostBeginPlay()
     for (i = 0; i < KF.SpecialEventMonsterCollections.Length; i++)
     {
         KF.SpecialEventMonsterCollections[i] = KF.MonsterCollection;
-    }    
-    
-    Pounds[0] = "KFOldSchoolZeds.ZombieRangedPound_OS";
-    Pounds[1] = "KFOldSchoolZeds.ZombieRangedPoundGL_OS";
-    
-    PoundsMix[0] = "KFOldSchoolZeds.ZombieRangedPoundMix_OS";
-    PoundsMix[1] = "KFOldSchoolZeds.ZombieRangedPoundGLMix_OS";
-    
-    MyRand = Rand(2);    
-    
+    }
+
+    Pounds[0] = string(class'ZombieRangedPound_OS');
+    Pounds[1] = string(class'ZombieRangedPoundGL_OS');
+
+    PoundsMix[0] = string(class'ZombieRangedPoundMix_OS');
+    PoundsMix[1] = string(class'ZombieRangedPoundGLMix_OS');
+
+    MyRand = Rand(2);
+
     //If enabled, spawn Ranged Pounds in place of Husks
     //Otherwise, replace them with Bloats
     if(bEnableRangedPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" || bEnableExplosivesPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
     {
         if(!bEnableRandomSkins)
-        {        
+        {
             KF.MonsterCollection.default.MonsterClasses[8].MClassName = Pounds[MyRand];
         }
         else
         {
             KF.MonsterCollection.default.MonsterClasses[8].MClassName = PoundsMix[MyRand];
-        }     
-      
+        }
+
         if(!bEnableExplosivesPound && bEnableRangedPound)
         {
             if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPound_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPound_OS');
             else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundMix_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundMix_OS');
         }
         else if( !bEnableRangedPound && bEnableExplosivesPound)
         {
             if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundGL_OS";
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGL_OS');
             else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieRangedPoundGLMix_OS";
-        }    
+                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGLMix_OS');
+        }
     }
     else
     {
-        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "KFOldSchoolZeds.ZombieBloat_OS";
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieBloat_OS');
     }
-   
+
 
     // start the timer
     SetTimer(0.10, false);
@@ -127,12 +127,12 @@ simulated function Timer()
 static function FillPlayInfo(PlayInfo PlayInfo)
 {
   super(Info).FillPlayInfo(PlayInfo);
-  
+
   //TODO: Make it so you can't have both of these checked at the same time
   PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);
-  PlayInfo.AddSetting(default.FriendlyName, "bEnableOldMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);    
+  PlayInfo.AddSetting(default.FriendlyName, "bEnableOldMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);
 }
 
 
@@ -167,9 +167,9 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
     myLevel.AddPrecacheMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.StalkerSkin');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin');
-    myLevel.AddPrecacheMaterial(FinalBlend 'KFOldSchoolZeds_Textures.StalkerHairFB');    
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB');    
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');    
+    myLevel.AddPrecacheMaterial(FinalBlend 'KFOldSchoolZeds_Textures.StalkerHairFB');
+    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB');
+    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin');
     myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.RedPoundMeter');
@@ -186,7 +186,7 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
     myLevel.AddPrecacheMaterial(Texture'KFPatch2.BossGun');
     myLevel.AddPrecacheMaterial(Texture'KillingFloorLabTextures.LabCommon.voidtex');
     myLevel.AddPrecacheMaterial(Shader'KFPatch2.LaserShader');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.BossCloakShader');    
+    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.BossCloakShader');
 }
 
 //=======================================
@@ -202,10 +202,10 @@ defaultproperties
 
     bAlwaysRelevant=true
     RemoteRole=ROLE_SimulatedProxy
-    bAddToServerPackages=True
+    bAddToServerPackages=true
 
-    bEnableRangedPound=True
-    bEnableExplosivesPound=False
-    bEnableRandomSkins=False
-    bEnableOldMeleeDamage=False
+    bEnableRangedPound=true
+    bEnableExplosivesPound=false
+    bEnableRandomSkins=false
+    bEnableOldMeleeDamage=false
 }

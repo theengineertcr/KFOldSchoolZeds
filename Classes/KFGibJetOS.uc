@@ -16,5 +16,5 @@ defaultproperties
      // Bloody spray in KFX was imported to KFOldSchoolZeds_Textures
      Skins(0)=Texture'KFOldSchoolZeds_Textures.BloodySpray'
      Style=STY_Modulated
-     bUnlit=False
+     bUnlit=false
 }

@@ -50,17 +50,17 @@ replication
 defaultproperties
 {
     //These values were not set in KFMod
-    //AmbientGlow=0    
+    //AmbientGlow=0
     //StunTime=0.3 //Was used in Balance Round 1(removed for Round 2)
     //StunsRemaining=1 //Added in Balance Round 2
     ZombieFlag=3
     //SeveredHeadAttachScale=1.5
     //SeveredLegAttachScale=1.2
     //SeveredArmAttachScale=1.3
-    
+
     //Values that don't need to be changed
-    bMeleeStunImmune = true    
-    bFatAss=True
+    bMeleeStunImmune = true
+    bFatAss=true
     Mass=600.000000
     MeleeAnims(0)="PoundAttack1"
     MeleeAnims(1)="PoundAttack2"
@@ -74,11 +74,11 @@ defaultproperties
     RotationRate=(Yaw=45000,Roll=0)
     RagDeathVel=100.000000
     RagDeathUpKick=100.000000
-    bBoss=True
+    bBoss=true
     DamageToMonsterScale=5.0
-    
+
     //We'll keep these values the same as the retail version
-    //As this mod was made purely for the visual aspect, not gameplay    
+    //As this mod was made purely for the visual aspect, not gameplay
     ScoringValue=200
     RotMag=(X=500.000000,Y=500.000000,Z=600.000000)
     RotRate=(X=12500.000000,Y=12500.000000,Z=12500.000000)
@@ -106,7 +106,7 @@ defaultproperties
     ZappedDamageMod=1.25
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
-    
+
     //All of these need to be PoundWalk
     MovementAnims(0)="PoundWalk"
     MovementAnims(1)="PoundWalk"//"WalkB"
@@ -126,19 +126,18 @@ defaultproperties
 
     //Skins set in event class ZombieFleshpound_OS
     //Skins(1)=Shader'KFCharacters.FPAmberBloomShader'
-    
-    //These might need to be changed    
-    bUseExtendedCollision=True
+
+    //These might need to be changed
+    bUseExtendedCollision=true
     ColOffset=(Z=52.000000)
     ColRadius=36.000000
     ColHeight=35.000000
     PrePivot=(Z=0) //Y-15?
 
-    
     //Headshot doesn't work properly with Projectile weapons and I don't want to scale this up
     //TODO:Do a quick patch, then investigate this further
     SoloHeadScale=1.4
-    
+
     //Updated
     OnlineHeadshotOffset=(X=32,Y=-6,Z=68) // Z=50 when charging
     OnlineHeadshotScale=1.5

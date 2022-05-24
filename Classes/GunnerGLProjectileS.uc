@@ -7,5 +7,5 @@ defaultproperties
     ExplodeTimer=1.75
     DampenFactor=0.5
     DampenFactorParallel=0.7
-    TossZ=50    
+    TossZ=50
 }

@@ -21,23 +21,23 @@ defaultproperties
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.ZombieBoss'
     Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
     Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter'
-    Skins(2)=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader' 
-    Skins(3)=Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin'    
+    Skins(2)=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader'
+    Skins(3)=Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin'
 
     //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 
-    //Dont think we need this?    
-       //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.FP_HitPlayer'
+    //Dont think we need this?
+    //MeleeAttackHitSound=sound'KF_EnemiesFinalSnd.FP_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 }

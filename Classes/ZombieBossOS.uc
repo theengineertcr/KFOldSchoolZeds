@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -34,7 +34,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 {
     local vector NewVelocity;
 
-    NewVelocity = Super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
 
     if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
     {
@@ -55,7 +55,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
 function ZombieMoan()
 {
     if( !bShotAnim ) // Do not moan while taunting
-        Super.ZombieMoan();
+        super.ZombieMoan();
 }
 
 // Don't do this for the Patriarch
@@ -71,7 +71,7 @@ simulated function Tick(float DeltaTime)
 {
     local KFHumanPawn HP;
 
-    Super.Tick(DeltaTime);
+    super.Tick(DeltaTime);
 
     // Process the pipe bomb time damage scale, reducing the scale over time so
     // it goes back up to 100% damage over a few seconds
@@ -86,7 +86,7 @@ simulated function Tick(float DeltaTime)
     }
 
     if( Level.NetMode==NM_DedicatedServer )
-        Return; // Servers aren't intrested in this info.
+        return; // Servers aren't intrested in this info.
 
     bSpecialCalcView = bIsBossView;
     if( bZapped )
@@ -97,7 +97,7 @@ simulated function Tick(float DeltaTime)
     else if( bCloaked && Level.TimeSeconds>LastCheckTimes )
     {
         LastCheckTimes = Level.TimeSeconds+0.8;
-        ForEach VisibleCollidingActors(Class'KFHumanPawn',HP,1000,Location)
+        ForEach VisibleCollidingActors(class'KFHumanPawn',HP,1000,Location)
         {
             if( HP.Health <= 0 || !HP.ShowStalkers() )
                 continue;
@@ -105,15 +105,15 @@ simulated function Tick(float DeltaTime)
             // If he's a commando, we've been spotted.
             if( !bSpotted )
             {
-                bSpotted = True;
+                bSpotted = true;
                 CloakBoss();
             }
-            Return;
+            return;
         }
         // if we're uberbrite, turn down the light
         if( bSpotted )
         {
-            bSpotted = False;
+            bSpotted = false;
             bUnlit = false;
             CloakBoss();
         }
@@ -135,7 +135,7 @@ simulated function CloakBoss()
     {
         Visibility = 120;
         if( Level.NetMode==NM_DedicatedServer )
-            Return; //Use KFMod textures
+            return; //Use KFMod textures
         Skins[0] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
         Skins[1] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
         Skins[2] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
@@ -151,14 +151,14 @@ simulated function CloakBoss()
     bCloaked = true;
     if( Level.NetMode!=NM_Client )
     {
-        For( C=Level.ControllerList; C!=None; C=C.NextController )
+        For( C=Level.ControllerList; C!=none; C=C.NextController )
         {
-            if( C.bIsPlayer && C.Enemy==Self )
-                C.Enemy = None; // Make bots lose sight with me.
+            if( C.bIsPlayer && C.Enemy==self )
+                C.Enemy = none; // Make bots lose sight with me.
         }
     }
     if( Level.NetMode==NM_DedicatedServer )
-        Return;
+        return;
     //Use KFMod Textures
     Skins[0] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
     Skins[1] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
@@ -209,11 +209,11 @@ simulated function UnCloakBoss()
 
     Visibility = default.Visibility;
     bCloaked = false;
-    bSpotted = False;
-    bUnlit = False;
+    bSpotted = false;
+    bUnlit = false;
     if( Level.NetMode==NM_DedicatedServer )
-        Return;
-    Skins = Default.Skins;
+        return;
+    Skins = default.Skins;
 
     if (PlayerShadow != none)
         PlayerShadow.bShadowActive = true;
@@ -231,7 +231,7 @@ simulated function SetZappedBehavior()
     if( Level.Netmode != NM_DedicatedServer )
     {
         bUnlit = false;
-        Skins = Default.Skins;
+        Skins = default.Skins;
 
         if (PlayerShadow != none)
             PlayerShadow.bShadowActive = true;
@@ -250,7 +250,7 @@ simulated function UnSetZappedBehavior()
     if( Level.Netmode != NM_DedicatedServer )
     {
         LastCheckTimes = Level.TimeSeconds;
-        SetOverlayMaterial(None, 0.0f, true);
+        SetOverlayMaterial(none, 0.0f, true);
     }
 }
 
@@ -357,7 +357,7 @@ function bool MakeGrandEntry()
     HandleWaitForAnim('Entrance');
     GotoState('MakingEntrance');
 
-    return True;
+    return true;
 }
 
 //Retail code we need
@@ -380,11 +380,11 @@ Begin:
 
 simulated function Destroyed()
 {
-    if( mTracer!=None )
+    if( mTracer!=none )
         mTracer.Destroy();
-    if( mMuzzleFlash!=None )
+    if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 simulated Function PostNetBeginPlay()
@@ -393,7 +393,7 @@ simulated Function PostNetBeginPlay()
     AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
-    bNetNotify = True;
+    bNetNotify = true;
 }
 
 function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageType)
@@ -417,26 +417,26 @@ function bool OnlyEnemyAround( Pawn Other )
 {
     local Controller C;
 
-    For( C=Level.ControllerList; C!=None; C=C.NextController )
+    For( C=Level.ControllerList; C!=none; C=C.NextController )
     {
-        if( C.bIsPlayer && C.Pawn!=None && C.Pawn!=Other && ((VSize(C.Pawn.Location-Location)<1500 && FastTrace(C.Pawn.Location,Location))
+        if( C.bIsPlayer && C.Pawn!=none && C.Pawn!=Other && ((VSize(C.Pawn.Location-Location)<1500 && FastTrace(C.Pawn.Location,Location))
          || (VSize(C.Pawn.Location-Other.Location)<1000 && FastTrace(C.Pawn.Location,Other.Location))) )
-            Return False;
+            return false;
     }
-    Return True;
+    return true;
 }
 
 function bool IsCloseEnuf( Actor A )
 {
     local vector V;
 
-    if( A==None )
-        Return False;
+    if( A==none )
+        return false;
     V = A.Location-Location;
     if( Abs(V.Z)>(CollisionHeight+A.CollisionHeight) )
-        Return False;
+        return false;
     V.Z = 0;
-    Return (VSize(V)<(CollisionRadius+A.CollisionRadius+25));
+    return (VSize(V)<(CollisionRadius+A.CollisionRadius+25));
 }
 
 function RangedAttack(Actor A)
@@ -454,11 +454,11 @@ function RangedAttack(Actor A)
     if ( bShotAnim )
         return;
     D = VSize(A.Location-Location);
-    bOnlyE = (Pawn(A)!=None && OnlyEnemyAround(Pawn(A)));
+    bOnlyE = (Pawn(A)!=none && OnlyEnemyAround(Pawn(A)));
     if ( IsCloseEnuf(A) )
     {
         bShotAnim = true;
-        if( Health>1500 && Pawn(A)!=None && FRand() < 0.5 ) //Was .85 in KFMod, but this is fine
+        if( Health>1500 && Pawn(A)!=none && FRand() < 0.5 ) //Was .85 in KFMod, but this is fine
         {
             SetAnimAction('MeleeImpale');
         }
@@ -474,13 +474,13 @@ function RangedAttack(Actor A)
         {
             // Wait another 20 to try this again
             LastSneakedTime = Level.TimeSeconds;//+FRand()*120;
-            Return;
+            return;
         }
         SetAnimAction('BossHitF'); //transition to BossHitF
         GoToState('SneakAround');
     }
     else if( bChargingPlayer && (bOnlyE || D<200) )
-        Return;
+        return;
     else if( !bDesireChainGun && !bChargingPlayer && (D<300 || (D<700 && bOnlyE)) &&
         (Level.TimeSeconds - LastChargeTime > (5.0 + 5.0 * FRand())) )  // Don't charge again for a few seconds
     {
@@ -492,7 +492,7 @@ function RangedAttack(Actor A)
         if( !Controller.LineOfSightTo(A) || FRand() > 0.75 )
         {
             LastMissileTime = Level.TimeSeconds+FRand() * 5;
-            Return;
+            return;
         }
 
         LastMissileTime = Level.TimeSeconds + 10 + FRand() * 15;
@@ -510,7 +510,7 @@ function RangedAttack(Actor A)
         if ( !Controller.LineOfSightTo(A) || FRand()> 0.85 )
         {
             LastChainGunTime = Level.TimeSeconds+FRand()*4;
-            Return;
+            return;
         }
 
         LastChainGunTime = Level.TimeSeconds + 5 + FRand() * 10;
@@ -528,7 +528,7 @@ function RangedAttack(Actor A)
 
 event Bump(actor Other)
 {
-    Super(Monster).Bump(Other);
+    super(Monster).Bump(Other);
     if( Other==none )
         return;
 
@@ -548,17 +548,17 @@ simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
-    
+
     //Get Old L85 fire sound
-    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);    
+    PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('tip').Origin;
-    if( mTracer==None )
-        mTracer = Spawn(Class'KFMod.KFNewTracer',,,Start); //KFNewTracer are similar
+    if( mTracer==none )
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer are similar
     else mTracer.SetLocation(Start);
-    if( mMuzzleFlash==None )
+    if( mMuzzleFlash==none )
     {
         //Swap with NewMinigunMFlash
-        mMuzzleFlash = Spawn(Class'NewMinigunMFlashOS');
+        mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'tip');
     }
     else mMuzzleFlash.SpawnParticle(1);
@@ -578,7 +578,7 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
-    Instigator = Self;
+    Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
@@ -598,7 +598,7 @@ simulated function AnimEnd( int Channel )
 
         if( Sequence != 'PreFireMG' && Sequence != 'FireMG' )
         {
-            Super.AnimEnd(Channel);
+            super.AnimEnd(Channel);
             return;
         }
 
@@ -607,7 +607,7 @@ simulated function AnimEnd( int Channel )
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
     }
-    else Super.AnimEnd(Channel);
+    else super.AnimEnd(Channel);
 }
 
 state FireChaingun
@@ -667,7 +667,7 @@ state FireChaingun
     function EndState()
     {
         TraceHitPos = vect(0,0,0);
-        bMinigunning = False;
+        bMinigunning = false;
 
         AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
@@ -679,10 +679,10 @@ state FireChaingun
 
     function BeginState()
     {
-        bFireAtWill = False;
+        bFireAtWill = false;
         Acceleration = vect(0,0,0);
         MGLostSightTimeout = 0.0;
-        bMinigunning = True;
+        bMinigunning = true;
     }
 
     function AnimEnd( int Channel )
@@ -708,7 +708,7 @@ state FireChaingun
                 else
                 {
                     MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                    Controller.Focus = None;
+                    Controller.Focus = none;
                 }
 
                 Controller.Target = Controller.Enemy;
@@ -716,7 +716,7 @@ state FireChaingun
             else
             {
                 MGLostSightTimeout = Level.TimeSeconds + (0.25 + FRand() * 0.35);
-                Controller.Focus = None;
+                Controller.Focus = none;
             }
 
             if( !bFireAtWill )
@@ -729,7 +729,7 @@ state FireChaingun
                 PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
             }
 
-            bFireAtWill = True;
+            bFireAtWill = true;
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
@@ -747,7 +747,7 @@ state FireChaingun
         MGFireCounter--;
 
         Start = GetBoneCoords('tip').Origin;
-        if( Controller.Focus!=None )
+        if( Controller.Focus!=none )
             R = rotator(Controller.Focus.Location-Start);
         else R = rotator(Controller.FocalPoint-Start);
         if( NeedToTurnFor(R) )
@@ -758,18 +758,18 @@ state FireChaingun
 
         // Have to turn of hit point collision so trace doesn't hit the Human Pawn's bullet whiz cylinder
         bBlockHitPointTraces = false;
-        A = Trace(HL,HN,End,Start,True);
+        A = Trace(HL,HN,End,Start,true);
         bBlockHitPointTraces = true;
 
-        if( A==None )
-            Return;
+        if( A==none )
+            return;
         TraceHitPos = HL;
         if( Level.NetMode!=NM_DedicatedServer )
             AddTraceHitFX(HL);
 
         if( A!=Level )
         {
-            A.TakeDamage(MGDamage+Rand(3),Self,HL,Dir*500,Class'DamageType');
+            A.TakeDamage(MGDamage+Rand(3),self,HL,Dir*500,class'DamageType');
         }
     }
 
@@ -783,7 +783,7 @@ state FireChaingun
     }
 
 Begin:
-    While( True )
+    While( true )
     {
         Acceleration = vect(0,0,0);
 
@@ -833,19 +833,19 @@ Ignores RangedAttack;
         Start = GetBoneCoords('tip').Origin;
         if ( !SavedFireProperties.bInitialized )
         {
-            SavedFireProperties.AmmoClass = MyAmmo.Class;
+            SavedFireProperties.AmmoClass = MyAmmo.class;
             SavedFireProperties.ProjectileClass = MyAmmo.ProjectileClass;
             SavedFireProperties.WarnTargetPct = 0.15;
             SavedFireProperties.MaxRange = 10000;
-            SavedFireProperties.bTossed = False;
-            SavedFireProperties.bTrySplash = False;
-            SavedFireProperties.bLeadTarget = True;
-            SavedFireProperties.bInstantHit = True;
+            SavedFireProperties.bTossed = false;
+            SavedFireProperties.bTrySplash = false;
+            SavedFireProperties.bLeadTarget = true;
+            SavedFireProperties.bInstantHit = true;
             SavedFireProperties.bInitialized = true;
         }
         R = AdjustAim(SavedFireProperties,Start,100);
         PlaySound(Sound'KFOldSchoolZeds_Sounds.Shared.LAWFire'); //Use KFMod Law Fire sound
-        Spawn(Class'BossLAWProjOS',,,Start,R); //Use Old BossLAWProj
+        Spawn(class'BossLAWProjOS',,,Start,R); //Use Old BossLAWProj
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
@@ -870,12 +870,12 @@ Begin:
 
 function bool MeleeDamageTarget(int hitdamage, vector pushdir)
 {
-    if( Controller.Target!=None && Controller.Target.IsA('NetKActor') )
+    if( Controller.Target!=none && Controller.Target.IsA('NetKActor') )
         pushdir = Normal(Controller.Target.Location-Location)*100000; // Fly bitch!
 
-    // Used to set MeleeRange = Default.MeleeRange; in Balance Round 1, fixed in Balance Round 2
+    // Used to set MeleeRange = default.MeleeRange; in Balance Round 1, fixed in Balance Round 2
 
-    return Super.MeleeDamageTarget(hitdamage, pushdir);
+    return super.MeleeDamageTarget(hitdamage, pushdir);
 }
 
 state Charging
@@ -893,7 +893,7 @@ state Charging
 
     function BeginState()
     {
-        bChargingPlayer = True;
+        bChargingPlayer = true;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
 
@@ -904,7 +904,7 @@ state Charging
     function EndState()
     {
         SetGroundSpeed(GetOriginalGroundSpeed());
-        bChargingPlayer = False;
+        bChargingPlayer = false;
         ChargeDamage = 0;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
@@ -930,7 +930,7 @@ state Charging
                     PostNetReceive();
             }
             SetGroundSpeed(OriginalGroundSpeed * 1.25);
-            if( LookTarget!=None )
+            if( LookTarget!=none )
             {
                 Acceleration = AccelRate * Normal(LookTarget.Location - Location);
             }
@@ -1099,7 +1099,7 @@ State Escaping extends Charging // Got hurt and running away...
     function EndState()
     {
         SetGroundSpeed(GetOriginalGroundSpeed());
-        bChargingPlayer = False;
+        bChargingPlayer = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
         if( bCloaked )
@@ -1194,12 +1194,12 @@ Begin:
 
 simulated function DropNeedle()
 {
-    if( CurrentNeedle!=None )
+    if( CurrentNeedle!=none )
     {
         DetachFromBone(CurrentNeedle);
         CurrentNeedle.SetLocation(GetBoneCoords('Bip01 R Finger0').Origin); //Rpalm_MedAttachment
         CurrentNeedle.DroppedNow();
-        CurrentNeedle = None;
+        CurrentNeedle = none;
     }
 }
 simulated function NotifySyringeA()
@@ -1216,7 +1216,7 @@ simulated function NotifySyringeA()
     if( Level.NetMode!=NM_DedicatedServer )
     {
         DropNeedle();
-        CurrentNeedle = Spawn(Class'BossHPNeedle'); //TODO:Maybe use old boss syringe?
+        CurrentNeedle = Spawn(class'BossHPNeedle'); //TODO:Maybe use old boss syringe?
         AttachToBone(CurrentNeedle,'Bip01 R Finger0'); //Rpalm_MedAttachment
     }
 }
@@ -1232,7 +1232,7 @@ function NotifySyringeB()
 simulated function NotifySyringeC()
 {
     //log("Heal Part 3");
-    if( Level.NetMode!=NM_DedicatedServer && CurrentNeedle!=None )
+    if( Level.NetMode!=NM_DedicatedServer && CurrentNeedle!=none )
     {
         CurrentNeedle.Velocity = vect(-45,300,-90) >> Rotation;
         DropNeedle();
@@ -1287,7 +1287,7 @@ simulated function PostNetReceive()
         Switch( SyringeCount )
         {    //Use KFMod Syringe bones
             Case 1:
-                SetBoneScale(3,0,'SyringeBoneOne'); 
+                SetBoneScale(3,0,'SyringeBoneOne');
                 Break;
             Case 2:
                 SetBoneScale(3,0,'SyringeBoneOne');
@@ -1298,7 +1298,7 @@ simulated function PostNetReceive()
                 SetBoneScale(4,0,'SyringeBoneTwo');
                 SetBoneScale(5,0,'SyringeBoneThree');
                 Break;
-            Default: // WTF? reset...?
+            default: // WTF? reset...?
                 SetBoneScale(3,1,'SyringeBoneOne');
                 SetBoneScale(4,1,'SyringeBoneTwo');
                 SetBoneScale(5,1,'SyringeBoneThree');
@@ -1328,9 +1328,9 @@ simulated function int DoAnimAction( name AnimName )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
-        Return 1;
+        return 1;
     }
-    Return Super.DoAnimAction(AnimName);
+    return super.DoAnimAction(AnimName);
 }
 
 //We need this
@@ -1339,7 +1339,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -1366,7 +1366,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
 
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
@@ -1405,10 +1405,10 @@ simulated function HandleBumpGlass()
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
-// Return true if we want to charge from taking too much damage
+// return true if we want to charge from taking too much damage
 function bool ShouldChargeFromDamage()
 {
     // If we don;t want to heal, charge whoever damaged us!!!
@@ -1452,7 +1452,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
        Damage *= UsedPipeBombDamScale;
     }
 
-    Super.TakeDamage(Damage,instigatedBy,hitlocation,Momentum,damageType);
+    super.TakeDamage(Damage,instigatedBy,hitlocation,Momentum,damageType);
 
     if( Level.TimeSeconds - LastDamageTime > 10 )
     {
@@ -1483,7 +1483,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     }
 
     if( Health<=0 || SyringeCount==3 || IsInState('Escaping') || IsInState('KnockDown') /*|| IsInState('RadialAttack') || bDidRadialAttack || bShotAnim*/ ) //Dont want RadialAttack here
-        Return;
+        return;
 
     if( (SyringeCount==0 && Health<HealingLevels[0]) || (SyringeCount==1 && Health<HealingLevels[1]) || (SyringeCount==2 && Health<HealingLevels[2]) )
     {
@@ -1493,7 +1493,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Acceleration = vect(0,0,0);
         SetAnimAction('KnockDown');
         HandleWaitForAnim('KnockDown');
-        KFMonsterController(Controller).bUseFreezeHack = True;
+        KFMonsterController(Controller).bUseFreezeHack = true;
         GoToState('KnockDown');
     }
 }
@@ -1512,7 +1512,7 @@ function DoorAttack(Actor A)
 {
     if ( bShotAnim )
         return;
-    else if ( A!=None )
+    else if ( A!=none )
     {
         Controller.Target = A;
         bShotAnim = true;
@@ -1520,7 +1520,7 @@ function DoorAttack(Actor A)
         SetAnimAction('PreFireMG'); //('PreFireMissile');
         HandleWaitForAnim('PreFireMG');
         //Not sure if we need this
-        MGFireCounter = Rand(20);        
+        MGFireCounter = Rand(20);
         GoToState('FireMissile');
     }
 }
@@ -1528,7 +1528,7 @@ function RemoveHead();
 function PlayDirectionalHit(Vector HitLoc);
 function bool SameSpeciesAs(Pawn P)
 {
-    return False;
+    return false;
 }
 
 // Creapy endgame camera when the evil wins.
@@ -1541,28 +1541,28 @@ function bool SetBossLaught()
     Acceleration = vect(0,0,0);
     SetAnimAction('VictoryLaugh');
     HandleWaitForAnim('VictoryLaugh');
-    bIsBossView = True;
-    bSpecialCalcView = True;
-    For( C=Level.ControllerList; C!=None; C=C.NextController )
+    bIsBossView = true;
+    bSpecialCalcView = true;
+    For( C=Level.ControllerList; C!=none; C=C.NextController )
     {
-        if( PlayerController(C)!=None )
+        if( PlayerController(C)!=none )
         {
-            PlayerController(C).SetViewTarget(Self);
-            PlayerController(C).ClientSetViewTarget(Self);
-            PlayerController(C).ClientSetBehindView(True);
+            PlayerController(C).SetViewTarget(self);
+            PlayerController(C).ClientSetViewTarget(self);
+            PlayerController(C).ClientSetBehindView(true);
         }
     }
-    Return True;
+    return true;
 }
 simulated function bool SpectatorSpecialCalcView(PlayerController Viewer, out Actor ViewActor, out vector CameraLocation, out rotator CameraRotation)
 {
-    Viewer.bBehindView = True;
-    ViewActor = Self;
+    Viewer.bBehindView = true;
+    ViewActor = self;
     CameraRotation.Yaw = Rotation.Yaw-32768;
     CameraRotation.Pitch = 0;
     CameraRotation.Roll = Rotation.Roll;
     CameraLocation = Location + (vect(80,0,80) >> Rotation);
-    Return True;
+    return true;
 }
 
 // Overridden to do a cool slomo death view of the patriarch dying
@@ -1574,14 +1574,14 @@ function Died(Controller Killer, class<DamageType> damageType, vector HitLocatio
 
     KFGameType(Level.Game).DoBossDeath();
 
-    For( C=Level.ControllerList; C!=None; C=C.NextController )
+    For( C=Level.ControllerList; C!=none; C=C.NextController )
     {
-        if( PlayerController(C)!=None )
+        if( PlayerController(C)!=none )
         {
-            PlayerController(C).SetViewTarget(Self);
-            PlayerController(C).ClientSetViewTarget(Self);
+            PlayerController(C).SetViewTarget(self);
+            PlayerController(C).ClientSetViewTarget(self);
             PlayerController(C).bBehindView = true;
-            PlayerController(C).ClientSetBehindView(True);
+            PlayerController(C).ClientSetBehindView(true);
         }
     }
 }
@@ -1642,7 +1642,7 @@ function ClawDamageTarget()
         Controller.Target = OldTarget;
     }
 
-    MeleeRange = Default.MeleeRange;
+    MeleeRange = default.MeleeRange;
 // End Balance Round 1, 2, and 3
 }
 
@@ -1663,8 +1663,8 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 
-    ControllerClass=Class'KFOldSchoolZeds.BossZombieControllerOS'
+    ControllerClass=class'BossZombieControllerOS'
 }

@@ -1,11 +1,10 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
 class ZombieBloatOS extends ZombieBloatBaseOS
     abstract;
-
 
 //----------------------------------------------------------------------------
 // NOTE: All Variables are declared in the base class to eliminate hitching
@@ -32,7 +31,7 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 //Retail code we're keeping
@@ -52,7 +51,7 @@ function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
-    else if ( A!=None )
+    else if ( A!=none )
     {
         bShotAnim = true;
         if( !bDecapitated )
@@ -88,7 +87,7 @@ function RangedAttack(Actor A)
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
     }
-    else if( (KFDoorMover(A)!=None || VSize(A.Location-Location)<=DistBeforePuke) && !bDecapitated )
+    else if( (KFDoorMover(A)!=none || VSize(A.Location-Location)<=DistBeforePuke) && !bDecapitated )
     {
         bShotAnim=true;
         SetAnimAction('ZombieBarf');
@@ -99,7 +98,7 @@ function RangedAttack(Actor A)
         if ( FRand() < 0.03 && KFHumanPawn(A) != none && PlayerController(KFHumanPawn(A).Controller) != none )
         {
             PlayerController(KFHumanPawn(A).Controller).Speech('AUTO', 7, "");
-        }    
+        }
         //Controller.GotoState(,'WaitForAnim');
     }
 }
@@ -113,10 +112,9 @@ function SpawnTwoShots()
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
 
-    
-    if( Controller!=None && KFDoorMover(Controller.Target)!=None )
+    if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
-        Controller.Target.TakeDamage(22,Self,Location,vect(0,0,0),Class'DamTypeVomit');
+        Controller.Target.TakeDamage(22,self,Location,vect(0,0,0),class'DamTypeVomit');
         return;
     }
 
@@ -124,31 +122,31 @@ function SpawnTwoShots()
     FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
     if ( !SavedFireProperties.bInitialized )
     {
-        SavedFireProperties.AmmoClass = Class'SkaarjAmmo';
-        SavedFireProperties.ProjectileClass = Class'KFBloatVomitOS';
+        SavedFireProperties.AmmoClass = class'SkaarjAmmo';
+        SavedFireProperties.ProjectileClass = class'KFBloatVomitOS';
         SavedFireProperties.WarnTargetPct = 1;
         SavedFireProperties.MaxRange = 500;
-        SavedFireProperties.bTossed = False;
-        SavedFireProperties.bTrySplash = False;
-        SavedFireProperties.bLeadTarget = True;
-        SavedFireProperties.bInstantHit = True;
-        SavedFireProperties.bInitialized = True;
+        SavedFireProperties.bTossed = false;
+        SavedFireProperties.bTrySplash = false;
+        SavedFireProperties.bLeadTarget = true;
+        SavedFireProperties.bInstantHit = true;
+        SavedFireProperties.bInitialized = true;
     }
-    
+
     // Turn off extra collision before spawning vomit, otherwise spawn fails
-    ToggleAuxCollision(false);    
+    ToggleAuxCollision(false);
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
-    Spawn(Class'KFBloatVomitOS',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
 
     FireStart-=(0.5*CollisionRadius*Y);
     FireRotation.Yaw -= 1200;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
 
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
-    spawn(Class'KFBloatVomitOS',,,FireStart, FireRotation);
-    // Turn extra collision back on    
-    ToggleAuxCollision(true);    
+    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
+    // Turn extra collision back on
+    ToggleAuxCollision(true);
 
 }
 
@@ -157,11 +155,11 @@ simulated function Tick(float deltatime)
 {
     local vector BileExplosionLoc;
     local BileExplosionOS GibBileExplosion;
-  
-    Super.tick(deltatime);
-  
+
+    super.tick(deltatime);
+
     if( Level.NetMode!=NM_DedicatedServer &&
-    Gored>0 && 
+    Gored>0 &&
     !bPlayBileSplash )
     {
         BileExplosionLoc = self.Location;
@@ -175,10 +173,10 @@ simulated function Tick(float deltatime)
 function BileBomb()
 {
     local bool AttachSucess;
-    
+
     //Modified with KFMod Code
     BloatJet = spawn(class'BileJetOS', self,,,);
-    
+
     //KFMod Code
     if(Gored < 5)
         AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
@@ -220,7 +218,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
                 //log("DEAD Bloaty Bile didn't like the Boning :o");
                 BloatJet.SetBase(self);
             }
-        
+
             BloatJet.SetRelativeRotation(rot(0,-4096,0));
         }
     }
@@ -242,8 +240,8 @@ State Dying
 
 function RemoveHead()
 {
-    bCanDistanceAttackDoors = False;
-    Super.RemoveHead();
+    bCanDistanceAttackDoors = false;
+    super.RemoveHead();
 }
 
 //KFMod Code
@@ -253,7 +251,7 @@ simulated function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation,
     // Bloats are volatile. They burn faster than other zeds.
     if (DamageType == class 'Burned')
         Damage *= 1.5;
-   
+
     //Dont take damage from your own puke or modern bloat puke!
     if (damageType == class 'DamTypeVomit' || damageType == class 'DamTypeVomitOS')
     {
@@ -263,9 +261,9 @@ simulated function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation,
     {
        // Reduced damage from the blower thrower bile, but lets not zero it out entirely
        Damage *= 0.25;
-    }   
-   
-  Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
+    }
+
+  super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
 }
 
 
@@ -279,12 +277,12 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
-    
+
     //Event classes dont exist in KFMod
     //EventClasses(0)="KFChar.ZombieBloat_STANDARD"
-    
+
     //Use the Old BloatZombieController
-    ControllerClass=Class'KFOldSchoolZeds.BloatZombieControllerOS'
+    ControllerClass=class'BloatZombieControllerOS'
 }

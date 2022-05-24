@@ -1,9 +1,10 @@
 // ✔
 class FleshHitEmitterOS extends KFHitEmitterOS;
-     // Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
-     // So we'll load that package instead. Also, load the texture package
-     #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-     #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+// Necessary sounds in KFWeaponSound.uax have been moved to KFOldSchoolZeds_Sounds,
+// So we'll load that package instead. Also, load the texture package
+
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
@@ -12,19 +13,20 @@ defaultproperties
      ImpactSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact1'
      ImpactSounds(2)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact2'
      ImpactSounds(3)=Sound'KFOldSchoolZeds_Sounds.Shared.Heavy_FleshImpact3'
-     Begin Object Class=SpriteEmitter Name=SpriteEmitter0
-         FadeOut=True
-         RespawnDeadParticles=False
-         SpawnOnlyInDirectionOfNormal=True
-         SpinParticles=True
-         UseSizeScale=True
-         UseRegularSizeScale=False
-         UniformSize=True
-         ScaleSizeYByVelocity=True
-         ScaleSizeZByVelocity=True
-         AutomaticInitialSpawning=False
-         BlendBetweenSubdivisions=True
-         UseRandomSubdivision=True
+
+     Begin Object class=SpriteEmitter Name=SpriteEmitter0
+         FadeOut=true
+         RespawnDeadParticles=false
+         SpawnOnlyInDirectionOfNormal=true
+         SpinParticles=true
+         UseSizeScale=true
+         UseRegularSizeScale=false
+         UniformSize=true
+         ScaleSizeYByVelocity=true
+         ScaleSizeZByVelocity=true
+         AutomaticInitialSpawning=false
+         BlendBetweenSubdivisions=true
+         UseRandomSubdivision=true
          Acceleration=(Z=-350.000000)
          ColorScale(1)=(RelativeTime=0.300000,Color=(B=255,G=255,R=255))
          ColorScale(2)=(RelativeTime=0.750000,Color=(B=96,G=160,R=255))
@@ -50,7 +52,7 @@ defaultproperties
          StartVelocityRange=(Z=(Min=120.000000,Max=150.000000))
      End Object
      // This class uses this emitter, make sure that's known
-     Emitters(0)=SpriteEmitter'KFOldSchoolZeds.FleshHitEmitterOS.SpriteEmitter0'
+     Emitters(0)=SpriteEmitter0
 
      LifeSpan=1.000000
 }

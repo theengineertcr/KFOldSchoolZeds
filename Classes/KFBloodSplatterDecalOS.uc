@@ -11,7 +11,7 @@ simulated function PostBeginPlay()
     ProjTexture = splats[Rand(3)];
     FOV = Rand(6);
     SetDrawScale((Rand(2)-0.7) + (Rand(1)+0.05));
-    Super.PostBeginPlay();
+    super.PostBeginPlay();
 }
 
 defaultproperties

@@ -1,5 +1,5 @@
 //Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed, 
+//We'll need to overhaul all class files of each zed,
 //Controllers as well if we count certain Zeds
 
 // Zombie Monster for KF Invasion gametype
@@ -42,7 +42,7 @@ function ClawDamageTarget()
 
         if( !bDecapitated && KFP != none )
         {
-            //Had to change this or the Clot will grab Berserkers 
+            //Had to change this or the Clot will grab Berserkers
             //TODO:Make this Custom perk friendly somehow?
             if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
             {
@@ -88,7 +88,7 @@ function RangedAttack(Actor A)
         Acceleration = Normal(A.Location-Location)*600;
         Controller.GoToState('WaitForAnim');
         Controller.MoveTarget = A;
-        Controller.MoveTimer = 1.5;        
+        Controller.MoveTimer = 1.5;
     }
 }
 
@@ -98,7 +98,7 @@ simulated event SetAnimAction(name NewAction)
     local int meleeAnimIndex;
 
     if( NewAction=='' )
-        Return;
+        return;
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -125,7 +125,7 @@ simulated event SetAnimAction(name NewAction)
     if( Level.NetMode!=NM_Client )
     {
         AnimAction = NewAction;
-        bResetAnimAct = True;
+        bResetAnimAct = true;
         ResetAnimActTime = Level.TimeSeconds+0.3;
     }
 }
@@ -156,7 +156,7 @@ simulated function int DoAnimAction( name AnimName )
 
 function RemoveHead()
 {
-    Super.RemoveHead();
+    super.RemoveHead();
     MeleeAnims[0] = 'Claw';
     MeleeAnims[1] = 'Claw';
     MeleeAnims[2] = 'Claw2';
@@ -169,7 +169,7 @@ function RemoveHead()
 //Keep this
 static simulated function PreCacheStaticMeshes(LevelInfo myLevel)
 {//should be derived and used.
-   Super.PreCacheStaticMeshes(myLevel);
+   super.PreCacheStaticMeshes(myLevel);
 ///*
 //    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_1');
 //    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_2');
@@ -189,6 +189,6 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 defaultproperties
 {
     //-------------------------------------------------------------------------------
-    // NOTE: Most Default Properties are set in the base class to eliminate hitching
+    // NOTE: Most default Properties are set in the base class to eliminate hitching
     //-------------------------------------------------------------------------------
 }

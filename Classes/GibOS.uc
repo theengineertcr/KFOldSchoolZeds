@@ -2,7 +2,7 @@
 //Were in hot water going this far up, avoid touching anything!
 class GibOS extends Gib
     abstract;
-    
+
 //Variables being Obscured, but as long as it works...
 //We won't tweak the names of these unless necessary
 var() class<xEmitter> TrailClass;
@@ -18,10 +18,10 @@ var() xEmitter Trail;
 
 simulated function Destroyed()
 {
-    if( Trail != None )
+    if( Trail != none )
         Trail.mRegen = false;
 
-    Super.Destroyed();
+    super.Destroyed();
 }
 
 //Can't override final functions, their definition don't differ so don't touch it
@@ -30,14 +30,14 @@ simulated function Destroyed()
 //    DesiredRotation = RotRand();
 //    RotationRate.Yaw = spinRate * 2 *FRand() - spinRate;
 //    RotationRate.Pitch = spinRate * 2 *FRand() - spinRate;
-//    RotationRate.Roll = spinRate * 2 *FRand() - spinRate;    
+//    RotationRate.Roll = spinRate * 2 *FRand() - spinRate;
 //}
 
 simulated function Landed( Vector HitNormal )
 {
-    HitWall( HitNormal, None );
+    HitWall( HitNormal, none );
 }
-  
+
 simulated function HitWall( Vector HitNormal, Actor Wall )
 {
     local float Speed, MinSpeed;
@@ -53,18 +53,18 @@ simulated function HitWall( Vector HitNormal, Actor Wall )
     {
          if( (Level.NetMode != NM_DedicatedServer) && !Level.bDropDetail )
          {
-             if ( GibGroupClass.default.BloodHitClass != None )
+             if ( GibGroupClass.default.BloodHitClass != none )
                 Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
             if ( (LifeSpan < 7.3)  && (Level.DetailMode != DM_Low) )
                 PlaySound(HitSounds[Rand(2)]);
         }
     }
 
-    if( Speed < 20 ) 
+    if( Speed < 20 )
     {
-         if( !bFlaming && !Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != None )
+         if( !bFlaming && !Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != none )
             Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
-        bBounce = False;
+        bBounce = false;
         SetPhysics(PHYS_None);
     }
 }
@@ -93,19 +93,19 @@ simulated function SpawnTrail()
 defaultproperties
 {
      //No XEffects class, just get xPawnGibGroup from wherever it currently is
-     GibGroupClass=Class'xPawnGibGroup'
+     GibGroupClass=class'xPawnGibGroup'
      DampenFactor=0.650000
      //Retail KF doesn't use proper gib landing SFX, so we set them here
      HitSounds(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets1'
-     HitSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets2'     
+     HitSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets2'
      Physics=PHYS_Falling
      RemoteRole=ROLE_None
      LifeSpan=8.000000
-     bUnlit=True
+     bUnlit=true
      TransientSoundVolume=0.170000
-     bCollideWorld=True
-     bUseCylinderCollision=True
-     bBounce=True
-     bFixedRotationDir=True
+     bCollideWorld=true
+     bUseCylinderCollision=true
+     bBounce=true
+     bFixedRotationDir=true
      Mass=30.000000
 }

@@ -21,29 +21,28 @@ defaultproperties
     //Use KFMod Models and Textures
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.SawZombie'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin'
-    Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'    
+    Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'
     Skins(2)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin'
-    Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'    
+    Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'
 
     //Use KFMod Sounds
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Scrake.Saw_Idle'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Scrake.Scrake_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 
-    //Dont think we need this?    
+    //Dont think we need this?
     //MeleeAttackHitSound=Sound'KF_EnemiesFinalSnd.Scrake_Chainsaw_HitPlayer'
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
     //KFMod Zeds don't use challenge sounds
-    ChallengeSound(0)=None
-    ChallengeSound(1)=None
-    ChallengeSound(2)=None
-    ChallengeSound(3)=None
+    ChallengeSound(0)=none
+    ChallengeSound(1)=none
+    ChallengeSound(2)=none
+    ChallengeSound(3)=none
 
     //Retail variables we dont want
     //SawAttackLoopSound=Sound'KF_BaseScrake.Scrake_Chainsaw_Impale'
     //ChainSawOffSound=Sound'KF_ChainsawSnd.Chainsaw_Deselect'
 }
-

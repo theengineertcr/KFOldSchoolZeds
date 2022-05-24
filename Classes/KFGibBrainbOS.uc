@@ -1,21 +1,21 @@
 // KFMod GibBrainb is similar to retail with some minor differences
 class KFGibBrainbOS extends KFGibOS;
 
-    //Load necessary meshes and textures
-    #exec OBJ LOAD FILE=KillingFloorStatics.usx
-    #exec OBJ LOAD FILE=KillingFloorTextures.utx
+//Load necessary meshes and textures
+#exec OBJ LOAD FILE=KillingFloorStatics.usx
+#exec OBJ LOAD FILE=KillingFloorTextures.utx
 
 defaultproperties
 {
     // Use the KFMod GibGroup and GibJet
-     GibGroupClass=Class'KFOldSchoolZeds.KFHumanGibGroupOS'
-     TrailClass=Class'KFOldSchoolZeds.KFGibJetOS'
+     GibGroupClass=class'KFHumanGibGroupOS'
+     TrailClass=class'KFGibJetOS'
      DrawType=DT_StaticMesh
-     StaticMesh=StaticMesh'KillingFloorStatics.Gib2'     
+     StaticMesh=StaticMesh'KillingFloorStatics.Gib2'
      LifeSpan=6.000000
      DrawScale=0.300000
      Skins(0)=Texture'KillingFloorTextures.Statics.GibsSKin'
-     bUnlit=False
+     bUnlit=false
      TransientSoundVolume=25.000000
      CollisionRadius=5.000000
      CollisionHeight=2.500000

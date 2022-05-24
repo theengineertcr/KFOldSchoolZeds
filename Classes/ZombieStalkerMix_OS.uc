@@ -10,10 +10,10 @@ var int MyRand, HairRand;
 
 //Choose a random skin!
 simulated function PostBeginPlay()
-{   
+{
     MyRand = Rand(10);
     HairRand = Rand(3);
-    
+
     ZedSkins[0] = Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin';
     ZedSkins[1] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
     ZedSkins[2] = Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin';
@@ -24,12 +24,12 @@ simulated function PostBeginPlay()
     ZedSkins[7] = Texture'KFOldSchoolZeds_Textures.Gunpound.GunpoundSkin';
     ZedSkins[8] = Texture'KFOldSchoolZeds_Textures.Patriarch.PatriarchSkin';
     ZedSkins[9] = Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin';
-    
-    HairSkins[0] = FinalBlend'KFOldSchoolZeds_Textures.SirenHairFB'; 
+
+    HairSkins[0] = FinalBlend'KFOldSchoolZeds_Textures.SirenHairFB';
     HairSkins[1] = FinalBlend'KFOldSchoolZeds_Textures.BossHairFB';
     HairSkins[2] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
     HairSkins[3] = FinalBlend'KFOldSchoolZeds_Textures.CrawlerHairFB';
-    
+
     super.PostBeginPlay();
 }
 
@@ -47,7 +47,7 @@ simulated function CloakStalker()
 simulated function UnCloakStalker()
 {
     super.UnCloakStalker();
-    
+
     if(!bCrispified)
     {
         Skins[0] = ZedSkins[MyRand];
@@ -69,7 +69,7 @@ simulated function SetZappedBehavior()
 
 function RemoveHead()
 {
-    Super.RemoveHead();
+    super.RemoveHead();
 
     if (!bCrispified)
     {
@@ -80,7 +80,7 @@ function RemoveHead()
 
 simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
-    Super.PlayDying(DamageType,HitLoc);
+    super.PlayDying(DamageType,HitLoc);
     if (!bCrispified)
     {
         Skins[0] = ZedSkins[MyRand];
@@ -88,6 +88,4 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     }
 }
 
-defaultproperties
-{
-}
+defaultproperties{}

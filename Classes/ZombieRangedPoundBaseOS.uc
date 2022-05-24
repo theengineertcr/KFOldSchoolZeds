@@ -15,7 +15,7 @@ class ZombieRangedPoundBaseOS extends KFMonsterOS
 #exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-    
+
 //We don't want this guy to have a rage state or charge at player
 //Since he's a Husk's replacement
 
@@ -64,27 +64,27 @@ defaultproperties
     //These values were not set in KFMod
     //DrawScale=1.4
     ZombieFlag=1
-    //AmmunitionClass=Class'KFMod.BZombieAmmo'
+    //AmmunitionClass=class'KFMod.BZombieAmmo'
     //SoundRadius=2.5
     //AmbientSoundScaling=8.0
-    //SoundVolume=200    
+    //SoundVolume=200
     //SeveredHeadAttachScale=0.9
     //SeveredLegAttachScale=0.9
     //SeveredArmAttachScale=0.9
     //AmbientGlow=0
-    
+
     //Values that don't need to be changed
-    bFatAss=True
+    bFatAss=true
     Mass=400.000000
-    RotationRate=(Yaw=45000,Roll=0)        
-    bUseExtendedCollision=True
+    RotationRate=(Yaw=45000,Roll=0)
+    bUseExtendedCollision=true
 
     //Skins set in event class ZombieRangedPound_OS
     //Skins(1)=Shader'KF_Specimens_Trip_T_Two.burns.burns_shdr'
 
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
-    ScoringValue=17    
+    ScoringValue=17
     GroundSpeed=115.0
     WaterSpeed=102.000000
     Health=600//700
@@ -106,15 +106,15 @@ defaultproperties
     MGFireInterval=5.5
     MGDamage=2.0//2.0//6.0 This was too much
     MGAccuracy=0.04 //0.06//0.08// Rebalanced
-    MGFireRate=0.06//0.05 
+    MGFireRate=0.06//0.05
     MGFireBurst=15//5//15//30 // We'll stick with 10 after all, we want the bursts to be a bit short and slightly damaging, it'd be a problem if they shot for too long and dealt excessive damage
-    
-    bCannibal = False // No animation for him.
+
+    bCannibal = false // No animation for him.
     MenuName="Flesh Pound Chaingunner"
 
     //Use RangedIdle
     IdleHeavyAnim="RangedIdle"
-    IdleRifleAnim="RangedIdle"    
+    IdleRifleAnim="RangedIdle"
     IdleCrouchAnim="RangedIdle"
     IdleWeaponAnim="RangedIdle"
     IdleRestAnim="RangedIdle"
@@ -149,29 +149,29 @@ defaultproperties
     LandAnims(2)="RangedJumpLanded"
     LandAnims(3)="RangedJumpLanded"
     AirStillAnim="RangedJumpInAir"
-    TakeoffStillAnim="RangedJumpTakeOff"    
+    TakeoffStillAnim="RangedJumpTakeOff"
     TurnLeftAnim="RangedBossHitF"//"TurnLeft"
     TurnRightAnim="RangedBossHitF"//"TurnRight"
-    
+
     KFRagdollName="FleshPoundRag"//use KFMod ragdoll
-    
+
     //Bonk them with the Minigun!
     MeleeAnims(0)="PoundPunch2"
     MeleeAnims(1)="PoundPunch2"
     MeleeAnims(2)="PoundPunch2"
-    
+
     //Dont attack doors with the minigun
-    bCanDistanceAttackDoors=False
-    
-    //These might need to be changed    
+    bCanDistanceAttackDoors=false
+
+    //These might need to be changed
     ColOffset=(Z=65)//(Z=50)
     ColRadius=27
     ColHeight=25//40
     PrePivot=(Z=0)
-    
+
     SoloHeadScale=1.55
-    
+
     //Updated
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
-    OnlineHeadshotScale=1.75//1.3   
+    OnlineHeadshotScale=1.75//1.3
 }

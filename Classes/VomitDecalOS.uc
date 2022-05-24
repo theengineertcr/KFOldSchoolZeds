@@ -8,14 +8,14 @@ simulated function BeginPlay()
 {
     if ( !Level.bDropDetail && (FRand() < 0.5) ) //Use KFMod Texture
         ProjTexture = texture'KFOldSchoolZeds_Textures.VomSplat';
-    Super.BeginPlay();
+    super.BeginPlay();
 }
 
 defaultproperties
 {
     //Use KFMod Texture
      ProjTexture=Texture'KFOldSchoolZeds_Textures.VomSplat'
-     bClipStaticMesh=True
+     bClipStaticMesh=true
      CullDistance=7000.000000
      LifeSpan=5.000000
      DrawScale=0.500000

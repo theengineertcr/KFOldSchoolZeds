@@ -75,16 +75,16 @@ event Bump(actor Other)
 //    {
 //        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
 //        PlayAnim(AnimName,, 0.0, 1);
-//        Return 1;
+//        return 1;
 //    }
-//    Return Super.DoAnimAction(AnimName);
+//    return super.DoAnimAction(AnimName);
 //}
 
 //KFMod SetAnimAction
 // Blend his attacks so he can hit you in mid air.
 simulated event SetAnimAction(name NewAction)
 {
-  Super.SetAnimAction(NewAction);
+  super.SetAnimAction(NewAction);
 
         if ( AnimAction == 'ZombieLeapAttack' || AnimAction == 'LeapAttack3'
             || AnimAction == 'ZombieLeapAttack')
@@ -109,7 +109,7 @@ simulated event SetAnimAction(name NewAction)
 
 function bool FlipOver()
 {
-    Return False;
+    return false;
 }
 
 defaultproperties
@@ -124,22 +124,22 @@ defaultproperties
     //SeveredLegAttachScale=0.85
     //SeveredArmAttachScale=0.8
     ZombieFlag=2
-    bDoTorsoTwist=False
-    
+    bDoTorsoTwist=false
+
     //Values that don't need to be changed
-    bCannibal = true    
-    Intelligence=BRAINS_Mammal    
-    bStunImmune=True
+    bCannibal = true
+    Intelligence=BRAINS_Mammal
+    bStunImmune=true
     damageForce=5000
     IdleHeavyAnim="ZombieLeapIdle"
-    IdleRifleAnim="ZombieLeapIdle"    
+    IdleRifleAnim="ZombieLeapIdle"
     TakeoffAnims(0)= "ZombieSpring"
     TakeoffAnims(1)= "ZombieSpring"
     TakeoffAnims(2)= "ZombieSpring"
     TakeoffAnims(3)= "ZombieSpring"
     AirAnims(0)="ZombieSpring"
-    
-    AirAnims(3)="ZombieSpring"    
+
+    AirAnims(3)="ZombieSpring"
     AirStillAnim="ZombieSpring"
     IdleCrouchAnim="ZombieLeapIdle"
     IdleWeaponAnim="ZombieLeapIdle"
@@ -147,7 +147,7 @@ defaultproperties
     CollisionHeight=25.000000
     bCrawler = true
     bOrientOnSlope = true
-    
+
     //We'll keep these values the same as the retail version
     //As this mod was made purely for the visual aspect, not gameplay
     MeleeDamage=6
@@ -160,7 +160,7 @@ defaultproperties
     PounceSpeed=330.000000   // 300
     MotionDetectorThreat=0.34
     CrispUpThreshhold=10
-    
+
     //All of these need to be ZombieLeapIdle
     //Previous comment obsolete, bad idea from the old code That makes Crawlers
     //Walk while doing idle anims. Swap with ZombieScuttle instead.
@@ -170,12 +170,12 @@ defaultproperties
     LandAnims(1)="ZombieScuttle"
     LandAnims(2)="ZombieScuttle"
     LandAnims(3)="ZombieScuttle"
-    
+
     //All of these need to be ZombieScuttle
     MovementAnims(0)="ZombieScuttle"
     MovementAnims(1)="ZombieScuttle"
     MovementAnims(2)="ZombieScuttle"
-    MovementAnims(3)="ZombieScuttle"    
+    MovementAnims(3)="ZombieScuttle"
     WalkAnims(0)="ZombieLeap"
     WalkAnims(1)="ZombieLeap"
     WalkAnims(2)="ZombieLeap"
@@ -183,30 +183,30 @@ defaultproperties
 
     //All of these used the ZombieSpring anim in KFMod
     //Bad idea, don't use any anims when getting hit
-    HitAnims(0)=None//"HitF"
-    HitAnims(1)=None//"HitF"
-    HitAnims(2)=None//"HitF"
-    KFHitFront=None//"HitF"
-    KFHitBack=None//"HitF"
-    KFHitLeft=None//"HitF"
-    KFHitRight=None//"HitF"
+    HitAnims(0)=none//"HitF"
+    HitAnims(1)=none//"HitF"
+    HitAnims(2)=none//"HitF"
+    KFHitFront=none//"HitF"
+    KFHitBack=none//"HitF"
+    KFHitLeft=none//"HitF"
+    KFHitRight=none//"HitF"
 
     MeleeAnims(0)="ZombieLeapAttack"
     MeleeAnims(1)="ZombieLeapAttack"//"ZombieLeapAttack2"//Swapped to Old Anim
     MeleeAnims(2)="LeapAttack3"//"ZombieLeapAttack2"//Swapped to Old Anim
 
     TakeoffStillAnim="ZombieLeap"//"ZombieLeapIdle"//Swapped to Old Anim
-    
+
     //Use Old Ragdoll
     KFRagdollName="CrawlerRag"
     MenuName="Crawler 2.5"//"Crawler"
-    
+
     //KFMod had this so were bringing it here
     SpineBone1=
-    SpineBone2=    
+    SpineBone2=
 
     SoloHeadScale=1.1
-    
+
     //Updated
     OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
     OnlineHeadshotScale=1.1

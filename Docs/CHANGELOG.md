@@ -1,6 +1,6 @@
 # Changelog
 
-> Return back to [README](../README.md#documentation)
+> return back to [README](../README.md#documentation)
 
 ## [2022.05.20]
 
