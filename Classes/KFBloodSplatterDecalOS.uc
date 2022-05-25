@@ -1,10 +1,4 @@
-// ✔
-// KFs very own higher-res Bloodstains
-
 class KFBloodSplatterDecalOS extends BloodSplatterOS;
-
-// Load KFOldSchoolZeds_Textures
-#exec OBJ LOAD File=KFOldSchoolZeds_Textures.utx
 
 simulated function PostBeginPlay()
 {
@@ -16,10 +10,9 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     // KFX to KFOldSchoolZeds_Textures
-     Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
-     Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodSplat2'
-     Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodSplat3'
-     ProjTexture=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
-     LifeSpan=10.000000
+    Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
+    Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodSplat2'
+    Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodSplat3'
+    ProjTexture=Texture'KFOldSchoolZeds_Textures.BloodSplat1'
+    LifeSpan=10.000000
 }

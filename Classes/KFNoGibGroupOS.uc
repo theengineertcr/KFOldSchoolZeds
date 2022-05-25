@@ -1,4 +1,3 @@
-//A gib group with no gibs, but there's plenty of blood!
 class KFNoGibGroupOS extends xPawnGibGroup;
 
 defaultproperties

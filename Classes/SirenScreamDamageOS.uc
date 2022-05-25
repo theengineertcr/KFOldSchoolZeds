@@ -1,5 +1,3 @@
-// for the Purposes of Gibbing and various nasty shit.
-
 class SirenScreamDamageOS extends DamTypeZombieAttack;
 
 defaultproperties

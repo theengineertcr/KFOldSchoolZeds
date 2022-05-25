@@ -1,35 +1,43 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieBossOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieBossOS extends ZombieBossBaseOS
-    abstract;
-
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFBossOld.ukx
-#exec OBJ LOAD FILE=KFPatch2.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KillingFloorLabTextures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-
-//----------------------------------------------------------------------------
-// NOTE: Most Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//TODO:Use old Boss needle?
 var BossHPNeedle CurrentNeedle;
+var bool bChargingPlayer,bClientCharg,bFireAtWill,bMinigunning,bIsBossView;
+var float RageStartTime,LastChainGunTime,LastMissileTime,LastSneakedTime;
+var bool bClientMiniGunning;
+var name ChargingAnim;        
+var byte SyringeCount,ClientSyrCount;
+var int MGFireCounter;
 
+var vector TraceHitPos;
+var Emitter mTracer,mMuzzleFlash;
+var bool bClientCloaked;
+var float LastCheckTimes;
+var int HealingLevels[3],HealingAmount;
+var             float   MGFireDuration;     
+var             float   MGLostSightTimeout; 
+var()           float   MGDamage;           
+var()           float   ClawMeleeDamageRange;
+var()           float   ImpaleMeleeDamageRange;
+var             float   LastChargeTime;     
+var             float   LastForceChargeTime;
+var             int     NumChargeAttacks;   
+var             float   ChargeDamage;       
+var             float   LastDamageTime;     
+var             float   SneakStartTime;     
+var             int     SneakCount;         
+var()           float   PipeBombDamageScale;
 
-//Retail code we'll keep
-// Make the Boss's ambient scale higher, since there is only 1, doesn't matter if he's relevant almost all the time
-simulated function CalcAmbientRelevancyScale()
+replication
 {
-        // Make the zed only relevant by thier ambient sound out to a range of 100 meters
-        CustomAmbientRelevancyScale = 5000/(100 * SoundRadius);
+    reliable if( Role==ROLE_Authority )
+        bChargingPlayer,SyringeCount,TraceHitPos,bMinigunning,bIsBossView;
 }
 
-//We'll keep this retail code
+simulated function CalcAmbientRelevancyScale()
+{
+    CustomAmbientRelevancyScale = 5000/(100 * SoundRadius);
+}
+
 function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPosition, float fTimeEnd  )
 {
     local vector NewVelocity;
@@ -40,77 +48,73 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
     {
         if( PhysicsVolume.Gravity.Z < class'PhysicsVolume'.default.Gravity.Z )
         {
-            // Just checking mass to be extra-cautious.
             if( Mass > 900 )
             {
-                // Extra velocity boost to counter oversized mass weighing the boss down.
                 NewVelocity.Z += 90;
             }
         }
     }
+    
     return NewVelocity;
 }
 
-//We'll keep this retail code
 function ZombieMoan()
 {
-    if( !bShotAnim ) // Do not moan while taunting
+    if( !bShotAnim )
         super.ZombieMoan();
 }
 
-// Don't do this for the Patriarch
 simulated function SetBurningBehavior(){}
 simulated function UnSetBurningBehavior(){}
+
 function bool CanGetOutOfWay()
 {
     return false;
 }
 
-//Dont touch this
 simulated function Tick(float DeltaTime)
 {
     local KFHumanPawn HP;
 
     super.Tick(DeltaTime);
 
-    // Process the pipe bomb time damage scale, reducing the scale over time so
-    // it goes back up to 100% damage over a few seconds
     if( Role == ROLE_Authority )
     {
-       PipeBombDamageScale -= DeltaTime * 0.33;
+        PipeBombDamageScale -= DeltaTime * 0.33;
 
-       if( PipeBombDamageScale < 0 )
-       {
-           PipeBombDamageScale = 0;
-       }
+        if( PipeBombDamageScale < 0 )
+        {
+            PipeBombDamageScale = 0;
+        }
     }
 
     if( Level.NetMode==NM_DedicatedServer )
-        return; // Servers aren't intrested in this info.
+        return;
 
     bSpecialCalcView = bIsBossView;
+    
     if( bZapped )
     {
-        // Make sure we check if we need to be cloaked as soon as the zap wears off
         LastCheckTimes = Level.TimeSeconds;
     }
     else if( bCloaked && Level.TimeSeconds>LastCheckTimes )
     {
         LastCheckTimes = Level.TimeSeconds+0.8;
+        
         ForEach VisibleCollidingActors(class'KFHumanPawn',HP,1000,Location)
         {
             if( HP.Health <= 0 || !HP.ShowStalkers() )
                 continue;
 
-            // If he's a commando, we've been spotted.
             if( !bSpotted )
             {
                 bSpotted = true;
                 CloakBoss();
             }
+            
             return;
         }
-        // if we're uberbrite, turn down the light
+        
         if( bSpotted )
         {
             bSpotted = false;
@@ -125,7 +129,6 @@ simulated function CloakBoss()
     local Controller C;
     local int Index;
 
-    // No cloaking if zapped
     if( bZapped )
     {
         return;
@@ -135,7 +138,7 @@ simulated function CloakBoss()
     {
         Visibility = 120;
         if( Level.NetMode==NM_DedicatedServer )
-            return; //Use KFMod textures
+            return;
         Skins[0] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
         Skins[1] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
         Skins[2] = Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB';
@@ -149,17 +152,19 @@ simulated function CloakBoss()
 
     Visibility = 1;
     bCloaked = true;
+    
     if( Level.NetMode!=NM_Client )
     {
         For( C=Level.ControllerList; C!=none; C=C.NextController )
         {
             if( C.bIsPlayer && C.Enemy==self )
-                C.Enemy = none; // Make bots lose sight with me.
+                C.Enemy = none; 
         }
     }
+    
     if( Level.NetMode==NM_DedicatedServer )
         return;
-    //Use KFMod Textures
+
     Skins[0] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
     Skins[1] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
     Skins[2] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
@@ -168,20 +173,16 @@ simulated function CloakBoss()
     Skins[5] = Shader'KFOldSchoolZeds_Textures.BossCloakShader';
     Skins[6] = Texture'KillingFloorLabTextures.LabCommon.voidtex';
 
-    // Invisible - no shadow
     if(PlayerShadow != none)
         PlayerShadow.bShadowActive = false;
 
-    // Remove/disallow projectors on invisible people
     Projectors.Remove(0, Projectors.Length);
     bAcceptsProjectors = false;
-    //Use KFMod texture
+
     SetOverlayMaterial(FinalBlend'KFOldSchoolZeds_Textures.Patriarch.BossCloakFizzleFB', 1.0, true);
 
-    // Randomly send out a message about Patriarch going invisible(10% chance)
     if ( FRand() < 0.10 )
     {
-        // Pick a random Player to say the message
         Index = Rand(Level.Game.NumPlayers);
 
         for ( C = Level.ControllerList; C != none; C = C.NextController )
@@ -211,8 +212,10 @@ simulated function UnCloakBoss()
     bCloaked = false;
     bSpotted = false;
     bUnlit = false;
+    
     if( Level.NetMode==NM_DedicatedServer )
         return;
+        
     Skins = default.Skins;
 
     if (PlayerShadow != none)
@@ -222,12 +225,10 @@ simulated function UnCloakBoss()
     SetOverlayMaterial( none, 0.0, true );
 }
 
-// Set the zed to the zapped behavior
 simulated function SetZappedBehavior()
 {
     super.SetZappedBehavior();
 
-    // Handle setting the zed to uncloaked so the zapped overlay works properly
     if( Level.Netmode != NM_DedicatedServer )
     {
         bUnlit = false;
@@ -241,12 +242,10 @@ simulated function SetZappedBehavior()
     }
 }
 
-// Turn off the zapped behavior
 simulated function UnSetZappedBehavior()
 {
     super.UnSetZappedBehavior();
 
-    // Handle getting the zed back cloaked if need be
     if( Level.Netmode != NM_DedicatedServer )
     {
         LastCheckTimes = Level.TimeSeconds;
@@ -254,7 +253,6 @@ simulated function UnSetZappedBehavior()
     }
 }
 
-// Overridden because we need to handle the overlays differently for zombies that can cloak
 function SetZapped(float ZapAmount, Pawn Instigator)
 {
     LastZapTime = Level.TimeSeconds;
@@ -271,17 +269,12 @@ function SetZapped(float ZapAmount, Pawn Instigator)
         if( TotalZap >= ZapThreshold )
         {
             RemainingZap = ZapDuration;
-              bZapped = true;
+            bZapped = true;
         }
     }
     ZappedBy = Instigator;
 }
 
-//-----------------------------------------------------------------------------
-// PostBeginPlay
-//-----------------------------------------------------------------------------
-
-//Retail Code we need
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
@@ -291,12 +284,8 @@ simulated function PostBeginPlay()
         return;
     }
 
-    // Difficulty Scaling
     if (Level.Game != none)
     {
-        //log(self$" Beginning ground speed "$default.GroundSpeed);
-
-        // If you are playing by yourself,  reduce the MG damage
         if( Level.Game.NumPlayers == 1 )
         {
             if( Level.Game.GameDifficulty < 2.0 )
@@ -311,7 +300,7 @@ simulated function PostBeginPlay()
             {
                 MGDamage = default.MGDamage * 1.15;
             }
-            else // Hardest difficulty
+            else
             {
                 MGDamage = default.MGDamage * 1.3;
             }
@@ -330,23 +319,18 @@ simulated function PostBeginPlay()
             {
                 MGDamage = default.MGDamage * 1.15;
             }
-            else // Hardest difficulty
+            else
             {
                 MGDamage = default.MGDamage * 1.3;
             }
         }
     }
 
-    HealingLevels[0] = Health/1.25; // Around 5600 HP
-    HealingLevels[1] = Health/2.f; // Around 3500 HP
-    HealingLevels[2] = Health/3.2; // Around 2187 HP
-//    log("Health = "$Health);
-//    log("HealingLevels[0] = "$HealingLevels[0]);
-//    log("HealingLevels[1] = "$HealingLevels[1]);
-//    log("HealingLevels[2] = "$HealingLevels[2]);
+    HealingLevels[0] = Health/1.25; 
+    HealingLevels[1] = Health/2.f; 
+    HealingLevels[2] = Health/3.2; 
 
-    HealingAmount = Health/4; // 1750 HP
-//    log("HealingAmount = "$HealingAmount);
+    HealingAmount = Health/4; 
 }
 
 function bool MakeGrandEntry()
@@ -360,8 +344,6 @@ function bool MakeGrandEntry()
     return true;
 }
 
-//Retail code we need
-// State of playing the initial entrance anim
 state MakingEntrance
 {
     Ignores RangedAttack;
@@ -390,7 +372,7 @@ simulated function Destroyed()
 simulated Function PostNetBeginPlay()
 {
     EnableChannelNotify ( 1,1);
-    AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
+    AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
     bNetNotify = true;
@@ -445,7 +427,6 @@ function RangedAttack(Actor A)
     local bool bOnlyE;
     local bool bDesireChainGun;
 
-    // Randomly make him want to chaingun more
     if( Controller.LineOfSightTo(A) && FRand() < 0.15 && LastChainGunTime<Level.TimeSeconds )
     {
         bDesireChainGun = true;
@@ -453,38 +434,39 @@ function RangedAttack(Actor A)
 
     if ( bShotAnim )
         return;
-    D = VSize(A.Location-Location);
+        
+    D = VSize(A.Location-Location);   
     bOnlyE = (Pawn(A)!=none && OnlyEnemyAround(Pawn(A)));
+    
     if ( IsCloseEnuf(A) )
     {
         bShotAnim = true;
-        if( Health>1500 && Pawn(A)!=none && FRand() < 0.5 ) //Was .85 in KFMod, but this is fine
+        if( Health>1500 && Pawn(A)!=none && FRand() < 0.5 )
         {
             SetAnimAction('MeleeImpale');
         }
         else
         {
             SetAnimAction('MeleeClaw');
-            PlaySound(sound'Claw2s', SLOT_None);//We have this sound so play it
+            PlaySound(sound'Claw2s', SLOT_None);
         }
     }
     else if( Level.TimeSeconds - LastSneakedTime > 20.0 )
     {
         if( FRand() < 0.3 )
         {
-            // Wait another 20 to try this again
-            LastSneakedTime = Level.TimeSeconds;//+FRand()*120;
+            LastSneakedTime = Level.TimeSeconds;
             return;
         }
-        SetAnimAction('BossHitF'); //transition to BossHitF
+        SetAnimAction('BossHitF'); 
         GoToState('SneakAround');
     }
     else if( bChargingPlayer && (bOnlyE || D<200) )
         return;
     else if( !bDesireChainGun && !bChargingPlayer && (D<300 || (D<700 && bOnlyE)) &&
-        (Level.TimeSeconds - LastChargeTime > (5.0 + 5.0 * FRand())) )  // Don't charge again for a few seconds
+        (Level.TimeSeconds - LastChargeTime > (5.0 + 5.0 * FRand())) )
     {
-        SetAnimAction('BossHitF'); //transition to BossHitF
+        SetAnimAction('BossHitF');
         GoToState('Charging');
     }
     else if( LastMissileTime<Level.TimeSeconds && D > 500 )
@@ -499,9 +481,9 @@ function RangedAttack(Actor A)
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('PreFireMG'); //PreFireMissile to PreFireMG
+        SetAnimAction('PreFireMG'); 
 
-        HandleWaitForAnim('PreFireMG'); //PreFireMissile to PreFireMG
+        HandleWaitForAnim('PreFireMG'); 
 
         GoToState('FireMissile');
     }
@@ -533,13 +515,13 @@ event Bump(actor Other)
         return;
 
     if( Other.IsA('NetKActor') && Physics != PHYS_Falling && !bShotAnim && Abs(Other.Location.Z-Location.Z)<(CollisionHeight+Other.CollisionHeight) )
-    { // Kill the annoying deco brat.
+    { 
         Controller.Target = Other;
         Controller.Focus = Other;
         bShotAnim = true;
         Acceleration = (Other.Location-Location);
         SetAnimAction('MeleeClaw');
-        PlaySound(sound'Claw2s', SLOT_None);//We have this sound, play it
+        PlaySound(sound'Claw2s', SLOT_None);
         HandleWaitForAnim('MeleeClaw');
     }
 }
@@ -549,15 +531,14 @@ simulated function AddTraceHitFX( vector HitPos )
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
 
-    //Get Old L85 fire sound
+    
     PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('tip').Origin;
     if( mTracer==none )
-        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer are similar
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); 
     else mTracer.SetLocation(Start);
     if( mMuzzleFlash==none )
     {
-        //Swap with NewMinigunMFlash
         mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
         AttachToBone(mMuzzleFlash, 'tip');
     }
@@ -582,11 +563,10 @@ simulated function AddTraceHitFX( vector HitPos )
 
     if( HitPos != vect(0,0,0) )
     {
-        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start))); //Not gonna bother using whatever the old boss used
+        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start))); 
     }
 }
 
-//Keep this the same
 simulated function AnimEnd( int Channel )
 {
     local name  Sequence;
@@ -618,7 +598,6 @@ state FireChaingun
         Controller.Focus = A;
     }
 
-    // Chaingun mode handles this itself
     function bool ShouldChargeFromDamage()
     {
         return false;
@@ -630,15 +609,13 @@ state FireChaingun
 
         global.TakeDamage(Damage,instigatedBy,hitlocation,vect(0,0,0),damageType);
 
-        // if someone close up is shooting us, just charge them
         if( InstigatedBy != none )
         {
             DamagerDistSq = VSizeSquared(Location - InstigatedBy.Location);
 
             if( (ChargeDamage > 200 && DamagerDistSq < (500 * 500)) || DamagerDistSq < (100 * 100) )
             {
-                SetAnimAction('BossHitF'); //transition to BossHitF
-                //log("Frak this shizz, Charging!!!!");
+                SetAnimAction('BossHitF'); 
                 GoToState('Charging');
                 return;
             }
@@ -658,7 +635,7 @@ state FireChaingun
 
             if( DamagerDistSq < (500 * 500) )
             {
-                SetAnimAction('BossHitF'); //transition to BossHitF
+                SetAnimAction('BossHitF'); 
                 GoToState('Charging');
             }
         }
@@ -725,7 +702,6 @@ state FireChaingun
             }
             else if ( FRand() < 0.03 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
             {
-                // Randomly send out a message about Patriarch shooting chain gun(3% chance)
                 PlayerController(Controller.Enemy.Controller).Speech('AUTO', 9, "");
             }
 
@@ -752,11 +728,10 @@ state FireChaingun
         else R = rotator(Controller.FocalPoint-Start);
         if( NeedToTurnFor(R) )
             R = Rotation;
-        // KFTODO: Maybe scale this accuracy by his skill or the game difficulty
+
         Dir = Normal(vector(R)+VRand()*0.06); //*0.04
         End = Start+Dir*10000;
 
-        // Have to turn of hit point collision so trace doesn't hit the Human Pawn's bullet whiz cylinder
         bBlockHitPointTraces = false;
         A = Trace(HL,HN,End,Start,true);
         bBlockHitPointTraces = true;
@@ -844,15 +819,14 @@ Ignores RangedAttack;
             SavedFireProperties.bInitialized = true;
         }
         R = AdjustAim(SavedFireProperties,Start,100);
-        PlaySound(Sound'KFOldSchoolZeds_Sounds.Shared.LAWFire'); //Use KFMod Law Fire sound
-        Spawn(class'BossLAWProjOS',,,Start,R); //Use Old BossLAWProj
+        PlaySound(Sound'KFOldSchoolZeds_Sounds.Shared.LAWFire');
+        Spawn(class'BossLAWProjOS',,,Start,R); 
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('FireEndMG'); //FireEndMissile to FireEndMG
-        HandleWaitForAnim('FireEndMG'); //FireEndMissile to FireEndMG
+        SetAnimAction('FireEndMG');
+        HandleWaitForAnim('FireEndMG'); 
 
-        // Randomly send out a message about Patriarch shooting a rocket(5% chance)
         if ( FRand() < 0.05 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
         {
             PlayerController(Controller.Enemy.Controller).Speech('AUTO', 10, "");
@@ -871,16 +845,14 @@ Begin:
 function bool MeleeDamageTarget(int hitdamage, vector pushdir)
 {
     if( Controller.Target!=none && Controller.Target.IsA('NetKActor') )
-        pushdir = Normal(Controller.Target.Location-Location)*100000; // Fly bitch!
+        pushdir = Normal(Controller.Target.Location-Location)*100000; 
 
-    // Used to set MeleeRange = default.MeleeRange; in Balance Round 1, fixed in Balance Round 2
 
     return super.MeleeDamageTarget(hitdamage, pushdir);
 }
 
 state Charging
 {
-    // Don't override speed in this state
     function bool CanSpeedAdjust()
     {
         return false;
@@ -897,7 +869,6 @@ state Charging
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
 
-        // How many charge attacks we can do randomly 1-3
         NumChargeAttacks = Rand(2) + 1;
     }
 
@@ -920,7 +891,6 @@ state Charging
             GoToState('');
         }
 
-        // Keep the flesh pound moving toward its target when attacking
         if( Role == ROLE_Authority && bShotAnim)
         {
             if( bChargingPlayer )
@@ -944,7 +914,6 @@ state Charging
                     PostNetReceive();
             }
 
-            // Zapping slows him down, but doesn't stop him
             if( bZapped )
             {
                 SetGroundSpeed(OriginalGroundSpeed * 1.5);
@@ -1011,8 +980,7 @@ Begin:
     if( Health > 0 )
     {
         Sleep(GetAnimDuration('KnockDown'));
-        CloakBoss(); //KFMod boss doesn't ask for zeds to save him
-        //PlaySound(sound'KF_EnemiesFinalSnd.Patriarch.Kev_SaveMe', SLOT_Misc, 2.0,,500.0);
+        CloakBoss(); 
         if( KFGameType(Level.Game).FinalSquadNum == SyringeCount )
         {
            KFGameType(Level.Game).AddBossBuddySquad();
@@ -1049,7 +1017,7 @@ State Escaping extends Charging // Got hurt and running away...
             Acceleration = vect(0,0,0);
             Acceleration = (A.Location-Location);
             SetAnimAction('MeleeClaw');
-            PlaySound(sound'Claw2s', SLOT_None); //We have the sound, play it
+            PlaySound(sound'Claw2s', SLOT_None); 
         }
     }
 
@@ -1061,7 +1029,6 @@ State Escaping extends Charging // Got hurt and running away...
     function Tick( float Delta )
     {
 
-        // Keep the flesh pound moving toward its target when attacking
         if( Role == ROLE_Authority && bShotAnim)
         {
             if( bChargingPlayer )
@@ -1081,7 +1048,6 @@ State Escaping extends Charging // Got hurt and running away...
                     PostNetReceive();
             }
 
-            // Zapping slows him down, but doesn't stop him
             if( bZapped )
             {
                 SetGroundSpeed(OriginalGroundSpeed * 1.5);
@@ -1177,7 +1143,6 @@ Begin:
         Sleep(0.5);
         SneakCount++;
 
-        // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
         if( SneakCount > 1000 || (Controller != none && BossZombieControllerOS(Controller).bAlreadyFoundEnemy) ) //BossZombieController to BossZombieControllerOS
         {
             GoToState('');
@@ -1197,15 +1162,13 @@ simulated function DropNeedle()
     if( CurrentNeedle!=none )
     {
         DetachFromBone(CurrentNeedle);
-        CurrentNeedle.SetLocation(GetBoneCoords('Bip01 R Finger0').Origin); //Rpalm_MedAttachment
+        CurrentNeedle.SetLocation(GetBoneCoords('Bip01 R Finger0').Origin); 
         CurrentNeedle.DroppedNow();
         CurrentNeedle = none;
     }
 }
 simulated function NotifySyringeA()
 {
-    //log("Heal Part 1");
-
     if( Level.NetMode!=NM_Client )
     {
         if( SyringeCount<3 )
@@ -1216,13 +1179,12 @@ simulated function NotifySyringeA()
     if( Level.NetMode!=NM_DedicatedServer )
     {
         DropNeedle();
-        CurrentNeedle = Spawn(class'BossHPNeedle'); //TODO:Maybe use old boss syringe?
-        AttachToBone(CurrentNeedle,'Bip01 R Finger0'); //Rpalm_MedAttachment
+        CurrentNeedle = Spawn(class'BossHPNeedle'); 
+        AttachToBone(CurrentNeedle,'Bip01 R Finger0'); 
     }
 }
 function NotifySyringeB()
 {
-    //log("Heal Part 2");
     if( Level.NetMode != NM_Client )
     {
         Health += HealingAmount;
@@ -1231,7 +1193,6 @@ function NotifySyringeB()
 }
 simulated function NotifySyringeC()
 {
-    //log("Heal Part 3");
     if( Level.NetMode!=NM_DedicatedServer && CurrentNeedle!=none )
     {
         CurrentNeedle.Velocity = vect(-45,300,-90) >> Rotation;
@@ -1244,7 +1205,6 @@ simulated function PostNetReceive()
     if( bClientMiniGunning != bMinigunning )
     {
         bClientMiniGunning = bMinigunning;
-        // Hack so Patriarch won't go out of MG Firing to play his idle anim online
         if( bMinigunning )
         {
             IdleHeavyAnim='FireMG';
@@ -1285,7 +1245,7 @@ simulated function PostNetReceive()
     {
         ClientSyrCount = SyringeCount;
         Switch( SyringeCount )
-        {    //Use KFMod Syringe bones
+        {    
             Case 1:
                 SetBoneScale(3,0,'SyringeBoneOne');
                 Break;
@@ -1298,7 +1258,7 @@ simulated function PostNetReceive()
                 SetBoneScale(4,0,'SyringeBoneTwo');
                 SetBoneScale(5,0,'SyringeBoneThree');
                 Break;
-            default: // WTF? reset...?
+            default: 
                 SetBoneScale(3,1,'SyringeBoneOne');
                 SetBoneScale(4,1,'SyringeBoneTwo');
                 SetBoneScale(5,1,'SyringeBoneThree');
@@ -1321,10 +1281,9 @@ simulated function PostNetReceive()
     }
 }
 
-//Overhauled with KFMod Code
 simulated function int DoAnimAction( name AnimName )
 {
-    if( AnimName=='MeleeImpale' || AnimName=='MeleeClaw' || AnimName=='BossHitF' /* || AnimName=='FireMG' */  ) //Removing FireMG fixes bug with boss walking in FireMG anim
+    if(AnimName=='MeleeImpale' || AnimName=='MeleeClaw' || AnimName=='BossHitF')
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
@@ -1333,7 +1292,6 @@ simulated function int DoAnimAction( name AnimName )
     return super.DoAnimAction(AnimName);
 }
 
-//We need this
 simulated event SetAnimAction(name NewAction)
 {
     local int meleeAnimIndex;
@@ -1351,7 +1309,7 @@ simulated event SetAnimAction(name NewAction)
 
     if( Controller != none )
     {
-       BossZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;//BossZombieController to BossZombieControllerOS
+       BossZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
     }
 
     if( AnimNeedsWait(NewAction) )
@@ -1372,8 +1330,6 @@ simulated event SetAnimAction(name NewAction)
     }
 }
 
-//Keep this retail code
-// Hand sending the controller to the WaitForAnim state
 simulated function HandleWaitForAnim( name NewAnim )
 {
     local float RageAnimDur;
@@ -1384,13 +1340,10 @@ simulated function HandleWaitForAnim( name NewAnim )
     BossZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim); //BossZombieController to BossZombieControllerOS
 }
 
-//Not sure if we need this retail code, keep it anyway
-// The animation is full body and should set the bWaitForAnim flag
 simulated function bool AnimNeedsWait(name TestAnim)
 {
-    if( /*TestAnim == 'MeleeImpale' || TestAnim =='MeleeClaw' || TestAnim =='transition' ||*/ TestAnim == 'FireMG' ||
-        TestAnim == 'PreFireMG' || TestAnim == 'FireEndMG' || /*TestAnim == 'PreFireMissile' ||  TestAnim == 'FireEndMissile' ||*/ //Not KFMod Anims
-        TestAnim == 'Heal' || TestAnim == 'KnockDown' || TestAnim == 'Entrance' || TestAnim == 'VictoryLaugh' ) // || TestAnim == 'RadialAttack' )
+    if(TestAnim == 'FireMG' ||TestAnim == 'PreFireMG' || TestAnim == 'FireEndMG' || TestAnim == 'Heal' 
+       || TestAnim == 'KnockDown' || TestAnim == 'Entrance' || TestAnim == 'VictoryLaugh' )
     {
         return true;
     }
@@ -1408,10 +1361,8 @@ function bool FlipOver()
     return false;
 }
 
-// return true if we want to charge from taking too much damage
 function bool ShouldChargeFromDamage()
 {
-    // If we don;t want to heal, charge whoever damaged us!!!
     if( (SyringeCount==0 && Health<HealingLevels[0]) || (SyringeCount==1 && Health<HealingLevels[1]) || (SyringeCount==2 && Health<HealingLevels[2]) )
     {
         return false;
@@ -1428,16 +1379,12 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 {
     local float DamagerDistSq;
     local float UsedPipeBombDamScale;
-    local KFHumanPawn P;
 
     if ( class<DamTypeCrossbow>(damageType) == none && class<DamTypeCrossbowHeadShot>(damageType) == none )
     {
         bOnlyDamagedByCrossbow = false;
     }
 
-    // Scale damage from the pipebomb down a bit if lots of pipe bomb damage happens
-    // at around the same times. Prevent players from putting all thier pipe bombs
-    // in one place and owning the patriarch in one blow.
     if ( class<DamTypePipeBomb>(damageType) != none )
     {
        UsedPipeBombDamScale = FMax(0,(1.0 - PipeBombDamageScale));
@@ -1466,14 +1413,13 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     if( ShouldChargeFromDamage() && ChargeDamage > 200 )
     {
-        // If someone close up is shooting us, just charge them
         if( InstigatedBy != none )
         {
             DamagerDistSq = VSizeSquared(Location - InstigatedBy.Location);
 
             if( DamagerDistSq < (700 * 700) )
             {
-                SetAnimAction('BossHitF'); //transition to BossHitF
+                SetAnimAction('BossHitF');
                 ChargeDamage=0;
                 LastForceChargeTime = Level.TimeSeconds;
                 GoToState('Charging');
@@ -1482,13 +1428,11 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         }
     }
 
-    if( Health<=0 || SyringeCount==3 || IsInState('Escaping') || IsInState('KnockDown') /*|| IsInState('RadialAttack') || bDidRadialAttack || bShotAnim*/ ) //Dont want RadialAttack here
+    if( Health<=0 || SyringeCount==3 || IsInState('Escaping') || IsInState('KnockDown'))
         return;
 
     if( (SyringeCount==0 && Health<HealingLevels[0]) || (SyringeCount==1 && Health<HealingLevels[1]) || (SyringeCount==2 && Health<HealingLevels[2]) )
     {
-        //log(GetStateName()$" Took damage and want to heal!!! Health="$Health$" HealingLevels "$HealingLevels[SyringeCount]);
-
         bShotAnim = true;
         Acceleration = vect(0,0,0);
         SetAnimAction('KnockDown');
@@ -1498,8 +1442,6 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     }
 }
 
-//If he plays pain anims just before he enters minigun state, he skips his MGFire animation
-//So we'll prevent him from playing pain anims just before he starts firing
 function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
 {
     if(LastChainGunTime<Level.TimeSeconds + 1 || LastMissileTime<Level.TimeSeconds + 1)
@@ -1517,21 +1459,21 @@ function DoorAttack(Actor A)
         Controller.Target = A;
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('PreFireMG'); //('PreFireMissile');
+        SetAnimAction('PreFireMG'); 
         HandleWaitForAnim('PreFireMG');
-        //Not sure if we need this
         MGFireCounter = Rand(20);
         GoToState('FireMissile');
     }
 }
+
 function RemoveHead();
 function PlayDirectionalHit(Vector HitLoc);
+
 function bool SameSpeciesAs(Pawn P)
 {
     return false;
 }
 
-// Creapy endgame camera when the evil wins.
 function bool SetBossLaught()
 {
     local Controller C;
@@ -1565,7 +1507,6 @@ simulated function bool SpectatorSpecialCalcView(PlayerController Viewer, out Ac
     return true;
 }
 
-// Overridden to do a cool slomo death view of the patriarch dying
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation)
 {
     local Controller C;
@@ -1621,7 +1562,6 @@ function ClawDamageTarget()
     else
         PushDir = damageForce * vector(Rotation);
 
-// Begin Balance Round 1(damages everyone in Round 2 and added seperate code path for MeleeImpale in Round 3)
     if( Anim == 'MeleeImpale' )
     {
         bDamagedSomeone = MeleeDamageTarget(UsedMeleeDamage, PushDir);
@@ -1632,10 +1572,10 @@ function ClawDamageTarget()
 
         foreach DynamicActors(class'KFHumanPawn', P)
         {
-            if ( (P.Location - Location) dot PushDir > 0.0 ) // Added dot Product check in Balance Round 3
+            if ( (P.Location - Location) dot PushDir > 0.0 ) 
             {
                 Controller.Target = P;
-                bDamagedSomeone = bDamagedSomeone || MeleeDamageTarget(UsedMeleeDamage, damageForce * Normal(P.Location - Location)); // Always pushing players away added in Balance Round 3
+                bDamagedSomeone = bDamagedSomeone || MeleeDamageTarget(UsedMeleeDamage, damageForce * Normal(P.Location - Location)); 
             }
         }
 
@@ -1643,12 +1583,10 @@ function ClawDamageTarget()
     }
 
     MeleeRange = default.MeleeRange;
-// End Balance Round 1, 2, and 3
 }
 
-//TODO:Use KFMod precache textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(FinalBlend'KFPatch2.BossHairFB');
     myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Patriarch.BossCloakFizzleFB');
     myLevel.AddPrecacheMaterial(Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB');
@@ -1662,9 +1600,111 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFBossOld.Boss'
+    Skins(0)=FinalBlend'KFPatch2.BossHairFB'
+    Skins(1)=Texture'KFPatch2.BossBits'
+    Skins(2)=Texture'KFPatch2.GunPoundSkin'
+    Skins(3)=Texture'KFPatch2.BossGun'
+    Skins(4)=Texture'KFPatch2.BossBits'
+    Skins(5)=Texture'KFPatch2.BossBits'
+    Skins(6)=Shader'KFPatch2.LaserShader'
 
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+    
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Pain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+    
+    bMeleeStunImmune = true
+    bFatAss=true
+    RagDeathVel=80.000000
+    RagDeathUpKick=100.000000
+    MeleeRange=10.000000
+    MovementAnims(0)="WalkF"
+    MovementAnims(1)="WalkF"
+    MovementAnims(2)="WalkF"
+    MovementAnims(3)="WalkF"
+    WalkAnims(0)="WalkF"
+    WalkAnims(1)="WalkF"
+    WalkAnims(2)="WalkF"
+    WalkAnims(3)="WalkF"
+    BurningWalkFAnims(0)="WalkF"
+    BurningWalkFAnims(1)="WalkF"
+    BurningWalkFAnims(2)="WalkF"
+    BurningWalkAnims(0)="WalkF"
+    BurningWalkAnims(1)="WalkF"
+    BurningWalkAnims(2)="WalkF"
+    AirAnims(0)="JumpInAir"
+    AirAnims(1)="JumpInAir"
+    AirAnims(2)="JumpInAir"
+    AirAnims(3)="JumpInAir"
+    TakeoffAnims(0)="JumpTakeOff"
+    TakeoffAnims(1)="JumpTakeOff"
+    TakeoffAnims(2)="JumpTakeOff"
+    TakeoffAnims(3)="JumpTakeOff"
+    LandAnims(0)="JumpLanded"
+    LandAnims(1)="JumpLanded"
+    LandAnims(2)="JumpLanded"
+    LandAnims(3)="JumpLanded"
+    AirStillAnim="JumpInAir"
+    TakeoffStillAnim="JumpTakeOff"
+    ChargingAnim="RunF"
+    IdleHeavyAnim="BossIdle"
+    IdleRifleAnim="BossIdle"
+    IdleCrouchAnim="BossIdle"
+    IdleWeaponAnim="BossIdle"
+    IdleRestAnim="BossIdle"
+    Mass=1000.000000
+    RotationRate=(Yaw=36000,Roll=0)
+    bBoss=true
+    bCanDistanceAttackDoors=true
+    bNetNotify=false
+    bUseExtendedCollision=true
+    DamageToMonsterScale=5.0
+
+    ScoringValue=500
+    GroundSpeed=120.000000
+    WaterSpeed=120.000000
+    MeleeDamage=75
+    Health=4000//4000
+    HealthMax=4000//4000
+    PlayerCountHealthScale=0.75
+    Intelligence=BRAINS_Human
+    MGDamage=6.0
+    HealingLevels(0)=5600
+    HealingLevels(1)=3500
+    HealingLevels(2)=2187
+    HealingAmount=1750
+    damageForce=170000
+    CrispUpThreshhold=1
+    MotionDetectorThreat=10.0
+    PipeBombDamageScale=0.0
+    ZapThreshold=5.0
+    ZappedDamageMod=1.25
+    ZapResistanceScale=1.0
+    bHarpoonToHeadStuns=false
+    bHarpoonToBodyStuns=false
+    ClawMeleeDamageRange=85//50
+    ImpaleMeleeDamageRange=45//75
+
+    TurnLeftAnim="BossHitF"
+    TurnRightAnim="BossHitF"
+    MenuName="Patriarch 2.5"
+
+    ColOffset=(Z=65)//(Z=50)
+    ColRadius=27
+    ColHeight=25//40
+    PrePivot=(Z=3)
+
+    ZombieFlag=3
+
+    KFRagdollName="BossRag"
+
+
+    SoloHeadScale=1.5
+    OnlineHeadshotScale=1.5//1.2
+    OnlineHeadshotOffset=(X=28,Y=-6,Z=70) //Z=75
+    
     ControllerClass=class'BossZombieControllerOS'
 }

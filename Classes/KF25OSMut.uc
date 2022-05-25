@@ -3,20 +3,24 @@
 class KF25OSMut extends Mutator
     config(KF25OSMut);
 
-
 // We've taken this code from CssHDMut:
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
-
-//Do we want Ranged pounds or gunners in our game?
+//config vars
+var config bool bEnableRandomSkins;
 var config bool bEnableRangedPound;
 var config bool bEnableExplosivesPound;
-
-//Enable Random Zed skins?
-var config bool bEnableRandomSkins;
-
-//Use KFMod 2.5 Melee Damage?
+//var config bool bEnableCorpseDecay;
+//var config bool bEnableOldHealth;
+//var config bool bEnableOldSpeed;
 var config bool bEnableOldMeleeDamage;
+//var config bool bEnableOldGorefastChargeSpeed;
+//var config bool bEnableOldFleshpoundChargeSpeed;
+//var config bool bEnableOldCrawlerBehaviour;
+//var config bool bEnableOldScrakeBehavior;
+//var config bool bEnableOldFleshpoundBehavior;
+//var config bool bEnableOldHeadshotBehaviour;
+//var config bool bEnableNoHealthScaling;
 
 // Load all relevant texture, sound, and other packages
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
@@ -27,7 +31,6 @@ var config bool bEnableOldMeleeDamage;
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KF_M79Snd.uax
 
-
 //=======================================
 //          PostBeginPlay
 //=======================================
@@ -36,82 +39,41 @@ event PostBeginPlay()
 {
     local int i;
     local KFGameType KF;
-    local string Pounds[2];
-    local string PoundsMix[2];
-    local int MyRand;
-    local KFMonsterOS KFMOS;
 
     super.PostBeginPlay();
 
-    //This BS doesn't work because I can't classify KFMos as a (Pawn) without erroring
-    //KFMOS = KFMonsterOS(Pawn);
     KF = KFGameType(Level.Game);
+
     if (KF == none)
     {
-      log("KFGameType not found, terminating!", self.name);
-      Destroy();
-      return;
+        log("KFGameType not found, terminating!", self.name);
+        Destroy();
+        return;
     }
 
-    // change vanilla monster collection
     if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection && !bEnableRandomSkins)
     {
-      KF.MonsterCollection = class'KFMonstersCollectionOS';
-    }
-    else if(bEnableRandomSkins)
-    {
-        KF.MonsterCollection = class'KFMonstersCollectionMixOS';
+        KF.MonsterCollection = class'KFMonstersCollectionOS';
     }
 
-    // shut down default event system
     for (i = 0; i < KF.SpecialEventMonsterCollections.Length; i++)
     {
         KF.SpecialEventMonsterCollections[i] = KF.MonsterCollection;
     }
 
-    Pounds[0] = string(class'ZombieRangedPound_OS');
-    Pounds[1] = string(class'ZombieRangedPoundGL_OS');
-
-    PoundsMix[0] = string(class'ZombieRangedPoundMix_OS');
-    PoundsMix[1] = string(class'ZombieRangedPoundGLMix_OS');
-
-    MyRand = Rand(2);
-
-    //If enabled, spawn Ranged Pounds in place of Husks
-    //Otherwise, replace them with Bloats
-    if(bEnableRangedPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" || bEnableExplosivesPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
+    if(bEnableExplosivesPound   &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" || 
+       bEnableRangedPound       &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
     {
-        if(!bEnableRandomSkins)
-        {
-            KF.MonsterCollection.default.MonsterClasses[8].MClassName = Pounds[MyRand];
-        }
-        else
-        {
-            KF.MonsterCollection.default.MonsterClasses[8].MClassName = PoundsMix[MyRand];
-        }
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundOS');
 
-        if(!bEnableExplosivesPound && bEnableRangedPound)
+        if( !bEnableRangedPound && bEnableExplosivesPound)
         {
-            if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPound_OS');
-            else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundMix_OS');
-        }
-        else if( !bEnableRangedPound && bEnableExplosivesPound)
-        {
-            if(!bEnableRandomSkins)
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGL_OS');
-            else
-                KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundGLMix_OS');
+            KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieExplosivesPoundOS');
         }
     }
     else
-    {
-        KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieBloat_OS');
-    }
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";
 
-
-    // start the timer
     SetTimer(0.10, false);
 }
 
@@ -128,10 +90,10 @@ static function FillPlayInfo(PlayInfo PlayInfo)
 {
   super(Info).FillPlayInfo(PlayInfo);
 
-  //TODO: Make it so you can't have both of these checked at the same time
+  //TODO: Make it so you can't have both Ranged & Explosive pound enabled at same time? Is that even possible?
   PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
-  PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);
+  //PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableOldMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);
 }
 
@@ -153,10 +115,9 @@ static event string GetDescriptionText(string Property)
   }
 }
 
-
-//Precache KFMod textures
+//This is potentially useless?
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin');
@@ -195,7 +156,7 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    // Don't be active with other muts
+    // Don't be active with TWI muts
     GroupName="KF-MonsterMut"
     FriendlyName="KFMod 2.5 Zeds"
     Description="Replaces zeds with their 2.5 counter-parts."

@@ -1,30 +1,22 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieExplosivesPoundOS extends KFMonsterOS;
 
-// A "mini" patty that fires incendiary rounds as a Husk replacement
-class ZombieRangedPoundGLOS extends ZombieRangedPoundGLBaseOS
-    abstract;
-
-//Issues
-//Does not always play the FireMGEnd animation after he's finished firing,
-//Resulting in him walking weirdly towards the player. Try to suss it out using logs?
-
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KF_M79Snd.uax
-
-//----------------------------------------------------------------------------
-// NOTE: Most Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Grenades!
 var class<Projectile> GunnerProjClass;
+var bool bClientGLing;
+var int GLFireCounter;
+var bool bFireAtWill,bGLing;
+var float LastGLTime;        
+var vector TraceHitPos;
+var Emitter mTracer,mMuzzleFlash;
+var()   float   GLFireRate; 
+var()   int     GLFireBurst;
+var()   float   GLFireInterval;
 
+replication
+{
+    reliable if( Role==ROLE_Authority )
+        TraceHitPos,bGLing;
+}
 
-//We'll keep this retail code
 function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPosition, float fTimeEnd  )
 {
     local vector NewVelocity;
@@ -35,10 +27,8 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
     {
         if( PhysicsVolume.Gravity.Z < class'PhysicsVolume'.default.Gravity.Z )
         {
-            // Just checking mass to be extra-cautious.
             if( Mass > 900 )
             {
-                // Extra velocity boost to counter oversized mass weighing the boss down.
                 NewVelocity.Z += 90;
             }
         }
@@ -46,14 +36,11 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
     return NewVelocity;
 }
 
-
-//We want to keep this
 function bool CanGetOutOfWay()
 {
     return false;
 }
 
-// High damage was taken, make em fall over.
 function bool FlipOver()
 {
     // if( Physics==PHYS_Falling )
@@ -76,20 +63,12 @@ function bool FlipOver()
     return false;
 }
 
-//-----------------------------------------------------------------------------
-// PostBeginPlay
-//-----------------------------------------------------------------------------
-
 simulated function PostBeginPlay()
 {
     if( Role < ROLE_Authority )
     {
         return;
     }
-
-    // Difficulty Scaling
-    // Grenade Launcher fired amount and rate of fire are set here
-    // TODO: Implement these variables
 
     if (Level.Game != none)
     {
@@ -119,8 +98,6 @@ simulated function PostBeginPlay()
     super.PostBeginPlay();
 }
 
-// Copied from Husk
-// don't interrupt the bloat while he is puking
 simulated function bool HitCanInterruptAction()
 {
     if( bShotAnim )
@@ -131,41 +108,36 @@ simulated function bool HitCanInterruptAction()
     return true;
 }
 
-//Needed Retail Code
 simulated function Destroyed()
 {
     if( mTracer!=none )
         mTracer.Destroy();
+        
     if( mMuzzleFlash!=none )
         mMuzzleFlash.Destroy();
+        
     super.Destroyed();
 }
 
-//Needed Retail Code
 simulated Function PostNetBeginPlay()
 {
     EnableChannelNotify ( 1,1);
-    AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); //SpineBone1 to Bip01 Spine1
+    AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1'); 
     super.PostNetBeginPlay();
     TraceHitPos = vect(0,0,0);
     bNetNotify = true;
 }
 
-
-//Need to overhaul this(Done!)
 function RangedAttack(Actor A)
 {
     local float Dist;
-    local int LastFireTime; //Husk variable // Don't know if we need this
+    local int LastFireTime;
 
     if ( bShotAnim )
         return;
 
     Dist = VSize(Controller.Target.Location-Location);
 
-    class'GunnerGLProjectile'.default.Speed = Dist;
-
-    //Using the Husks code, albeit modified
     if ( Physics == PHYS_Swimming )
     {
         SetAnimAction('Claw');
@@ -177,27 +149,19 @@ function RangedAttack(Actor A)
         bShotAnim = true;
         LastFireTime = Level.TimeSeconds;
         SetAnimAction('Claw');
-        PlaySound(sound'Claw2s', SLOT_Interact); // We have this sound, use it
+        PlaySound(sound'Claw2s', SLOT_Interact);
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 )
     {
-        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
-
+        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('RangedPreFireMG'); //PreFireMG
-        HandleWaitForAnim('RangedPreFireMG'); //PreFireMG
+        SetAnimAction('RangedPreFireMG'); 
+        HandleWaitForAnim('RangedPreFireMG');
 
-        //How many nades to fire
-         GLFireCounter =  GLFireBurst; // Balance 1 - Removed the random extra grenades
-
-        //Ding ding ding! You won the lottery, and your prize is certain death!
-        // Lowered the chance because this attack is pretty deadly
-        if(FRand() < 0.05 && Level.Game.GameDifficulty >= 5.0) // Don't hurt the little babies who play on Easy Modo
-            GLFireCounter =  GLFireBurst + 3 + Rand(4);
-
+        GLFireCounter =  GLFireBurst;
         GoToState('FireGrenades');
     }
 }
@@ -207,17 +171,18 @@ simulated function AddTraceHitFX( vector HitPos )
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
 
-    Start = GetBoneCoords('FireBone').Origin; //tip to FireBone
+    Start = GetBoneCoords('FireBone').Origin;
     if( mTracer==none )
-        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); //KFNewTracer from KFMod and Retail are similar, so were not replacing it
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start);
     else mTracer.SetLocation(Start);
+    
     if( mMuzzleFlash==none )
     {
-        //Swap with NewMinigunMFlash(Done!)
         mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
-        AttachToBone(mMuzzleFlash, 'FireBone'); //tip to FireBone
+        AttachToBone(mMuzzleFlash, 'FireBone');
     }
     else mMuzzleFlash.SpawnParticle(1);
+    
     hitDist = VSize(HitPos - Start) - 50.f;
 
     if( hitDist>10 )
@@ -234,11 +199,12 @@ simulated function AddTraceHitFX( vector HitPos )
         mTracer.Emitters[0].LifetimeRange.Max = mTracer.Emitters[0].LifetimeRange.Min;
         mTracer.SpawnParticle(1);
     }
+    
     Instigator = self;
 
     if( HitPos != vect(0,0,0) )
     {
-        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start))); //Can't be bothered to replace this
+        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start)));
     }
 }
 
@@ -246,7 +212,6 @@ function FireGLShot()
 {
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
-    local KFMonsterController KFMonstControl;
 
     GLFireCounter--;
 
@@ -255,9 +220,9 @@ function FireGLShot()
         Controller.Target.TakeDamage(22,self,Location,vect(0,0,0),class'DamTypeVomit');
         return;
     }
+    
     GetAxes(Rotation,X,Y,Z);
-    FireStart = GetBoneCoords('FireBone').Origin; //tip to FireBone
-    //GunnerProjClass = class'GunnerGLProjectile';
+    FireStart = GetBoneCoords('FireBone').Origin;
 
     if ( !SavedFireProperties.bInitialized )
     {
@@ -282,7 +247,6 @@ function FireGLShot()
     ToggleAuxCollision(true);
 }
 
-//Keep this the same as retail
 simulated function AnimEnd( int Channel )
 {
     local name  Sequence;
@@ -292,13 +256,13 @@ simulated function AnimEnd( int Channel )
     {
         GetAnimParams( Channel, Sequence, Frame, Rate );
 
-        if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) //PreFireMG and FireMG now use RangedPound anims
+        if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' )
         {
             super.AnimEnd(Channel);
             return;
         }
 
-        PlayAnim('RangedFireMG'); //Rangedpound Anims
+        PlayAnim('RangedFireMG');
         bWaitForAnim = true;
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
@@ -306,7 +270,6 @@ simulated function AnimEnd( int Channel )
     else super.AnimEnd(Channel);
 }
 
-//We'll use retail code(modified) instead of KFMod code for this
 state FireGrenades
 {
     function RangedAttack(Actor A)
@@ -345,7 +308,7 @@ state FireGrenades
         SoundRadius=default.SoundRadius;
         GLFireCounter=0;
 
-        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0); //Level.TimeSeconds + 5 + FRand() * 10;
+        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
     }
 
     function BeginState()
@@ -361,15 +324,15 @@ state FireGrenades
         {
             bShotAnim = true;
             Acceleration = vect(0,0,0);
-            SetAnimAction('RangedFireMGEnd'); //RangedPound Anims
-            HandleWaitForAnim('RangedFireMGEnd'); //RangedPound Anims
+            SetAnimAction('RangedFireMGEnd');
+            HandleWaitForAnim('RangedFireMGEnd');
             GoToState('');
         }
         else
         {
             if ( Controller.Enemy != none )
             {
-                if ( Controller.LineOfSightTo(Controller.Enemy) && FastTrace(GetBoneCoords('FireBone').Origin,Controller.Enemy.Location)) //tip to FireBone
+                if ( Controller.LineOfSightTo(Controller.Enemy) && FastTrace(GetBoneCoords('FireBone').Origin,Controller.Enemy.Location))
                 {
                     Controller.Focus = Controller.Enemy;
                     Controller.FocalPoint = Controller.Enemy.Location;
@@ -382,7 +345,7 @@ state FireGrenades
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
-            SetAnimAction('RangedFireMG'); //Use RangedPound anim
+            SetAnimAction('RangedFireMG');
             bWaitForAnim = true;
         }
     }
@@ -405,14 +368,14 @@ Begin:
         {
             bShotAnim = true;
             Acceleration = vect(0,0,0);
-            SetAnimAction('RangedFireMGEnd'); //Ranged Anims
-            HandleWaitForAnim('RangedFireMGEnd'); //Ranged Anims
+            SetAnimAction('RangedFireMGEnd');
+            HandleWaitForAnim('RangedFireMGEnd');
             GoToState('');
         }
 
         if( bFireAtWill )
             FireGLShot();
-        Sleep(GLFireRate); //0.05//Uses our own fire rate set in the base file
+        Sleep(GLFireRate);
     }
 }
 
@@ -422,10 +385,9 @@ simulated function PostNetReceive()
     if( bClientGLing != bGLing )
     {
         bClientGLing = bGLing;
-        // Hack so Patriarch won't go out of MG Firing to play his idle anim online
+
         if( bGLing )
         {
-            //Make sure all of these are RangedPound Anims
             IdleHeavyAnim='RangedFireMG';
             IdleRifleAnim='RangedFireMG';
             IdleCrouchAnim='RangedFireMG';
@@ -442,7 +404,6 @@ simulated function PostNetReceive()
         }
     }
 
-    //We just need this, the else if portion in the retail version is unnecessary
     if( TraceHitPos!=vect(0,0,0) )
     {
         AddTraceHitFX(TraceHitPos);
@@ -450,11 +411,9 @@ simulated function PostNetReceive()
     }
 }
 
-//Overhauled with KFMod Code
 simulated function int DoAnimAction( name AnimName )
 {
-    //Removed boss anims and replaced with Ranged
-    if( AnimName=='PoundPunch2' || AnimName=='RangedHitF' /*|| AnimName=='RangedFireMG'*/  ) //Removing RangedFireMG may have potentially fixed the bug with him not playing end anims
+    if( AnimName=='PoundPunch2' || AnimName=='RangedHitF' )
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
@@ -463,13 +422,13 @@ simulated function int DoAnimAction( name AnimName )
     return super.DoAnimAction(AnimName);
 }
 
-//We need this retail Code
 simulated event SetAnimAction(name NewAction)
 {
     local int meleeAnimIndex;
 
     if( NewAction=='' )
         return;
+        
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
@@ -481,7 +440,7 @@ simulated event SetAnimAction(name NewAction)
 
     if( Controller != none )
     {
-       RangedPoundGLZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
+       ExplosivesPoundZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
     }
 
     if( AnimNeedsWait(NewAction) )
@@ -501,7 +460,6 @@ simulated event SetAnimAction(name NewAction)
     }
 }
 
-//We need this retail code
 simulated function HandleWaitForAnim( name NewAnim )
 {
     local float RageAnimDur;
@@ -509,15 +467,11 @@ simulated function HandleWaitForAnim( name NewAnim )
     Controller.GoToState('WaitForAnim');
     RageAnimDur = GetAnimDuration(NewAnim);
 
-    //RangedPound controller
-    RangedPoundGLZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim); //BossZombieController to BossZombieControllerOS
+    ExplosivesPoundZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
 }
 
-//We need this retail code
-// The animation is full body and should set the bWaitForAnim flag
 simulated function bool AnimNeedsWait(name TestAnim)
 {
-    //Removed the extra patty anims
     if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'RangedKnockDown')
     {
         return true;
@@ -526,17 +480,13 @@ simulated function bool AnimNeedsWait(name TestAnim)
     return false;
 }
 
-
-//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin');
 }
 
-//If he plays pain anims just before he enters GL state, he skips his MGFire animation
-//So we'll prevent him from playing pain anims just before he starts firing
 function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
 {
     if(LastGLTime<Level.TimeSeconds + 1)
@@ -545,14 +495,110 @@ function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<D
         super.OldPlayHit(Damage,InstigatedBy,HitLocation,damageType,Momentum,HitIndex);
 }
 
-
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
-
-    //Use Rangedpound controller
-    ControllerClass=class'RangedPoundGLZombieControllerOS'
+    ControllerClass=class'ExplosivesPoundZombieControllerOS'
     GunnerProjClass=class'GunnerGLProjectile'
+    
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Rangedpound'
+    Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
+    Skins(1)=Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex'
+    Skins(2)=Texture'KFOldSchoolZeds_Textures.Patriarch.PatriarchSkin'
+    
+    //Maybe add ambient sound?
+    AmbientSound=none
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+    
+    ZombieFlag=1
+
+    bFatAss=true
+    Mass=400.000000
+    RotationRate=(Yaw=45000,Roll=0)
+    bUseExtendedCollision=true
+
+    ScoringValue=125
+    GroundSpeed=75.0
+    WaterSpeed=75.000000
+    Health=1250//700
+    HealthMax=1250//700
+    PlayerCountHealthScale=0.10//0.15
+    PlayerNumHeadHealthScale=0.05
+    HeadHealth=655//250
+    MeleeDamage=15
+    JumpZ=320.000000
+    bHarpoonToHeadStuns=true
+    bHarpoonToBodyStuns=false
+    BleedOutDuration=6.0
+    MeleeRange=30.0//55.000000
+    damageForce=70000
+    Intelligence=BRAINS_Mammal
+    MotionDetectorThreat=2.0
+    ZapThreshold=1.25
+    ZappedDamageMod=1.25
+    GLFireInterval=5.5
+    GLFireRate=0.75
+    GLFireBurst=2
+
+    AmmunitionClass=class'KFMod.BZombieAmmo'
+    bCannibal = false
+    MenuName="Flesh Pound Explosives Gunner"
+
+    IdleHeavyAnim="RangedIdle"
+    IdleRifleAnim="RangedIdle"
+    IdleCrouchAnim="RangedIdle"
+    IdleWeaponAnim="RangedIdle"
+    IdleRestAnim="RangedIdle"
+
+    MovementAnims(0)="RangedWalkF"
+    MovementAnims(1)="RangedWalkF"
+    MovementAnims(2)="RangedWalkF"
+    MovementAnims(3)="RangedWalkF"
+    WalkAnims(0)="RangedWalkF"
+    WalkAnims(1)="RangedWalkF"
+    WalkAnims(2)="RangedWalkF"
+    WalkAnims(3)="RangedWalkF"
+    BurningWalkFAnims(0)="RangedWalkF"
+    BurningWalkFAnims(1)="RangedWalkF"
+    BurningWalkFAnims(2)="RangedWalkF"
+    BurningWalkAnims(0)="RangedWalkF"
+    BurningWalkAnims(1)="RangedWalkF"
+    BurningWalkAnims(2)="RangedWalkF"
+
+    AirAnims(0)="RangedJumpInAir"
+    AirAnims(1)="RangedJumpInAir"
+    AirAnims(2)="RangedJumpInAir"
+    AirAnims(3)="RangedJumpInAir"
+    TakeoffAnims(0)="RangedJumpTakeOff"
+    TakeoffAnims(1)="RangedJumpTakeOff"
+    TakeoffAnims(2)="RangedJumpTakeOff"
+    TakeoffAnims(3)="RangedJumpTakeOff"
+    LandAnims(0)="RangedJumpLanded"
+    LandAnims(1)="RangedJumpLanded"
+    LandAnims(2)="RangedJumpLanded"
+    LandAnims(3)="RangedJumpLanded"
+    AirStillAnim="RangedJumpInAir"
+    TakeoffStillAnim="RangedJumpTakeOff"
+    TurnLeftAnim="RangedBossHitF"
+    TurnRightAnim="RangedBossHitF"
+
+    KFRagdollName="FleshPoundRag"
+
+    MeleeAnims(0)="PoundPunch2"
+    MeleeAnims(1)="PoundPunch2"
+    MeleeAnims(2)="PoundPunch2"
+
+    bCanDistanceAttackDoors=false
+
+    ColOffset=(Z=65)
+    ColRadius=27
+    ColHeight=25
+    PrePivot=(Z=0)
+
+    SoloHeadScale=1.55
+    OnlineHeadshotScale=1.75//1.3    
+    OnlineHeadshotOffset=(X=30,Y=7,Z=68)
 }

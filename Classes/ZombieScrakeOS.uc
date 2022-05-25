@@ -1,26 +1,14 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieScrakeOS extends KFMonsterOS;
 
-// Chainsaw Zombie Monster for KF Invasion gametype
-// He's not quite as speedy as the other Zombies, But his attacks are TRULY damaging.
-class ZombieScrakeOS extends ZombieScrakeBaseOS
-    abstract;
+var         bool    bCharging;
+var float DistBeforeSaw;
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+replication
+{
+    reliable if(Role == ROLE_Authority)
+        bCharging;
+}
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//Head Hitbox is kinda wonky, though it might be fine now?
-//Needs more testing and user feedback.
-
-//Same as KFMod
 simulated function PostNetBeginPlay()
 {
     EnableChannelNotify ( 1,1);
@@ -32,9 +20,8 @@ simulated function PostNetReceive()
 {
     if (bCharging)
     {
-        MovementAnims[0]='ZombieRun';//'ChargeF'; Use the Gorefast charging anim
+        MovementAnims[0]='ZombieRun';
 
-        //If he's not attacking, increase his Z's Offset
         if( !bShotAnim )
         {
             OnlineHeadshotOffset.Z=39;
@@ -51,15 +38,12 @@ simulated function PostNetReceive()
     }
 }
 
-//Not sure what the SetMindControlled function does, so were keeping it
-// This zed has been taken control of. Boost its health and speed
 function SetMindControlled(bool bNewMindControlled)
 {
     if( bNewMindControlled )
     {
         NumZCDHits++;
 
-        // if we hit him a couple of times, make him rage!
         if( NumZCDHits > 1 )
         {
             if( !IsInState('RunningToMarker') )
@@ -98,8 +82,6 @@ function SetMindControlled(bool bNewMindControlled)
     bZedUnderControl = bNewMindControlled;
 }
 
-//Retail code we'll keep
-// Handle the zed being commanded to move to a new location
 function GivenNewMarker()
 {
     if( bCharging && NumZCDHits > 1  )
@@ -112,10 +94,8 @@ function GivenNewMarker()
     }
 }
 
-//Retail code we'll keep
 simulated function SetBurningBehavior()
 {
-    // If we're burning stop charging
     if( Role == Role_Authority && IsInState('RunningState') )
             {
         super.SetBurningBehavior();
@@ -127,31 +107,26 @@ simulated function SetBurningBehavior()
 
 function RangedAttack(Actor A)
 {
-    //Retail variable
     local float Dist;
 
     Dist = VSize(A.Location - Location);
 
     if ( bShotAnim || Physics == PHYS_Swimming)
-        return; //DistBeforeSaw added here
+        return;
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
     {
         bShotAnim = true;
         SetAnimAction(MeleeAnims[Rand(2)]);
         CurrentDamType = ZombieDamType[0];
-        PlaySound(sound'Claw2s', SLOT_None);//We have this sound, so we can play it
+        PlaySound(sound'Claw2s', SLOT_None);
         GoToState('SawingLoop');
     }
 
-    //Do more melee damage on the slower attack
-    //And do less on the faster attack
     if(AnimAction == MeleeAnims[0])
         MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 0.85), 1 );
     else if(AnimAction == MeleeAnims[1])
          MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 1.15), 1 );
 
-    //Code that handles running when low on health, we need it
-    //As we want retail Scrake behaviour, even if the Mod didn't have it
     if( !bShotAnim && !bDecapitated )
     {
         if ( Level.Game.GameDifficulty < 5.0 )
@@ -161,23 +136,20 @@ function RangedAttack(Actor A)
         }
         else
         {
-            if ( float(Health)/HealthMax < 0.75 ) // Changed Rage Point from 0.5 to 0.75 in Balance Round 1(applied to only Suicidal and HoE in Round 7)
+            if ( float(Health)/HealthMax < 0.75 )
                 GoToState('RunningState');
         }
     }
 }
 
-//Dont touch this retail code
 state RunningState
 {
-    // Set the zed to the zapped behavior
     simulated function SetZappedBehavior()
     {
         Global.SetZappedBehavior();
         GoToState('');
     }
 
-    // Don't override speed in this state
     function bool CanSpeedAdjust()
     {
         return false;
@@ -219,20 +191,16 @@ state RunningState
 
     function RangedAttack(Actor A)
     {
-        //Retail variable
         local float Dist;
 
         Dist = VSize(A.Location - Location);
-        //Get even closer before doing an attack so you can get a
-        //Guaranteed hit on the player!
         DistBeforeSaw = 20.0;
 
         if ( bShotAnim || Physics == PHYS_Swimming)
-            return; //Added it here just incase
+            return;
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
         {
             bShotAnim = true;
-            //Code that makes it so Scrake on suicidal+ prefers attack 1 instead of 2 while charging
             if(Level.Game.GameDifficulty < 5.0)
                 SetAnimAction(MeleeAnims[Rand(2)]);
             else
@@ -242,14 +210,10 @@ state RunningState
         }
     }
 
-    //Added in code to increase Head Hitbox whenever Gorefasts
-    //Do their running animation because during that specific
-    //Animation, they can't be headshot
     simulated function Tick(float DeltaTime)
     {
         local int i;
 
-        //For some reason, this does not work on Network games
         if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
         {
             OnlineHeadshotOffset.Z=39;
@@ -259,22 +223,12 @@ state RunningState
             OnlineHeadshotOffset.Z=57;
         }
 
-        //Gorefasts dont attack and move
-        // Keep the gorefast moving toward its target when attacking
-        //if( Role == ROLE_Authority && bShotAnim && !bWaitForAnim )
-        //{
         //    if( LookTarget!=none )
-        //    {
-        //        Acceleration = AccelRate * Normal(LookTarget.Location - Location);
-        //    }
-        //}
 
         global.Tick(DeltaTime);
     }
 }
 
-// State where the zed is charging to a marked location.
-// Not sure if we need this, but we'll keep it
 state RunningToMarker extends RunningState
 {
 }
@@ -282,8 +236,6 @@ state RunningToMarker extends RunningState
 
 State SawingLoop
 {
-    //Keep this retail code
-    // Don't override speed in this state
     function bool CanSpeedAdjust()
     {
         return false;
@@ -297,7 +249,7 @@ State SawingLoop
     function RangedAttack(Actor A)
     {
         if ( bShotAnim )
-            return; //We dont need distance checking for sawing
+            return; 
         else if ( CanAttack(A) )
         {
             Acceleration = vect(0,0,0);
@@ -312,7 +264,7 @@ State SawingLoop
     {
         super.AnimEnd(Channel);
         if( Controller!=none && Controller.Enemy!=none )
-            RangedAttack(Controller.Enemy); // Keep on attacking if possible.
+            RangedAttack(Controller.Enemy); 
     }
 
     function EndState()
@@ -326,43 +278,23 @@ State SawingLoop
     }
 }
 
-//Dont touch this
-// Added in Balance Round 1 to reduce the headshot damage taken from Crossbows
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
     local bool bIsHeadShot;
-    local PlayerController PC;
-    local KFSteamStatsAndAchievements Stats;
 
     bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
 
     if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
     {
-        Damage *= 0.5; // Was 0.5 in Balance Round 1, then 0.6 in Round 2, back to 0.5 in Round 3
+        Damage *= 0.5; 
     }
 
     super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
 
-    // Added in Balance Round 3 to make the Scrake "Rage" more reliably when his health gets low(limited to Suicidal and HoE in Round 7)
     if ( Level.Game.GameDifficulty >= 5.0 && !IsInState('SawingLoop') && !IsInState('RunningState') && float(Health) / HealthMax < 0.75 )
         RangedAttack(InstigatedBy);
-
-    //Can remove this but I dont want to
-    if( damageType == class'DamTypeDBShotgun' )
-    {
-        PC = PlayerController( InstigatedBy.Controller );
-        if( PC != none )
-        {
-            Stats = KFSteamStatsAndAchievements( PC.SteamStatsAndAchievements );
-            if( Stats != none )
-            {
-                Stats.CheckAndSetAchievementComplete( Stats.KFACHIEVEMENT_PushScrakeSPJ );
-            }
-        }
-    }
 }
 
-//More or less same as KFMod code
 function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageType)
 {
     local int StunChance;
@@ -384,7 +316,6 @@ function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageTyp
     PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
 }
 
-//Overhauled with KFMod Code
 simulated function int DoAnimAction( name AnimName )
 {
     if( AnimName=='SawZombieAttack1' || AnimName=='SawZombieAttack2' || AnimName=='SawImpaleLoop' )
@@ -396,7 +327,6 @@ simulated function int DoAnimAction( name AnimName )
     return super.DoAnimAction(AnimName);
 }
 
-//Retail code we'll keep
 simulated event SetAnimAction(name NewAction)
 {
     local int meleeAnimIndex;
@@ -424,8 +354,6 @@ simulated event SetAnimAction(name NewAction)
     }
 }
 
-//Retail code we'll keep
-// The animation is full body and should set the bWaitForAnim flag
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     if( TestAnim == 'SawImpaleLoop' || TestAnim == 'DoorBash' || TestAnim == 'KnockDown' )
@@ -437,16 +365,13 @@ simulated function bool AnimNeedsWait(name TestAnim)
 }
 
 
-//We'll keep this Retail code, but without the Exhaust Effect code
-// Maybe spawn some chunks when the player gets obliterated
 simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation)
 {
     super.SpawnGibs(HitRotation,ChunkPerterbation);
 }
 
-//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin');
     myLevel.AddPrecacheMaterial(TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC');
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin');
@@ -455,10 +380,79 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.SawZombie'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSkin'
+    Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'
+    Skins(2)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin'
+    Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'
+    
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Scrake.Saw_Idle'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Scrake.Scrake_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+    
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+    
+    ZombieFlag=3
 
-    //Use KFMod Controller
+    bMeleeStunImmune = true
+    MeleeAnims(0)="SawZombieAttack1"
+    MeleeAnims(1)="SawZombieAttack2"
+    MovementAnims(0)="SawZombieWalk"
+    MovementAnims(1)="SawZombieWalk"
+    MovementAnims(2)="SawZombieWalk"
+    MovementAnims(3)="SawZombieWalk"
+    WalkAnims(0)="SawZombieWalk"
+    WalkAnims(1)="SawZombieWalk"
+    WalkAnims(2)="SawZombieWalk"
+    WalkAnims(3)="SawZombieWalk"
+    IdleCrouchAnim="SawZombieIdle"
+    IdleWeaponAnim="SawZombieIdle"
+    IdleRestAnim="SawZombieIdle"
+    IdleHeavyAnim="SawZombieIdle"
+    IdleRifleAnim="SawZombieIdle"
+    bFatAss=true
+    Mass=500.000000
+    RotationRate=(Yaw=45000,Roll=0)
+    bUseExtendedCollision=true
+    DamageToMonsterScale=8.0
+    PoundRageBumpDamScale=0.01
+
+    MeleeDamage=20
+    damageForce=-100000
+    ScoringValue=75
+    MeleeRange=60
+    DistBeforeSaw=0.0
+    GroundSpeed=85.000000
+    WaterSpeed=75.000000
+    Health=1000
+    HealthMax=1000
+    PlayerCountHealthScale=0.5
+    PlayerNumHeadHealthScale=0.30 
+    HeadHealth=650
+    BleedOutDuration=6.0
+    MotionDetectorThreat=3.0
+    ZapThreshold=1.25
+    ZappedDamageMod=1.25
+    bHarpoonToHeadStuns=true
+    bHarpoonToBodyStuns=false
+    Intelligence=BRAINS_Mammal
+
+    KFRagdollName="SawZombieRag"
+    bCannibal = true
+    MenuName="Scrake 2.5"
+    SoundRadius=200.000000
+    AmbientSoundScaling=1.800000
+
+    ColOffset=(Z=55)
+    ColRadius=29
+    ColHeight=18
+    Prepivot=(Z=0.0)
+
+
+    SoloHeadScale=1.3
+    OnlineHeadshotScale=1.5  
+    OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
+
     ControllerClass=class'SawZombieControllerOS'
 }

@@ -1,16 +1,9 @@
-// The Nice, nasty barf we'll be using for the Bloat's ranged attack.
-// KFModified!
 class KFBloatVomitOS extends KFBloatVomit;
 
-
-// Load all relevant texture, sound, and other packages
 #exec OBJ LOAD FILE=KillingFloorLabTextures.utx
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 
-//PostBeginPlay and DifficultyDamageModifer removed,
-//We don't need to restate things in the parent class
-
-//Some minor differences
+//TODO: Extend and shorten
 state OnGround
 {
     simulated function BeginState()
@@ -29,7 +22,6 @@ state OnGround
             bCollideWorld = true;
             bCheckedsurface = false;
             bProjTarget = false;
-            //KFMod wants to have the anim loop, so we'll loop it
             LoopAnim('flying', 1.0);
             GotoState('Flying');
         }
@@ -59,7 +51,6 @@ state OnGround
             DotProduct = SurfaceNormal dot Vect(0,0,-1);
             if (DotProduct > 0.7)
             {
-                //KFMod Code
                 PlayAnim('Drip', 0.66);
                 bDrip = true;
                 SetTimer(DripTime, false);
@@ -68,7 +59,6 @@ state OnGround
             }
             else if (DotProduct > -0.5)
             {
-                //KFMode Code
                 PlayAnim('Slide', 1.0);
                 if (bOnMover)
                     BlowUp(Location);
@@ -91,18 +81,15 @@ state OnGround
         SetGoopLevel(NewGoopLevel);
         SetCollisionSize(GoopVolume*10.0, GoopVolume*10.0);
         PlaySound(ImpactSound, SLOT_Misc);
-        //KFMod Code
         PlayAnim('hit');
         bCheckedSurface = false;
         SetTimer(RestTime, false);
     }
 }
 
-//KFModified
 singular function SplashGlobs(int NumGloblings)
 {
     local int g;
-    //Use KFMod Bloat Vomit
     local KFBloatVomitOS NewGlob;
     local Vector VNorm;
 
@@ -119,27 +106,23 @@ singular function SplashGlobs(int NumGloblings)
             }
             NewGlob.InstigatorController = InstigatorController;
         }
-        //else log("unable to spawn globling");
     }
 }
 
-//KFModified
 simulated function Destroyed()
 {
     if ( !bNoFX && EffectIsRelevant(Location,false) )
     {
-        //Spawn(class'xEffects.GoopSmoke');
-        //Use KFMod VomGroundSplash
         Spawn(class'VomGroundSplashOS');
     }
+    
     if ( Fear != none )
         Fear.Destroy();
+
     if (Trail != none)
         Trail.Destroy();
-    //super.Destroyed();
 }
 
-//KFModified
 auto state Flying
 {
     simulated function Landed( Vector HitNormal )
@@ -150,12 +133,10 @@ auto state Flying
         if ( Level.NetMode != NM_DedicatedServer )
         {
             PlaySound(ImpactSound, SLOT_Misc);
-            // explosion effects
         }
 
         SurfaceNormal = HitNormal;
 
-        // spawn globlings
         CoreGoopLevel = Rand3 + MaxGoopLevel - 3;
         if (GoopLevel > CoreGoopLevel)
         {
@@ -163,7 +144,6 @@ auto state Flying
                 SplashGlobs(GoopLevel - CoreGoopLevel);
             SetGoopLevel(CoreGoopLevel);
         }
-        //Use KFMod VomitDecal
         spawn(class'VomitDecalOS',,,, rotator(-HitNormal));
 
         bCollideWorld = false;
@@ -204,26 +184,13 @@ auto state Flying
 
 defaultproperties
 {
-     //Not set in KFMod, maybe set to none?
-     //DrawType=DT_StaticMesh
-     BaseDamage=3
-     TouchDetonationDelay=0.000000
-     Speed=400.000000
-     Damage=4.000000
-     MomentumTransfer=2000.000000
-     //Use KFMod DamTypeVomit
-     MyDamageType=class'DamTypeVomitOS'
-     bDynamicLight=false
-     LifeSpan=1.000000//8.000000 Old value used
-     //Use KFMod's texture, even though it wont be useful
+     //DamTypeVomitOS does not deal immediate damage, fix this later
+     //MyDamageType=class'DamTypeVomitOS'
+     LifeSpan=1.000000//8.000000
      Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
-     CollisionRadius=0.000000//2.000000 Old Values used here
+     CollisionRadius=0.000000//2.000000
      CollisionHeight=0.000000//2.000000
-     bUseCollisionStaticMesh=false
-     //Dont use modern chunks
      StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
-     //Use BioGlob's Impact and Explosion sound
      ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'
      ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
-     bBlockHitPointTraces=false
 }

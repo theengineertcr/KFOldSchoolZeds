@@ -1,30 +1,16 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieBloatOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieBloatOS extends ZombieBloatBaseOS
-    abstract;
+var BileJetOS BloatJet;
+var bool bPlayBileSplash;
+var float DistBeforePuke;
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//The same issue with the Siren, since they both can't attack and move at the same time
-//Need to increase puke range by 100-200 units and make him puke at a closer distance
-//Though, making him puke farther isn't the same as increasing the Scream radius
-//And It's confusing me, so were going to have to keep experimenting with this
-
-//KFMod Code
 function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vector momentum, class<DamageType> damageType)
 {
-  super.BodyPartRemoval(Damage, instigatedBy, hitlocation, momentum, damageType);
-
-  //TODO: This is a debug. Remove
+    super.BodyPartRemoval(Damage, instigatedBy, hitlocation, momentum, damageType);
 
     if((Health - Damage)<=0)
         Gored=3;
+        
     if(Gored>=3 && Gored < 5)
         BileBomb();
 }
@@ -34,8 +20,6 @@ function bool FlipOver()
     return false;
 }
 
-//Retail code we're keeping
-//Don't interrupt the bloat while he is puking
 simulated function bool HitCanInterruptAction()
 {
     if( bShotAnim )
@@ -46,7 +30,6 @@ simulated function bool HitCanInterruptAction()
     return true;
 }
 
-//Overhauled with KFMod Code
 function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
@@ -64,7 +47,6 @@ function DoorAttack(Actor A)
     }
 }
 
-//Retail code modified with KFMod code
 function RangedAttack(Actor A)
 {
     local int LastFireTime;
@@ -93,20 +75,14 @@ function RangedAttack(Actor A)
         SetAnimAction('ZombieBarf');
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
-        // We want those voicelines to play!
-        // Randomly send out a message about Bloat Vomit burning(3% chance)
+        
         if ( FRand() < 0.03 && KFHumanPawn(A) != none && PlayerController(KFHumanPawn(A).Controller) != none )
         {
             PlayerController(KFHumanPawn(A).Controller).Speech('AUTO', 7, "");
         }
-        //Controller.GotoState(,'WaitForAnim');
     }
 }
 
-
-// Barf Time.
-
-//Retained Retail code for balance reasons
 function SpawnTwoShots()
 {
     local vector X,Y,Z, FireStart;
@@ -120,6 +96,7 @@ function SpawnTwoShots()
 
     GetAxes(Rotation,X,Y,Z);
     FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
+    
     if ( !SavedFireProperties.bInitialized )
     {
         SavedFireProperties.AmmoClass = class'SkaarjAmmo';
@@ -133,8 +110,8 @@ function SpawnTwoShots()
         SavedFireProperties.bInitialized = true;
     }
 
-    // Turn off extra collision before spawning vomit, otherwise spawn fails
     ToggleAuxCollision(false);
+    
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
     Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
 
@@ -145,12 +122,10 @@ function SpawnTwoShots()
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
     spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
-    // Turn extra collision back on
+    
     ToggleAuxCollision(true);
-
 }
 
-//Overhauled with KFMod code
 simulated function Tick(float deltatime)
 {
     local vector BileExplosionLoc;
@@ -169,53 +144,43 @@ simulated function Tick(float deltatime)
     }
 }
 
-//Modified with KFMod code
 function BileBomb()
 {
     local bool AttachSucess;
 
-    //Modified with KFMod Code
     BloatJet = spawn(class'BileJetOS', self,,,);
 
-    //KFMod Code
     if(Gored < 5)
         AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
 
     if(!AttachSucess)
         BloatJet.SetBase(self);
+        
     BloatJet.SetRelativeRotation(rot(0,-4096,0));
 }
 
 function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
 {
-    //KFMod variable brought back
     local bool AttachSucess;
 
     super.PlayDyingAnimation(DamageType, HitLoc);
 
-    //Keeping this
-    // Don't blow up with bleed out
     if( bDecapitated && DamageType == class'DamTypeBleedOut' )
     {
         return;
     }
 
-
-    //Added this back in, otherwise they'd not bile bomb upon death
     if(Role == ROLE_Authority)
     {
         BileBomb();
-        //KFMod code we want kept
+
         if(BloatJet!=none)
         {
             if(Gored < 5)
                 AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
-            // else
-                // AttachSucess=AttachToBone(BloatJet,'Bip01 Spine1');
 
             if(!AttachSucess)
             {
-                //log("DEAD Bloaty Bile didn't like the Boning :o");
                 BloatJet.SetBase(self);
             }
 
@@ -224,7 +189,6 @@ function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
     }
 }
 
-//KFMod code
 State Dying
 {
     function tick(float deltaTime)
@@ -244,30 +208,23 @@ function RemoveHead()
     super.RemoveHead();
 }
 
-//KFMod Code
 simulated function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector momentum, class<DamageType> damageType, optional int HitIndex)
 {
-
-    // Bloats are volatile. They burn faster than other zeds.
     if (DamageType == class 'Burned')
         Damage *= 1.5;
 
-    //Dont take damage from your own puke or modern bloat puke!
     if (damageType == class 'DamTypeVomit' || damageType == class 'DamTypeVomitOS')
     {
         return;
     }
     else if( damageType == class 'DamTypeBlowerThrower' )
     {
-       // Reduced damage from the blower thrower bile, but lets not zero it out entirely
        Damage *= 0.25;
     }
 
   super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
 }
 
-
-//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
 {
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin');
@@ -276,13 +233,88 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Bloat'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin'
+    
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Bloat.Bloat_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
 
-    //Event classes dont exist in KFMod
-    //EventClasses(0)="KFChar.ZombieBloat_STANDARD"
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
 
-    //Use the Old BloatZombieController
-    ControllerClass=class'BloatZombieControllerOS'
+    MenuName="Bloat 2.5"
+    ScoringValue=17
+    ZombieFlag=1
+    Intelligence=BRAINS_Stupid
+    
+    IdleHeavyAnim="BloatIdle"
+    IdleRifleAnim="BloatIdle"
+    IdleCrouchAnim="BloatIdle"
+    IdleWeaponAnim="BloatIdle"
+    IdleRestAnim="BloatIdle"
+    
+    MovementAnims(0)="WalkBloat"
+    MovementAnims(1)="WalkBloat"
+    WalkAnims(0)="WalkBloat"
+    WalkAnims(1)="WalkBloat"
+    WalkAnims(2)="WalkBloat"
+    WalkAnims(3)="WalkBloat"
+    
+    MeleeAnims(0)="BloatChop2"
+    MeleeAnims(1)="BloatChop2"
+    MeleeAnims(2)="BloatChop2"
+    
+    MeleeDamage=14
+    MeleeRange=30.0//55.000000
+    damageForce=70000  
+    
+    PuntAnim="BloatPunt"
+
+    CollisionRadius=26.000000
+    CollisionHeight=44.000000
+    Prepivot=(Z=8.000000) //(Z=5.0)
+    
+    bUseExtendedCollision=true
+    ColOffset=(Z=60.000000)
+    ColRadius=27.000000
+    ColHeight=22.000000
+
+    SoloHeadScale=1.2
+    OnlineHeadshotScale=1.3
+    OnlineHeadshotOffset=(X=28,Y=-5,Z=70)
+
+    Health=525
+    HealthMax=525
+    PlayerCountHealthScale=0.25
+    HeadHealth=25
+    PlayerNumHeadHealthScale=0.0
+    
+    Mass=400.000000
+    RotationRate=(Yaw=45000,Roll=0)
+    bFatAss=true
+    
+    GroundSpeed=75.0//105.000000
+    WaterSpeed=102.000000
+    JumpZ=320.000000
+    
+    DistBeforePuke=250
+    
+    bCanDistanceAttackDoors=true
+    
+    AmmunitionClass=class'KFMod.BZombieAmmo'
+
+    BleedOutDuration=6.0
+    
+    MotionDetectorThreat=1.0
+    
+    ZapThreshold=0.5
+    ZappedDamageMod=1.5
+    
+    bHarpoonToHeadStuns=true
+    bHarpoonToBodyStuns=false
+
+    KFRagdollName="BloatRag"
+
+    bCannibal=true
 }

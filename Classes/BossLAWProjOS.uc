@@ -1,19 +1,11 @@
-//We just want it to play the old explosion sound,
-//Don't tweak anything else
 class BossLAWProjOS extends BossLAWProj;
 
-//-----------------------------------------------------------------------------
-// PostBeginPlay
-//-----------------------------------------------------------------------------
-
-//Load the sound package
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KillingFloorStatics.usx
 
-//Increase speed, damage, and radius on higher difficulty
+//TODO: Make this a toggle in mutator
 simulated function PostBeginPlay()
 {
-    // Difficulty Scaling
     if (Level.Game != none)
     {
         if( Level.Game.NumPlayers == 1 )
@@ -36,7 +28,7 @@ simulated function PostBeginPlay()
                 DamageRadius = default.DamageRadius * 1.15;
                 Speed = default.Speed * 1.10;
             }
-            else // Hardest difficulty
+            else
             {
                 Damage = default.Damage * 1.5;
                 DamageRadius = default.DamageRadius * 1.3;

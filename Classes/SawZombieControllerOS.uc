@@ -1,17 +1,13 @@
 class SawZombieControllerOS extends KFMonsterControllerOS;
-// Custom Zombie Thinkerating
-// By : Alex
 
 var    bool    bDoneSpottedCheck;
 
-//Need this for voicelines
 state ZombieHunt
 {
     event SeePlayer(Pawn SeenPlayer)
     {
         if ( !bDoneSpottedCheck && PlayerController(SeenPlayer.Controller) != none )
         {
-            // 25% chance of first player to see this Scrake saying something
             if ( !KFGameType(Level.Game).bDidSpottedScrakeMessage && FRand() < 0.25 )
             {
                 PlayerController(SeenPlayer.Controller).Speech('AUTO', 14, "");
@@ -25,7 +21,6 @@ state ZombieHunt
     }
 }
 
-//Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
     if ( (Enemy == none) || FireWeaponAt(Enemy) )
@@ -33,10 +28,8 @@ function TimedFireWeaponAtEnemy()
     else SetTimer(0.01, true);
 }
 
-//More or less the same
 state ZombieCharge
 {
-    // Don't do this in this state
     function GetOutOfTheWayOfShot(vector ShotDirection, vector ShotOrigin){}
 
     function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)

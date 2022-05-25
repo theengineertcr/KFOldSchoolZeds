@@ -1,10 +1,5 @@
-// KFMod BloodSpurt, originally found in XEffects.u
-//=============================================================================
-// BloodSpurt.
-//=============================================================================
 class BloodSpurtOS extends xEmitter;
 
-//Load relevant texture package
 #exec OBJ LOAD FILE=KFOldSchool_XEffects.utx
 
 var class<Actor>    BloodDecalClass;
@@ -21,9 +16,13 @@ replication
 simulated function PostNetBeginPlay()
 {
     if ( Level.NetMode != NM_DedicatedServer )
+    {
         WallSplat();
+    }
     else
+    {
         LifeSpan = 0.2;
+    }
 }
 
 simulated function WallSplat()
@@ -32,20 +31,29 @@ simulated function WallSplat()
     local Actor WallActor;
 
     if ( Level.bDropDetail || (!bMustShow && (FRand() > 0.8)) || (BloodDecalClass == none) )
+    {
         return;
+    }
 
     if ( HitDir == vect(0,0,0) )
     {
         if ( Owner != none )
+        {
             HitDir = Location - Owner.Location;
+        }
         else
+        {
             HitDir.Z = -1;
+        }
     }
-    HitDir = Normal(HitDir);
 
+    HitDir = Normal(HitDir);
     WallActor = Trace(WallHit, WallNormal, Location + 350 * HitDir, Location, false);
+
     if ( WallActor != none )
+    {
         spawn(BloodDecalClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
+    }
 }
 
 static function PrecacheContent(LevelInfo Level)
@@ -53,6 +61,7 @@ static function PrecacheContent(LevelInfo Level)
     local int i;
 
     super.PrecacheContent(Level);
+    
     if ( default.BloodDecalClass != none )
     {
         for ( i=0; i<3; i++ )
@@ -63,7 +72,6 @@ static function PrecacheContent(LevelInfo Level)
 defaultproperties
 {
      BloodDecalClass=class'BloodSplatterOS'
-     // Use Relevant Splat Textures found in KFOldSchool_XEffects
      Splats(0)=Texture'KFOldSchool_XEffects.BloodSplat1'
      Splats(1)=Texture'KFOldSchool_XEffects.BloodSplat2'
      Splats(2)=Texture'KFOldSchool_XEffects.BloodSplat3'
@@ -90,7 +98,6 @@ defaultproperties
      bOnlyRelevantToOwner=true
      RemoteRole=ROLE_SimulatedProxy
      LifeSpan=3.500000
-     //Texture ported to KFOldSchool_XEffects
      Skins(0)=Texture'KFOldSchool_XEffects.pcl_Blooda'
      Style=STY_Alpha
 }

@@ -1,23 +1,19 @@
-//-----------------------------------------------------------
-//
-//-----------------------------------------------------------
 class BossZombieControllerOS extends KFMonsterControllerOS;
 
 var NavigationPoint HidingSpots;
 
-//Dont touch these retail variables
-var     float       WaitAnimTimeout;    // How long until the Anim we are waiting for is completed; Hack so the server doesn't get stuck in idle when its doing the Rage anim
-var     int         AnimWaitChannel;    // The channel we are waiting to end in WaitForAnim
-var     name        AnimWaitingFor;     // The animation we are waiting to end in WaitForAnim, mostly used for debugging
-var     bool        bAlreadyFoundEnemy; // The Boss has already found an enemy at least once
+var     float       WaitAnimTimeout;    
+var     int         AnimWaitChannel;   
+var     name        AnimWaitingFor;    
+var     bool        bAlreadyFoundEnemy; 
 
-//Retail function, don't touch
+
 function bool CanKillMeYet()
 {
     return false;
 }
 
-//This function hasn't changed since KFMod, were keeping it
+
 function TimedFireWeaponAtEnemy()
 {
     if ( (Enemy == none) || FireWeaponAt(Enemy) )
@@ -26,212 +22,6 @@ function TimedFireWeaponAtEnemy()
         SetTimer(0.01, true);
 }
 
-//Fix this
-function rotator AdjustAim(FireProperties FiredAmmunition, vector projStart, int aimerror)
-{
-    local rotator FireRotation, TargetLook;
-    local float FireDist, TargetDist, ProjSpeed;
-    local actor HitActor;
-    local vector FireSpot, FireDir, TargetVel, HitLocation, HitNormal;
-    local int realYaw;
-    local bool bDefendMelee, bClean, bLeadTargetNow;
-    local bool bWantsToAimAtFeet;
-
-    if ( FiredAmmunition.ProjectileClass != none )
-        projspeed = FiredAmmunition.ProjectileClass.default.speed;
-
-    // make sure bot has a valid target
-    if ( Target == none )
-    {
-        Target = Enemy;
-        if ( Target == none )
-            return Rotation;
-    }
-    FireSpot = Target.Location;
-    TargetDist = VSize(Target.Location - Pawn.Location);
-
-    // perfect aim at stationary objects
-    if ( Pawn(Target) == none )
-    {
-        if ( !FiredAmmunition.bTossed )
-            return rotator(Target.Location - projstart);
-        else
-        {
-            FireDir = AdjustToss(projspeed,ProjStart,Target.Location,true);
-            SetRotation(Rotator(FireDir));
-            return Rotation;
-        }
-    }
-
-    bLeadTargetNow = FiredAmmunition.bLeadTarget && bLeadTarget;
-    bDefendMelee = ( (Target == Enemy) && DefendMelee(TargetDist) );
-    aimerror = AdjustAimError(aimerror,TargetDist,bDefendMelee,FiredAmmunition.bInstantHit, bLeadTargetNow);
-
-    // lead target with non instant hit projectiles
-    if ( bLeadTargetNow )
-    {
-        TargetVel = Target.Velocity;
-        // hack guess at projecting falling velocity of target
-        if ( Target.Physics == PHYS_Falling )
-        {
-            if ( Target.PhysicsVolume.Gravity.Z <= Target.PhysicsVolume.default.Gravity.Z )
-                TargetVel.Z = FMin(TargetVel.Z + FMax(-400, Target.PhysicsVolume.Gravity.Z * FMin(1,TargetDist/projSpeed)),0);
-            else
-                TargetVel.Z = FMin(0, TargetVel.Z);
-        }
-        // more or less lead target (with some random variation)
-        FireSpot += FMin(1, 0.7 + 0.6 * FRand()) * TargetVel * TargetDist/projSpeed;
-        FireSpot.Z = FMin(Target.Location.Z, FireSpot.Z);
-
-        if ( (Target.Physics != PHYS_Falling) && (FRand() < 0.55) && (VSize(FireSpot - ProjStart) > 1000) )
-        {
-            // don't always lead far away targets, especially if they are moving sideways with respect to the bot
-            TargetLook = Target.Rotation;
-            if ( Target.Physics == PHYS_Walking )
-                TargetLook.Pitch = 0;
-            bClean = ( ((Vector(TargetLook) Dot Normal(Target.Velocity)) >= 0.71) && FastTrace(FireSpot, ProjStart) );
-        }
-        else // make sure that bot isn't leading into a wall
-            bClean = FastTrace(FireSpot, ProjStart);
-        if ( !bClean)
-        {
-            // reduce amount of leading
-            if ( FRand() < 0.3 )
-                FireSpot = Target.Location;
-            else
-                FireSpot = 0.5 * (FireSpot + Target.Location);
-        }
-    }
-
-    bClean = false; //so will fail first check unless shooting at feet
-
-    // Randomly determine if we should try and splash damage with the fire projectile
-    if( FiredAmmunition.bTrySplash )
-    {
-        if( Skill < 2.0 )
-        {
-            if(FRand() > 0.85)
-            {
-                bWantsToAimAtFeet = true;
-            }
-        }
-        else if( Skill < 3.0 )
-        {
-            if(FRand() > 0.5)
-            {
-                bWantsToAimAtFeet = true;
-            }
-        }
-        else if( Skill >= 3.0 )
-        {
-            bWantsToAimAtFeet = true;
-        }
-    }
-
-    if ( FiredAmmunition.bTrySplash && (Pawn(Target) != none) && (((Target.Physics == PHYS_Falling)
-        && (Pawn.Location.Z + 80 >= Target.Location.Z)) || ((Pawn.Location.Z + 19 >= Target.Location.Z)
-        && (bDefendMelee || bWantsToAimAtFeet))) )
-    {
-        HitActor = Trace(HitLocation, HitNormal, FireSpot - vect(0,0,1) * (Target.CollisionHeight + 10), FireSpot, false);
-
-         bClean = (HitActor == none);
-        if ( !bClean )
-        {
-            FireSpot = HitLocation + vect(0,0,3);
-            bClean = FastTrace(FireSpot, ProjStart);
-        }
-        else
-            bClean = ( (Target.Physics == PHYS_Falling) && FastTrace(FireSpot, ProjStart) );
-    }
-
-    if ( !bClean )
-    {
-        //try middle
-        FireSpot.Z = Target.Location.Z;
-         bClean = FastTrace(FireSpot, ProjStart);
-    }
-    if ( FiredAmmunition.bTossed && !bClean && bEnemyInfoValid )
-    {
-        FireSpot = LastSeenPos;
-         HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-        if ( HitActor != none )
-        {
-            bCanFire = false;
-            FireSpot += 2 * Target.CollisionHeight * HitNormal;
-        }
-        bClean = true;
-    }
-
-    if( !bClean )
-    {
-        // try head
-         FireSpot.Z = Target.Location.Z + 0.9 * Target.CollisionHeight;
-         bClean = FastTrace(FireSpot, ProjStart);
-    }
-    if ( !bClean && (Target == Enemy) && bEnemyInfoValid )
-    {
-        FireSpot = LastSeenPos;
-        if ( Pawn.Location.Z >= LastSeenPos.Z )
-            FireSpot.Z -= 0.4 * Enemy.CollisionHeight;
-         HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-        if ( HitActor != none )
-        {
-            FireSpot = LastSeenPos + 2 * Enemy.CollisionHeight * HitNormal;
-            if ( Monster(Pawn).SplashDamage() && (Skill >= 4) )
-            {
-                 HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-                if ( HitActor != none )
-                    FireSpot += 2 * Enemy.CollisionHeight * HitNormal;
-            }
-            bCanFire = false;
-        }
-    }
-
-    // adjust for toss distance
-    if ( FiredAmmunition.bTossed )
-        FireDir = AdjustToss(projspeed,ProjStart,FireSpot,true);
-    else
-        FireDir = FireSpot - ProjStart;
-
-    FireRotation = Rotator(FireDir);
-    realYaw = FireRotation.Yaw;
-    InstantWarnTarget(Target,FiredAmmunition,vector(FireRotation));
-
-    FireRotation.Yaw = SetFireYaw(FireRotation.Yaw + aimerror);
-    FireDir = vector(FireRotation);
-    // avoid shooting into wall
-    FireDist = FMin(VSize(FireSpot-ProjStart), 400);
-    FireSpot = ProjStart + FireDist * FireDir;
-    HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-    if ( HitActor != none )
-    {
-        if ( HitNormal.Z < 0.7 )
-        {
-            FireRotation.Yaw = SetFireYaw(realYaw - aimerror);
-            FireDir = vector(FireRotation);
-            FireSpot = ProjStart + FireDist * FireDir;
-            HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-        }
-        if ( HitActor != none )
-        {
-            FireSpot += HitNormal * 2 * Target.CollisionHeight;
-            if ( Skill >= 4 )
-            {
-                HitActor = Trace(HitLocation, HitNormal, FireSpot, ProjStart, false);
-                if ( HitActor != none )
-                    FireSpot += Target.CollisionHeight * HitNormal;
-            }
-            FireDir = Normal(FireSpot - ProjStart);
-            FireRotation = rotator(FireDir);
-        }
-    }
-
-    SetRotation(FireRotation);
-    return FireRotation;
-}
-
-//Retail function we need
-// Overridden to support a quick initial attack to get the boss to the players quickly
 function FightEnemy(bool bCanCharge)
 {
     if( KFM.bShotAnim )
@@ -247,9 +37,6 @@ function FightEnemy(bool bCanCharge)
 
     if ( (Enemy == FailedHuntEnemy) && (Level.TimeSeconds == FailedHuntTime) )
     {
-    //    if ( Enemy.Controller.bIsPlayer )
-        //    FindNewEnemy();
-
         if ( Enemy == FailedHuntEnemy )
         {
                         GoalString = "FAILED HUNT - HANG OUT";
@@ -259,8 +46,6 @@ function FightEnemy(bool bCanCharge)
     }
     if ( !EnemyVisible() )
     {
-        //ZombieBoss to ZombieBossOS
-        // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
         if( bAlreadyFoundEnemy || ZombieBossOS(Pawn).SneakCount > 2 )
         {
             bAlreadyFoundEnemy = true;
@@ -269,8 +54,6 @@ function FightEnemy(bool bCanCharge)
         }
         else
         {
-            //ZombieBoss to ZombieBossOS
-            // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
             ZombieBossOS(Pawn).SneakCount++;
             GoalString = "InitialHunt";
             GotoState('InitialHunting');
@@ -278,16 +61,12 @@ function FightEnemy(bool bCanCharge)
         return;
     }
 
-    // see enemy - decide whether to charge it or strafe around/stand and fire
     Target = Enemy;
     GoalString = "Charge";
     PathFindState = 2;
     DoCharge();
 }
 
-
-//Retail code we dont want to touch
-// Get the boss to the players quickly after initial spawn
 state InitialHunting extends Hunting
 {
     event SeePlayer(Pawn SeenPlayer)
@@ -302,8 +81,6 @@ state InitialHunting extends Hunting
     {
         local float ZDif;
 
-        //ZombieBoss to ZombieBossOS
-        // Added sneakcount hack to try and fix the endless loop crash. Try and track down what was causing this later - Ramm
         ZombieBossOS(Pawn).SneakCount++;
 
         if( Pawn.CollisionRadius>27 || Pawn.CollisionHeight>46 )
@@ -330,7 +107,6 @@ state InitialHunting extends Hunting
     }
 }
 
-//Same as in KFMod
 state ZombieCharge
 {
     function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)
@@ -338,7 +114,6 @@ state ZombieCharge
         return false;
     }
 
-    // I suspect this function causes bloats to get confused
     function bool TryStrafe(vector sideDir)
     {
         return false;
@@ -368,7 +143,7 @@ Moving:
 
 state RunSomewhere
 {
-Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle; //Startle is new, but we dont care
+Ignores HearNoise,DamageAttitudeTo,Tick,EnemyChanged,Startle;
 
     function BeginState()
     {
@@ -395,7 +170,7 @@ Begin:
     if( HidingSpots==none )
         HidingSpots = FindRandomDest();
     if( HidingSpots==none )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing(); 
     if( ActorReachable(HidingSpots) )
     {
         MoveTarget = HidingSpots;
@@ -403,12 +178,12 @@ Begin:
     }
     else FindBestPathToward(HidingSpots,true,false);
     if( MoveTarget==none )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing(); 
     if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
         MoveToward(MoveTarget,Enemy,,false);
     else MoveToward(MoveTarget,MoveTarget,,false);
     if( HidingSpots==none || !PlayerSeesMe() )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing(); 
     GoTo'Begin';
 }
 State SyrRetreat
@@ -471,7 +246,7 @@ Begin:
     if( HidingSpots==none )
         FindHideSpot();
     if( HidingSpots==none )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing();
     if( ActorReachable(HidingSpots) )
     {
         MoveTarget = HidingSpots;
@@ -479,12 +254,12 @@ Begin:
     }
     else FindBestPathToward(HidingSpots,true,false);
     if( MoveTarget==none )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing(); 
     if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
         MoveToward(MoveTarget,Enemy,,false);
     else MoveToward(MoveTarget,MoveTarget,,false);
     if( HidingSpots==none )
-        ZombieBossOS(Pawn).BeginHealing(); //ZombieBoss to ZombieBossOS
+        ZombieBossOS(Pawn).BeginHealing();
     GoTo'Begin';
 }
 function bool PlayerSeesMe()
@@ -499,14 +274,6 @@ function bool PlayerSeesMe()
     return false;
 }
 
-//The rest of this is Retail Code that we'll keep
-
-// Used to set a timeout for the WaitForAnim state. This is a bit of a hack fix
-// for the Patriach getting stuck in its idle anim on a dedicated server when it
-// is supposed to doing something. For some reason, on a dedicated server only, it
-// never gets an animend call for some of the anims, instead the anim gets
-// interrupted by the idle anim. If we figure that bug out, we can
-// probably take this out in the future. But for now the fix works - Ramm
 function SetWaitForAnimTimout(float NewWaitAnimTimeout, name AnimToWaitFor)
 {
     WaitAnimTimeout = NewWaitAnimTimeout;
@@ -518,7 +285,6 @@ state WaitForAnim
 Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
 
-    // The anim has ended, clear the flags and let the AI do its thing
     function WaitTimeout()
     {
         if( bUseFreezeHack )
@@ -536,22 +302,6 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
     event AnimEnd(int Channel)
     {
-        /*local name  Sequence;
-        local float Frame, Rate;
-
-
-        Pawn.GetAnimParams( KFMonster(Pawn).ExpectingChannel, Sequence, Frame, Rate );
-
-        log(GetStateName()$" AnimEnd for Exp Chan "$KFMonster(Pawn).ExpectingChannel$" = "$Sequence$" Channel = "$Channel);
-
-        Pawn.GetAnimParams( 0, Sequence, Frame, Rate );
-        log(GetStateName()$" AnimEnd for Chan 0 = "$Sequence);
-
-        Pawn.GetAnimParams( 1, Sequence, Frame, Rate );
-        log(GetStateName()$" AnimEnd for Chan 1 = "$Sequence);
-
-        log(GetStateName()$" AnimEnd bShotAnim = "$Monster(Pawn).bShotAnim); */
-
         Pawn.AnimEnd(Channel);
         if ( !Monster(Pawn).bShotAnim )
             WhatToDoNext(99);

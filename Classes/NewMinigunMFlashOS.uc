@@ -1,7 +1,5 @@
-//Originally from XEffects
 class NewMinigunMFlashOS extends Emitter;
 
-//Load correct texture package
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties

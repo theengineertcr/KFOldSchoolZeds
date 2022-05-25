@@ -1,24 +1,25 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieFleshpoundOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieFleshpoundOS extends ZombieFleshpoundBaseOS
-    abstract;
+var bool bChargingPlayer,bClientCharge;
+var int TwoSecondDamageTotal;
+var float LastDamagedTime,RageEndTime;
+var() vector RotMag;                      
+var() vector RotRate;              
+var() float    RotTime;              
+var() vector OffsetMag;          
+var() vector OffsetRate;               
+var() float    OffsetTime;
+var name ChargingAnim;
+var () int RageDamageThreshold;  
+var FleshPoundAvoidArea AvoidArea;
+var bool    bFrustrated;
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+replication
+{
+    reliable if(Role == ROLE_Authority)
+        bChargingPlayer, bFrustrated;
+}
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//Head hitbox is wonky.
-
-//Dont touch this retail code
 simulated function PostNetBeginPlay()
 {
     //TODO: Make Avoid Area spawn if Fleshy is charging
@@ -527,7 +528,6 @@ Ignores StartCharging;
         KFMonst = KFMonster(Other);
 
         // Hurt/Kill enemies that we run into while raging
-        // Added additional "ZombieFleshPoundOS(Other)==none" just incase people play with Old and Retail zeds
         if( !bShotAnim && KFMonst!=none && ZombieFleshPound(Other)==none && ZombieFleshPoundOS(Other)==none && Pawn(Other).Health>0 )
         {
             // Random chance of doing obliteration damage
@@ -889,10 +889,111 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.ZombieBoss'
+    Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
+    Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter'
+    Skins(2)=Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader'
+    Skins(3)=Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin'
 
-    //Use KFMod controller
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+    
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+    
+    //These values were not set in KFMod
+    //AmbientGlow=0
+    //StunTime=0.3 //Was used in Balance Round 1(removed for Round 2)
+    //StunsRemaining=1 //Added in Balance Round 2
+    ZombieFlag=3
+    //SeveredHeadAttachScale=1.5
+    //SeveredLegAttachScale=1.2
+    //SeveredArmAttachScale=1.3
+
+    //Values that don't need to be changed
+    bMeleeStunImmune = true
+    bFatAss=true
+    Mass=600.000000
+    MeleeAnims(0)="PoundAttack1"
+    MeleeAnims(1)="PoundAttack2"
+    MeleeAnims(2)="PoundAttack1" //PoundAttack3 Causes issues, removed.
+    IdleHeavyAnim="PoundIdle"
+    IdleRifleAnim="PoundIdle"
+    IdleCrouchAnim="PoundIdle"
+    IdleWeaponAnim="PoundIdle"
+    IdleRestAnim="PoundIdle"
+    ChargingAnim = "PoundRun"
+    RotationRate=(Yaw=45000,Roll=0)
+    RagDeathVel=100.000000
+    RagDeathUpKick=100.000000
+    bBoss=true
+    DamageToMonsterScale=5.0
+
+    //We'll keep these values the same as the retail version
+    //As this mod was made purely for the visual aspect, not gameplay
+    ScoringValue=200
+    RotMag=(X=500.000000,Y=500.000000,Z=600.000000)
+    RotRate=(X=12500.000000,Y=12500.000000,Z=12500.000000)
+    RotTime=6.000000
+    OffsetMag=(X=5.000000,Y=10.000000,Z=5.000000)
+    OffsetRate=(X=300.000000,Y=300.000000,Z=300.000000)
+    OffsetTime=3.500000
+    MeleeRange=55.000000
+    damageForce=15000//Old Fleshy had an extra 0 at the end...tempted to add that back for fun.
+    GroundSpeed=130.000000
+    WaterSpeed=120.000000
+    MeleeDamage=35
+    SpinDamConst=5.000000
+    SpinDamRand=4.000000
+    Health=1500//2000
+    HealthMax=1500
+    PlayerCountHealthScale=0.25
+    PlayerNumHeadHealthScale=0.30 // Was 0.35 in Balance Round 1
+    HeadHealth=700
+    RageDamageThreshold = 360
+    Intelligence=BRAINS_Mammal // Changed in Balance Round 1
+    BleedOutDuration=7.0
+    MotionDetectorThreat=5.0
+    ZapThreshold=1.75
+    ZappedDamageMod=1.25
+    bHarpoonToHeadStuns=true
+    bHarpoonToBodyStuns=false
+
+    //All of these need to be PoundWalk
+    MovementAnims(0)="PoundWalk"
+    MovementAnims(1)="PoundWalk"//"WalkB"
+    MovementAnims(2)="PoundWalk"//"RunL"
+    MovementAnims(3)="PoundWalk"//"RunR"
+    WalkAnims(0)="PoundWalk"
+    WalkAnims(1)="PoundWalk"//"WalkB"
+    WalkAnims(2)="PoundWalk"//"RunL"
+    WalkAnims(3)="PoundWalk"//"RunR"
+
+    KFRagdollName="FleshPoundRag"//"FleshPound_Trip" use KFMod ragdoll
+
+    //Not needed anymore
+    //BlockDamageReduction=0.400000
+
+    MenuName="Flesh Pound 2.5"//"Flesh Pound"
+
+    //Skins set in event class ZombieFleshpound_OS
+    //Skins(1)=Shader'KFCharacters.FPAmberBloomShader'
+
+    //These might need to be changed
+    bUseExtendedCollision=true
+    ColOffset=(Z=52.000000)
+    ColRadius=36.000000
+    ColHeight=35.000000
+    PrePivot=(Z=0) //Y-15?
+
+    //Headshot doesn't work properly with Projectile weapons and I don't want to scale this up
+    //TODO:Do a quick patch, then investigate this further
+    SoloHeadScale=1.4
+
+    //Updated
+    OnlineHeadshotOffset=(X=32,Y=-6,Z=68) // Z=50 when charging
+    OnlineHeadshotScale=1.5
+    
     ControllerClass=class'FleshpoundZombieControllerOS'
 }

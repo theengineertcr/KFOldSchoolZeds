@@ -1,15 +1,12 @@
-// ✔
-// Old KFHitEmitter, no changes done
-class KFHitEmitterOS extends Emitter
-    abstract
+class KFHitEmitterOS extends Emitter 
+    abstract 
     hidedropdown;
 
-// Not sure what these sounds are, but that's fine for now
-// Edit: Child classes use these impact sounds e.g FleshHitEmitter
-// To play noises of blood gushing out of flesh after a zed gets shot
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
+
 var() array<Sound> ImpactSounds;
 
-//Particle start velocity is relative to rotation.
 simulated function PostBeginPlay()
 {
     local vector MinVel, MaxVel;
@@ -37,7 +34,6 @@ simulated function PostBeginPlay()
         Emitters[0].StartVelocityRange.Y.Max = MaxVel.Y;
         Emitters[0].StartVelocityRange.Z.Max = MaxVel.Z;
     }
-    // Ok, now let's do the same for Emitter 1
     if(Emitters.Length>1)
     {
         MinVel.X = Emitters[1].StartVelocityRange.X.Min;

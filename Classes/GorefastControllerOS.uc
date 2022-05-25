@@ -1,7 +1,5 @@
-// Custom code to make the Gorefast act abit more interesting.
 class GorefastControllerOS extends KFMonsterControllerOS;
 
-//Dont need to touch any of the retail code this time
 var    bool    bDoneSpottedCheck;
 
 state ZombieHunt
@@ -10,7 +8,6 @@ state ZombieHunt
     {
         if ( !bDoneSpottedCheck && PlayerController(SeenPlayer.Controller) != none )
         {
-            // 25% chance of first player to see this Gorefast saying something
             if ( !KFGameType(Level.Game).bDidSpottedGorefastMessage && FRand() < 0.25 )
             {
                 PlayerController(SeenPlayer.Controller).Speech('AUTO', 13, "");

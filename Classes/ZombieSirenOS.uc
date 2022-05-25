@@ -1,31 +1,29 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieSirenOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieSirenOS extends ZombieSirenBaseOS
-    abstract;
+var float DistBeforeScream;
+var () int ScreamRadius;
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+var () class <DamageType> ScreamDamageType;
+var () int ScreamForce;
 
+var(Shake)  rotator RotMag;
+var(Shake)  float   RotRate;
+var(Shake)  vector  OffsetMag;
+var(Shake)  float   OffsetRate;
+var(Shake)  float   ShakeTime;
+var(Shake)  float   ShakeFadeTime;
+var(Shake)  float    ShakeEffectScalar;
+var(Shake)  float    MinShakeEffectScale;
+var(Shake)  float    ScreamBlurScale;
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//Buggy head hitbox, but should be fine after the radius increase.
-
+var bool bAboutToDie;
+var float DeathTimer;
 
 function bool FlipOver()
 {
     return false;
 }
 
-//Same as KFMod
 function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming || bDecapitated || A==none )
@@ -37,14 +35,13 @@ function DoorAttack(Actor A)
 function RangedAttack(Actor A)
 {
     local int LastFireTime;
-    local float Dist; //Retail variable were keeping
+    local float Dist;
 
     if ( bShotAnim )
         return;
 
     Dist = VSize(A.Location - Location);
 
-    //Most of the code is the same
     if ( Physics == PHYS_Swimming )
     {
         SetAnimAction('Claw');
@@ -56,13 +53,10 @@ function RangedAttack(Actor A)
         bShotAnim = true;
         LastFireTime = Level.TimeSeconds;
         SetAnimAction('Claw');
-        //We can bring this sound back
         PlaySound(sound'Claw2s', SLOT_Interact);
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
-    }    //Sirens cant move while screaming anymore, making them less of a risk,
-        //So were going to have to make them get even closer before screaming,
-        //Otherwise she'll scream at a distance where she deals no damage
+    }    
     else if( Dist <= (ScreamRadius - DistBeforeScream) && !bDecapitated && !bZapped )
     {
         bShotAnim=true;
@@ -72,8 +66,6 @@ function RangedAttack(Actor A)
     }
 }
 
-//We'll keep this retail code as the old scream effect was shit
-// Scream Time
 simulated function SpawnTwoShots()
 {
     if( bZapped )
@@ -85,34 +77,31 @@ simulated function SpawnTwoShots()
 
     if( Level.NetMode!=NM_Client )
     {
-        // Deal Actual Damage.
         if( Controller!=none && KFDoorMover(Controller.Target)!=none )
             Controller.Target.TakeDamage(ScreamDamage*0.6,self,Location,vect(0,0,0),ScreamDamageType);
-        else HurtRadius(ScreamDamage ,ScreamRadius, ScreamDamageType, ScreamForce, Location);
+        else 
+            HurtRadius(ScreamDamage ,ScreamRadius, ScreamDamageType, ScreamForce, Location);
     }
 }
 
-//We'll keep this retail code as the old scream effect was shit
-// Shake nearby players screens
 simulated function DoShakeEffect()
 {
     local PlayerController PC;
     local float Dist, scale, BlurScale;
 
-    //viewshake
     if (Level.NetMode != NM_DedicatedServer)
     {
         PC = Level.GetLocalPlayerController();
         if (PC != none && PC.ViewTarget != none)
         {
             Dist = VSize(Location - PC.ViewTarget.Location);
+            
             if (Dist < ScreamRadius )
             {
                 scale = (ScreamRadius - Dist) / (ScreamRadius);
                 scale *= ShakeEffectScalar;
                 BlurScale = scale;
 
-                // Reduce blur if there is something between us and the siren
                 if( !FastTrace(PC.ViewTarget.Location,Location) )
                 {
                     scale *= 0.25;
@@ -130,7 +119,6 @@ simulated function DoShakeEffect()
                     KFHumanPawn(PC.ViewTarget).AddBlur(ShakeTime, BlurScale * ScreamBlurScale);
                 }
 
-                // 10% chance of player saying something about our scream
                 if ( Level != none && Level.Game != none && !KFGameType(Level.Game).bDidSirenScreamMessage && FRand() < 0.10 )
                 {
                     PC.Speech('AUTO', 16, "");
@@ -141,7 +129,6 @@ simulated function DoShakeEffect()
     }
 }
 
-//Don't touch this code, we want the Retail versions Siren Scream
 simulated function HurtRadius( float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, vector HitLocation )
 {
     local actor Victims;
@@ -153,10 +140,9 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
         return;
 
     bHurtEntry = true;
+    
     foreach VisibleCollidingActors( class 'Actor', Victims, DamageRadius, HitLocation )
     {
-        // don't let blast damage affect fluid - VisibleCollisingActors doesn't really work for them - jag
-        // Or Karma actors in this case. self inflicted Death due to flying chairs is uncool for a zombie of your stature.
         if( (Victims != self) && !Victims.IsA('FluidSurfaceInfo') && !Victims.IsA('KFMonster') && !Victims.IsA('ExtendedZCollision') )
         {
             dir = Victims.Location - HitLocation;
@@ -164,12 +150,12 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
             dir = dir/dist;
             damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius)/DamageRadius);
 
-            if (!Victims.IsA('KFHumanPawn')) // If it aint human, don't pull the vortex crap on it.
+            if (!Victims.IsA('KFHumanPawn'))
                 Momentum = 0;
 
-            if (Victims.IsA('KFGlassMover'))   // Hack for shattering in interesting ways.
+            if (Victims.IsA('KFGlassMover'))
             {
-                UsedDamageAmount = 100000; // Siren always shatters glass
+                UsedDamageAmount = 100000;
             }
             else
             {
@@ -182,11 +168,10 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
                 Vehicle(Victims).DriverRadiusDamage(UsedDamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
         }
     }
+    
     bHurtEntry = false;
 }
 
-//Same as KFMod
-// When siren loses her head she's got nothin' Kill her.
 function RemoveHead()
 {
     super.RemoveHead();
@@ -217,19 +202,109 @@ function PlayDyingSound()
         super.PlayDyingSound();
 }
 
-//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin');
     myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB');
 }
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale2'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin'
+    Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB'
 
-    //Use Old SirenZombieController
+    AmbientSound=none
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Siren.Siren_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'
+
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Siren_Die'
+    
+    MenuName="Siren 2.5"
+    ScoringValue=25
+    ZombieFlag=1
     ControllerClass=class'SirenZombieControllerOS'
+
+    IdleHeavyAnim="Siren_Idle"
+    IdleRifleAnim="Siren_Idle"
+    IdleCrouchAnim="Siren_Idle"
+    IdleWeaponAnim="Siren_Idle"
+    IdleRestAnim="Siren_Idle"
+    
+    MovementAnims(0)="Siren_Walk"
+    MovementAnims(1)="Siren_Walk"
+    MovementAnims(2)="Siren_Walk"
+    MovementAnims(3)="Siren_Walk"
+    WalkAnims(0)="Siren_Walk"
+    WalkAnims(1)="Siren_Walk"
+    WalkAnims(2)="Siren_Walk"
+    WalkAnims(3)="Siren_Walk"
+    
+    HitAnims(0)="HitReactionF"
+    HitAnims(1)="HitReactionF"
+    HitAnims(2)="HitReactionF"
+    
+    MeleeAnims(0)="Siren_Bite"
+    MeleeAnims(1)="Siren_Bite"
+    MeleeAnims(2)="Siren_Bite"
+    
+    MeleeDamage=13
+    MeleeRange=45.000000
+    damageForce=5000
+    
+    ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
+
+    PrePivot=(Z=-13)
+    
+    bUseExtendedCollision=true
+    ColOffset=(Z=48)
+    ColRadius=25
+    ColHeight=5
+    
+    SoloHeadScale=1.2
+    OnlineHeadshotScale=1.2
+    OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
+    
+    DistBeforeScream=200
+    ScreamRadius=900
+    ScreamDamage=8
+    ScreamDamageType=class'SirenScreamDamageOS'
+    ScreamForce=-150000
+    RotMag=(Pitch=150,Yaw=150,Roll=150)
+    RotRate=500
+    OffsetMag=(X=0.000000,Y=5.000000,Z=1.000000)
+    OffsetRate=500
+    ShakeEffectScalar=1.0
+    ShakeTime=2.0
+    ShakeFadeTime=0.25
+    MinShakeEffectScale=0.6
+    ScreamBlurScale=0.85
+    
+    GroundSpeed=100.0
+    WaterSpeed=80.000000
+    
+    Health=300
+    HealthMax=300
+    PlayerCountHealthScale=0.10
+    HeadHealth=200
+    PlayerNumHeadHealthScale=0.05
+    
+    RotationRate=(Yaw=45000,Roll=0)
+    
+    CrispUpThreshhold=7
+    
+    MotionDetectorThreat=2.0
+    
+    ZapThreshold=0.5
+    ZappedDamageMod=1.5
+
+    bCanDistanceAttackDoors=true
+    
+    KFRagdollName="SirenRag"
+    
+    //Yet to make this
+    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
 }

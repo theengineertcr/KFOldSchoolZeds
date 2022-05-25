@@ -2,45 +2,45 @@ class KFMonstersCollectionOS extends KFMonstersCollection;
 
 defaultproperties
 {
-    MonsterClasses(0)=(MClassName="KFOldSchoolZeds.ZombieClot_OS",MID="A")
-    MonsterClasses(1)=(MClassName="KFOldSchoolZeds.ZombieCrawler_OS",MID="B")
-    MonsterClasses(2)=(MClassName="KFOldSchoolZeds.ZombieGoreFast_OS",MID="C")
-    MonsterClasses(3)=(MClassName="KFOldSchoolZeds.ZombieStalker_OS",MID="D")
-    MonsterClasses(4)=(MClassName="KFOldSchoolZeds.ZombieScrake_OS",MID="E")
-    MonsterClasses(5)=(MClassName="KFOldSchoolZeds.ZombieFleshpound_OS",MID="F")
-    MonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloat_OS",MID="G")
-    MonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSiren_OS",MID="H")
-    MonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPound_OS",MID="I")
+    MonsterClasses(0)=(MClassName="KFOldSchoolZeds.ZombieClotOS",MID="A")
+    MonsterClasses(1)=(MClassName="KFOldSchoolZeds.ZombieCrawlerOS",MID="B")
+    MonsterClasses(2)=(MClassName="KFOldSchoolZeds.ZombieGoreFastOS",MID="C")
+    MonsterClasses(3)=(MClassName="KFOldSchoolZeds.ZombieStalkerOS",MID="D")
+    MonsterClasses(4)=(MClassName="KFOldSchoolZeds.ZombieScrakeOS",MID="E")
+    MonsterClasses(5)=(MClassName="KFOldSchoolZeds.ZombieFleshpoundOS",MID="F")
+    MonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloatOS",MID="G")
+    MonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSirenOS",MID="H")
+    MonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPoundOS",MID="I")
 
-    StandardMonsterClasses(0)=(MClassName="KFOldSchoolZeds.ZombieClot_OS",MID="A")
-    StandardMonsterClasses(1)=(MClassName="KFOldSchoolZeds.ZombieCrawler_OS",MID="B")
-    StandardMonsterClasses(2)=(MClassName="KFOldSchoolZeds.ZombieGoreFast_OS",MID="C")
-    StandardMonsterClasses(3)=(MClassName="KFOldSchoolZeds.ZombieStalker_OS",MID="D")
-    StandardMonsterClasses(4)=(MClassName="KFOldSchoolZeds.ZombieScrake_OS",MID="E")
-    StandardMonsterClasses(5)=(MClassName="KFOldSchoolZeds.ZombieFleshpound_OS",MID="F")
-    StandardMonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloat_OS",MID="G")
-    StandardMonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSiren_OS",MID="H")
-    StandardMonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPound_OS",MID="I")
+    StandardMonsterClasses(0)=(MClassName="KFOldSchoolZeds.ZombieClotOS",MID="A")
+    StandardMonsterClasses(1)=(MClassName="KFOldSchoolZeds.ZombieCrawlerOS",MID="B")
+    StandardMonsterClasses(2)=(MClassName="KFOldSchoolZeds.ZombieGoreFastOS",MID="C")
+    StandardMonsterClasses(3)=(MClassName="KFOldSchoolZeds.ZombieStalkerOS",MID="D")
+    StandardMonsterClasses(4)=(MClassName="KFOldSchoolZeds.ZombieScrakeOS",MID="E")
+    StandardMonsterClasses(5)=(MClassName="KFOldSchoolZeds.ZombieFleshpoundOS",MID="F")
+    StandardMonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloatOS",MID="G")
+    StandardMonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSirenOS",MID="H")
+    StandardMonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPoundOS",MID="I")
 
 
-    FinalSquads(0)=(ZedClass=("KFOldSchoolZeds.ZombieClot_OS"),NumZeds=(4))
-    FinalSquads(1)=(ZedClass=("KFOldSchoolZeds.ZombieClot_OS","KFOldSchoolZeds.ZombieCrawler_OS"),NumZeds=(3,1))
-    FinalSquads(2)=(ZedClass=("KFOldSchoolZeds.ZombieClot_OS","KFOldSchoolZeds.ZombieStalker_OS","KFOldSchoolZeds.ZombieCrawler_OS"),NumZeds=(3,1,1))
+    FinalSquads(0)=(ZedClass=("KFOldSchoolZeds.ZombieClotOS"),NumZeds=(4))
+    FinalSquads(1)=(ZedClass=("KFOldSchoolZeds.ZombieClotOS","KFOldSchoolZeds.ZombieCrawlerOS"),NumZeds=(3,1))
+    FinalSquads(2)=(ZedClass=("KFOldSchoolZeds.ZombieClotOS","KFOldSchoolZeds.ZombieStalkerOS","KFOldSchoolZeds.ZombieCrawlerOS"),NumZeds=(3,1,1))
 
-    ShortSpecialSquads(2)=(ZedClass=("KFOldSchoolZeds.ZombieCrawler_OS","KFOldSchoolZeds.ZombieGorefast_OS","KFOldSchoolZeds.ZombieStalker_OS","KFOldSchoolZeds.ZombieScrake_OS"),NumZeds=(2,2,1,1))
-    ShortSpecialSquads(3)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,2,1))
+    ShortSpecialSquads(2)=(ZedClass=("KFOldSchoolZeds.ZombieCrawlerOS","KFOldSchoolZeds.ZombieGorefastOS","KFOldSchoolZeds.ZombieStalkerOS","KFOldSchoolZeds.ZombieScrakeOS"),NumZeds=(2,2,1,1))
+    ShortSpecialSquads(3)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,2,1))
 
-    NormalSpecialSquads(3)=(ZedClass=("KFOldSchoolZeds.ZombieCrawler_OS","KFOldSchoolZeds.ZombieGorefast_OS","KFOldSchoolZeds.ZombieStalker_OS","KFOldSchoolZeds.ZombieScrake_OS"),NumZeds=(2,2,1,1))
-    NormalSpecialSquads(4)=(ZedClass=("KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1))
-    NormalSpecialSquads(5)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,1,1))
-    NormalSpecialSquads(6)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,1,2))
+    NormalSpecialSquads(3)=(ZedClass=("KFOldSchoolZeds.ZombieCrawlerOS","KFOldSchoolZeds.ZombieGorefastOS","KFOldSchoolZeds.ZombieStalkerOS","KFOldSchoolZeds.ZombieScrakeOS"),NumZeds=(2,2,1,1))
+    NormalSpecialSquads(4)=(ZedClass=("KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1))
+    NormalSpecialSquads(5)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,1,1))
+    NormalSpecialSquads(6)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,1,2))
 
-    LongSpecialSquads(4)=(ZedClass=("KFOldSchoolZeds.ZombieCrawler_OS","KFOldSchoolZeds.ZombieGorefast_OS","KFOldSchoolZeds.ZombieStalker_OS","KFOldSchoolZeds.ZombieScrake_OS"),NumZeds=(2,2,1,1))
-    LongSpecialSquads(6)=(ZedClass=("KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1))
-    LongSpecialSquads(7)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,1,1))
-    LongSpecialSquads(8)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieScrake_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,2,1,1))
-    LongSpecialSquads(9)=(ZedClass=("KFOldSchoolZeds.ZombieBloat_OS","KFOldSchoolZeds.ZombieSiren_OS","KFOldSchoolZeds.ZombieScrake_OS","KFOldSchoolZeds.ZombieFleshPound_OS"),NumZeds=(1,2,1,2))
+    LongSpecialSquads(4)=(ZedClass=("KFOldSchoolZeds.ZombieCrawlerOS","KFOldSchoolZeds.ZombieGorefastOS","KFOldSchoolZeds.ZombieStalkerOS","KFOldSchoolZeds.ZombieScrakeOS"),NumZeds=(2,2,1,1))
+    LongSpecialSquads(6)=(ZedClass=("KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1))
+    LongSpecialSquads(7)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,1,1))
+    LongSpecialSquads(8)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieScrakeOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,2,1,1))
+    LongSpecialSquads(9)=(ZedClass=("KFOldSchoolZeds.ZombieBloatOS","KFOldSchoolZeds.ZombieSirenOS","KFOldSchoolZeds.ZombieScrakeOS","KFOldSchoolZeds.ZombieFleshPoundOS"),NumZeds=(1,2,1,2))
 
-    FallbackMonsterClass="KFOldSchoolZeds.ZombieStalker_OS"
-    EndGameBossClass="KFOldSchoolZeds.ZombieBoss_OS"
+    FallbackMonsterClass="KFOldSchoolZeds.ZombieStalkerOS"
+    EndGameBossClass="KFOldSchoolZeds.ZombieBossOS"
 }

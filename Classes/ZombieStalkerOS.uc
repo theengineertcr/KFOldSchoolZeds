@@ -1,28 +1,14 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieStalkerOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieStalkerOS extends ZombieStalkerBaseOS
-    abstract;
+var bool bCloaking;
+var float NextCheckTime;
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+event PreBeginPlay()
+{
+    super.PreBeginPlay();
+    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.SirenSet');
+}
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//none currently, but we may need to overhaul the Commando
-//Spotting to take into account the distance at which a
-//Commando can see a cloaked Stalker. Otherwise, a level 0
-//And a level 6 Commando will see the red overlay at the
-//Same distance.
-
-//Retail Code we want
 simulated event SetAnimAction(name NewAction)
 {
     if ( NewAction == 'Claw' || NewAction == MeleeAnims[0] || NewAction == MeleeAnims[1] || NewAction == MeleeAnims[2] )
@@ -35,30 +21,26 @@ simulated event SetAnimAction(name NewAction)
 
 simulated function Tick(float DeltaTime)
 {
-    //Instead of KFHumanPawn being a variable in base class,
-    //It was a local variable here in KFMod, so we'll add it
     Local KFHumanPawn HP;
 
     super.Tick(DeltaTime);
     if( Level.NetMode==NM_DedicatedServer )
-        return; // Servers aren't intrested in this info.
+        return; 
 
-    //We want this for zapped effects
     if( bZapped )
     {
-        // Make sure we check if we need to be cloaked as soon as the zap wears off
         NextCheckTime = Level.TimeSeconds;
     }
     else if( Level.TimeSeconds > NextCheckTime && Health > 0 )
     {
-        NextCheckTime = Level.TimeSeconds + 0.8; //0.5; in retail
-        //Old KFMod code
+        NextCheckTime = Level.TimeSeconds + 0.8; 
+
+        //We need GetStalkerViewDistanceMulti here later
         ForEach VisibleCollidingActors(class'KFHumanPawn',HP,800,Location)
         {
-            if( HP.Health<=0 || !HP.ShowStalkers() ) //!HP.GetVeteran().Static.ShowStalkers()
+            if( HP.Health<=0 || !HP.ShowStalkers() ) 
                 continue;
 
-            // If he's a commando, we've been spotted.
             if( !bSpotted )
             {
                 bSpotted = true;
@@ -67,54 +49,34 @@ simulated function Tick(float DeltaTime)
             }
             return;
         }
-        // if we're uberbrite, turn down the light
+        
         if( bSpotted )
         {
             bSpotted = false;
             bUnlit = false;
             CloakStalker();
         }
-
-        //The rest of this is Retail code, not needed
-        //TODO:After consideration, we might need this, least
-        //The bit for the StalkerViewDistance for Commandos.
-
-        //if( LocalKFHumanPawn != none && LocalKFHumanPawn.Health > 0 && LocalKFHumanPawn.ShowStalkers() &&
-        //    VSizeSquared(Location - LocalKFHumanPawn.Location) < LocalKFHumanPawn.GetStalkerViewDistanceMulti() * 640000.0 ) // 640000 = 800 Units
-        //{
-        //    bSpotted = true;
-        //}
-        //else
-        //{
-        //    bSpotted = false;
-        //}
     }
 }
 
-// Cloak Functions ( called from animation notifies to save Gibby trouble ;) )
-
 simulated function CloakStalker()
 {
-    // No cloaking if zapped
     if( bZapped )
     {
         return;
     }
 
-    //Stalkers shouldn't glow for Commandos when headless
     if ( bSpotted && !bDecapitated )
     {
         if( Level.NetMode == NM_DedicatedServer )
             return;
-        //Use KFMod textures
+
         Skins[0] = Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB';
         Skins[1] = Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB';
         bUnlit = true;
         return;
     }
-    //Updated if statement to include !bCloaked, otherwise the
-    //Invisible bitch flickers whenever the function is called
-    if ( !bDecapitated && !bCrispified && !bCloaked) // No head, no cloak, honey.  updated :  Being charred means no cloak either :D
+    if ( !bDecapitated && !bCrispified && !bCloaked)
     {
         Visibility = 1;
         bCloaked = true;
@@ -122,20 +84,17 @@ simulated function CloakStalker()
         if( Level.NetMode == NM_DedicatedServer )
             return;
 
-        //Use KFMod textures
         Skins[0] = Shader 'KFOldSchoolZeds_Textures.StalkerHairShader';
         Skins[1] = Shader 'KFOldSchoolZeds_Textures.StalkerCloakShader';
 
-        // Invisible - no shadow
         if(PlayerShadow != none)
             PlayerShadow.bShadowActive = false;
         if(RealTimeShadow != none)
             RealTimeShadow.Destroy();
 
-        // Remove/disallow projectors on invisible people
         Projectors.Remove(0, Projectors.Length);
         bAcceptsProjectors = false;
-        //Use KFMod textures
+        
         SetOverlayMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb', 0.25, true);
     }
 }
@@ -149,49 +108,40 @@ simulated function UnCloakStalker()
 
     if( !bCrispified )
     {
-        //Removed retail variable
-        //LastUncloakTime = Level.TimeSeconds;
-
         Visibility = default.Visibility;
         bCloaked = false;
         bUnlit = false;
 
-        //Keep this voiceline
-        // 25% chance of our Enemy saying something about us being invisible
         if( Level.NetMode!=NM_Client && !KFGameType(Level.Game).bDidStalkerInvisibleMessage && FRand()<0.25 && Controller.Enemy!=none &&
          PlayerController(Controller.Enemy.Controller)!=none )
         {
             PlayerController(Controller.Enemy.Controller).Speech('AUTO', 17, "");
             KFGameType(Level.Game).bDidStalkerInvisibleMessage = true;
         }
+        
         if( Level.NetMode == NM_DedicatedServer )
             return;
 
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
         Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
 
-        //KFMod Code
         if (PlayerShadow != none)
             PlayerShadow.bShadowActive = true;
 
         bAcceptsProjectors = true;
 
-        //Use KFMod textures
         SetOverlayMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb', 0.25, true);
     }
 }
 
-// Set the zed to the zapped behavior
 simulated function SetZappedBehavior()
 {
     super.SetZappedBehavior();
 
     bUnlit = false;
 
-    // Handle setting the zed to uncloaked so the zapped overlay works properly
     if( Level.Netmode != NM_DedicatedServer )
     {
-        //Use KFMod textures
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
         Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
 
@@ -203,12 +153,10 @@ simulated function SetZappedBehavior()
     }
 }
 
-// Turn off the zapped behavior
 simulated function UnSetZappedBehavior()
 {
     super.UnSetZappedBehavior();
 
-    // Handle getting the zed back cloaked if need be
     if( Level.Netmode != NM_DedicatedServer )
     {
         NextCheckTime = Level.TimeSeconds;
@@ -216,7 +164,6 @@ simulated function UnSetZappedBehavior()
     }
 }
 
-// Overridden because we need to handle the overlays differently for zombies that can cloak
 function SetZapped(float ZapAmount, Pawn Instigator)
 {
     LastZapTime = Level.TimeSeconds;
@@ -233,7 +180,7 @@ function SetZapped(float ZapAmount, Pawn Instigator)
         if( TotalZap >= ZapThreshold )
         {
             RemainingZap = ZapDuration;
-              bZapped = true;
+            bZapped = true;
         }
     }
     ZappedBy = Instigator;
@@ -245,7 +192,6 @@ function RemoveHead()
 
     if (!bCrispified)
     {
-        //Use KFMod textures
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
         Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
     }
@@ -258,19 +204,13 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     if(bUnlit)
         bUnlit=!bUnlit;
 
-    //Removed Retail Variable
-    //LocalKFHumanPawn = none;
-
     if (!bCrispified)
     {
-        //Use KFMod textures
         Skins[1] = FinalBlend'KFOldSchoolZeds_Textures.StalkerHairFB';
         Skins[0] = Texture'KFOldSchoolZeds_Textures.StalkerSkin';
     }
 }
 
-//Exactly the same as KFMod, don't touch
-// Give her the ability to spring.
 function bool DoJump( bool bUpdating )
 {
     if ( !bIsCrouched && !bWantsToCrouch && ((Physics == PHYS_Walking) || (Physics == PHYS_Ladder) || (Physics == PHYS_Spider)) )
@@ -282,6 +222,7 @@ function bool DoJump( bool bUpdating )
             if ( bCountJumps && (Inventory != none) )
                 Inventory.OwnerEvent('Jumped');
         }
+        
         if ( Physics == PHYS_Spider )
             Velocity = JumpZ * Floor;
         else if ( Physics == PHYS_Ladder )
@@ -296,20 +237,21 @@ function bool DoJump( bool bUpdating )
             Velocity.Z = JumpZ;
             Velocity.X = (JumpZ * 0.6);
         }
+        
         if ( (Base != none) && !Base.bWorldGeometry )
         {
             Velocity.Z += Base.Velocity.Z;
             Velocity.X += Base.Velocity.X;
         }
+        
         SetPhysics(PHYS_Falling);
         return true;
     }
     return false;
 }
 
-//Precache KFMod textures
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.StalkerHairShader');
     myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.StalkerCloakShader');
     myLevel.AddPrecacheMaterial(Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB');
@@ -320,7 +262,67 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteFemale'
+    Skins(0) = Shader'KFOldSchoolZeds_Textures.StalkerHairShader'
+    Skins(1) = Shader'KFOldSchoolZeds_Textures.StalkerCloakShader'
+
+    AmbientSound=none
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'
+    
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Death'
+
+    ScoringValue=15
+    MenuName="Stalker 2.5"
+    
+    IdleCrouchAnim="StalkerIdle"
+    IdleWeaponAnim="StalkerIdle"
+    IdleRestAnim="StalkerIdle"
+    IdleHeavyAnim="StalkerIdle"
+    IdleRifleAnim="StalkerIdle"
+
+    MovementAnims(0)="ZombieRun"
+    MovementAnims(1)="ZombieRun"
+    MovementAnims(2)="ZombieRun"
+    MovementAnims(3)="ZombieRun"
+    WalkAnims(0)="ZombieRun"
+    WalkAnims(1)="ZombieRun"
+    WalkAnims(2)="ZombieRun"
+    WalkAnims(3)="ZombieRun"
+    
+    MeleeAnims(0)="StalkerSpinAttack"
+    MeleeAnims(1)="StalkerAttack1"
+    MeleeAnims(2)="JumpAttack"
+    
+    PuntAnim="ClotPunt"
+    
+    SoloHeadScale=1.1
+    OnlineHeadshotScale=1.2//1.4//1.2
+    OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
+    
+    CrispUpThreshhold=10
+    
+    RotationRate=(Yaw=45000,Roll=0)
+
+    MeleeRange=30.000000
+    MeleeDamage=9
+    damageForce=5000
+    ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
+    ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
+
+    Health=100
+    HealthMax=100
+   
+    GroundSpeed=200.000000
+    WaterSpeed=180.000000
+    JumpZ=350.000000
+    
+    MotionDetectorThreat=0.25
+
+    bCannibal=true
+
+    //Have yet to make this, will do it later
+    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
 }

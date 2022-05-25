@@ -1,28 +1,14 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieCrawlerOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieCrawlerOS extends ZombieCrawlerBaseOS
-    abstract;
+var() float PounceSpeed;
+var bool bPouncing;
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+event PreBeginPlay()
+{
+    super.PreBeginPlay();
+    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
+}
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
-
-//Issues:
-//none for now.
-
-//For some reason, retail KF redefined the same functions in the base class here,
-//So we'll redefine them here as well, except for ZombieMoan since Zeds already have
-//A set MoanVoice, and nothing warrants redefining it for our special Crawler boy
-
-//Exact same as in KFMod, do not touch
 function bool DoPounce()
 {
     if ( bZapped || bIsCrouched || bWantsToCrouch || (Physics != PHYS_Walking) || VSize(Location - Controller.Target.Location) > (MeleeRange * 5) )
@@ -36,51 +22,30 @@ function bool DoPounce()
     return true;
 }
 
-//Exact same as in KFMod, do not touch
 simulated function ZombieSpringAnim()
 {
     SetAnimAction('ZombieSpring');
 }
 
-//Exact same as in KFMod, do not touch
 event Landed(vector HitNormal)
 {
     bPouncing=false;
     super.Landed(HitNormal);
 }
 
-//More or less unchanged, we just want the modern damage calculations
 event Bump(actor Other)
 {
-    // TODO: is there a better way
     if(bPouncing && KFHumanPawn(Other)!=none )
     {
         KFHumanPawn(Other).TakeDamage(((MeleeDamage - (MeleeDamage * 0.05)) + (MeleeDamage * (FRand() * 0.1))), self ,self.Location,self.velocity, class 'KFmod.ZombieMeleeDamage');
         if (KFHumanPawn(Other).Health <=0)
         {
-            //TODO - move this to humanpawn.takedamage? Also see KFMonster.MeleeDamageTarget
             KFHumanPawn(Other).SpawnGibs(self.rotation, 1);
         }
-        //After impact, there'll be no momentum for further bumps
         bPouncing=false;
     }
 }
 
-// KFMod doesn't have this
-// Blend his attacks so he can hit you in mid air.
-//simulated function int DoAnimAction( name AnimName )
-//{
-//    if( AnimName=='ZombieLeapAttack' || AnimName=='LeapAttack3' || AnimName=='ZombieLeapAttack' )
-//    {
-//        AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
-//        PlayAnim(AnimName,, 0.0, 1);
-//        return 1;
-//    }
-//    return super.DoAnimAction(AnimName);
-//}
-
-//KFMod SetAnimAction
-// Blend his attacks so he can hit you in mid air.
 simulated event SetAnimAction(name NewAction)
 {
   super.SetAnimAction(NewAction);
@@ -94,36 +59,104 @@ simulated event SetAnimAction(name NewAction)
 
 }
 
-//Retail code not in KFMod
-// The animation is full body and should set the bWaitForAnim flag
-//simulated function bool AnimNeedsWait(name TestAnim)
-//{
-//    if( TestAnim == 'ZombieSpring' /*|| TestAnim == 'DoorBash'*/ ) //Crawlers don't use Doorbash anims
-//    {
-//        return true;
-//    }
-//
-//    return false;
-//}
-
 function bool FlipOver()
 {
     return false;
 }
 
-//Precache KFMod textures.
+
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin');
     myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
 }
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModels.Shade'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
+    Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB'
 
-    //Use the Old CrawlerController
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Crawler.Crawler_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+    
+    ZombieFlag=2
+    bDoTorsoTwist=false
+
+    bCannibal = true
+    Intelligence=BRAINS_Mammal
+    bStunImmune=true
+    damageForce=5000
+    IdleHeavyAnim="ZombieLeapIdle"
+    IdleRifleAnim="ZombieLeapIdle"
+    TakeoffAnims(0)= "ZombieSpring"
+    TakeoffAnims(1)= "ZombieSpring"
+    TakeoffAnims(2)= "ZombieSpring"
+    TakeoffAnims(3)= "ZombieSpring"
+    AirAnims(0)="ZombieSpring"
+
+    AirAnims(3)="ZombieSpring"
+    AirStillAnim="ZombieSpring"
+    IdleCrouchAnim="ZombieLeapIdle"
+    IdleWeaponAnim="ZombieLeapIdle"
+    IdleRestAnim="ZombieLeapIdle"
+    CollisionHeight=25.000000
+    bCrawler = true
+    bOrientOnSlope = true
+
+    MeleeDamage=6
+    ScoringValue=10
+    GroundSpeed=140.000000
+    WaterSpeed=130.000000
+    JumpZ=350.000000
+    Health=70
+    HealthMax=70
+    PounceSpeed=330.000000 
+    MotionDetectorThreat=0.34
+    CrispUpThreshhold=10
+
+    TurnLeftAnim= "ZombieScuttle"
+    TurnRightAnim= "ZombieScuttle"
+    LandAnims(0)= "ZombieScuttle"
+    LandAnims(1)="ZombieScuttle"
+    LandAnims(2)="ZombieScuttle"
+    LandAnims(3)="ZombieScuttle"
+
+    MovementAnims(0)="ZombieScuttle"
+    MovementAnims(1)="ZombieScuttle"
+    MovementAnims(2)="ZombieScuttle"
+    MovementAnims(3)="ZombieScuttle"
+    WalkAnims(0)="ZombieLeap"
+    WalkAnims(1)="ZombieLeap"
+    WalkAnims(2)="ZombieLeap"
+    WalkAnims(3)="ZombieLeap"
+
+    HitAnims(0)=none//"HitF"
+    HitAnims(1)=none//"HitF"
+    HitAnims(2)=none//"HitF"
+    KFHitFront=none//"HitF"
+    KFHitBack=none//"HitF"
+    KFHitLeft=none//"HitF"
+    KFHitRight=none//"HitF"
+
+    MeleeAnims(0)="ZombieLeapAttack"
+    MeleeAnims(1)="ZombieLeapAttack"//"ZombieLeapAttack2"
+    MeleeAnims(2)="LeapAttack3"//"ZombieLeapAttack2"
+
+    TakeoffStillAnim="ZombieLeap"//"ZombieLeapIdle"
+
+    KFRagdollName="CrawlerRag"
+    MenuName="Crawler 2.5"
+
+    SpineBone1=
+    SpineBone2=
+
+    SoloHeadScale=1.1
+    OnlineHeadshotScale=1.1
+    OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
     ControllerClass=class'CrawlerControllerOS'
 }

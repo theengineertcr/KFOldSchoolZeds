@@ -1,17 +1,9 @@
-//-----------------------------------------------------------
-//
-//-----------------------------------------------------------
-class RangedPoundGLZombieControllerOS extends KFMonsterControllerOS;
+class ExplosivesPoundZombieControllerOS extends KFMonsterControllerOS;
 
-//var NavigationPoint HidingSpots;
+var     float       WaitAnimTimeout;    
+var     int         AnimWaitChannel;   
+var     name        AnimWaitingFor;     
 
-//Dont touch these retail variables
-var     float       WaitAnimTimeout;    // How long until the Anim we are waiting for is completed; Hack so the server doesn't get stuck in idle when its doing the Rage anim
-var     int         AnimWaitChannel;    // The channel we are waiting to end in WaitForAnim
-var     name        AnimWaitingFor;     // The animation we are waiting to end in WaitForAnim, mostly used for debugging
-
-
-// Overridden to create a delay between when the Rangedpound fires his minigun
 function bool FireWeaponAt(Actor A)
 {
     if ( A == none )
@@ -20,9 +12,8 @@ function bool FireWeaponAt(Actor A)
         return false;
     Target = A;
 
-    //ZombieHusk to ZombieRangedPoundGLOS
-    if( (VSize(A.Location - Pawn.Location) >= ZombieRangedPoundGLOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius) &&
-        ZombieRangedPoundGLOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
+    if( (VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius) &&
+        ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
     {
         return false;
     }
@@ -31,7 +22,6 @@ function bool FireWeaponAt(Actor A)
     return false;
 }
 
-//Same as KFMod
 function TimedFireWeaponAtEnemy()
 {
     if ( (Enemy == none) || FireWeaponAt(Enemy) )
@@ -41,8 +31,6 @@ function TimedFireWeaponAtEnemy()
 }
 
 
-//We'll keep this because it might have to do with the Ranged Attack
-//Exactly same as in KFMod
 state ZombieCharge
 {
     function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)
@@ -50,7 +38,6 @@ state ZombieCharge
         return false;
     }
 
-    // I suspect this function causes bloats to get confused
     function bool TryStrafe(vector sideDir)
     {
         return false;
@@ -79,13 +66,6 @@ Moving:
 }
 
 
-//The rest of this is Retail Code that we'll keep
-// Used to set a timeout for the WaitForAnim state. This is a bit of a hack fix
-// for the Patriach getting stuck in its idle anim on a dedicated server when it
-// is supposed to doing something. For some reason, on a dedicated server only, it
-// never gets an animend call for some of the anims, instead the anim gets
-// interrupted by the idle anim. If we figure that bug out, we can
-// probably take this out in the future. But for now the fix works - Ramm
 function SetWaitForAnimTimout(float NewWaitAnimTimeout, name AnimToWaitFor)
 {
     WaitAnimTimeout = NewWaitAnimTimeout;
@@ -97,7 +77,6 @@ state WaitForAnim
 Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
 
-    // The anim has ended, clear the flags and let the AI do its thing
     function WaitTimeout()
     {
         if( bUseFreezeHack )
@@ -115,22 +94,6 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
     event AnimEnd(int Channel)
     {
-        /*local name  Sequence;
-        local float Frame, Rate;
-
-
-        Pawn.GetAnimParams( KFMonster(Pawn).ExpectingChannel, Sequence, Frame, Rate );
-
-        log(GetStateName()$" AnimEnd for Exp Chan "$KFMonster(Pawn).ExpectingChannel$" = "$Sequence$" Channel = "$Channel);
-
-        Pawn.GetAnimParams( 0, Sequence, Frame, Rate );
-        log(GetStateName()$" AnimEnd for Chan 0 = "$Sequence);
-
-        Pawn.GetAnimParams( 1, Sequence, Frame, Rate );
-        log(GetStateName()$" AnimEnd for Chan 1 = "$Sequence);
-
-        log(GetStateName()$" AnimEnd bShotAnim = "$Monster(Pawn).bShotAnim); */
-
         Pawn.AnimEnd(Channel);
         if ( !Monster(Pawn).bShotAnim )
             WhatToDoNext(99);

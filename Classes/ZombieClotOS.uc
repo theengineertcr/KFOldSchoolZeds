@@ -1,30 +1,31 @@
-//Because we want the zeds to extend to KFMonsterOS,
-//We'll need to overhaul all class files of each zed,
-//Controllers as well if we count certain Zeds
+class ZombieClotOS extends KFMonsterOS;
 
-// Zombie Monster for KF Invasion gametype
-class ZombieClotOS extends ZombieClotBaseOS
-    abstract;
+var     KFPawn  DisabledPawn;           
+var     bool    bGrappling;             
+var     float   GrappleEndTime;        
+var()   float   GrappleDuration;        
+var    float    ClotGrabMessageDelay;   
 
-// Load all relevant texture, sound, and other packages
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
-#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
-#exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
+replication
+{
+    reliable if(bNetDirty && Role == ROLE_Authority)
+        bGrappling;
+}
 
-//----------------------------------------------------------------------------
-// NOTE: All Variables are declared in the base class to eliminate hitching
-//----------------------------------------------------------------------------
+function BreakGrapple()
+{
+    if( DisabledPawn != none )
+    {
+         DisabledPawn.bMovementDisabled = false;
+         DisabledPawn = none;
+    }
+}
 
-//Issues:
-//Possible incompatability with Serverperks because of grabbing code?
-
-//We'll use a combination of necessary Retail code and Old Code
 function ClawDamageTarget()
 {
     local vector PushDir;
     local KFPawn KFP;
     local float UsedMeleeDamage;
-
 
     if( MeleeDamage > 1 )
     {
@@ -35,15 +36,12 @@ function ClawDamageTarget()
        UsedMeleeDamage = MeleeDamage;
     }
 
-    // If zombie has latched onto us...
     if ( MeleeDamageTarget( UsedMeleeDamage, PushDir))
     {
         KFP = KFPawn(Controller.Target);
 
         if( !bDecapitated && KFP != none )
         {
-            //Had to change this or the Clot will grab Berserkers
-            //TODO:Make this Custom perk friendly somehow?
             if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
             {
                 if( DisabledPawn != none )
@@ -58,7 +56,6 @@ function ClawDamageTarget()
     }
 }
 
-
 function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
@@ -66,9 +63,7 @@ function DoorAttack(Actor A)
     else if ( CanAttack(A) )
     {
         bShotAnim = true;
-        //Bash that door
         SetAnimAction('DoorBash');
-        //Play the Clawing noise here
         PlaySound(sound'Claw2s', SLOT_None);
         return;
     }
@@ -82,9 +77,6 @@ function RangedAttack(Actor A)
     {
         bShotAnim = true;
         SetAnimAction('Claw');
-        //We dont need this return, Clots dont play different anims after grabbing
-        //return;
-        //KFMod code to make the Clot move towards the target he is grappling
         Acceleration = Normal(A.Location-Location)*600;
         Controller.GoToState('WaitForAnim');
         Controller.MoveTarget = A;
@@ -92,7 +84,6 @@ function RangedAttack(Actor A)
     }
 }
 
-//We need clots to attack doors, not grapple them
 simulated event SetAnimAction(name NewAction)
 {
     local int meleeAnimIndex;
@@ -107,6 +98,7 @@ simulated event SetAnimAction(name NewAction)
     }
     else if( NewAction == 'DoorBash' )
     {
+       //TODO: Make sure Grapple Anim isn't used
        NewAction = meleeAnims[rand(2)];
        CurrentDamtype = ZombieDamType[Rand(3)];
     }
@@ -130,18 +122,10 @@ simulated event SetAnimAction(name NewAction)
     }
 }
 
-
-////This wasn't in KFMod, but we need it for voicelines
 simulated function int DoAnimAction( name AnimName )
 {
-    //There is no ClotGrappleTwo or ClotGrappleThree, so we got rid of them
     if( AnimName=='ClotGrapple' )
     {
-        //Dont need anything but voicelines
-        //AnimBlendParams(1, 1.0, 0.1,, FireRootBone);
-        //PlayAnim(AnimName,, 0.1, 1);
-
-        // Randomly send out a message about Clot grabbing you(10% chance)
         if ( FRand() < 0.10 && LookTarget != none && KFPlayerController(LookTarget.Controller) != none &&
              VSizeSquared(Location - LookTarget.Location) < 2500 /* (MeleeRange + 20)^2 */ &&
              Level.TimeSeconds - KFPlayerController(LookTarget.Controller).LastClotGrabMessageTime > ClotGrabMessageDelay &&
@@ -157,6 +141,8 @@ simulated function int DoAnimAction( name AnimName )
 function RemoveHead()
 {
     super.RemoveHead();
+
+    //this doesn't even work in retail kf
     MeleeAnims[0] = 'Claw';
     MeleeAnims[1] = 'Claw';
     MeleeAnims[2] = 'Claw2';
@@ -165,30 +151,74 @@ function RemoveHead()
     MeleeRange *= 2;
 }
 
-
-//Keep this
 static simulated function PreCacheStaticMeshes(LevelInfo myLevel)
-{//should be derived and used.
+{
    super.PreCacheStaticMeshes(myLevel);
-///*
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_1');
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_2');
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_3');
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_4');
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_5');
-//    myLevel.AddPrecacheStaticMesh(StaticMesh'kf_gore_trip_sm.clot.clothead_piece_6');
-//*/
 }
 
-//Use KFMod textures for precache
 static simulated function PreCacheMaterials(LevelInfo myLevel)
-{//should be derived and used.
+{
     myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin');
 }
 
 defaultproperties
 {
-    //-------------------------------------------------------------------------------
-    // NOTE: Most default Properties are set in the base class to eliminate hitching
-    //-------------------------------------------------------------------------------
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale1'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin'
+    
+    AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
+    MoanVoice=Sound'KFOldSchoolZeds_Sounds.Clot.Clot_Speech'
+    JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
+
+    HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
+    DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
+
+    MenuName="Clot 2.5"
+    ScoringValue=7
+    Intelligence=BRAINS_Mammal
+    KFRagdollName="ClotRag"
+    
+    MovementAnims(0)="ClotWalk"
+    WalkAnims(0)="ClotWalk"
+    WalkAnims(1)="ClotWalk"
+    WalkAnims(2)="ClotWalk"
+    WalkAnims(3)="ClotWalk"
+    AdditionalWalkAnims(0) = "ClotWalk2"
+    
+    MeleeAnims(0)="Claw"
+    MeleeAnims(1)="Claw2"
+    MeleeAnims(2)="ClotGrapple"
+    
+    MeleeRange=20.0
+    MeleeDamage=6
+    damageForce=5000
+    
+    PuntAnim="ClotPunt"
+    
+    bUseExtendedCollision=true
+    ColOffset=(Z=48.000000)
+    ColRadius=25.000000
+    ColHeight=5.000000
+    
+    SoloHeadScale=1.1
+    OnlineHeadshotScale=1.2
+    OnlineHeadshotOffset=(X=25,Y=-7,Z=45)
+    
+    Health=130
+    HealthMax=130
+    
+    RotationRate=(Yaw=45000,Roll=0)
+    
+    GroundSpeed=105.000000
+    WaterSpeed=105.000000
+    JumpZ=340.000000
+    
+    MotionDetectorThreat=0.34
+
+    CrispUpThreshhold=9
+    
+    GrappleDuration=1.0//1.5
+    ClotGrabMessageDelay=12.0
+    
+    bCannibal = true        
 }

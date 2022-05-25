@@ -1,13 +1,7 @@
-// KFMod GibBrain is similar to retail with some minor differences
 class KFGibBrainOS extends KFGibOS;
-
-//Load necessary meshes and textures
-#exec OBJ LOAD FILE=KillingFloorStatics.usx
-#exec OBJ LOAD FILE=KillingFloorTextures.utx
 
 defaultproperties
 {
-    // Use the KFMod GibGroup and GibJet
      GibGroupClass=class'KFHumanGibGroupOS'
      TrailClass=class'KFGibJetOS'
      DrawType=DT_StaticMesh
