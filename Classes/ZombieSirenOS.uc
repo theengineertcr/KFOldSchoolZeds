@@ -19,6 +19,8 @@ var(Shake)  float    ScreamBlurScale;
 var bool bAboutToDie;
 var float DeathTimer;
 
+// Fixes credit: https://github.com/Shtoyan/KF1066/blob/main/docs/VeryAnnoying/ZedIssues.md
+
 function bool FlipOver()
 {
     return false;
@@ -68,7 +70,7 @@ function RangedAttack(Actor A)
 
 simulated function SpawnTwoShots()
 {
-    if( bZapped )
+    if( bZapped || bDecapitated)
     {
         return;
     }
@@ -185,6 +187,11 @@ function RemoveHead()
     }
 }
 
+State ZombieDying
+{
+    ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, Falling, BreathTimer, Died, RangedAttack, SpawnTwoShots;
+}
+
 simulated function Tick( float Delta )
 {
     super.Tick(Delta);
@@ -257,7 +264,7 @@ defaultproperties
     ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
     ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
 
-    PrePivot=(Z=-13)
+    PrePivot=(Z=-8)
     
     bUseExtendedCollision=true
     ColOffset=(Z=48)
