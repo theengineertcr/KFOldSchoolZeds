@@ -34,6 +34,9 @@ function bool FireWeaponAt(Actor A)
 
     Target = A;
 
+    if(ZombieExplosivesPoundOS(Pawn).Health / ZombieExplosivesPoundOS(Pawn).HealthMax < 0.5 )
+        Monster(Pawn).RangedAttack(Target);
+
     if((VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius)
         && ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
     {

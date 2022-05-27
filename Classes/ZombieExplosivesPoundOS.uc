@@ -244,8 +244,6 @@ simulated function Destroyed()
     super.Destroyed();
 }
 
-//bugged: does not consistently do rangedattack, waits for gltime
-//and after performing ranged attack, slows down because gltime doesnt reset
 function RangedAttack(Actor A)
 {
     local float Dist;
@@ -259,16 +257,16 @@ function RangedAttack(Actor A)
     {
         bShotAnim = true;
         LastFireTime = Level.TimeSeconds;
-        SetAnimAction(MeleeAnims[Rand(2)]);
+        SetAnimAction(MeleeAnims[Rand(3)]);
         CurrentDamType = ZombieDamType[0];
         PlaySound(sound'Claw2s', SLOT_Interact);
     }
 
-    //if( !bShotAnim && !bDecapitated )
-    //{
-    //    if ( float(Health)/HealthMax < 0.5 )
-    //        GoToState('RunningState');
-    //}
+    if( !bShotAnim && !bDecapitated )
+    {
+        if ( float(Health)/HealthMax < 0.5 )
+            GoToState('RunningState');
+    }
 
     if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 && !bCharging)
     {
@@ -506,6 +504,10 @@ state FireGrenades
         class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
 
+        if(float(Health)/HealthMax < 0.5)
+        {
+            EndState();
+        }
         super.Tick(DeltaTime);
     }
 
@@ -519,7 +521,10 @@ state FireGrenades
         SoundRadius=default.SoundRadius;
         GLFireCounter=0;
 
-        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
+        if(float(Health)/HealthMax < 0.5)
+            LastGLTime *= 0;
+        else
+            LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
     }
 
     function BeginState()
@@ -704,14 +709,14 @@ defaultproperties
     bUseExtendedCollision=true
 
     ScoringValue=125
-    GroundSpeed=75.0
-    WaterSpeed=75.000000
+    GroundSpeed=65.0
+    WaterSpeed=65.0
     Health=1250//700
     HealthMax=1250//700
     PlayerCountHealthScale=0.10//0.15
     PlayerNumHeadHealthScale=0.05
     HeadHealth=655//250
-    MeleeDamage=35//15
+    MeleeDamage=20//15
     JumpZ=320.000000
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
@@ -781,7 +786,7 @@ defaultproperties
     ColOffset=(Z=65)
     ColRadius=27
     ColHeight=25
-    PrePivot=(Z=10)
+    PrePivot=(Z=2)
 
     SoloHeadScale=1.55
     OnlineHeadshotScale=1.75//1.3
