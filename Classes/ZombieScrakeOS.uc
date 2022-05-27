@@ -418,7 +418,7 @@ defaultproperties
     bCannibal = true
     MenuName="Scrake 2.5"
     SoundRadius=200.000000
-    AmbientSoundScaling=1.800000
+    AmbientSoundScaling=5
 
     ColOffset=(Z=55)
     ColRadius=29

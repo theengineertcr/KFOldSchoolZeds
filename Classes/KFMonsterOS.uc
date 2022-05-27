@@ -1349,6 +1349,12 @@ event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
     }
 }
 
+function Died(Controller Killer, class<DamageType> damageType, vector HitLocation)
+{
+    AmbientSound = none;
+    super.Died( Killer, damageType, HitLocation );
+}
+
 defaultproperties
 {
     MixTexturePool(0)=Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin'
@@ -1445,4 +1451,8 @@ defaultproperties
     RagGravScale=1.500000
     RagSpinScale=2.500000
     RagMaxSpinAmount=1.000000
+    MoanVolume=10
+    SoundVolume=200
+    //add later
+    SoundGroupClass=None
 }

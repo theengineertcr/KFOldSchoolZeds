@@ -809,7 +809,7 @@ defaultproperties
     bCanDistanceAttackDoors=false
 
     SoundRadius=200.00000
-    AmbientSoundScaling=1.800000
+    AmbientSoundScaling=5
     ColOffset=(Z=65)
     ColRadius=27
     ColHeight=25
