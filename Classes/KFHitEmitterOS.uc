@@ -1,5 +1,5 @@
-class KFHitEmitterOS extends Emitter 
-    abstract 
+class KFHitEmitterOS extends Emitter
+    abstract
     hidedropdown;
 
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
@@ -61,9 +61,9 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     AutoDestroy=true
-     bNoDelete=false
-     LifeSpan=5.000000
-     TransientSoundVolume=150.000000
-     TransientSoundRadius=80.000000
+    AutoDestroy=true
+    bNoDelete=false
+    LifeSpan=5.000000
+    TransientSoundVolume=150.000000
+    TransientSoundRadius=80.000000
 }

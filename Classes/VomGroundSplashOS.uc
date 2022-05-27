@@ -4,5 +4,5 @@ class VomGroundSplashOS extends AlienSmallHit;
 
 defaultproperties
 {
-     Skins(0)=Texture'KFOldSchoolZeds_Textures.VomitSplash'
+    Skins(0)=Texture'KFOldSchoolZeds_Textures.VomitSplash'
 }

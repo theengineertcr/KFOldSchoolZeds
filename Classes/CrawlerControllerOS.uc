@@ -62,7 +62,7 @@ function bool FireWeaponAt(Actor A)
       Monster(Pawn).RangedAttack(Target);
     }
     else
-    {
+    { //bEnableOldCrawlerBehavior
         if( LastPounceTime+1 < Level.TimeSeconds )
         {
             aFacing=Normal(Vector(Pawn.Rotation));
@@ -70,6 +70,7 @@ function bool FireWeaponAt(Actor A)
             aToB=A.Location-Pawn.Location;
 
             RelativeDir = aFacing dot aToB;
+
             if ( RelativeDir > 0.85 )
             {
                 if(IsInPounceDist(A) )
@@ -85,13 +86,13 @@ function bool FireWeaponAt(Actor A)
 
 function bool NotifyLanded(vector HitNormal)
 {
-  if( ZombieCrawlerOS(pawn).bPouncing )
-  {
-     GotoState('hunting');
-     return false;
-  }
-  else
-     return super.NotifyLanded(HitNormal);
+    if( ZombieCrawlerOS(pawn).bPouncing )
+    {
+        GotoState('hunting');
+        return false;
+    }
+    else
+        return super.NotifyLanded(HitNormal);
 }
 
 defaultproperties{}

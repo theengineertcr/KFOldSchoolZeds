@@ -4,7 +4,7 @@ var BossHPNeedle CurrentNeedle;
 var bool bChargingPlayer,bClientCharg,bFireAtWill,bMinigunning,bIsBossView;
 var float RageStartTime,LastChainGunTime,LastMissileTime,LastSneakedTime;
 var bool bClientMiniGunning;
-var name ChargingAnim;        
+var name ChargingAnim;
 var byte SyringeCount,ClientSyrCount;
 var int MGFireCounter;
 
@@ -13,18 +13,18 @@ var Emitter mTracer,mMuzzleFlash;
 var bool bClientCloaked;
 var float LastCheckTimes;
 var int HealingLevels[3],HealingAmount;
-var             float   MGFireDuration;     
-var             float   MGLostSightTimeout; 
-var()           float   MGDamage;           
+var             float   MGFireDuration;
+var             float   MGLostSightTimeout;
+var()           float   MGDamage;
 var()           float   ClawMeleeDamageRange;
 var()           float   ImpaleMeleeDamageRange;
-var             float   LastChargeTime;     
+var             float   LastChargeTime;
 var             float   LastForceChargeTime;
-var             int     NumChargeAttacks;   
-var             float   ChargeDamage;       
-var             float   LastDamageTime;     
-var             float   SneakStartTime;     
-var             int     SneakCount;         
+var             int     NumChargeAttacks;
+var             float   ChargeDamage;
+var             float   LastDamageTime;
+var             float   SneakStartTime;
+var             int     SneakCount;
 var()           float   PipeBombDamageScale;
 
 replication
@@ -54,7 +54,7 @@ function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPositio
             }
         }
     }
-    
+
     return NewVelocity;
 }
 
@@ -92,7 +92,7 @@ simulated function Tick(float DeltaTime)
         return;
 
     bSpecialCalcView = bIsBossView;
-    
+
     if( bZapped )
     {
         LastCheckTimes = Level.TimeSeconds;
@@ -100,7 +100,7 @@ simulated function Tick(float DeltaTime)
     else if( bCloaked && Level.TimeSeconds>LastCheckTimes )
     {
         LastCheckTimes = Level.TimeSeconds+0.8;
-        
+
         ForEach VisibleCollidingActors(class'KFHumanPawn',HP,1000,Location)
         {
             if( HP.Health <= 0 || !HP.ShowStalkers() )
@@ -111,10 +111,10 @@ simulated function Tick(float DeltaTime)
                 bSpotted = true;
                 CloakBoss();
             }
-            
+
             return;
         }
-        
+
         if( bSpotted )
         {
             bSpotted = false;
@@ -152,16 +152,16 @@ simulated function CloakBoss()
 
     Visibility = 1;
     bCloaked = true;
-    
+
     if( Level.NetMode!=NM_Client )
     {
         For( C=Level.ControllerList; C!=none; C=C.NextController )
         {
             if( C.bIsPlayer && C.Enemy==self )
-                C.Enemy = none; 
+                C.Enemy = none;
         }
     }
-    
+
     if( Level.NetMode==NM_DedicatedServer )
         return;
 
@@ -212,10 +212,10 @@ simulated function UnCloakBoss()
     bCloaked = false;
     bSpotted = false;
     bUnlit = false;
-    
+
     if( Level.NetMode==NM_DedicatedServer )
         return;
-        
+
     Skins = default.Skins;
 
     if (PlayerShadow != none)
@@ -326,11 +326,11 @@ simulated function PostBeginPlay()
         }
     }
 
-    HealingLevels[0] = Health/1.25; 
-    HealingLevels[1] = Health/2.f; 
-    HealingLevels[2] = Health/3.2; 
+    HealingLevels[0] = Health/1.25;
+    HealingLevels[1] = Health/2.f;
+    HealingLevels[2] = Health/3.2;
 
-    HealingAmount = Health/4; 
+    HealingAmount = Health/4;
 }
 
 function bool MakeGrandEntry()
@@ -434,10 +434,10 @@ function RangedAttack(Actor A)
 
     if ( bShotAnim )
         return;
-        
-    D = VSize(A.Location-Location);   
+
+    D = VSize(A.Location-Location);
     bOnlyE = (Pawn(A)!=none && OnlyEnemyAround(Pawn(A)));
-    
+
     if ( IsCloseEnuf(A) )
     {
         bShotAnim = true;
@@ -458,7 +458,7 @@ function RangedAttack(Actor A)
             LastSneakedTime = Level.TimeSeconds;
             return;
         }
-        SetAnimAction('BossHitF'); 
+        SetAnimAction('BossHitF');
         GoToState('SneakAround');
     }
     else if( bChargingPlayer && (bOnlyE || D<200) )
@@ -481,9 +481,9 @@ function RangedAttack(Actor A)
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('PreFireMG'); 
+        SetAnimAction('PreFireMG');
 
-        HandleWaitForAnim('PreFireMG'); 
+        HandleWaitForAnim('PreFireMG');
 
         GoToState('FireMissile');
     }
@@ -515,7 +515,7 @@ event Bump(actor Other)
         return;
 
     if( Other.IsA('NetKActor') && Physics != PHYS_Falling && !bShotAnim && Abs(Other.Location.Z-Location.Z)<(CollisionHeight+Other.CollisionHeight) )
-    { 
+    {
         Controller.Target = Other;
         Controller.Focus = Other;
         bShotAnim = true;
@@ -531,11 +531,11 @@ simulated function AddTraceHitFX( vector HitPos )
     local vector Start,SpawnVel,SpawnDir;
     local float hitDist;
 
-    
+
     PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
     Start = GetBoneCoords('tip').Origin;
     if( mTracer==none )
-        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); 
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start);
     else mTracer.SetLocation(Start);
     if( mMuzzleFlash==none )
     {
@@ -563,7 +563,7 @@ simulated function AddTraceHitFX( vector HitPos )
 
     if( HitPos != vect(0,0,0) )
     {
-        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start))); 
+        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start)));
     }
 }
 
@@ -615,7 +615,7 @@ state FireChaingun
 
             if( (ChargeDamage > 200 && DamagerDistSq < (500 * 500)) || DamagerDistSq < (100 * 100) )
             {
-                SetAnimAction('BossHitF'); 
+                SetAnimAction('BossHitF');
                 GoToState('Charging');
                 return;
             }
@@ -635,7 +635,7 @@ state FireChaingun
 
             if( DamagerDistSq < (500 * 500) )
             {
-                SetAnimAction('BossHitF'); 
+                SetAnimAction('BossHitF');
                 GoToState('Charging');
             }
         }
@@ -820,12 +820,12 @@ Ignores RangedAttack;
         }
         R = AdjustAim(SavedFireProperties,Start,100);
         PlaySound(Sound'KFOldSchoolZeds_Sounds.Shared.LAWFire');
-        Spawn(class'BossLAWProjOS',,,Start,R); 
+        Spawn(class'BossLAWProjOS',,,Start,R);
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
         SetAnimAction('FireEndMG');
-        HandleWaitForAnim('FireEndMG'); 
+        HandleWaitForAnim('FireEndMG');
 
         if ( FRand() < 0.05 && Controller.Enemy != none && PlayerController(Controller.Enemy.Controller) != none )
         {
@@ -845,7 +845,7 @@ Begin:
 function bool MeleeDamageTarget(int hitdamage, vector pushdir)
 {
     if( Controller.Target!=none && Controller.Target.IsA('NetKActor') )
-        pushdir = Normal(Controller.Target.Location-Location)*100000; 
+        pushdir = Normal(Controller.Target.Location-Location)*100000;
 
 
     return super.MeleeDamageTarget(hitdamage, pushdir);
@@ -980,7 +980,7 @@ Begin:
     if( Health > 0 )
     {
         Sleep(GetAnimDuration('KnockDown'));
-        CloakBoss(); 
+        CloakBoss();
         if( KFGameType(Level.Game).FinalSquadNum == SyringeCount )
         {
            KFGameType(Level.Game).AddBossBuddySquad();
@@ -1017,7 +1017,7 @@ State Escaping extends Charging // Got hurt and running away...
             Acceleration = vect(0,0,0);
             Acceleration = (A.Location-Location);
             SetAnimAction('MeleeClaw');
-            PlaySound(sound'Claw2s', SLOT_None); 
+            PlaySound(sound'Claw2s', SLOT_None);
         }
     }
 
@@ -1162,7 +1162,7 @@ simulated function DropNeedle()
     if( CurrentNeedle!=none )
     {
         DetachFromBone(CurrentNeedle);
-        CurrentNeedle.SetLocation(GetBoneCoords('Bip01 R Finger0').Origin); 
+        CurrentNeedle.SetLocation(GetBoneCoords('Bip01 R Finger0').Origin);
         CurrentNeedle.DroppedNow();
         CurrentNeedle = none;
     }
@@ -1179,8 +1179,8 @@ simulated function NotifySyringeA()
     if( Level.NetMode!=NM_DedicatedServer )
     {
         DropNeedle();
-        CurrentNeedle = Spawn(class'BossHPNeedle'); 
-        AttachToBone(CurrentNeedle,'Bip01 R Finger0'); 
+        CurrentNeedle = Spawn(class'BossHPNeedle');
+        AttachToBone(CurrentNeedle,'Bip01 R Finger0');
     }
 }
 function NotifySyringeB()
@@ -1245,7 +1245,7 @@ simulated function PostNetReceive()
     {
         ClientSyrCount = SyringeCount;
         Switch( SyringeCount )
-        {    
+        {
             Case 1:
                 SetBoneScale(3,0,'SyringeBoneOne');
                 Break;
@@ -1258,7 +1258,7 @@ simulated function PostNetReceive()
                 SetBoneScale(4,0,'SyringeBoneTwo');
                 SetBoneScale(5,0,'SyringeBoneThree');
                 Break;
-            default: 
+            default:
                 SetBoneScale(3,1,'SyringeBoneOne');
                 SetBoneScale(4,1,'SyringeBoneTwo');
                 SetBoneScale(5,1,'SyringeBoneThree');
@@ -1342,7 +1342,7 @@ simulated function HandleWaitForAnim( name NewAnim )
 
 simulated function bool AnimNeedsWait(name TestAnim)
 {
-    if(TestAnim == 'FireMG' ||TestAnim == 'PreFireMG' || TestAnim == 'FireEndMG' || TestAnim == 'Heal' 
+    if(TestAnim == 'FireMG' ||TestAnim == 'PreFireMG' || TestAnim == 'FireEndMG' || TestAnim == 'Heal'
        || TestAnim == 'KnockDown' || TestAnim == 'Entrance' || TestAnim == 'VictoryLaugh' )
     {
         return true;
@@ -1459,7 +1459,7 @@ function DoorAttack(Actor A)
         Controller.Target = A;
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('PreFireMG'); 
+        SetAnimAction('PreFireMG');
         HandleWaitForAnim('PreFireMG');
         MGFireCounter = Rand(20);
         GoToState('FireMissile');
@@ -1572,10 +1572,10 @@ function ClawDamageTarget()
 
         foreach DynamicActors(class'KFHumanPawn', P)
         {
-            if ( (P.Location - Location) dot PushDir > 0.0 ) 
+            if ( (P.Location - Location) dot PushDir > 0.0 )
             {
                 Controller.Target = P;
-                bDamagedSomeone = bDamagedSomeone || MeleeDamageTarget(UsedMeleeDamage, damageForce * Normal(P.Location - Location)); 
+                bDamagedSomeone = bDamagedSomeone || MeleeDamageTarget(UsedMeleeDamage, damageForce * Normal(P.Location - Location));
             }
         }
 
@@ -1612,10 +1612,10 @@ defaultproperties
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Patriarch.Patriarch_Pain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     bMeleeStunImmune = true
     bFatAss=true
     RagDeathVel=80.000000
@@ -1705,6 +1705,6 @@ defaultproperties
     SoloHeadScale=1.5
     OnlineHeadshotScale=1.5//1.2
     OnlineHeadshotOffset=(X=28,Y=-6,Z=70) //Z=75
-    
+
     ControllerClass=class'BossZombieControllerOS'
 }

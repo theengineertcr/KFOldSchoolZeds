@@ -8,7 +8,7 @@ simulated function BeginPlay()
     {
         ProjTexture = texture'KFOldSchool_XEffects.xbiosplat2';
     }
-    
+
     super.BeginPlay();
 }
 

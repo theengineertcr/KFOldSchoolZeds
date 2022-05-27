@@ -3,7 +3,7 @@ class KFBloatVomitOS extends KFBloatVomit;
 #exec OBJ LOAD FILE=KillingFloorLabTextures.utx
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 
-//TODO: Extend and shorten
+//TODO: Optimization. Extend to parent and shorten
 state OnGround
 {
     simulated function BeginState()
@@ -115,7 +115,7 @@ simulated function Destroyed()
     {
         Spawn(class'VomGroundSplashOS');
     }
-    
+
     if ( Fear != none )
         Fear.Destroy();
 
@@ -175,6 +175,7 @@ auto state Flying
     {
         if( ExtendedZCollision(Other)!=none )
             return;
+
         if (Other != Instigator && (Other.IsA('Pawn') || Other.IsA('DestroyableObjective') || Other.bProjTarget))
             HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation );
         else if ( Other != Instigator && Other.bBlockActors )
@@ -184,13 +185,13 @@ auto state Flying
 
 defaultproperties
 {
-     //DamTypeVomitOS does not deal immediate damage, fix this later
-     //MyDamageType=class'DamTypeVomitOS'
-     LifeSpan=1.000000//8.000000
-     Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
-     CollisionRadius=0.000000//2.000000
-     CollisionHeight=0.000000//2.000000
-     StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
-     ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'
-     ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
+    //DamTypeVomitOS does not deal immediate damage, fix this later
+    //MyDamageType=class'DamTypeVomitOS'
+    LifeSpan=1.000000//8.000000
+    Skins(0)=Texture'KillingFloorLabTextures.LabCommon.voidtex'
+    CollisionRadius=0.000000//2.000000
+    CollisionHeight=0.000000//2.000000
+    StaticMesh=none//Mesh'XWeapons_rc.GoopMesh'
+    ExplodeSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo1'
+    ImpactSound=Sound'KFOldSchoolZeds_Sounds.Shared.BioRifleGoo2'
 }

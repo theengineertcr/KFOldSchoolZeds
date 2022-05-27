@@ -61,7 +61,7 @@ static function PrecacheContent(LevelInfo Level)
     local int i;
 
     super.PrecacheContent(Level);
-    
+
     if ( default.BloodDecalClass != none )
     {
         for ( i=0; i<3; i++ )

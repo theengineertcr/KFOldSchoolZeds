@@ -10,7 +10,7 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
 
     if((Health - Damage)<=0)
         Gored=3;
-        
+
     if(Gored>=3 && Gored < 5)
         BileBomb();
 }
@@ -75,7 +75,7 @@ function RangedAttack(Actor A)
         SetAnimAction('ZombieBarf');
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
-        
+
         if ( FRand() < 0.03 && KFHumanPawn(A) != none && PlayerController(KFHumanPawn(A).Controller) != none )
         {
             PlayerController(KFHumanPawn(A).Controller).Speech('AUTO', 7, "");
@@ -96,7 +96,7 @@ function SpawnTwoShots()
 
     GetAxes(Rotation,X,Y,Z);
     FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
-    
+
     if ( !SavedFireProperties.bInitialized )
     {
         SavedFireProperties.AmmoClass = class'SkaarjAmmo';
@@ -111,7 +111,7 @@ function SpawnTwoShots()
     }
 
     ToggleAuxCollision(false);
-    
+
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
     Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
 
@@ -122,7 +122,7 @@ function SpawnTwoShots()
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
     spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
-    
+
     ToggleAuxCollision(true);
 }
 
@@ -155,7 +155,7 @@ function BileBomb()
 
     if(!AttachSucess)
         BloatJet.SetBase(self);
-        
+
     BloatJet.SetRelativeRotation(rot(0,-4096,0));
 }
 
@@ -235,7 +235,7 @@ defaultproperties
 {
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Bloat'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin'
-    
+
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Bloat.Bloat_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
@@ -247,34 +247,34 @@ defaultproperties
     ScoringValue=17
     ZombieFlag=1
     Intelligence=BRAINS_Stupid
-    
+
     IdleHeavyAnim="BloatIdle"
     IdleRifleAnim="BloatIdle"
     IdleCrouchAnim="BloatIdle"
     IdleWeaponAnim="BloatIdle"
     IdleRestAnim="BloatIdle"
-    
+
     MovementAnims(0)="WalkBloat"
     MovementAnims(1)="WalkBloat"
     WalkAnims(0)="WalkBloat"
     WalkAnims(1)="WalkBloat"
     WalkAnims(2)="WalkBloat"
     WalkAnims(3)="WalkBloat"
-    
+
     MeleeAnims(0)="BloatChop2"
     MeleeAnims(1)="BloatChop2"
     MeleeAnims(2)="BloatChop2"
-    
+
     MeleeDamage=14
     MeleeRange=30.0//55.000000
-    damageForce=70000  
-    
+    damageForce=70000
+
     PuntAnim="BloatPunt"
 
     CollisionRadius=26.000000
     CollisionHeight=44.000000
     Prepivot=(Z=8.000000) //(Z=5.0)
-    
+
     bUseExtendedCollision=true
     ColOffset=(Z=60.000000)
     ColRadius=27.000000
@@ -289,28 +289,28 @@ defaultproperties
     PlayerCountHealthScale=0.25
     HeadHealth=25
     PlayerNumHeadHealthScale=0.0
-    
+
     Mass=400.000000
     RotationRate=(Yaw=45000,Roll=0)
     bFatAss=true
-    
+
     GroundSpeed=75.0//105.000000
     WaterSpeed=102.000000
     JumpZ=320.000000
-    
+
     DistBeforePuke=250
-    
+
     bCanDistanceAttackDoors=true
-    
+
     AmmunitionClass=class'KFMod.BZombieAmmo'
 
     BleedOutDuration=6.0
-    
+
     MotionDetectorThreat=1.0
-    
+
     ZapThreshold=0.5
     ZappedDamageMod=1.5
-    
+
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
 

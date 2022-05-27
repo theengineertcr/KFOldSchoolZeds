@@ -11,10 +11,10 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-     Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
-     Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
-     Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
-     PushBack=5.000000
-     RandomOrient=false
-     ProjTexture=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+    Splats(0)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+    Splats(1)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+    Splats(2)=Texture'KFOldSchoolZeds_Textures.BloodStreak'
+    PushBack=5.000000
+    RandomOrient=false
+    ProjTexture=Texture'KFOldSchoolZeds_Textures.BloodStreak'
 }

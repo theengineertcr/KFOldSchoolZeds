@@ -9,27 +9,26 @@ class KFMonsterOS extends KFMonster
 #exec OBJ LOAD FILE=KFCharacterModelsOldSchool.ukx
 #exec OBJ LOAD FILE=KFBossOld.ukx
 
-var KFGibOS HeadStub;
+var KFGibOS HeadStubOS;
 
-// Obscured intentionally, may not need to in the future
-var class <KFGibOS> HeadStubClass;
-var class <KFGibOS> MonsterHeadGiblet;
-var class <KFGibOS> MonsterThighGiblet;
-var class <KFGibOS> MonsterArmGiblet;
-var class <KFGibOS> MonsterLegGiblet;
-var class <KFGibOS> MonsterTorsoGiblet;
-var class <KFGibOS> MonsterLowerTorsoGiblet;
+var class <KFGibOS> HeadStubClassOS;
+var class <KFGibOS> MonsterHeadGibletOS;
+var class <KFGibOS> MonsterThighGibletOS;
+var class <KFGibOS> MonsterArmGibletOS;
+var class <KFGibOS> MonsterLegGibletOS;
+var class <KFGibOS> MonsterTorsoGibletOS;
+var class <KFGibOS> MonsterLowerTorsoGibletOS;
 
 var Vector LastBloodHitDirection;
 
 var float SoloHeadScale;
 
 var bool bUseOldMeleeDamage;
-var bool bUseOldHealth;
-var bool bUseOldSpeed;
-var bool bCorpsesDecay;
+//var bool bUseOldHealth;
+//var bool bUseOldSpeed;
+//var bool bCorpsesDecay;
 
-var bool bUseMixedSkins;
+//var bool bUseMixedSkins;
 
 var int damageRand;
 var int damageConst;
@@ -68,7 +67,7 @@ function bool FlipOver()
     Velocity.Y = 0;
     Controller.GoToState('WaitForAnim');
     KFMonsterController(Controller).Focus = none;
-    KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;    
+    KFMonsterController(Controller).FocalPoint = KFMonsterController(Controller).LastSeenPos;
     KFMonsterController(Controller).bUseFreezeHack = true;
     return true;
 }
@@ -155,7 +154,7 @@ simulated function DoDamageFX( Name boneName, int Damage, class<DamageType> Dama
             }
         }
 
-        if ( DamageType.default.bNeverSevers || class'GameInfo'.static.UseLowGore() || 
+        if ( DamageType.default.bNeverSevers || class'GameInfo'.static.UseLowGore() ||
            (Level.Game != none && Level.Game.PreventSever(self, boneName, Damage, DamageType)) )
         {
             HitFX[HitFxTicker].bSever = false;
@@ -198,10 +197,10 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     {
         HideBone('bip01 head');
 
-        if (HeadStub == none && HeadStubClass != none)
+        if (HeadStubOS == none && HeadStubClassOS != none)
         {
-            HeadStub = Spawn(HeadStubClass,self);
-            AttachToBone( HeadStub,'Bip01 head');
+            HeadStubOS = Spawn(HeadStubClassOS,self);
+            AttachToBone( HeadStubOS,'Bip01 head');
         }
     }
 
@@ -210,9 +209,9 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
         if (Gored == 1)
             HideBone('Bip01 L Clavicle');
         else if (Gored == 2)
-            HideBone('Bip01 R Clavicle'); 
+            HideBone('Bip01 R Clavicle');
         else if (Gored == 3)
-            HideBone('Bip01 Spine2'); 
+            HideBone('Bip01 Spine2');
         else if (Gored == 4)
             HideBone('Bip01 Spine1');
         else if (Gored == 5)
@@ -223,7 +222,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     }
 
     AmbientSound = none;
-    bCanTeleport = false; 
+    bCanTeleport = false;
     bReplicateMovement = false;
     bTearOff = true;
     bPlayedDeath = true;
@@ -232,7 +231,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     if (CurrentCombo != none)
         CurrentCombo.Destroy();
 
-    HitDamageType = DamageType; 
+    HitDamageType = DamageType;
     TakeHitLocation = HitLoc;
 
     bSTUNNED = false;
@@ -285,7 +284,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
 
                     if ( LD != none )
                         LD.SetBase(self);
-                    
+
                     PlaySound( sound'KFOldSchoolZeds_Sounds.BExplosion5', SLOT_None, 1.5*TransientSoundVolume );
                 }
             }
@@ -296,7 +295,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
             SetOverlayMaterial(DamageType.default.DamageOverlayMaterial, 2*DamageType.default.DamageOverlayTime, true);
     }
 
-   
+
     AnimBlendParams(1, 0.0);
     FireState = FS_None;
 
@@ -321,7 +320,7 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
     {
         SetPhysics(PHYS_None);
         SetCollision(false, false, false);
-        
+
         if ( !IsAnimating(0) )
             LandThump();
 
@@ -375,9 +374,6 @@ simulated function ProcessHitFX()
     local int i,j;
     local float GibPerterbation;
 
-    j = 0 ;
-    i = 0 ;
-
     if( (Level.NetMode == NM_DedicatedServer) || bSkeletized || (Mesh == SkeletonMesh))
     {
         SimHitFxTicker = HitFxTicker;
@@ -404,7 +400,7 @@ simulated function ProcessHitFX()
 
             HitFX[SimHitFxTicker].damtype.static.GetHitEffects( HitEffects, Health );
 
-            if( !PhysicsVolume.bWaterVolume ) 
+            if( !PhysicsVolume.bWaterVolume )
             {
                 for( i = 0; i < ArrayCount(HitEffects); i++ )
                 {
@@ -469,7 +465,7 @@ simulated function ProcessHitFX()
                     }
                     break;
             }
-            
+
             if (!bDecapitated)
                 HideBone(HitFX[SimHitFxTicker].bone);
         }
@@ -516,16 +512,16 @@ simulated function SpecialHideHead()
     local int BoneScaleSlot;
     local coords boneCoords;
 
-    if(HeadStub == none && HeadStubClass != none)
+    if(HeadStubOS == none && HeadStubClassOS != none)
     {
         boneScaleSlot = 4;
-        HeadStub = Spawn(HeadStubClass,self);
+        HeadStubOS = Spawn(HeadStubClassOS,self);
 
 
         boneCoords = GetBoneCoords( 'Bip01 Head' );
 
 
-        AttachToBone(HeadStub, 'Bip01 Head');
+        AttachToBone(HeadStubOS, 'Bip01 Head');
     }
     else
     {
@@ -740,10 +736,10 @@ simulated function Tick(float DeltaTime)
             SplatLocation.z += CollisionHeight;
             GibPerterbation = 0.060000;
             HideBone('bip01 head');
-            if (HeadStub == none && HeadStubClass != none)
+            if (HeadStubOS == none && HeadStubClassOS != none)
             {
-                HeadStub = Spawn(HeadStubClass,self,'',Location);
-                AttachToBone( HeadStub,'Bip01 head');
+                HeadStubOS = Spawn(HeadStubClassOS,self,'',Location);
+                AttachToBone( HeadStubOS,'Bip01 head');
             }
             if ( EffectIsRelevant(Location,false) )
             {
@@ -758,7 +754,7 @@ simulated function Tick(float DeltaTime)
         {
             SplatLocation = self.Location;
             SplatLocation.z += (CollisionHeight - (CollisionHeight * 0.5));
-            GibPerterbation = 0.060000; 
+            GibPerterbation = 0.060000;
 
             if (Gored == 1)
                 HideBone('Bip01 L Clavicle');
@@ -766,7 +762,7 @@ simulated function Tick(float DeltaTime)
                 HideBone('Bip01 R Clavicle');
             else if (Gored == 3)
             {
-                HideBone('Bip01 Spine2'); 
+                HideBone('Bip01 Spine2');
 
                 if (GoredMat != none)
                     Skins[0] = GoredMat;
@@ -788,19 +784,19 @@ simulated function Tick(float DeltaTime)
                 Spawn(class'BodySplashOS',,,SplatLocation,self.Rotation);
 
                 if (!bDecapitated)
-                    SpawnGiblet(MonsterHeadGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
+                    SpawnGiblet(MonsterHeadGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
 
-                SpawnGiblet(MonsterTorsoGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet(MonsterLowerTorsoGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterTorsoGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterLowerTorsoGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
 
-                SpawnGiblet(MonsterArmGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet(MonsterArmGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterArmGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterArmGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
 
-                SpawnGiblet(MonsterThighGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet(MonsterThighGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterThighGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterThighGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
 
-                SpawnGiblet(MonsterLegGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
-                SpawnGiblet(MonsterLegGiblet,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterLegGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
+                SpawnGiblet(MonsterLegGibletOS,SplatLocation, self.Rotation, GibPerterbation ) ;
 
                 GibbedExplosion = Spawn(class'GibExplosionOS',self,, SplatLocation );
 
@@ -882,7 +878,7 @@ function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
         return;
-    else if ( CanAttack(A) ) 
+    else if ( CanAttack(A) )
     {
         bShotAnim = true;
         SetAnimAction('Claw');
@@ -914,7 +910,7 @@ function ClawDamageTarget()
     {
 
         if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) )
-            PlayZombieAttackHitSound(); 
+            PlayZombieAttackHitSound();
     }
     else
     {
@@ -959,7 +955,7 @@ function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vect
 
         if ((Health - Damage) < (0-(Threshold * HealthMax)) && (Health - Damage) > (0-((Threshold * 1.2) * HealthMax)) )
             Gored = rand(4)+1;
-                else 
+                else
         if ((Health - Damage) <= (0-(1.0 * HealthMax)))
             {
                 if( damageType == class 'DamTypeFrag' || damageType == class 'DamTypeLAW' ||
@@ -1267,8 +1263,8 @@ simulated function Destroyed()
         SpawnVolume.RemoveZEDFromSpawnList(self);
     }
 
-    if (HeadStub != none)
-        HeadStub.Destroy();
+    if (HeadStubOS != none)
+        HeadStubOS.Destroy();
 
     RemoveFlamingEffects();
 
@@ -1278,12 +1274,13 @@ simulated function Destroyed()
 //todo: simplify using int i?
 simulated function ZombieCrispUp()
 {
+    local int i;
     super.ZombieCrispUp();
 
-    Skins[0]=Texture'KFOldSchoolZeds_Textures.Shared.BurntZedSkin';
-    Skins[1]=Texture'KFOldSchoolZeds_Textures.Shared.BurntZedSkin';
-    Skins[2]=Texture'KFOldSchoolZeds_Textures.Shared.BurntZedSkin';
-    Skins[3]=Texture'KFOldSchoolZeds_Textures.Shared.BurntZedSkin';
+    for (i = 0; i < Skins.Length; i++)
+    {
+        Skins[i]=Texture'KFOldSchoolZeds_Textures.Shared.BurntZedSkin';
+    }
 }
 
 simulated function SetBurningBehavior()
@@ -1389,16 +1386,22 @@ defaultproperties
     NeckBone="Bip01 Neck"
     ExtCollAttachBoneName="Bip01 Spine"
 
-    HeadStubClass=class'GibHeadStumpOS'
-
     ObliteratedEffectClass=GibExplosionOS
 
-    MonsterHeadGiblet=class'ClotGibHeadOS'
-    MonsterThighGiblet=class'ClotGibThighOS'
-    MonsterArmGiblet=class'ClotGibArmOS'
-    MonsterLegGiblet=class'ClotGibLegOS'
-    MonsterTorsoGiblet=class'ClotGibTorsoOS'
-    MonsterLowerTorsoGiblet=class'ClotGibLowerTorsoOS'
+    HeadStubClassOS=class'GibHeadStumpOS'
+    MonsterHeadGibletOS=class'ClotGibHeadOS'
+    MonsterThighGibletOS=class'ClotGibThighOS'
+    MonsterArmGibletOS=class'ClotGibArmOS'
+    MonsterLegGibletOS=class'ClotGibLegOS'
+    MonsterTorsoGibletOS=class'ClotGibTorsoOS'
+    MonsterLowerTorsoGibletOS=class'ClotGibLowerTorsoOS'
+
+    MonsterHeadGiblet=none
+    MonsterThighGiblet=none
+    MonsterArmGiblet=none
+    MonsterLegGiblet=none
+    MonsterTorsoGiblet=none
+    MonsterLowerTorsoGiblet=none
 
     Mass=300.000000
 

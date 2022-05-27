@@ -1,10 +1,10 @@
 class ZombieClotOS extends KFMonsterOS;
 
-var     KFPawn  DisabledPawn;           
-var     bool    bGrappling;             
-var     float   GrappleEndTime;        
-var()   float   GrappleDuration;        
-var    float    ClotGrabMessageDelay;   
+var     KFPawn  DisabledPawn;
+var     bool    bGrappling;
+var     float   GrappleEndTime;
+var()   float   GrappleDuration;
+var    float    ClotGrabMessageDelay;
 
 replication
 {
@@ -165,7 +165,7 @@ defaultproperties
 {
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale1'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin'
-    
+
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Clot.Clot_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
@@ -177,48 +177,48 @@ defaultproperties
     ScoringValue=7
     Intelligence=BRAINS_Mammal
     KFRagdollName="ClotRag"
-    
+
     MovementAnims(0)="ClotWalk"
     WalkAnims(0)="ClotWalk"
     WalkAnims(1)="ClotWalk"
     WalkAnims(2)="ClotWalk"
     WalkAnims(3)="ClotWalk"
     AdditionalWalkAnims(0) = "ClotWalk2"
-    
+
     MeleeAnims(0)="Claw"
     MeleeAnims(1)="Claw2"
     MeleeAnims(2)="ClotGrapple"
-    
+
     MeleeRange=20.0
     MeleeDamage=6
     damageForce=5000
-    
+
     PuntAnim="ClotPunt"
-    
+
     bUseExtendedCollision=true
     ColOffset=(Z=48.000000)
     ColRadius=25.000000
     ColHeight=5.000000
-    
+
     SoloHeadScale=1.1
     OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=25,Y=-7,Z=45)
-    
+
     Health=130
     HealthMax=130
-    
+
     RotationRate=(Yaw=45000,Roll=0)
-    
+
     GroundSpeed=105.000000
     WaterSpeed=105.000000
     JumpZ=340.000000
-    
+
     MotionDetectorThreat=0.34
 
     CrispUpThreshhold=9
-    
+
     GrappleDuration=1.0//1.5
     ClotGrabMessageDelay=12.0
-    
-    bCannibal = true        
+
+    bCannibal = true
 }

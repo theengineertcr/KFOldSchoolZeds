@@ -9,6 +9,13 @@ event PreBeginPlay()
     LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
 }
 
+simulated function ZombieCrispUp()
+{
+    super.ZombieCrispUp();
+
+    Skins[1]=default.Skins[1];
+}
+
 function bool DoPounce()
 {
     if ( bZapped || bIsCrouched || bWantsToCrouch || (Physics != PHYS_Walking) || VSize(Location - Controller.Target.Location) > (MeleeRange * 5) )
@@ -83,7 +90,7 @@ defaultproperties
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     ZombieFlag=2
     bDoTorsoTwist=false
 
@@ -115,7 +122,7 @@ defaultproperties
     JumpZ=350.000000
     Health=70
     HealthMax=70
-    PounceSpeed=330.000000 
+    PounceSpeed=330.000000
     MotionDetectorThreat=0.34
     CrispUpThreshhold=10
 

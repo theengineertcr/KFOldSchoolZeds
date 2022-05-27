@@ -1,19 +1,41 @@
 class ExplosivesPoundZombieControllerOS extends KFMonsterControllerOS;
 
-var     float       WaitAnimTimeout;    
-var     int         AnimWaitChannel;   
-var     name        AnimWaitingFor;     
+var     float       WaitAnimTimeout;
+var     int         AnimWaitChannel;
+var     name        AnimWaitingFor;
+var    bool    bDoneSpottedCheck;
+
+state ZombieHunt
+{
+    event SeePlayer(Pawn SeenPlayer)
+    {
+        if ( !bDoneSpottedCheck && PlayerController(SeenPlayer.Controller) != none )
+        {
+            if ( !KFGameType(Level.Game).bDidSpottedScrakeMessage && FRand() < 0.25 )
+            {
+                PlayerController(SeenPlayer.Controller).Speech('AUTO', 14, "");
+                KFGameType(Level.Game).bDidSpottedScrakeMessage = true;
+            }
+
+            bDoneSpottedCheck = true;
+        }
+
+        super.SeePlayer(SeenPlayer);
+    }
+}
 
 function bool FireWeaponAt(Actor A)
 {
     if ( A == none )
         A = Enemy;
+
     if ( (A == none) || (Focus != A) )
         return false;
+
     Target = A;
 
-    if( (VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius) &&
-        ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
+    if((VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius)
+        && ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
     {
         return false;
     }
@@ -33,6 +55,8 @@ function TimedFireWeaponAtEnemy()
 
 state ZombieCharge
 {
+    function GetOutOfTheWayOfShot(vector ShotDirection, vector ShotOrigin){}
+
     function bool StrafeFromDamage(float Damage, class<DamageType> DamageType, bool bFindDest)
     {
         return false;
@@ -51,13 +75,11 @@ state ZombieCharge
     }
 
 WaitForAnim:
-
-    if ( Monster(Pawn).bShotAnim )
-    {
-        Goto('Moving');
-    }
+    While( Monster(Pawn).bShotAnim )
+        Sleep(0.25);
     if ( !FindBestPathToward(Enemy, false,true) )
         GotoState('ZombieRestFormation');
+
 Moving:
     MoveToward(Enemy);
     WhatToDoNext(17);

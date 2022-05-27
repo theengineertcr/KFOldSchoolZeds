@@ -21,20 +21,10 @@ simulated function PostNetReceive()
     if (bCharging)
     {
         MovementAnims[0]='ZombieRun';
-
-        if( !bShotAnim )
-        {
-            OnlineHeadshotOffset.Z=39;
-        }
-        else
-        {
-            OnlineHeadshotOffset.Z=57;
-        }
     }
     else if( !(bCrispified && bBurnified) )
     {
         MovementAnims[0]=default.MovementAnims[0];
-        OnlineHeadshotOffset.Z=57;
     }
 }
 
@@ -97,10 +87,10 @@ function GivenNewMarker()
 simulated function SetBurningBehavior()
 {
     if( Role == Role_Authority && IsInState('RunningState') )
-            {
+    {
         super.SetBurningBehavior();
         GotoState('');
-            }
+    }
 
     super.SetBurningBehavior();
 }
@@ -168,6 +158,7 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
+            OnlineHeadshotOffset.Z=39;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -181,6 +172,7 @@ state RunningState
         bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
+        OnlineHeadshotOffset.Z=57;
     }
 
     function RemoveHead()
@@ -209,24 +201,6 @@ state RunningState
             GoToState('SawingLoop');
         }
     }
-
-    simulated function Tick(float DeltaTime)
-    {
-        local int i;
-
-        if( MovementAnims[i] == 'ZombieRun' && !bShotAnim)
-        {
-            OnlineHeadshotOffset.Z=39;
-        }
-        else
-        {
-            OnlineHeadshotOffset.Z=57;
-        }
-
-        //    if( LookTarget!=none )
-
-        global.Tick(DeltaTime);
-    }
 }
 
 state RunningToMarker extends RunningState
@@ -249,7 +223,7 @@ State SawingLoop
     function RangedAttack(Actor A)
     {
         if ( bShotAnim )
-            return; 
+            return;
         else if ( CanAttack(A) )
         {
             Acceleration = vect(0,0,0);
@@ -264,7 +238,7 @@ State SawingLoop
     {
         super.AnimEnd(Channel);
         if( Controller!=none && Controller.Enemy!=none )
-            RangedAttack(Controller.Enemy); 
+            RangedAttack(Controller.Enemy);
     }
 
     function EndState()
@@ -286,7 +260,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
     {
-        Damage *= 0.5; 
+        Damage *= 0.5;
     }
 
     super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
@@ -333,12 +307,14 @@ simulated event SetAnimAction(name NewAction)
 
     if( NewAction=='' )
         return;
+
     if(NewAction == 'Claw')
     {
         meleeAnimIndex = Rand(3);
         NewAction = meleeAnims[meleeAnimIndex];
         CurrentDamtype = ZombieDamType[meleeAnimIndex];
     }
+
     ExpectingChannel = DoAnimAction(NewAction);
 
     if( AnimNeedsWait(NewAction) )
@@ -385,14 +361,14 @@ defaultproperties
     Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'
     Skins(2)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin'
     Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'
-    
+
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Scrake.Saw_Idle'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Scrake.Scrake_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     ZombieFlag=3
 
     bMeleeStunImmune = true
@@ -428,7 +404,7 @@ defaultproperties
     Health=1000
     HealthMax=1000
     PlayerCountHealthScale=0.5
-    PlayerNumHeadHealthScale=0.30 
+    PlayerNumHeadHealthScale=0.30
     HeadHealth=650
     BleedOutDuration=6.0
     MotionDetectorThreat=3.0
@@ -451,7 +427,7 @@ defaultproperties
 
 
     SoloHeadScale=1.3
-    OnlineHeadshotScale=1.5  
+    OnlineHeadshotScale=1.5
     OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
 
     ControllerClass=class'SawZombieControllerOS'

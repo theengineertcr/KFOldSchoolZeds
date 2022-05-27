@@ -58,7 +58,7 @@ function RangedAttack(Actor A)
         PlaySound(sound'Claw2s', SLOT_Interact);
         Controller.bPreparingMove = true;
         Acceleration = vect(0,0,0);
-    }    
+    }
     else if( Dist <= (ScreamRadius - DistBeforeScream) && !bDecapitated && !bZapped )
     {
         bShotAnim=true;
@@ -81,7 +81,7 @@ simulated function SpawnTwoShots()
     {
         if( Controller!=none && KFDoorMover(Controller.Target)!=none )
             Controller.Target.TakeDamage(ScreamDamage*0.6,self,Location,vect(0,0,0),ScreamDamageType);
-        else 
+        else
             HurtRadius(ScreamDamage ,ScreamRadius, ScreamDamageType, ScreamForce, Location);
     }
 }
@@ -97,7 +97,7 @@ simulated function DoShakeEffect()
         if (PC != none && PC.ViewTarget != none)
         {
             Dist = VSize(Location - PC.ViewTarget.Location);
-            
+
             if (Dist < ScreamRadius )
             {
                 scale = (ScreamRadius - Dist) / (ScreamRadius);
@@ -142,7 +142,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
         return;
 
     bHurtEntry = true;
-    
+
     foreach VisibleCollidingActors( class 'Actor', Victims, DamageRadius, HitLocation )
     {
         if( (Victims != self) && !Victims.IsA('FluidSurfaceInfo') && !Victims.IsA('KFMonster') && !Victims.IsA('ExtendedZCollision') )
@@ -170,7 +170,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
                 Vehicle(Victims).DriverRadiusDamage(UsedDamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
         }
     }
-    
+
     bHurtEntry = false;
 }
 
@@ -227,7 +227,7 @@ defaultproperties
 
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Siren_Die'
-    
+
     MenuName="Siren 2.5"
     ScoringValue=25
     ZombieFlag=1
@@ -238,7 +238,7 @@ defaultproperties
     IdleCrouchAnim="Siren_Idle"
     IdleWeaponAnim="Siren_Idle"
     IdleRestAnim="Siren_Idle"
-    
+
     MovementAnims(0)="Siren_Walk"
     MovementAnims(1)="Siren_Walk"
     MovementAnims(2)="Siren_Walk"
@@ -247,34 +247,34 @@ defaultproperties
     WalkAnims(1)="Siren_Walk"
     WalkAnims(2)="Siren_Walk"
     WalkAnims(3)="Siren_Walk"
-    
+
     HitAnims(0)="HitReactionF"
     HitAnims(1)="HitReactionF"
     HitAnims(2)="HitReactionF"
-    
+
     MeleeAnims(0)="Siren_Bite"
     MeleeAnims(1)="Siren_Bite"
     MeleeAnims(2)="Siren_Bite"
-    
+
     MeleeDamage=13
     MeleeRange=45.000000
     damageForce=5000
-    
+
     ZombieDamType(0)=class'KFMod.DamTypeSlashingAttack'
     ZombieDamType(1)=class'KFMod.DamTypeSlashingAttack'
     ZombieDamType(2)=class'KFMod.DamTypeSlashingAttack'
 
     PrePivot=(Z=-8)
-    
+
     bUseExtendedCollision=true
     ColOffset=(Z=48)
     ColRadius=25
     ColHeight=5
-    
+
     SoloHeadScale=1.2
     OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
-    
+
     DistBeforeScream=200
     ScreamRadius=900
     ScreamDamage=8
@@ -289,29 +289,29 @@ defaultproperties
     ShakeFadeTime=0.25
     MinShakeEffectScale=0.6
     ScreamBlurScale=0.85
-    
+
     GroundSpeed=100.0
     WaterSpeed=80.000000
-    
+
     Health=300
     HealthMax=300
     PlayerCountHealthScale=0.10
     HeadHealth=200
     PlayerNumHeadHealthScale=0.05
-    
+
     RotationRate=(Yaw=45000,Roll=0)
-    
+
     CrispUpThreshhold=7
-    
+
     MotionDetectorThreat=2.0
-    
+
     ZapThreshold=0.5
     ZappedDamageMod=1.5
 
     bCanDistanceAttackDoors=true
-    
+
     KFRagdollName="SirenRag"
-    
+
     //Yet to make this
     //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
 }

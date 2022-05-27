@@ -3,7 +3,8 @@ class BossLAWProjOS extends BossLAWProj;
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KillingFloorStatics.usx
 
-//TODO: Make this a toggle in mutator
+/*
+TODO: Make this a toggle in mutator
 simulated function PostBeginPlay()
 {
     if (Level.Game != none)
@@ -66,6 +67,7 @@ simulated function PostBeginPlay()
 
     super.PostBeginPlay();
 }
+*/
 
 defaultproperties
 {

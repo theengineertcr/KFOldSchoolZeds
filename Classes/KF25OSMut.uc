@@ -1,19 +1,19 @@
 // Mutator that replaces zeds with their 2.5 counterpart
 // GitHub: https://github.com/theengineertcr/KFOldSchoolZeds
 class KF25OSMut extends Mutator
-    config(KF25OSMut);
+    config(KFOldSchoolZeds);
 
 // We've taken this code from CssHDMut:
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
 //config vars
-var config bool bEnableRandomSkins;
+//var config bool bEnableRandomSkins;
 var config bool bEnableRangedPound;
 var config bool bEnableExplosivesPound;
 //var config bool bEnableCorpseDecay;
-//var config bool bEnableOldHealth;
-//var config bool bEnableOldSpeed;
-var config bool bEnableOldMeleeDamage;
+//var config bool bEnableOldZedHealth;
+//var config bool bEnableOldZedSpeed;
+//var config bool bEnableOldZedMeleeDamage;
 //var config bool bEnableOldGorefastChargeSpeed;
 //var config bool bEnableOldFleshpoundChargeSpeed;
 //var config bool bEnableOldCrawlerBehaviour;
@@ -51,7 +51,7 @@ event PostBeginPlay()
         return;
     }
 
-    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection && !bEnableRandomSkins)
+    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection/* && !bEnableRandomSkins*/)
     {
         KF.MonsterCollection = class'KFMonstersCollectionOS';
     }
@@ -61,12 +61,14 @@ event PostBeginPlay()
         KF.SpecialEventMonsterCollections[i] = KF.MonsterCollection;
     }
 
-    if(bEnableExplosivesPound   &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" || 
+    if(bEnableExplosivesPound   &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" ||
        bEnableRangedPound       &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
     {
-        KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundOS');
-
-        if( !bEnableRangedPound && bEnableExplosivesPound)
+        if(!bEnableExplosivesPound && bEnableRangedPound)
+        {
+            KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundOS');
+        }
+        else if( !bEnableRangedPound && bEnableExplosivesPound)
         {
             KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieExplosivesPoundOS');
         }
@@ -94,7 +96,7 @@ static function FillPlayInfo(PlayInfo PlayInfo)
   PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
   PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
   //PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);
-  PlayInfo.AddSetting(default.FriendlyName, "bEnableOldMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);
+  //PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);
 }
 
 
@@ -106,10 +108,10 @@ static event string GetDescriptionText(string Property)
       return "Enables the Fleshpound Chaingunner";
     case "bEnableExplosivesPound":
       return "Enables the Fleshpound Explosives Gunner";
-    case "bEnableRandomSkins":
-        return "Zeds use random skins";
-    case "bEnableOldMeleeDamage":
-        return "Zeds use 2.5 Melee damage";
+    //case "bEnableRandomSkins":
+    //    return "Zeds use random skins";
+    //case "bEnableOldZedMeleeDamage":
+    //    return "Zeds use 2.5 Melee damage";
     default:
       return super(Info).GetDescriptionText(Property);
   }
@@ -167,6 +169,6 @@ defaultproperties
 
     bEnableRangedPound=true
     bEnableExplosivesPound=false
-    bEnableRandomSkins=false
-    bEnableOldMeleeDamage=false
+    //bEnableRandomSkins=false
+    //bEnableOldZedMeleeDamage=false
 }

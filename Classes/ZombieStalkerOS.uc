@@ -25,7 +25,7 @@ simulated function Tick(float DeltaTime)
 
     super.Tick(DeltaTime);
     if( Level.NetMode==NM_DedicatedServer )
-        return; 
+        return;
 
     if( bZapped )
     {
@@ -33,12 +33,12 @@ simulated function Tick(float DeltaTime)
     }
     else if( Level.TimeSeconds > NextCheckTime && Health > 0 )
     {
-        NextCheckTime = Level.TimeSeconds + 0.8; 
+        NextCheckTime = Level.TimeSeconds + 0.8;
 
         //We need GetStalkerViewDistanceMulti here later
         ForEach VisibleCollidingActors(class'KFHumanPawn',HP,800,Location)
         {
-            if( HP.Health<=0 || !HP.ShowStalkers() ) 
+            if( HP.Health<=0 || !HP.ShowStalkers() )
                 continue;
 
             if( !bSpotted )
@@ -49,7 +49,7 @@ simulated function Tick(float DeltaTime)
             }
             return;
         }
-        
+
         if( bSpotted )
         {
             bSpotted = false;
@@ -94,7 +94,7 @@ simulated function CloakStalker()
 
         Projectors.Remove(0, Projectors.Length);
         bAcceptsProjectors = false;
-        
+
         SetOverlayMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb', 0.25, true);
     }
 }
@@ -118,7 +118,7 @@ simulated function UnCloakStalker()
             PlayerController(Controller.Enemy.Controller).Speech('AUTO', 17, "");
             KFGameType(Level.Game).bDidStalkerInvisibleMessage = true;
         }
-        
+
         if( Level.NetMode == NM_DedicatedServer )
             return;
 
@@ -222,7 +222,7 @@ function bool DoJump( bool bUpdating )
             if ( bCountJumps && (Inventory != none) )
                 Inventory.OwnerEvent('Jumped');
         }
-        
+
         if ( Physics == PHYS_Spider )
             Velocity = JumpZ * Floor;
         else if ( Physics == PHYS_Ladder )
@@ -237,13 +237,13 @@ function bool DoJump( bool bUpdating )
             Velocity.Z = JumpZ;
             Velocity.X = (JumpZ * 0.6);
         }
-        
+
         if ( (Base != none) && !Base.bWorldGeometry )
         {
             Velocity.Z += Base.Velocity.Z;
             Velocity.X += Base.Velocity.X;
         }
-        
+
         SetPhysics(PHYS_Falling);
         return true;
     }
@@ -269,13 +269,13 @@ defaultproperties
     AmbientSound=none
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombieJump'
-    
+
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Female_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Stalker.Stalker_Death'
 
     ScoringValue=15
     MenuName="Stalker 2.5"
-    
+
     IdleCrouchAnim="StalkerIdle"
     IdleWeaponAnim="StalkerIdle"
     IdleRestAnim="StalkerIdle"
@@ -290,19 +290,19 @@ defaultproperties
     WalkAnims(1)="ZombieRun"
     WalkAnims(2)="ZombieRun"
     WalkAnims(3)="ZombieRun"
-    
+
     MeleeAnims(0)="StalkerSpinAttack"
     MeleeAnims(1)="StalkerAttack1"
     MeleeAnims(2)="JumpAttack"
-    
+
     PuntAnim="ClotPunt"
-    
+
     SoloHeadScale=1.1
     OnlineHeadshotScale=1.2//1.4//1.2
     OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
-    
+
     CrispUpThreshhold=10
-    
+
     RotationRate=(Yaw=45000,Roll=0)
 
     MeleeRange=30.000000
@@ -314,11 +314,11 @@ defaultproperties
 
     Health=100
     HealthMax=100
-   
+
     GroundSpeed=200.000000
     WaterSpeed=180.000000
     JumpZ=350.000000
-    
+
     MotionDetectorThreat=0.25
 
     bCannibal=true

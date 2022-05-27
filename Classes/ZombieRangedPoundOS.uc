@@ -10,12 +10,12 @@ var vector TraceHitPos;
 var Emitter mTracer,mMuzzleFlash;
 var int MGFireCounter;
 var bool bClientMiniGunning;
-var             float   MGLostSightTimeout; 
-var()           float   MGDamage;          
-var()             float    MGAccuracy;            
-var()            float    MGFireRate;          
-var()             int     MGFireBurst;        
-var()   float   BurnDamageScale;        
+var             float   MGLostSightTimeout;
+var()           float   MGDamage;
+var()             float    MGAccuracy;
+var()            float    MGFireRate;
+var()             int     MGFireBurst;
+var()   float   BurnDamageScale;
 var()   float   MGFireInterval;
 
 replication
@@ -99,7 +99,7 @@ simulated function PostBeginPlay()
         {
             BurnDamageScale = default.BurnDamageScale * 0.75;
             MGDamage = default.MGDamage * 1.0;
-            MGAccuracy = default.MGAccuracy * 0.9; 
+            MGAccuracy = default.MGAccuracy * 0.9;
             MGFireBurst = default.MGFireBurst * 1.33;
             MGFireRate = default.MGFireRate * 0.833333;
         }
@@ -109,7 +109,7 @@ simulated function PostBeginPlay()
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.80;
             MGFireBurst = default.MGFireBurst * 1.67;
-            MGFireRate = default.MGFireRate * 0.68; 
+            MGFireRate = default.MGFireRate * 0.68;
         }
 
         SetMGDamage = MGDamage;
@@ -152,7 +152,7 @@ simulated Function PostNetBeginPlay()
 function RangedAttack(Actor A)
 {
     local float Dist;
-    local int LastFireTime; 
+    local int LastFireTime;
 
     if ( bShotAnim )
         return;
@@ -180,7 +180,7 @@ function RangedAttack(Actor A)
             bShotAnim = true;
             Acceleration = vect(0,0,0);
             SetAnimAction('RangedPreFireMG');
-            HandleWaitForAnim('RangedPreFireMG'); 
+            HandleWaitForAnim('RangedPreFireMG');
             MGDamage = MGDamage + Rand(4);
             MGFireCounter =  MGFireBurst;
             GoToState('FireChaingun');
@@ -191,16 +191,16 @@ function RangedAttack(Actor A)
         if (!Controller.LineOfSightTo(A))
         {
             //Maybe lower this further?
-            LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *1.0); 
+            LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *1.0);
             return;
         }
 
-        LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0); 
+        LastChainGunTime = Level.TimeSeconds + MGFireInterval + (FRand() *2.0);
 
         bShotAnim = true;
         Acceleration = vect(0,0,0);
-        SetAnimAction('RangedPreFireMG'); 
-        HandleWaitForAnim('RangedPreFireMG'); 
+        SetAnimAction('RangedPreFireMG');
+        HandleWaitForAnim('RangedPreFireMG');
 
         MGFireCounter =  MGFireBurst;
 
@@ -214,14 +214,14 @@ simulated function AddTraceHitFX( vector HitPos )
     local float hitDist;
 
     PlaySound(sound'KFOldSchoolZeds_Sounds.MinigunFire',SLOT_Misc,2,,1400,0.9+FRand()*0.2);
-    Start = GetBoneCoords('FireBone').Origin; 
+    Start = GetBoneCoords('FireBone').Origin;
     if( mTracer==none )
-        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start); 
+        mTracer = Spawn(class'KFMod.KFNewTracer',,,Start);
     else mTracer.SetLocation(Start);
     if( mMuzzleFlash==none )
     {
         mMuzzleFlash = Spawn(class'NewMinigunMFlashOS');
-        AttachToBone(mMuzzleFlash, 'FireBone'); 
+        AttachToBone(mMuzzleFlash, 'FireBone');
     }
     else mMuzzleFlash.SpawnParticle(1);
     hitDist = VSize(HitPos - Start) - 50.f;
@@ -244,7 +244,7 @@ simulated function AddTraceHitFX( vector HitPos )
 
     if( HitPos != vect(0,0,0) )
     {
-        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start))); 
+        Spawn(class'ROBulletHitEffect',,, HitPos, Rotator(Normal(HitPos - Start)));
     }
 }
 
@@ -257,13 +257,13 @@ simulated function AnimEnd( int Channel )
     {
         GetAnimParams( Channel, Sequence, Frame, Rate );
 
-        if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' ) 
+        if( Sequence != 'RangedPreFireMG' && Sequence != 'RangedFireMG' )
         {
             super.AnimEnd(Channel);
             return;
         }
 
-        PlayAnim('RangedFireMG'); 
+        PlayAnim('RangedFireMG');
         bWaitForAnim = true;
         bShotAnim = true;
         IdleTime = Level.TimeSeconds;
@@ -306,15 +306,15 @@ state FireChaingun
         {
             bShotAnim = true;
             Acceleration = vect(0,0,0);
-            SetAnimAction('RangedFireMGEnd'); 
-            HandleWaitForAnim('RangedFireMGEnd'); 
+            SetAnimAction('RangedFireMGEnd');
+            HandleWaitForAnim('RangedFireMGEnd');
             GoToState('');
         }
         else
         {
             if ( Controller.Enemy != none )
             {
-                if ( Controller.LineOfSightTo(Controller.Enemy) && FastTrace(GetBoneCoords('FireBone').Origin,Controller.Enemy.Location)) 
+                if ( Controller.LineOfSightTo(Controller.Enemy) && FastTrace(GetBoneCoords('FireBone').Origin,Controller.Enemy.Location))
                 {
                     MGLostSightTimeout = 0.0;
                     Controller.Focus = Controller.Enemy;
@@ -343,7 +343,7 @@ state FireChaingun
             bShotAnim = true;
             Acceleration = vect(0,0,0);
 
-            SetAnimAction('RangedFireMG'); 
+            SetAnimAction('RangedFireMG');
             bWaitForAnim = true;
         }
     }
@@ -357,13 +357,13 @@ state FireChaingun
         MGFireCounter--;
 
 
-        Start = GetBoneCoords('FireBone').Origin; 
+        Start = GetBoneCoords('FireBone').Origin;
         if( Controller.Focus!=none )
             R = rotator(Controller.Focus.Location-Start);
         else R = rotator(Controller.FocalPoint-Start);
         if( NeedToTurnFor(R) )
             R = Rotation;
-        Dir = Normal(vector(R)+VRand()*MGAccuracy); 
+        Dir = Normal(vector(R)+VRand()*MGAccuracy);
         End = Start+Dir*10000;
 
         bBlockHitPointTraces = false;
@@ -401,7 +401,7 @@ Begin:
         {
             bShotAnim = true;
             Acceleration = vect(0,0,0);
-            SetAnimAction('RangedFireMGEnd'); 
+            SetAnimAction('RangedFireMGEnd');
             HandleWaitForAnim('RangedFireMGEnd');
             GoToState('');
         }
@@ -507,7 +507,7 @@ simulated function HandleWaitForAnim( name NewAnim )
     Controller.GoToState('WaitForAnim');
     RageAnimDur = GetAnimDuration(NewAnim);
 
-    RangedPoundZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim); 
+    RangedPoundZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
 }
 
 simulated function bool AnimNeedsWait(name TestAnim)
@@ -552,14 +552,14 @@ defaultproperties
     Skins(0)=Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader'
     Skins(1)=Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex'
     Skins(2)=Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin'
-    
+
     AmbientSound=none
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Fleshpound.Fleshpound_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     ZombieFlag=1
 
     bFatAss=true
@@ -593,7 +593,7 @@ defaultproperties
     MGFireRate=0.06
     MGFireBurst=15
 
-    bCannibal = false 
+    bCannibal = false
     MenuName="Flesh Pound Chaingunner"
 
     IdleHeavyAnim="RangedIdle"
@@ -650,6 +650,6 @@ defaultproperties
     SoloHeadScale=1.55
     OnlineHeadshotScale=1.75
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
-    
+
     ControllerClass=class'RangedPoundZombieControllerOS'
 }

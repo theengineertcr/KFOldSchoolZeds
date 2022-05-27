@@ -11,7 +11,7 @@ simulated function timer()
     local rotator FireRotation;
 
     GetAxes(Rotation,X,Y,Z);
-    
+
     FireStart = location;
     FireRotation = rotation;
 

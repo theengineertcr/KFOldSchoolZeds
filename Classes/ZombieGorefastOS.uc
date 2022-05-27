@@ -107,7 +107,7 @@ function PlayZombieAttackHitSound()
 function RangedAttack(Actor A)
 {
     super.RangedAttack(A);
-    
+
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 )
     {
         GoToState('RunningState');
@@ -182,7 +182,7 @@ state RunningState
 
 Begin:
     GoTo('CheckCharge');
-    
+
 CheckCharge:
     if( Controller!=none && Controller.Target!=none && VSize(Controller.Target.Location-Location)<700 )
     {
@@ -220,14 +220,14 @@ defaultproperties
 {
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.GoreFast'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
-    
+
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Gorefast.Gorefast_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-    
+
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-    
+
     MeleeAnims(0)="GoreAttack1"
     MeleeAnims(1)="GoreAttack2"
     MeleeAnims(2)="GoreAttack1"

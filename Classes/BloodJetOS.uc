@@ -46,7 +46,7 @@ simulated function WallSplat()
     WallActor = Trace(WallHit, WallNormal, Location + vect(0,0,-200), Location, false);
 
     if ( WallActor != none )
-    { 
+    {
         spawn(SplatterClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
     }
 }

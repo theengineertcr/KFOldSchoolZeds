@@ -23,5 +23,5 @@ state ZombieHunt
 
 defaultproperties
 {
-     StrafingAbility=0.500000
+    StrafingAbility=0.500000
 }

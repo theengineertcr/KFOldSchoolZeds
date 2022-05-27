@@ -5,6 +5,6 @@ class DamTypeVomitOS extends DamTypeVomit
 
 defaultproperties
 {
-     HUDDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
-     HUDUberDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
+    HUDDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
+    HUDUberDamageTex=FinalBlend'KFOldSchoolZeds_Textures.HUD.VomitFB'
 }
