@@ -20,6 +20,14 @@ function bool FlipOver()
     return false;
 }
 
+function Died(Controller Killer, class<DamageType> damageType, vector HitLocation)
+{
+    if(damagetype != class'DamTypeBleedOut')
+        Gored=3;
+
+    super.Died(Killer,damageType,HitLocation);
+}
+
 simulated function bool HitCanInterruptAction()
 {
     if( bShotAnim )
