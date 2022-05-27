@@ -12,6 +12,7 @@ var()   int     GLFireBurst;
 var()   float   GLFireInterval;
 var         bool    bCharging;
 var float DistBeforeSaw;
+var bool bHasRaged;
 
 replication
 {
@@ -223,6 +224,20 @@ function bool FlipOver()
     return true;
 }
 
+function StartCharging()
+{
+    GoToState('');
+	SetAnimAction('PoundRage');
+    HandleWaitForAnim('PoundRage');
+	Acceleration = vect(0,0,0);
+	Velocity.X = 0;
+	Velocity.Y = 0;
+	bShotAnim = true;
+	Controller.GoToState('WaitForAnim');
+	KFMonsterController(Controller).bUseFreezeHack = True;
+    bHasRaged = true;
+}
+
 simulated function bool HitCanInterruptAction()
 {
     if( bShotAnim )
@@ -265,7 +280,11 @@ function RangedAttack(Actor A)
     if( !bShotAnim && !bDecapitated )
     {
         if ( float(Health)/HealthMax < 0.5 )
+        {
             GoToState('RunningState');
+            if(!bHasRaged)
+                StartCharging();
+        }
     }
 
     if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 && !bCharging)
@@ -339,13 +358,23 @@ state RunningState
             return;
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
         {
-            bShotAnim = true;
-            if(Level.Game.GameDifficulty < 5.0)
-                SetAnimAction(MeleeAnims[Rand(2)]);
+            if(FRand() < 0.10 )
+            {
+                bShotAnim = true;
+                Acceleration = vect(0,0,0);
+                SetAnimAction('RangedPreFireMG');
+                HandleWaitForAnim('RangedPreFireMG');
+
+                GLFireCounter =  1;
+                GoToState('FireGrenades');
+            }
             else
-                SetAnimAction(MeleeAnims[0]);
-            CurrentDamType = ZombieDamType[0];
-            GoToState('');
+            {
+                bShotAnim = true;
+                SetAnimAction(MeleeAnims[Rand(3)]);
+                CurrentDamType = ZombieDamType[0];
+                GoToState('');
+            }
         }
     }
 }
@@ -504,9 +533,9 @@ state FireGrenades
         class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
 
-        if(float(Health)/HealthMax < 0.5)
+        if(float(Health)/HealthMax < 0.5 && !bHasRaged && !bGLing)
         {
-            EndState();
+            StartCharging();
         }
         super.Tick(DeltaTime);
     }
@@ -521,10 +550,7 @@ state FireGrenades
         SoundRadius=default.SoundRadius;
         GLFireCounter=0;
 
-        if(float(Health)/HealthMax < 0.5)
-            LastGLTime *= 0;
-        else
-            LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
+        LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
     }
 
     function BeginState()
@@ -656,7 +682,8 @@ simulated function HandleWaitForAnim( name NewAnim )
 
 simulated function bool AnimNeedsWait(name TestAnim)
 {
-    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd' || TestAnim == 'StunState')
+    if( TestAnim == 'RangedFireMG' || TestAnim == 'RangedPreFireMG' || TestAnim == 'RangedFireMGEnd'
+        || TestAnim == 'StunState' || TestAnim == 'PoundRage')
     {
         return true;
     }
