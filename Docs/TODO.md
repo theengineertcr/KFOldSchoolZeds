@@ -15,7 +15,6 @@
 - [ ] Add option to disable Ranged Pound super Attack
 - [ ] Give a whirring sound when Ranged Pound enters prefire animation so that it's less unexpected. Maybe play a voice line as well?
 - [ ] Create an alternative Minigun Pound variant that does not use Incendiary rounds
-- [ ] Make Gorefast prefer quicker attack on Suicidal+ while charging
 - [ ] Disable collision, hittrace, projblock, etc. on death for zeds
 - [ ] Disable Siren scream after death so demos don't kill themselves shooting after a siren dies(bdecapitated return in spawntwoshot)
 - [ ] Add additional Siren "explosive block" state in controller similar to Fleshpound Spinstate that causes each explosive within range to explode.

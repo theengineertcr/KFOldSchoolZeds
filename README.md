@@ -26,15 +26,15 @@ For additional info check [**Changelog**](Docs/CHANGELOG.md) and [**TODO**](Docs
 Package name is `KFOldSchoolZeds`, Specimen names are:
 
 ```cpp
-ZombieBloat_OS
-ZombieBoss_OS
-ZombieClot_OS
-ZombieCrawler_OS
-ZombieFleshpound_OS
-ZombieGorefast_OS
-ZombieRangedPound_OS
-ZombieRangedPoundGL_OS
-ZombieScrake_OS
-ZombieSiren_OS
-ZombieStalker_OS
+ZombieBloatOS
+ZombieBossOS
+ZombieClotOS
+ZombieCrawlerOS
+ZombieFleshpoundOS
+ZombieGorefastOS
+ZombieRangedPoundOS
+ZombieExplosivesPoundOS
+ZombieScrakeOS
+ZombieSirenOS
+ZombieStalkerOS
 ```
