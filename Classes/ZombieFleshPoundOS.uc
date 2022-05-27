@@ -151,6 +151,13 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     local Vector X,Y,Z, Dir;
     local bool bIsHeadShot;
     local float HeadShotCheckScale;
+    local KFPlayerReplicationInfo KFPRI;
+
+	LastDamagedBy = instigatedBy;
+	LastDamagedByType = damageType;
+	HitMomentum = VSize(momentum);
+	LastHitLocation = hitlocation;
+	LastMomentum = momentum;
 
     GetAxes(Rotation, X,Y,Z);
 
@@ -166,7 +173,49 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         HeadShotCheckScale *= 1.25;
     }
 
-    bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
+    if ( !bDecapitated && class<KFWeaponDamageType>(damageType)!=none &&
+        class<KFWeaponDamageType>(damageType).default.bCheckForHeadShots )
+    {
+        HeadShotCheckScale = 1.0;
+
+        // Do larger headshot checks if it is a melee attach
+        if( class<DamTypeMelee>(damageType) != none )
+        {
+            HeadShotCheckScale *= 1.25;
+        }
+
+        bIsHeadShot = IsHeadShot(hitlocation, normal(momentum), HeadShotCheckScale);
+    }
+
+    if ( (bDecapitated || bIsHeadShot) && class<DamTypeBurned>(DamageType) == none && class<DamTypeFlamethrower>(DamageType) == none )
+    {
+        if(class<KFWeaponDamageType>(damageType)!=none)
+            Damage = Damage * class<KFWeaponDamageType>(damageType).default.HeadShotDamageMult;
+
+        if ( class<DamTypeMelee>(damageType) == none && KFPRI != none &&
+             KFPRI.ClientVeteranSkill != none )
+        {
+            Damage = float(Damage) * KFPRI.ClientVeteranSkill.Static.GetHeadShotDamMulti(KFPRI, KFPawn(instigatedBy), DamageType);
+        }
+
+        LastDamageAmount = Damage;
+
+        if( !bDecapitated )
+        {
+            if( bIsHeadShot )
+            {
+                if( bIsHeadShot )
+                {
+                    PlaySound(sound'KF_EnemyGlobalSndTwo.Impact_Skull', SLOT_None,2.0,true,500);
+                }
+                HeadHealth -= LastDamageAmount;
+                if( HeadHealth <= 0 || Damage > Health )
+                {
+                   RemoveHead();
+                }
+            }
+        }
+    }
 
     if ( DamageType != class 'DamTypeFrag' && DamageType != class 'DamTypeLaw' && DamageType != class 'DamTypePipeBomb'
         && DamageType != class 'DamTypeM79Grenade' && DamageType != class 'DamTypeM32Grenade'
@@ -375,6 +424,7 @@ Ignores StartCharging;
                 DifficultyModifier = 3.0; //
             }
 
+            OnlineHeadshotOffset.Z=50;
             RageEndTime = (Level.TimeSeconds + 5 * DifficultyModifier) + (FRand() * 6 * DifficultyModifier);
             NetUpdateTime = Level.TimeSeconds - 1;
         }
@@ -395,33 +445,32 @@ Ignores StartCharging;
         if( Level.NetMode!=NM_DedicatedServer )
             ClientChargingAnims();
 
+        OnlineHeadshotOffset.Z=68;
         NetUpdateTime = Level.TimeSeconds - 1;
     }
 
-    function Tick( float Delta )
-    {
-        local int i;
+	function Tick( float Delta )
+	{
+		if( !bShotAnim )
+		{
+			SetGroundSpeed(OriginalGroundSpeed * 2.3);//2.0;
+			if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
+			{
+            	GoToState('');
+			}
+		}
 
-        if( !bShotAnim )
-        {
-            if( MovementAnims[i] == 'PoundRun' )
-            {
-                OnlineHeadshotOffset.Z=50;
-            }
-            else
-            {
-                OnlineHeadshotOffset.Z=68;
-            }
-
-            SetGroundSpeed(OriginalGroundSpeed * 2.3);//2.0;
-            if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
-            {
-                GoToState('');
-            }
+        // Keep the flesh pound moving toward its target when attacking
+    	if( Role == ROLE_Authority && bShotAnim)
+    	{
+    		if( LookTarget!=None )
+    		{
+    		    Acceleration = AccelRate * Normal(LookTarget.Location - Location);
+    		}
         }
 
         global.Tick(Delta);
-    }
+	}
 
     function RangedAttack(Actor A)
     {
@@ -485,15 +534,6 @@ Ignores StartCharging;
 
         if( !bShotAnim )
         {
-            if( MovementAnims[i] == 'PoundRun' )
-            {
-                OnlineHeadshotOffset.Z=50;
-            }
-            else
-            {
-                OnlineHeadshotOffset.Z=68;
-            }
-
             SetGroundSpeed(OriginalGroundSpeed * 2.3);
             if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
             {
@@ -529,14 +569,6 @@ simulated function PostNetReceive()
         bClientCharge = bChargingPlayer;
         if (bChargingPlayer)
         {
-            if(!bShotAnim)
-            {
-                OnlineHeadshotOffset.Z=50;
-            }
-            else
-            {
-                OnlineHeadshotOffset.Z=68;
-            }
             MovementAnims[0]=ChargingAnim;
             MeleeAnims[0]='FPRageAttack';
             MeleeAnims[1]='FPRageAttack';
@@ -549,7 +581,6 @@ simulated function PostNetReceive()
             MeleeAnims[0]=default.MeleeAnims[0];
             MeleeAnims[1]=default.MeleeAnims[1];
             MeleeAnims[2]=default.MeleeAnims[2];
-            OnlineHeadshotOffset.Z=68;
             DeviceGoNormal();
         }
     }
