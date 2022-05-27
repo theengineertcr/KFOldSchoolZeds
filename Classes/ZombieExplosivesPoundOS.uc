@@ -227,14 +227,14 @@ function bool FlipOver()
 function StartCharging()
 {
     GoToState('');
-	SetAnimAction('PoundRage');
+    SetAnimAction('PoundRage');
     HandleWaitForAnim('PoundRage');
-	Acceleration = vect(0,0,0);
-	Velocity.X = 0;
-	Velocity.Y = 0;
-	bShotAnim = true;
-	Controller.GoToState('WaitForAnim');
-	KFMonsterController(Controller).bUseFreezeHack = True;
+    Acceleration = vect(0,0,0);
+    Velocity.X = 0;
+    Velocity.Y = 0;
+    bShotAnim = true;
+    Controller.GoToState('WaitForAnim');
+    KFMonsterController(Controller).bUseFreezeHack = True;
     bHasRaged = true;
 }
 
@@ -262,7 +262,6 @@ simulated function Destroyed()
 function RangedAttack(Actor A)
 {
     local float Dist;
-    local int LastFireTime;
 
     Dist = VSize(Controller.Target.Location-Location);
 
@@ -271,9 +270,7 @@ function RangedAttack(Actor A)
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
     {
         bShotAnim = true;
-        LastFireTime = Level.TimeSeconds;
-        SetAnimAction(MeleeAnims[Rand(3)]);
-        CurrentDamType = ZombieDamType[0];
+        SetAnimAction('Claw');
         PlaySound(sound'Claw2s', SLOT_Interact);
     }
 
@@ -358,7 +355,7 @@ state RunningState
             return;
         else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
         {
-            if(FRand() < 0.10 )
+            if(FRand() < 0.05 )
             {
                 bShotAnim = true;
                 Acceleration = vect(0,0,0);
@@ -371,11 +368,24 @@ state RunningState
             else
             {
                 bShotAnim = true;
-                SetAnimAction(MeleeAnims[Rand(3)]);
-                CurrentDamType = ZombieDamType[0];
+                SetAnimAction('Claw');
+                PlaySound(sound'Claw2s', SLOT_Interact);
                 GoToState('');
             }
         }
+    }
+
+    function Tick( float Delta )
+    {
+        if( Role == ROLE_Authority && bShotAnim)
+        {
+            if( LookTarget!=None )
+            {
+                Acceleration = 10000 * Normal(LookTarget.Location - Location);
+            }
+        }
+
+        global.Tick(Delta);
     }
 }
 
@@ -385,13 +395,63 @@ state RunningToMarker extends RunningState
 
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
-    local bool bIsHeadShot;
+    local bool bIsHeadshot;
+    local float HeadShotCheckScale;
+    local KFPlayerReplicationInfo KFPRI;
 
-    bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
+	LastDamagedBy = instigatedBy;
+	LastDamagedByType = damageType;
+	HitMomentum = VSize(momentum);
+	LastHitLocation = hitlocation;
+	LastMomentum = momentum;
 
     if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
     {
         Damage *= 0.5;
+    }
+
+    if ( !bDecapitated && class<KFWeaponDamageType>(damageType)!=none &&
+        class<KFWeaponDamageType>(damageType).default.bCheckForHeadShots )
+    {
+        HeadShotCheckScale = 1.0;
+
+        // Do larger headshot checks if it is a melee attach
+        if( class<DamTypeMelee>(damageType) != none )
+        {
+            HeadShotCheckScale *= 1.25;
+        }
+
+        bIsHeadShot = IsHeadShot(hitlocation, normal(momentum), HeadShotCheckScale);
+    }
+
+    if ( (bDecapitated || bIsHeadShot) && class<DamTypeBurned>(DamageType) == none && class<DamTypeFlamethrower>(DamageType) == none )
+    {
+        if(class<KFWeaponDamageType>(damageType)!=none)
+            Damage = Damage * class<KFWeaponDamageType>(damageType).default.HeadShotDamageMult;
+
+        if ( class<DamTypeMelee>(damageType) == none && KFPRI != none &&
+             KFPRI.ClientVeteranSkill != none )
+        {
+            Damage = float(Damage) * KFPRI.ClientVeteranSkill.Static.GetHeadShotDamMulti(KFPRI, KFPawn(instigatedBy), DamageType);
+        }
+
+        LastDamageAmount = Damage;
+
+        if( !bDecapitated )
+        {
+            if( bIsHeadShot )
+            {
+                if( bIsHeadShot )
+                {
+                    PlaySound(sound'KF_EnemyGlobalSndTwo.Impact_Skull', SLOT_None,2.0,true,500);
+                }
+                HeadHealth -= LastDamageAmount;
+                if( HeadHealth <= 0 || Damage > Health )
+                {
+                   RemoveHead();
+                }
+            }
+        }
     }
 
     super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
@@ -533,7 +593,7 @@ state FireGrenades
         class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
 
-        if(float(Health)/HealthMax < 0.5 && !bHasRaged && !bGLing)
+        if(float(Health)/HealthMax < 0.5 && !bHasRaged )
         {
             StartCharging();
         }
@@ -657,10 +717,6 @@ simulated event SetAnimAction(name NewAction)
     {
         bWaitForAnim = true;
     }
-    else
-    {
-        bWaitForAnim = false;
-    }
 
     if( Level.NetMode!=NM_Client )
     {
@@ -749,7 +805,7 @@ defaultproperties
     bHarpoonToBodyStuns=false
     BleedOutDuration=6.0
     MeleeRange=60//30.0
-    damageForce=-100000 //70000
+    damageForce=-200000 //70000
     Intelligence=BRAINS_Mammal
     MotionDetectorThreat=2.0
     ZapThreshold=1.25
