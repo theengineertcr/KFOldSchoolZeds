@@ -1,9 +1,10 @@
-class KFGibHeadOS extends KFGibOS;
+class KFGibHeadOS extends KFGib;
 
 defaultproperties
 {
-    GibGroupClass=class'KFHumanGibGroupOS'
-    TrailClass=class'KFGibJetOS'
+    //Temp until Old Blood gets fixed
+    GibGroupClass=Class'KFMod.KFHumanGibGroup'
+    TrailClass=Class'ROEffects.BloodTrail'
     DrawType=DT_StaticMesh
     StaticMesh=StaticMesh'KillingFloorStatics.Gib1'
     DrawScale=0.500000

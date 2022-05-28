@@ -1,49 +1,32 @@
-class KFGibOS extends GibOS;
+// Extends to gib
+class KFGibOS extends Gib;
+
+//Load packages
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFOldSchoolStatics.usx
+#exec OBJ LOAD FILE=22Patch.usx
+#exec OBJ LOAD FILE=22CharTex.utx
+#exec OBJ LOAD FILE=KillingFloorTextures.utx
 
 simulated function PostBeginPlay()
 {
-   SpawnTrail();
+    SpawnTrail();
 }
 
 simulated function HitWall( Vector HitNormal, Actor Wall )
 {
-    local float Speed, MinSpeed;
-
-    Velocity = DampenFactor * ((Velocity dot HitNormal) * HitNormal*(-2.0) + Velocity);
-    Speed = VSize(Velocity);
-
-    RandSpin(100000);
-
-    if (  Level.DetailMode == DM_Low )
-    {
-        MinSpeed = 250;
-        LifeSpan = 8.0;
-    }
-    else
-        MinSpeed = 150;
-
-    if( (Level.NetMode != NM_DedicatedServer) && !Level.bDropDetail )
-    {
-        if ( GibGroupClass.default.BloodGibClass != none )
-            Spawn( GibGroupClass.default.BloodGibClass,,, Location, Rotator(-HitNormal) );
-
-        if ( (LifeSpan < 7.3)  && (Level.DetailMode != DM_Low) )
-            PlaySound(HitSounds[Rand(2)]);
-    }
-
-    if( Speed < 20 )
-    {
-        if(!Level.bDropDetail && (Level.DetailMode != DM_Low) && GibGroupClass.default.BloodHitClass != none )
-            Spawn( GibGroupClass.default.BloodHitClass,,, Location, Rotator(-HitNormal) );
-
-        bBounce = false;
-        SetPhysics(PHYS_None);
-    }
+    //Use KFGib hitwall instead of redefining it here for efficiency
+    //KFGib does not use Gib Hitwall so we don't care about Gib
+    super(KFGib).Hitwall(HitNormal, Wall);
 }
 
 defaultproperties
 {
+    GibGroupClass=Class'xPawnGibGroup'
     LifeSpan=8.0
     DampenFactor=0.400000
     Mass=280.000000
+    //Hitsounds here
+    HitSounds(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets1'
+    HitSounds(1)=Sound'KFOldSchoolZeds_Sounds.Shared.Giblets2'
 }
