@@ -1541,5 +1541,5 @@ defaultproperties
     MoanVolume=10
     SoundVolume=200
     //add later
-    SoundGroupClass=None
+    //SoundGroupClass=
 }
