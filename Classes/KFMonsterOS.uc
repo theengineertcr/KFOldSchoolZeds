@@ -1133,12 +1133,12 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector mo
 
 	if ( KFPRI != none && Health-Damage <= 0 && KFPRI.ClientVeteranSkill != none && KFPRI.ClientVeteranSkill.static.KilledShouldExplode(KFPRI, KFPawn(instigatedBy)) )
 	{
-		Super.takeDamage(Damage + 600, instigatedBy, hitLocation, momentum, damageType);
+		Super(pawn).takeDamage(Damage + 600, instigatedBy, hitLocation, momentum, damageType);
 		HurtRadius(500, 1000, class'DamTypeFrag', 100000, Location);
 	}
 	else
 	{
-		Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
+		Super(pawn).takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
 	}
 
 	if( bIsHeadShot && Health <= 0 )
