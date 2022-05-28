@@ -37,6 +37,10 @@ var int damageConst;
 var protected array<material> MixTexturePool;
 var protected array<material> MixHairPool;
 
+// shut these, since we dont' use them
+simulated function SpawnSeveredGiblet(class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation){}
+simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
+
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
@@ -507,20 +511,17 @@ simulated function DecapFX( Vector DecapLocation, Rotator DecapRotation, bool bS
     SplatExplosion = Spawn(class 'BrainSplashOS',self,, DecapLocation );
 }
 
+// swapped SeveredHead with HeadStubOS
 simulated function SpecialHideHead()
 {
     local int BoneScaleSlot;
     local coords boneCoords;
 
-    if(HeadStubOS == none && HeadStubClassOS != none)
+    if (HeadStubOS == none && HeadStubClassOS != none)
     {
         boneScaleSlot = 4;
         HeadStubOS = Spawn(HeadStubClassOS,self);
-
-
-        boneCoords = GetBoneCoords( 'Bip01 Head' );
-
-
+        boneCoords = GetBoneCoords('Bip01 Head');
         AttachToBone(HeadStubOS, 'Bip01 Head');
     }
     else
@@ -544,12 +545,9 @@ simulated function CuteDecapFX()
     NeckRot.Yaw = -clamp(rand(24000), 14000, 24000);
     NeckRot.Roll = LeftRight * clamp(rand(8000), 2000, 8000);
     NeckRot.Pitch =  LeftRight * clamp(rand(12000), 2000, 12000);
+    // was 'neck'
     SetBoneRotation('Bip01 Neck', NeckRot);
     RemoveHead();
-}
-
-simulated function SpawnSeveredGiblet( class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation )
-{
 }
 
 simulated function HideBone(name boneName)
@@ -868,10 +866,6 @@ simulated function Tick(float DeltaTime)
 
         bOldHarpoonStunned = bHarpoonStunned;
     }
-}
-
-simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation)
-{
 }
 
 function DoorAttack(Actor A)
@@ -1294,6 +1288,7 @@ simulated function SetBurningBehavior()
 
 }
 
+// copy-paste, just to replace the blood streak decal
 event KImpact(actor other, vector pos, vector impactVel, vector impactNorm)
 {
     local int numSounds, soundNum;
