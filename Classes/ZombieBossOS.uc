@@ -1477,6 +1477,7 @@ function bool SameSpeciesAs(Pawn P)
 function bool SetBossLaught()
 {
     local Controller C;
+    local string sHealthInfo;
 
     GoToState('');
     bShotAnim = true;
@@ -1485,17 +1486,26 @@ function bool SetBossLaught()
     HandleWaitForAnim('VictoryLaugh');
     bIsBossView = true;
     bSpecialCalcView = true;
-    For( C=Level.ControllerList; C!=none; C=C.NextController )
+
+    sHealthInfo = class'Utility'.static.ParseTagsStatic("^r^" $ MenuName $ "^w^'s health is ^b^" $ health $ " ^w^/ ^b^" $ HealthMax $ "^w^. Syringes used - ^b^" $ SyringeCount);
+
+    for (C = Level.ControllerList; C != none; C = C.NextController)
     {
-        if( PlayerController(C)!=none )
+        // ignore Messaging Spectators (Web Admin)
+        if (c.bIsPlayer && PlayerController(C) != none)
         {
             PlayerController(C).SetViewTarget(self);
             PlayerController(C).ClientSetViewTarget(self);
             PlayerController(C).ClientSetBehindView(true);
+
+            // send a cute message to loosers
+            PlayerController(C).teamMessage(none, sHealthInfo, 'ZombieBossOS');
         }
     }
+
     return true;
 }
+
 simulated function bool SpectatorSpecialCalcView(PlayerController Viewer, out Actor ViewActor, out vector CameraLocation, out rotator CameraRotation)
 {
     Viewer.bBehindView = true;
