@@ -1,4 +1,4 @@
-Brings back the UT2004 zeds from KFMod 2.5 to Retail! Includes bonus zed "Fleshpound Chaingunner" as a Husk replacement and "Fleshpound Explosive Gunner", and a bonus zed inspired by the Quake 1 Ogre(Chainsaw arm, grenade launcher!) and Quake 2 Gunner(Fires multiple nades!).
+Brings back the UT2004 zeds from KFMod 2.5 to Retail! Includes bonus zed "Fleshpound Chaingunner" as a Husk replacement and "Fleshpound Explosive Gunner", a bonus zed inspired by the Quake 1 Ogre(Chainsaw arm, grenade launcher!) and Quake 2 Gunner(Fires multiple nades!).
 
 To play, select "Killing Floor" Game, enable the mutator in the mutator page and configure as desired.
 
@@ -6,7 +6,7 @@ For server owners: Mutator=KF25OSMut
 
 Additional configuration to be added in later versions. Planned variables include: Toggle of each zeds old behavior, old headshot behavior, old health, speed & damage values, and more.
 
-https://drive.google.com/file/d/1UpVLxM8sXF91E1G_yAp3kH1g9hbQOoHs/view
+Download: https://drive.google.com/file/d/1l4X4RCjGerr9-jfgPCAwlPAZVYC9YFXv/view
 
 Source: https://github.com/theengineertcr/KFOldSchoolZeds
 
