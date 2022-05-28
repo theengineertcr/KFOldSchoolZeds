@@ -20,13 +20,6 @@ replication
         TraceHitPos,bGLing,bCharging;
 }
 
-// pawn doesnt load default animset so were forcing it here
-event PreBeginPlay()
-{
-    super.PreBeginPlay();
-    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
-}
-
 simulated function PostBeginPlay()
 {
     if( Role < ROLE_Authority )

@@ -3,12 +3,6 @@ class ZombieStalkerOS extends KFMonsterOS;
 var bool bCloaking;
 var float NextCheckTime;
 
-event PreBeginPlay()
-{
-    super.PreBeginPlay();
-    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.SirenSet');
-}
-
 simulated event SetAnimAction(name NewAction)
 {
     if ( NewAction == 'Claw' || NewAction == MeleeAnims[0] || NewAction == MeleeAnims[1] || NewAction == MeleeAnims[2] )

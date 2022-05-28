@@ -8,12 +8,6 @@ replication
         bRunning;
 }
 
-event PreBeginPlay()
-{
-    super.PreBeginPlay();
-    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.BloatSet');
-}
-
 simulated function PostNetReceive()
 {
     if( !bZapped )
