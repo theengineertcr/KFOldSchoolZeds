@@ -231,7 +231,7 @@ defaultproperties
     MenuName="Siren 2.5"
     ScoringValue=25
     ZombieFlag=1
-    ControllerClass=class'SirenZombieControllerOS'
+    ControllerClass=class'ControllerSirenOS'
 
     IdleHeavyAnim="Siren_Idle"
     IdleRifleAnim="Siren_Idle"

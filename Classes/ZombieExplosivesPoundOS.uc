@@ -639,7 +639,7 @@ simulated event SetAnimAction(name NewAction)
 
     if( Controller != none )
     {
-       ExplosivesPoundZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
+       ControllerExplosivePound(Controller).AnimWaitChannel = ExpectingChannel;
     }
 
     if( AnimNeedsWait(NewAction) )
@@ -662,7 +662,7 @@ simulated function HandleWaitForAnim( name NewAnim )
     Controller.GoToState('WaitForAnim');
     RageAnimDur = GetAnimDuration(NewAnim);
 
-    ExplosivesPoundZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
+    ControllerExplosivePound(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
 }
 
 simulated function bool AnimNeedsWait(name TestAnim)
@@ -693,7 +693,7 @@ function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<D
 
 defaultproperties
 {
-    ControllerClass=class'ExplosivesPoundZombieControllerOS'
+    ControllerClass=class'ControllerExplosivePound'
     GunnerProjClass=class'GunnerGLProjectile'
 
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.ExplosivesPound'

@@ -302,7 +302,7 @@ function StartCharging()
     Controller.GoToState('WaitForAnim');
     KFMonsterControllerOS(Controller).bUseFreezeHack = true;
     RageAnimDur = GetAnimDuration('PoundRage');
-    FleshpoundZombieControllerOS(Controller).SetPoundRageTimout(RageAnimDur);
+    ControllerFleshpoundOS(Controller).SetPoundRageTimout(RageAnimDur);
     GoToState('BeginRaging');
 }
 
@@ -419,7 +419,7 @@ Ignores StartCharging;
         bChargingPlayer = false;
         bFrustrated = false;
 
-        FleshpoundZombieControllerOS(Controller).RageFrustrationTimer = 0;
+        ControllerFleshpoundOS(Controller).RageFrustrationTimer = 0;
 
         if( Health>0 && !bZapped )
         {
@@ -875,5 +875,5 @@ defaultproperties
     OnlineHeadshotOffset=(X=32,Y=-6,Z=68)
     OnlineHeadshotScale=1.5
 
-    ControllerClass=class'FleshpoundZombieControllerOS'
+    ControllerClass=class'ControllerFleshpoundOS'
 }

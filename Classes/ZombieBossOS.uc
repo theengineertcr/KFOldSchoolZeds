@@ -1143,7 +1143,7 @@ Begin:
         Sleep(0.5);
         SneakCount++;
 
-        if( SneakCount > 1000 || (Controller != none && BossZombieControllerOS(Controller).bAlreadyFoundEnemy) ) //BossZombieController to BossZombieControllerOS
+        if( SneakCount > 1000 || (Controller != none && ControllerBossOS(Controller).bAlreadyFoundEnemy) ) //BossZombieController to ControllerBossOS
         {
             GoToState('');
         }
@@ -1309,7 +1309,7 @@ simulated event SetAnimAction(name NewAction)
 
     if( Controller != none )
     {
-       BossZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
+       ControllerBossOS(Controller).AnimWaitChannel = ExpectingChannel;
     }
 
     if( AnimNeedsWait(NewAction) )
@@ -1337,7 +1337,7 @@ simulated function HandleWaitForAnim( name NewAnim )
     Controller.GoToState('WaitForAnim');
     RageAnimDur = GetAnimDuration(NewAnim);
 
-    BossZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim); //BossZombieController to BossZombieControllerOS
+    ControllerBossOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim); //BossZombieController to ControllerBossOS
 }
 
 simulated function bool AnimNeedsWait(name TestAnim)
@@ -1716,5 +1716,5 @@ defaultproperties
     OnlineHeadshotScale=1.5//1.2
     OnlineHeadshotOffset=(X=28,Y=-6,Z=70) //Z=75
 
-    ControllerClass=class'BossZombieControllerOS'
+    ControllerClass=class'ControllerBossOS'
 }

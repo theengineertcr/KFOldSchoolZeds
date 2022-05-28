@@ -266,5 +266,5 @@ defaultproperties
     ColOffset=(Z=52)
     ColRadius=25
     ColHeight=10
-    ControllerClass=class'GorefastControllerOS'
+    ControllerClass=class'ControllerGorefastOS'
 }

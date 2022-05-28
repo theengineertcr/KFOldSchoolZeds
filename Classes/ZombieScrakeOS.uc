@@ -430,5 +430,5 @@ defaultproperties
     OnlineHeadshotScale=1.5
     OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
 
-    ControllerClass=class'SawZombieControllerOS'
+    ControllerClass=class'ControllerScrakeOS'
 }

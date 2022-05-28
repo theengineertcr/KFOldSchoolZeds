@@ -160,5 +160,5 @@ defaultproperties
     SoloHeadScale=1.1
     OnlineHeadshotScale=1.1
     OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
-    ControllerClass=class'CrawlerControllerOS'
+    ControllerClass=class'ControllerCrawlerOS'
 }

@@ -480,7 +480,7 @@ simulated event SetAnimAction(name NewAction)
 
     if( Controller != none )
     {
-       RangedPoundZombieControllerOS(Controller).AnimWaitChannel = ExpectingChannel;
+       ControllerRangedPoundOS(Controller).AnimWaitChannel = ExpectingChannel;
     }
 
     if( AnimNeedsWait(NewAction) )
@@ -507,7 +507,7 @@ simulated function HandleWaitForAnim( name NewAnim )
     Controller.GoToState('WaitForAnim');
     RageAnimDur = GetAnimDuration(NewAnim);
 
-    RangedPoundZombieControllerOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
+    ControllerRangedPoundOS(Controller).SetWaitForAnimTimout(RageAnimDur,NewAnim);
 }
 
 simulated function bool AnimNeedsWait(name TestAnim)
@@ -651,5 +651,5 @@ defaultproperties
     OnlineHeadshotScale=1.75
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
 
-    ControllerClass=class'RangedPoundZombieControllerOS'
+    ControllerClass=class'ControllerRangedPoundOS'
 }
