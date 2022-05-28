@@ -1254,73 +1254,11 @@ function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
     return (Distance < (HeadRadius * HeadScale * AdditionalScale));
 }
 
+// added HeadStubOS
 simulated function Destroyed()
 {
-    local int i;
-
-    for( i=0; i<Attached.length; i++ )
-    {
-        if( Emitter(Attached[i])!=none && Attached[i].IsA('DismembermentJet') )
-        {
-            Emitter(Attached[i]).Kill();
-            Attached[i].LifeSpan = 2;
-        }
-
-        if( SealSquealProjectile(Attached[i])!=none )
-        {
-            SealSquealProjectile(Attached[i]).HandleBasePawnDestroyed();
-        }
-    }
-
-    if( MyExtCollision!=none )
-        MyExtCollision.Destroy();
-
-    if( PlayerShadow != none )
-        PlayerShadow.Destroy();
-
-    if ( FlamingFXs != none )
-    {
-        FlamingFXs.Emitters[0].SkeletalMeshActor = none;
-        FlamingFXs.Destroy();
-    }
-
-    if(RealtimeShadow !=none)
-        RealtimeShadow.Destroy();
-
-    if( SeveredLeftArm != none )
-    {
-        SeveredLeftArm.Destroy();
-    }
-
-    if( SeveredRightArm != none )
-    {
-        SeveredRightArm.Destroy();
-    }
-
-    if( SeveredRightLeg != none )
-    {
-        SeveredRightLeg.Destroy();
-    }
-
-    if( SeveredLeftLeg != none )
-    {
-        SeveredLeftLeg.Destroy();
-    }
-
-    if( SeveredHead != none )
-    {
-        SeveredHead.Destroy();
-    }
-
-    if(SpawnVolume != none)
-    {
-        SpawnVolume.RemoveZEDFromSpawnList(self);
-    }
-
     if (HeadStubOS != none)
         HeadStubOS.Destroy();
-
-    RemoveFlamingEffects();
 
     super.Destroyed();
 }
