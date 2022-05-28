@@ -3,11 +3,6 @@ class ZombieCrawlerOS extends KFMonsterOS;
 var() float PounceSpeed;
 var bool bPouncing;
 
-event PreBeginPlay()
-{
-    super.PreBeginPlay();
-    LinkSkelAnim(MeshAnimation'KFCharacterModelsOldSchool.InfectedWhiteMale1');
-}
 
 simulated function ZombieCrispUp()
 {
@@ -80,7 +75,7 @@ static simulated function PreCacheMaterials(LevelInfo myLevel)
 
 defaultproperties
 {
-    Mesh=SkeletalMesh'KFCharacterModels.Shade'
+    Mesh=SkeletalMesh'KFCharacterModelsOldSchool.Shade'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin'
     Skins(1)=FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB'
 
