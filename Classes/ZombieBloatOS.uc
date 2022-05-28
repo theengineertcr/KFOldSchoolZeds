@@ -218,60 +218,6 @@ function RemoveHead()
 
 simulated function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, Vector momentum, class<DamageType> damageType, optional int HitIndex)
 {
-    local bool bIsHeadshot;
-    local float HeadShotCheckScale;
-    local KFPlayerReplicationInfo KFPRI;
-
-	LastDamagedBy = instigatedBy;
-	LastDamagedByType = damageType;
-	HitMomentum = VSize(momentum);
-	LastHitLocation = hitlocation;
-	LastMomentum = momentum;
-
-    if ( !bDecapitated && class<KFWeaponDamageType>(damageType)!=none &&
-        class<KFWeaponDamageType>(damageType).default.bCheckForHeadShots )
-    {
-        HeadShotCheckScale = 1.0;
-
-        // Do larger headshot checks if it is a melee attach
-        if( class<DamTypeMelee>(damageType) != none )
-        {
-            HeadShotCheckScale *= 1.25;
-        }
-
-        bIsHeadShot = IsHeadShot(hitlocation, normal(momentum), HeadShotCheckScale);
-    }
-
-    if ( (bDecapitated || bIsHeadShot) && class<DamTypeBurned>(DamageType) == none && class<DamTypeFlamethrower>(DamageType) == none )
-    {
-        if(class<KFWeaponDamageType>(damageType)!=none)
-            Damage = Damage * class<KFWeaponDamageType>(damageType).default.HeadShotDamageMult;
-
-        if ( class<DamTypeMelee>(damageType) == none && KFPRI != none &&
-             KFPRI.ClientVeteranSkill != none )
-        {
-            Damage = float(Damage) * KFPRI.ClientVeteranSkill.Static.GetHeadShotDamMulti(KFPRI, KFPawn(instigatedBy), DamageType);
-        }
-
-        LastDamageAmount = Damage;
-
-        if( !bDecapitated )
-        {
-            if( bIsHeadShot )
-            {
-                if( bIsHeadShot )
-                {
-                    PlaySound(sound'KF_EnemyGlobalSndTwo.Impact_Skull', SLOT_None,2.0,true,500);
-                }
-                HeadHealth -= LastDamageAmount;
-                if( HeadHealth <= 0 || Damage > Health )
-                {
-                   RemoveHead();
-                }
-            }
-        }
-    }
-
     if (DamageType == class 'Burned')
         Damage *= 1.5;
 
