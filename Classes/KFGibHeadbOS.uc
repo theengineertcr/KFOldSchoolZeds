@@ -1,4 +1,4 @@
-class KFGibHeadbOS extends KFGib;
+class KFGibHeadbOS extends KFGibOS;
 
 defaultproperties
 {
