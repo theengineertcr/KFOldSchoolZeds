@@ -31,6 +31,8 @@ var config bool bEnableExplosivesPound;
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KF_M79Snd.uax
 
+var private array< class<KFMonsterOS> > ZedList;
+
 //=======================================
 //          PostBeginPlay
 //=======================================
@@ -75,13 +77,33 @@ event PostBeginPlay()
     }
     else
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";
-
-    SetTimer(0.10, false);
 }
 
-simulated function Timer()
+// precache materials
+function bool CheckReplacement(Actor Other, out byte bSuperRelevant)
 {
-    super(Actor).Timer();
+    // catch the PRI, most likely player is 'alive' at this point
+    if (PlayerReplicationInfo(Other) != none)
+    {
+        PreCacheMaterials(PlayerController(PlayerReplicationInfo(other).owner));
+    }
+
+    return super.CheckReplacement(Other, bSuperRelevant);
+}
+
+// parse zed list and load their assets to avoid lags on their first appearance
+final private function PreCacheMaterials(PlayerController pc)
+{
+    local int i;
+
+    // just in case
+    if (Level.NetMode != NM_DedicatedServer || pc == none)
+        return;
+
+    for (i = 0; i < ZedList.length; i++)
+    {
+        ZedList[i].static.PreCacheMaterials(Level);
+    }
 }
 
 //=======================================
@@ -117,41 +139,6 @@ static event string GetDescriptionText(string Property)
   }
 }
 
-//This is potentially useless?
-static simulated function PreCacheMaterials(LevelInfo myLevel)
-{
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Bloat.BloatSkin');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Crawler.CrawlerSkin');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.StalkerHairShader');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.StalkerCloakShader');
-    myLevel.AddPrecacheMaterial(Finalblend 'KFOldSchoolZeds_Textures.StalkerGlowFB');
-    myLevel.AddPrecacheMaterial(Material'KFOldSchoolZeds_Textures.StalkerDeCloakfb');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.StalkerSkin');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Siren.SirenSkin');
-    myLevel.AddPrecacheMaterial(FinalBlend 'KFOldSchoolZeds_Textures.StalkerHairFB');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Siren.SirenHairFB');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Crawler.CrawlerHairFB');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.AutoTurretGunTex');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.GunPound.GunPoundSkin');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.RedPoundMeter');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Fleshpound.AmberPoundMeter');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomRedShader');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.FPDeviceBloomAmberShader');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.Fleshpound.PoundBitsShader');
-    myLevel.AddPrecacheMaterial(Texture'KFOldSchoolZeds_Textures.Fleshpound.PoundSkin');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFPatch2.BossHairFB');
-    myLevel.AddPrecacheMaterial(FinalBlend'KFOldSchoolZeds_Textures.Patriarch.BossCloakFizzleFB');
-    myLevel.AddPrecacheMaterial(Finalblend'KFOldSchoolZeds_Textures.Patriarch.BossGlowFB');
-    myLevel.AddPrecacheMaterial(Texture'KFPatch2.BossBits');
-    myLevel.AddPrecacheMaterial(Texture'KFPatch2.GunPoundSkin');
-    myLevel.AddPrecacheMaterial(Texture'KFPatch2.BossGun');
-    myLevel.AddPrecacheMaterial(Texture'KillingFloorLabTextures.LabCommon.voidtex');
-    myLevel.AddPrecacheMaterial(Shader'KFPatch2.LaserShader');
-    myLevel.AddPrecacheMaterial(Shader'KFOldSchoolZeds_Textures.BossCloakShader');
-}
-
 //=======================================
 //          DefaultProperties
 //=======================================
@@ -171,4 +158,16 @@ defaultproperties
     bEnableExplosivesPound=false
     //bEnableRandomSkins=false
     //bEnableOldZedMeleeDamage=false
+
+    ZedList(00)=class'ZombieBloatOS'
+    ZedList(01)=class'ZombieBossOS'
+    ZedList(02)=class'ZombieClotOS'
+    ZedList(03)=class'ZombieCrawlerOS'
+    ZedList(04)=class'ZombieExplosivesPoundOS'
+    ZedList(05)=class'ZombieFleshPoundOS'
+    ZedList(06)=class'ZombieGorefastOS'
+    ZedList(07)=class'ZombieRangedPoundOS'
+    ZedList(08)=class'ZombieScrakeOS'
+    ZedList(09)=class'ZombieSirenOS'
+    ZedList(10)=class'ZombieStalkerOS'
 }
