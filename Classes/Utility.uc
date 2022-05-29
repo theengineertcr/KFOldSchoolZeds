@@ -23,6 +23,18 @@ final static function string ParseTagsStatic(string input)
     return input;
 }
 
+// remove tags, aka ^r^
+final static function string StriptTagsStatic(string input)
+{
+    local int i;
+
+    for (i = 0; i < default.ColorList.Length; i++)
+    {
+        ReplaceText(input, default.ColorList[i].ColorTag, "");
+    }
+    return input;
+}
+
 // remove colors, aka chr(27)
 final static function string StripColorStatic(string s)
 {
