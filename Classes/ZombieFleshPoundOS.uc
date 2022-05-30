@@ -145,12 +145,9 @@ function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageTyp
     PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
 }
 
-//Dont touch this too much unless necessary
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
-    //We dont care about the block stuff as it isnt used
-    local int OldHealth;//, BlockSlip;
-    //local float BlockChance;//, RageChance;
+    local int OldHealth;
     local Vector X,Y,Z, Dir;
     local bool bIsHeadShot;
     local float HeadShotCheckScale;
@@ -160,11 +157,10 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     if( LastDamagedTime<Level.TimeSeconds )
         TwoSecondDamageTotal = 0;
     LastDamagedTime = Level.TimeSeconds+2;
-    OldHealth = Health; // Corrected issue where only the Base Health is counted toward the FP's Rage in Balance Round 6(second attempt)
+    OldHealth = Health;
 
     HeadShotCheckScale = 1.0;
 
-    // Do larger headshot checks if it is a melee attach
     if( class<DamTypeMelee>(damageType) != none )
     {
         HeadShotCheckScale *= 1.25;
@@ -172,15 +168,12 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
 
-    // He takes less damage to small arms fire (non explosives)
-    // Frags and LAW rockets will bring him down way faster than bullets and shells.
     if ( DamageType != class 'DamTypeFrag' && DamageType != class 'DamTypeLaw' && DamageType != class 'DamTypePipeBomb'
         && DamageType != class 'DamTypeM79Grenade' && DamageType != class 'DamTypeM32Grenade'
         && DamageType != class 'DamTypeM203Grenade' && DamageType != class 'DamTypeMedicNade'
         && DamageType != class 'DamTypeSPGrenade' && DamageType != class 'DamTypeSealSquealExplosion'
         && DamageType != class 'DamTypeSeekerSixRocket' )
     {
-        // Don't reduce the damage so much if its a high headshot damage weapon
         if( bIsHeadShot && class<KFWeaponDamageType>(damageType)!=none &&
             class<KFWeaponDamageType>(damageType).default.HeadShotDamageMult >= 1.5 )
         {
@@ -188,20 +181,17 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         }
         else if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
         {
-            Damage *= 0.35; // was 0.3 in Balance Round 1, then 0.4 in Round 2, then 0.3 in Round 3/4, and 0.35 in Round 5
+            Damage *= 0.35;
         }
         else
         {
             Damage *= 0.5;
         }
     }
-    // double damage from handheld explosives or poison
     else if (DamageType == class 'DamTypeFrag' || DamageType == class 'DamTypePipeBomb' || DamageType == class 'DamTypeMedicNade' )
     {
         Damage *= 2.0;
     }
-    // A little extra damage from the grenade launchers, they are HE not shrapnel,
-    // and its shrapnel that REALLY hurts the FP ;)
     else if( DamageType == class 'DamTypeM79Grenade' || DamageType == class 'DamTypeM32Grenade'
          || DamageType == class 'DamTypeM203Grenade' || DamageType == class 'DamTypeSPGrenade'
          || DamageType == class 'DamTypeSealSquealExplosion' || DamageType == class 'DamTypeSeekerSixRocket')
@@ -209,46 +199,24 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         Damage *= 1.25;
     }
 
-    // Shut off his "Device" when dead
     if (Damage >= Health)
         PostNetReceive();
 
-    // Damage Berserk responses...
-    // Start a charge.
-    // The Lower his health, the less damage needed to trigger this response.
-    // Tempted to bring this KFMod behavior back but it'd fuck with the balance
-    //RageChance = (( HealthMax / Health * 300) - TwoSecondDamageTotal );
 
-    // Calculate whether the shot was coming from in front.
     Dir = -Normal(Location - hitlocation);
-    //BlockSlip = rand(5);//No more blocking
-
-    //if (AnimAction == 'PoundBlock')
-    //    Damage *= BlockDamageReduction;
-
-    //if (Dir Dot X > 0.7 || Dir == vect(0,0,0))
-    //    BlockChance = (Health / HealthMax * 100 ) - Damage * 0.25;
-
-
-    // We are healthy enough to block the attack, and we succeeded the blockslip.
-    // only 40% damage is done in this circumstance.
-    //TODO - bring this back?
-
-    // Log (Damage);
 
     if (damageType == class 'DamTypeVomit')
     {
-        Damage = 0; // nulled
+        Damage = 0;
     }
     else if( damageType == class 'DamTypeBlowerThrower' )
     {
-       // Reduced damage from the blower thrower bile, but lets not zero it out entirely
        Damage *= 0.25;
     }
 
     super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType,HitIndex) ;
 
-    TwoSecondDamageTotal += OldHealth - Health; // Corrected issue where only the Base Health is counted toward the FP's Rage in Balance Round 6(second attempt)
+    TwoSecondDamageTotal += OldHealth - Health;
 
     if (!bDecapitated && TwoSecondDamageTotal > RageDamageThreshold && !bChargingPlayer &&
         !bZapped && (!(bCrispified && bBurnified) || bFrustrated) )
@@ -437,14 +405,13 @@ Ignores StartCharging;
 	{
 		if( !bShotAnim )
 		{
-			SetGroundSpeed(OriginalGroundSpeed * 2.3);//2.0;
+			SetGroundSpeed(OriginalGroundSpeed * 2.3);
 			if( !bFrustrated && !bZedUnderControl && Level.TimeSeconds>RageEndTime )
 			{
             	GoToState('');
 			}
 		}
 
-        // Keep the flesh pound moving toward its target when attacking
     	if( Role == ROLE_Authority && bShotAnim)
     	{
     		if( LookTarget!=None )
@@ -514,8 +481,6 @@ Ignores StartCharging;
 
     function Tick( float Delta )
     {
-        local int i;
-
         if( !bShotAnim )
         {
             SetGroundSpeed(OriginalGroundSpeed * 2.3);
@@ -830,7 +795,7 @@ defaultproperties
     OffsetRate=(X=300.000000,Y=300.000000,Z=300.000000)
     OffsetTime=3.500000
     MeleeRange=55.000000
-    damageForce=15000//Old Fleshy had an extra 0 at the end...tempted to add that back for fun.
+    damageForce=15000 //Old Fleshy had an extra 0 at the end...tempted to add that back for fun.
     GroundSpeed=130.000000
     WaterSpeed=120.000000
     MeleeDamage=35
