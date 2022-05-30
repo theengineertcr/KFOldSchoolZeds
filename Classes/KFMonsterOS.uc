@@ -37,6 +37,8 @@ var int damageConst;
 var protected array<material> MixTexturePool;
 var protected array<material> MixHairPool;
 
+var private bool bHeadSpawned;
+
 // shut these, since we dont' use them
 simulated function SpawnSeveredGiblet(class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation){}
 simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
@@ -44,6 +46,12 @@ simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
+
+    // N.B. this must be commented at some point!
+    // draw some accurate heads (i hope :D)
+    // it will be deleted  on it's own
+    if (!bHeadSpawned)
+        spawn(class'DebugHeadHitbox', self);
 
     if (Level.Game != none && !bDiffAdjusted )
     {
