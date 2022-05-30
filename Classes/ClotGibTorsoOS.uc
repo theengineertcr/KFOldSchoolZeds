@@ -7,9 +7,8 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-    //Temp until Old Blood gets fixed
-    GibGroupClass=Class'KFMod.KFHumanGibGroup'
-    TrailClass=Class'ROEffects.BloodTrail'
+    GibGroupClass=Class'KFHumanGibGroupOS'
+    TrailClassOS=Class'KFGibJetOS'
     DampenFactor=0.200000
     DrawType=DT_StaticMesh
     StaticMesh=StaticMesh'KFOldSchoolStatics.ClotGibTorso'

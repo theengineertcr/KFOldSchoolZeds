@@ -1,4 +1,7 @@
-class FleshHitEmitterOS extends KFHitEmitterOS;
+class FleshHitEmitterOS extends KFHitEmitter;
+
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
+#exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 
 defaultproperties
 {
