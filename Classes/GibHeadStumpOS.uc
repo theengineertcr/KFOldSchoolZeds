@@ -7,8 +7,8 @@ simulated function PostBeginPlay()
 
 defaultproperties
 {
-    GibGroupClass=class'KFHumanGibGroupOS'
-    TrailClass=class'KFGibJetOS'
+    GibGroupClass=Class'KFHumanGibGroupOS'
+    TrailClassOS=Class'KFGibJetOS'
     DampenFactor=0.300000
     DrawType=DT_StaticMesh
     StaticMesh=StaticMesh'22Patch.Severed_Head'
