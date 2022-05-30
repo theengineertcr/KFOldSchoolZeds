@@ -20,7 +20,7 @@
 - [ ] Create an alternative Minigun Pound variant that does not use Incendiary rounds
 - [ ] Explosive Pound movement speed increase
 - [ ] Explosive Pound to prioritize Attack 1 when charging on Sui+
-- [ ] Alternative Nerfed Explosives Pound that fires a single projectile dealing less damage.
+- [ ] Explosive Pound spawns alongside Fleshpounds
 - [ ] Add additional Siren "explosive block" state in controller similar to Fleshpound Spinstate that causes each explosive within range to explode.
 - [ ] Redo animation for RangedPreFireMG, removing excessive head shake and point minigun accurately
 - [ ] Mirror Scrake melee animation for Explosive Pound(probably never?)
