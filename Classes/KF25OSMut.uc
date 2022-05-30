@@ -16,20 +16,27 @@ class KF25OSMut extends Mutator
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
 //config vars
-//var config bool bEnableRandomSkins;
-var config bool bEnableRangedPound;
-var config bool bEnableExplosivesPound;
-//var config bool bEnableCorpseDecay;
-//var config bool bEnableOldZedHealth;
-//var config bool bEnableOldZedSpeed;
-//var config bool bEnableOldZedMeleeDamage;
-//var config bool bEnableOldGorefastChargeSpeed;
-//var config bool bEnableOldFleshpoundChargeSpeed;
-//var config bool bEnableOldCrawlerBehaviour;
-//var config bool bEnableOldScrakeBehavior;
-//var config bool bEnableOldFleshpoundBehavior;
-//var config bool bEnableOldHeadshotBehaviour;
-//var config bool bEnableNoHealthScaling;
+var config bool bEnableCorpseDecay;                 // Zed corpses disappear similarly to KF1
+var config bool bEnableRangedPound;                 // Fleshpound Chaingunners replace Husks
+var config bool bEnableExplosivesPound;             // Explosive Fleshpound Gunners spawn Alongside Fleshphounds
+var config bool bEnableOldZedHealth;                // Zeds use 2.5 health values and modifiers
+var config bool bEnableOldZedSpeed;                 // Zeds use 2.5 speed values and modifiers
+var config bool bEnableOldZedDamage;                // Zeds use 2.5 damage values and modifiers
+var config bool bEnableOldZedRange;                 // Zeds use 2.5 Melee, Puke, Scream, etc. range
+var config bool bEnableOldZedKnockback;             // Zeds use 2.5 Melee Knockback values
+var config bool bEnableOldBloatPuke;                // Bloat uses 2.5 puke behavior
+var config bool bEnableOldCrawlerBehaviour;         // Crawler uses 2.5 leaping behavior
+var config bool bEnableOldGorefastChargeRange;      // The range at which a Gorefast begins to charge. Enables 2.5 range.
+var config bool bEnableOldGorefastChargeSpeed;      // Use 2.5 Gorefast charge speed multiplier.
+var config bool bEnableSirenNadeBoom;               // Swaps Siren Scream Damage type, causing explosives to explode
+var config bool bEnableOldScrakeBehavior;           // Use 2.5 Scrake behavior: No rage charging.
+var config bool bEnableOldFleshpoundBehavior;       // Use 2.5 Fleshpound behavior: No LoS rage.
+var config bool bEnableOldFleshpoundChargeSpeed;    // Use 2.5 Fleshpound charge speed multiplier.
+var config bool bEnableOldFleshpoundSpinAttack;     // Fleshpound uses his spin attack/state
+var config bool bEnableOldHeadshotBehavior;         // Use 2.5 Headshot behavior. No head health/bleedout. Damage Vs. Health / HealthMax * Multiplier determines if big zed loses head.
+var config bool bEnableOldWaveStyle;                // Spawn same amount of zeds in 2.5
+var config bool bEnableNoHealthScaling;             // Zed health values does not scale with player count.
+var config bool bEnableRandomSkins;                 // Zeds use a random skin from other zeds
 
 var private array< class<KFMonsterOS> > ZedList;
 var bool bShowHeadHitbox;
@@ -60,7 +67,7 @@ event PostBeginPlay()
         return;
     }
 
-    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection/* && !bEnableRandomSkins*/)
+    if (KF.MonsterCollection == class'KFGameType'.default.MonsterCollection)
     {
         KF.MonsterCollection = class'KFMonstersCollectionOS';
     }
@@ -70,17 +77,10 @@ event PostBeginPlay()
         KF.SpecialEventMonsterCollections[i] = KF.MonsterCollection;
     }
 
-    if(bEnableExplosivesPound   &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "" ||
-       bEnableRangedPound       &&  KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
+    if(bEnableRangedPound && KF.MonsterCollection.default.MonsterClasses[8].MClassName != "")
     {
-        if(!bEnableExplosivesPound && bEnableRangedPound)
-        {
+        if(bEnableRangedPound)
             KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundOS');
-        }
-        else if( !bEnableRangedPound && bEnableExplosivesPound)
-        {
-            KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieExplosivesPoundOS');
-        }
     }
     else
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";
@@ -117,17 +117,16 @@ final private function PreCacheMaterials(PlayerController pc)
 simulated function Tick(float DeltaTime)
 {
     local PlayerController PC;
-    local KFOSInteraction KFOSInt;
+    local Interaction KFOSInt;
 
     PC = Level.GetLocalPlayerController();
     if (PC != None)
     {
         KFOSInt = PC.Player.InteractionMaster.AddInteraction(string(class'KFOSInteraction'), PC.Player);
-        KFOSInt.Mut = Self;
+        KFOSInteraction(KFOSInt).Mut = Self;
     }
     Disable('Tick');
 }
-
 // fancy, colored Mutate system
 function Mutate(string MutateString, PlayerController Sender)
 {
@@ -246,13 +245,29 @@ final private function string getSenderName(PlayerController Sender)
 
 static function FillPlayInfo(PlayInfo PlayInfo)
 {
-  super(Info).FillPlayInfo(PlayInfo);
+    super(Info).FillPlayInfo(PlayInfo);
 
-  //TODO: Make it so you can't have both Ranged & Explosive pound enabled at same time? Is that even possible?
-  PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
-  PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
-  //PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Randomized Skins", 0, 0, "Check",,,,true);
-  //PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedMeleeDamage", "Old Melee Damage", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableCorpseDecay", "Corpses Decay", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedHealth", "Old Zed Health", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedSpeed", "Old Zed Speed", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedDamage", "Old Zed Damage", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedRange", "Old Zed Range", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldZedKnockback", "Old Zed Knockback", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldBloatPuke", "Old Bloat Puke", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldCrawlerBehaviour", "Old Crawler Leap", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldGorefastChargeRange", "Old Gorefast Charge Distance", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldGorefastChargeSpeed", "Old Gorefast Charge Speed", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableSirenNadeBoom", "Old Siren Scream", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldScrakeBehavior", "Disable Scrake Charge", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundBehavior", "Old Fleshpound Rage", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundChargeSpeed", "Old Fleshpound Charge Speed", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundSpinAttack", "Fleshpound Spin Attack", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldHeadshotBehavior", "Old Headshot System", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldWaveStyle", "Old Wave System", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableNoHealthScaling", "Disable Health Scaling", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableRandomSkins", "Mixed skins", 0, 0, "Check",,,,true);
 }
 
 
@@ -260,14 +275,48 @@ static event string GetDescriptionText(string Property)
 {
   switch (Property)
   {
+    case "bEnableCorpseDecay":
+        return "Zed corpses disappear, similarly to KF1";
     case "bEnableRangedPound":
       return "Enables the Fleshpound Chaingunner";
     case "bEnableExplosivesPound":
       return "Enables the Fleshpound Explosives Gunner";
-    //case "bEnableRandomSkins":
-    //    return "Zeds use random skins";
-    //case "bEnableOldZedMeleeDamage":
-    //    return "Zeds use 2.5 Melee damage";
+    case "bEnableOldZedHealth":
+        return "Zeds use 2.5 health values and modifiers";
+    case "bEnableOldZedSpeed":
+        return "Zeds use 2.5 speed values and modifiers";
+    case "bEnableOldZedDamage":
+        return "Zeds use old Melee/Scream/Puke damage";
+    case "bEnableOldZedRange":
+        return "Zeds use 2.5 Melee, Puke, Scream, etc. range";
+    case "bEnableOldZedKnockback":
+        return "Zeds use 2.5 Melee Knockback values";
+    case "bEnableOldBloatPuke":
+        return "Bloat uses 2.5 puke behavior";
+    case "bEnableOldCrawlerBehaviour":
+        return "Crawler uses 2.5 leaping behavior";
+    case "bEnableOldGorefastChargeRange":
+        return "The range at which a Gorefast begins to charge. Enables 2.5 range.";
+    case "bEnableOldGorefastChargeSpeed":
+        return "Use 2.5 Gorefast charge speed multiplier.";
+    case "bEnableSirenNadeBoom":
+        return "Sirens scream causes explosives to explode.";
+    case "bEnableOldScrakeBehavior":
+        return "Use 2.5 Scrake behavior: No rage charging.";
+    case "bEnableOldFleshpoundBehavior":
+        return "Use 2.5 Fleshpound behavior: No LoS rage.";
+    case "bEnableOldFleshpoundChargeSpeed":
+        return "Use 2.5 Fleshpound charge speed multiplier.";
+    case "bEnableOldFleshpoundSpinAttack":
+        return "Enables Fleshpound buggy spinning attack";
+    case "bEnableOldHeadshotBehavior":
+        return "Use 2.5 Headshot behavior. No head health/bleedout.";
+    case "bEnableOldWaveStyle":
+        return "Uses 2.5 style Wave systems";
+    case "bEnableNoHealthScaling":
+        return "Zed health values does not scale with player count.";
+    case "bEnableRandomSkins":
+        return "Zeds use random skins";
     default:
       return super(Info).GetDescriptionText(Property);
   }
