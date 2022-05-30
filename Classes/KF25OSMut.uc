@@ -117,13 +117,13 @@ final private function PreCacheMaterials(PlayerController pc)
 simulated function Tick(float DeltaTime)
 {
     local PlayerController PC;
-    local KFOSInteraction KFOSInt;
+    local Interaction KFOSInt;
 
     PC = Level.GetLocalPlayerController();
     if (PC != None)
     {
         KFOSInt = PC.Player.InteractionMaster.AddInteraction(string(class'KFOSInteraction'), PC.Player);
-        KFOSInt.Mut = Self;
+        KFOSInteraction(KFOSInt).Mut = Self;
     }
     Disable('Tick');
 }
