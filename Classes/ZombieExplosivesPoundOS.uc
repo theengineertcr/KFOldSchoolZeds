@@ -13,6 +13,7 @@ var()   float   GLFireInterval;
 var         bool    bCharging;
 var float DistBeforeSaw;
 var bool bHasRaged;
+var bool bNerfed;
 
 replication
 {
@@ -27,7 +28,7 @@ simulated function PostBeginPlay()
         return;
     }
 
-    if (Level.Game != none)
+    if (Level.Game != none && !bNerfed)
     {
         if( Level.Game.GameDifficulty < 2.0 )
         {
@@ -50,6 +51,12 @@ simulated function PostBeginPlay()
             GLFireRate = default.GLFireRate * 0.5;
         }
 
+        if(bNerfed)
+        {
+            GLFireInterval = default.GLFireInterval * 0.6;
+            GLFireBurst = default.GLFireBurst * 0.5;
+            GLFireRate = default.GLFireRate;
+        }
     }
 
     super.PostBeginPlay();
@@ -277,7 +284,7 @@ function RangedAttack(Actor A)
         }
     }
 
-    if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 2500 && !bCharging)
+    if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastGLTime<Level.TimeSeconds && Dist < 5000 && !bCharging)
     {
         LastGLTime = Level.TimeSeconds + GLFireInterval + (FRand() *2.0);
         bShotAnim = true;
@@ -362,8 +369,11 @@ state RunningState
             }
             else
             {
+                if(Level.Game.GameDifficulty < 5.0)
+                    SetAnimAction(MeleeAnims[Rand(2)]);
+                else
+                    SetAnimAction(MeleeAnims[1]);
                 bShotAnim = true;
-                SetAnimAction('Claw');
                 PlaySound(sound'Claw2s', SLOT_Interact);
                 GoToState('');
             }
@@ -435,8 +445,20 @@ function FireGLShot()
 {
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
+    local float Dist;
 
-    GLFireCounter--;
+    Dist = VSize(Controller.Target.Location-Location);
+
+    if(Dist < 400 && GLFireCounter <= 1 && !bNerfed)
+        GLFireCounter++;
+    else
+        GLFireCounter--;
+
+    //Randomness in leading target
+    if(FRand() > 0.5 && !bNerfed)
+        SavedFireProperties.bLeadTarget = true;
+    else
+        SavedFireProperties.bLeadTarget = false;
 
     if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
@@ -504,31 +526,48 @@ state FireGrenades
     simulated function Tick(float DeltaTime)
     {
         local float Dist;
-        local float Speed;
-        local float Timer;
-        local float TossZ;
+        local float Speed, Timer, TossZ;
         local float AdditionalSpeed;
         local float TimerDivizor;
-        local float TossZDivizor;
 
         Dist = VSize(Controller.Target.Location-Location);
 
         AdditionalSpeed = 250;
         TimerDivizor = 1250;
-        TossZDivizor = 22;
 
         Speed = Dist + AdditionalSpeed;
         Timer = Dist / TimerDivizor;
-        TossZ = Dist / TossZDivizor;
+        TossZ = Controller.Target.Location.Z - Location.Z;
+
+        if(TossZ >= 200)
+            TossZ = 200;
+        else if(TossZ <=100)
+            TossZ = 100;
 
         class'GunnerGLProjectile'.default.Speed = Speed;
-        class'GunnerGLProjectile'.default.ExplodeTimer = Timer;
+        class'GunnerGLProjectile'.default.ExplodeTimer = 1 + (FRand() - 0.5) + Timer;
         class'GunnerGLProjectile'.default.TossZ = TossZ;
+
+        if(class'GunnerGLProjectile'.default.ExplodeTimer >= 1.75)
+            class'GunnerGLProjectile'.default.ExplodeTimer = 1.75;
+
+        if(bNerfed)
+            class'GunnerGLProjectile'.default.ExplodeTimer = 1.5;
+
+        if(Dist < 500)
+        {
+            SavedFireProperties.bLeadTarget = true;
+            AdditionalSpeed = 700;
+        }
+
+        if(Dist > 3500 )
+            AdditionalSpeed = 0;
 
         if(float(Health)/HealthMax < 0.5 && !bHasRaged )
         {
             StartCharging();
         }
+
         super.Tick(DeltaTime);
     }
 
@@ -724,19 +763,19 @@ defaultproperties
     bUseExtendedCollision=true
 
     ScoringValue=125
-    GroundSpeed=65.0
-    WaterSpeed=65.0
+    GroundSpeed=80.0
+    WaterSpeed=80.0
     Health=1250//700
     HealthMax=1250//700
     PlayerCountHealthScale=0.10//0.15
     PlayerNumHeadHealthScale=0.05
-    HeadHealth=655//250
+    HeadHealth=650//250
     MeleeDamage=20//15
     JumpZ=320.000000
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
     BleedOutDuration=6.0
-    MeleeRange=60//30.0
+    MeleeRange=65//30.0
     damageForce=-200000 //70000
     Intelligence=BRAINS_Mammal
     MotionDetectorThreat=2.0
@@ -807,4 +846,5 @@ defaultproperties
     HeadRadius=9
     OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
+    bNerfed=false
 }
