@@ -23,12 +23,27 @@ var Vector LastBloodHitDirection;
 
 var float SoloHeadScale;
 
-var bool bUseOldMeleeDamage;
-//var bool bUseOldHealth;
-//var bool bUseOldSpeed;
-//var bool bCorpsesDecay;
-
-//var bool bUseMixedSkins;
+var bool bEnableCorpseDecay;
+var bool bEnableRangedPound;
+var bool bEnableExplosivesPound;
+var bool bEnableOldZedHealth;
+var bool bEnableOldZedSpeed;
+var bool bEnableOldZedDamage;
+var bool bEnableOldZedRange;
+var bool bEnableOldZedKnockback;
+var bool bEnableOldBloatPuke;
+var bool bEnableOldCrawlerBehaviour;
+var bool bEnableOldGorefastChargeRange;
+var bool bEnableOldGorefastChargeSpeed;
+var bool bEnableSirenNadeBoom;
+var bool bEnableOldScrakeBehavior;
+var bool bEnableOldFleshpoundBehavior;
+var bool bEnableOldFleshpoundChargeSpeed;
+var bool bEnableOldFleshpoundSpinAttack;
+var bool bEnableOldHeadshotBehavior;
+var bool bEnableOldWaveStyle;
+var bool bEnableNoHealthScaling;
+var bool bEnableRandomSkins;
 
 var int damageRand;
 var int damageConst;
@@ -43,6 +58,9 @@ var private bool bHeadSpawned;
 simulated function SpawnSeveredGiblet(class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation){}
 simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
 
+// TODO:new function that swaps skins
+function SkinSwap(){}
+
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
@@ -55,7 +73,7 @@ simulated function PostBeginPlay()
 
     if (Level.Game != none && !bDiffAdjusted )
     {
-        if(bUseOldMeleeDamage)
+        if(bEnableOldZedDamage)
         {
             damageConst *= (Level.Game.GameDifficulty / 3);
             damageRand *= (Level.Game.GameDifficulty / 3);
@@ -908,7 +926,7 @@ function ClawDamageTarget()
         PushDir = (damageForce * Normal(Controller.Target.Location - Location));
     else PushDir = damageForce * vector(Rotation);
 
-    if(!bUseOldMeleeDamage)
+    if(!bEnableOldZedDamage)
     {
 
         if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) )
@@ -1260,100 +1278,6 @@ function PlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<Dama
 
     if (DamageType.default.DamageOverlayMaterial != none && Damage > 0 )
         SetOverlayMaterial( DamageType.default.DamageOverlayMaterial, DamageType.default.DamageOverlayTime, false );
-}
-
-
-function bool IsHeadShot(vector loc, vector ray, float AdditionalScale)
-{
-    local vector HeadLoc, B, M, diff;
-    local float t, DotMM, Distance;
-    local int look;
-    local bool bUseAltHeadShotLocation;
-    local bool bWasAnimating;
-
-    if (HeadBone == '')
-        return false;
-
-    if (Level.NetMode == NM_DedicatedServer)
-    {
-        if (Physics == PHYS_Falling)
-            PlayAnim(AirAnims[0], 1.0, 0.0);
-        else if (Physics == PHYS_Walking)
-        {
-
-            if( !IsAnimating(0) && !IsAnimating(1) )
-            {
-                if (bIsCrouched)
-                {
-                    PlayAnim(IdleCrouchAnim, 1.0, 0.0);
-                }
-                else
-                {
-                    bUseAltHeadShotLocation=true;
-                }
-            }
-            else
-            {
-                bWasAnimating = true;
-            }
-
-            if ( bDoTorsoTwist )
-            {
-                SmoothViewYaw = Rotation.Yaw;
-                SmoothViewPitch = ViewPitch;
-
-                look = (256 * ViewPitch) & 65535;
-                if (look > 32768)
-                    look -= 65536;
-
-                SetTwistLook(0, look);
-            }
-        }
-        else if (Physics == PHYS_Swimming)
-            PlayAnim(SwimAnims[0], 1.0, 0.0);
-
-        if( !bWasAnimating )
-        {
-            SetAnimFrame(0.5);
-        }
-    }
-
-    if( bUseAltHeadShotLocation )
-    {
-        HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
-        AdditionalScale *= OnlineHeadshotScale;
-    }
-    else
-    {
-        HeadLoc = Location + (OnlineHeadshotOffset >> Rotation);
-        AdditionalScale *= SoloHeadScale;
-    }
-
-    B = loc;
-    M = ray * (2.0 * CollisionHeight + 2.0 * CollisionRadius);
-
-    diff = HeadLoc - B;
-    t = M Dot diff;
-    if (t > 0)
-    {
-        DotMM = M dot M;
-        if (t < DotMM)
-        {
-            t = t / DotMM;
-            diff = diff - (t * M);
-        }
-        else
-        {
-            t = 1;
-            diff -= M;
-        }
-    }
-    else
-        t = 0;
-
-    Distance = Sqrt(diff Dot diff);
-
-    return (Distance < (HeadRadius * HeadScale * AdditionalScale));
 }
 
 // added HeadStubOS
