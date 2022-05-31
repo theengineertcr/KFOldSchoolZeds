@@ -33,11 +33,9 @@
 - [ ] Fix Scrake Slow rage.
 
 ## Bugs
-- Despite modifying OnlineHeadShot Z offset to lower when zed is charging, it does not seem to work online.
+- Despite modifying OnlineHeadShot Z offset to lower when zed is charging, it does not seem to work online.(?)
 - Bloat Puke Damtype bugs out Bilebomb and puking generally for an unknown reasson
 - Bloat puke can be seen through walls(KFMod issue).
-- Blood Trails on gibs no longer work
- - Temporarily replaced with KF1 Blood trails
 
 ## Miscellaneous
 
