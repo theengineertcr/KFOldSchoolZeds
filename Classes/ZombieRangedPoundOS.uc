@@ -82,6 +82,7 @@ simulated function PostBeginPlay()
         if( Level.Game.GameDifficulty < 2.0 )
         {
             BurnDamageScale = default.BurnDamageScale * 2.0;
+            MGFireInterval = default.MGFireInterval * 1.25;
             MGDamage = default.MGDamage * 0.5;
             MGAccuracy = default.MGAccuracy * 1.25;
             MGFireBurst = default.MGFireBurst * 0.7;
@@ -90,6 +91,7 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 4.0 )
         {
             BurnDamageScale = default.BurnDamageScale * 1.0;
+            MGFireInterval = default.MGFireInterval * 1;
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 1.0;
             MGFireBurst = default.MGFireBurst * 1.0;
@@ -98,6 +100,7 @@ simulated function PostBeginPlay()
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             BurnDamageScale = default.BurnDamageScale * 0.75;
+            MGFireInterval = default.MGFireInterval * 0.75;
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.9;
             MGFireBurst = default.MGFireBurst * 1.33;
@@ -106,6 +109,7 @@ simulated function PostBeginPlay()
         else
         {
             BurnDamageScale = default.BurnDamageScale * 0.5;
+            MGFireInterval = default.MGFireInterval * 0.6;
             MGDamage = default.MGDamage * 1.0;
             MGAccuracy = default.MGAccuracy * 0.80;
             MGFireBurst = default.MGFireBurst * 1.67;
@@ -166,25 +170,12 @@ function RangedAttack(Actor A)
     }
     else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
     {
-        if( Level.Game.GameDifficulty <= 4 )
-        {
-            bShotAnim = true;
-            LastFireTime = Level.TimeSeconds;
-            SetAnimAction('Claw');
-            PlaySound(sound'Claw2s', SLOT_Interact);
-            Controller.bPreparingMove = true;
-            Acceleration = vect(0,0,0);
-        }
-        else
-        {
-            bShotAnim = true;
-            Acceleration = vect(0,0,0);
-            SetAnimAction('RangedPreFireMG');
-            HandleWaitForAnim('RangedPreFireMG');
-            MGDamage = MGDamage + Rand(4);
-            MGFireCounter =  MGFireBurst;
-            GoToState('FireChaingun');
-        }
+        bShotAnim = true;
+        LastFireTime = Level.TimeSeconds;
+        SetAnimAction('Claw');
+        PlaySound(sound'Claw2s', SLOT_Interact);
+        Controller.bPreparingMove = true;
+        Acceleration = vect(0,0,0);
     }
     else if ( !bWaitForAnim && !bShotAnim && !bDecapitated && LastChainGunTime<Level.TimeSeconds )
     {
@@ -353,9 +344,13 @@ state FireChaingun
         local vector Start,End,HL,HN,Dir;
         local rotator R;
         local Actor A;
+        local KFPawn KFP;
+        local float Dist;
+
+        KFP = KFPawn(Controller.Target);
+        Dist = VSize(Controller.Target.Location-Location);
 
         MGFireCounter--;
-
 
         Start = GetBoneCoords('FireBone').Origin;
         if( Controller.Focus!=none )
@@ -378,7 +373,10 @@ state FireChaingun
 
         if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)))
         {
-            A.TakeDamage(MGDamage,self,HL,Dir*500,class'DamTypeBurned');
+            if(Dist > 400)
+                A.TakeDamage(MGDamage,self,HL,Dir*500,class'DamTypeBurned');
+            else // temp until I can get it to only do this to Berserkers
+                A.TakeDamage(MGDamage + 1,self,HL,Dir*500,class'DamTypeBurned');
         }
         else    return;
     }
