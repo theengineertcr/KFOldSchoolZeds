@@ -157,8 +157,9 @@ defaultproperties
     SpineBone1=
     SpineBone2=
 
-    SoloHeadScale=1.1
+    HeadHeight=2.5
+    HeadRadius=10
     OnlineHeadshotScale=1.1
-    OnlineHeadshotOffset=(X=28,Y=-5,Z=-3)
+    OnlineHeadshotOffset=(X=35,Y=-5,Z=-3)
     ControllerClass=class'ControllerCrawlerOS'
 }

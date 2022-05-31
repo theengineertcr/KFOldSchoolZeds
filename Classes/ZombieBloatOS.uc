@@ -288,9 +288,8 @@ defaultproperties
     ColRadius=27.000000
     ColHeight=22.000000
 
-    SoloHeadScale=1.2
-    OnlineHeadshotScale=1.3
-    OnlineHeadshotOffset=(X=28,Y=-5,Z=70)
+    OnlineHeadshotScale=1.2
+    OnlineHeadshotOffset=(X=28,Y=-5,Z=69)
 
     Health=525
     HealthMax=525
@@ -315,6 +314,8 @@ defaultproperties
     BleedOutDuration=6.0
 
     MotionDetectorThreat=1.0
+    HeadRadius=8
+    HeadHeight=5.5
 
     ZapThreshold=0.5
     ZappedDamageMod=1.5

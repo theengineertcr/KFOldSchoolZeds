@@ -1711,10 +1711,10 @@ defaultproperties
 
     KFRagdollName="BossRag"
 
-
-    SoloHeadScale=1.5
-    OnlineHeadshotScale=1.5//1.2
-    OnlineHeadshotOffset=(X=28,Y=-6,Z=70) //Z=75
+    HeadHeight=8.5
+    HeadRadius=8
+    OnlineHeadshotScale=1.1
+    OnlineHeadshotOffset=(X=20,Y=-6,Z=67) //Z=75
 
     ControllerClass=class'ControllerBossOS'
 }

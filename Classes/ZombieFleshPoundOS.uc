@@ -246,6 +246,7 @@ function RangedAttack(Actor A)
         return;
     else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius || CanAttack(A))
     {
+            OnlineHeadshotOffset = default.OnlineHeadshotOffset;
             bShotAnim = true;
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_None);
@@ -397,7 +398,7 @@ Ignores StartCharging;
         if( Level.NetMode!=NM_DedicatedServer )
             ClientChargingAnims();
 
-        OnlineHeadshotOffset.Z=68;
+        OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         NetUpdateTime = Level.TimeSeconds - 1;
     }
 
@@ -433,6 +434,7 @@ Ignores StartCharging;
             return;
         else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
         {
+            OnlineHeadshotOffset = default.OnlineHeadshotOffset;
             bShotAnim = true;
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_None);
@@ -828,17 +830,16 @@ defaultproperties
 
     MenuName="Flesh Pound 2.5"
 
-
+    HeadHeight=9
+    HeadRadius=8
     bUseExtendedCollision=true
     ColOffset=(Z=52.000000)
     ColRadius=36.000000
     ColHeight=35.000000
     PrePivot=(Z=0)
 
-    SoloHeadScale=1.4
-
+    OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=32,Y=-6,Z=68)
-    OnlineHeadshotScale=1.5
 
     ControllerClass=class'ControllerFleshpoundOS'
 }

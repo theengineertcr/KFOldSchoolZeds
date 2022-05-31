@@ -642,13 +642,14 @@ defaultproperties
 
     bCanDistanceAttackDoors=false
 
+    HeadHeight=8
+    HeadRadius=9
     ColOffset=(Z=65)
     ColRadius=27
     ColHeight=25
     PrePivot=(Z=0)
 
-    SoloHeadScale=1.55
-    OnlineHeadshotScale=1.75
+    OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
 
     ControllerClass=class'ControllerRangedPoundOS'

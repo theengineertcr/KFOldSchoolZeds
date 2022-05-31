@@ -291,9 +291,15 @@ defaultproperties
 
     PuntAnim="ClotPunt"
 
-    SoloHeadScale=1.1
-    OnlineHeadshotScale=1.2//1.4//1.2
-    OnlineHeadshotOffset=(X=25,Y=-8,Z=28)
+    HeadRadius=9.2
+    HeadHeight=2.9
+    OnlineHeadshotScale=1.2
+    OnlineHeadshotOffset=(X=30,Y=-8,Z=28)
+
+    bUseExtendedCollision=true
+    ColOffset=(Z=48.000000)
+    ColRadius=25.000000
+    ColHeight=5.000000
 
     CrispUpThreshhold=10
 

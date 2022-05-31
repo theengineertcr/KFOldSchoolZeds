@@ -271,9 +271,8 @@ defaultproperties
     ColRadius=25
     ColHeight=5
 
-    SoloHeadScale=1.2
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=25,Y=-3,Z=41)
+    OnlineHeadshotOffset=(X=20,Y=-3,Z=41)
 
     DistBeforeScream=200
     ScreamRadius=900
@@ -293,6 +292,8 @@ defaultproperties
     GroundSpeed=100.0
     WaterSpeed=80.000000
 
+    HeadRadius=7.5
+    HeadHeight=4.5
     Health=300
     HealthMax=300
     PlayerCountHealthScale=0.10

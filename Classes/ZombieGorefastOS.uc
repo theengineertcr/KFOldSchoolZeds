@@ -134,7 +134,7 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z=30;
+            OnlineHeadshotOffset.Z = 34;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -149,7 +149,7 @@ state RunningState
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
 
-        OnlineHeadshotOffset.Z=45;
+        OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         NetUpdateTime = Level.TimeSeconds - 1;
     }
 
@@ -165,6 +165,7 @@ state RunningState
             return;
         else if ( CanAttack(A) )
         {
+            OnlineHeadshotOffset = default.OnlineHeadshotOffset;
             bShotAnim = true;
             SetAnimAction('Claw');
             Controller.bPreparingMove = true;
@@ -252,15 +253,16 @@ defaultproperties
     CrispUpThreshhold=8
     MotionDetectorThreat=0.5
 
+    HeadRadius=8
+    HeadHeight=5
     bCannibal = true
     MenuName="Gorefast 2.5"
 
-    damageConst = 100
+    damageConst = 10
     damageRand = 10
 
-    OnlineHeadshotOffset=(X=25,Y=-5,Z=45)
-    SoloHeadScale=1.1
-    OnlineHeadshotScale=1.35
+    OnlineHeadshotScale=1.2
+    OnlineHeadshotOffset=(X=30,Y=-8,Z=37)
 
     bUseExtendedCollision=true
     ColOffset=(Z=52)

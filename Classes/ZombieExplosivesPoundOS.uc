@@ -316,6 +316,7 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
+            OnlineHeadshotOffset.Z = 50;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -329,6 +330,7 @@ state RunningState
         bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
+        OnlineHeadshotOffset = default.OnlineHeadshotOffset;
     }
 
     function RemoveHead()
@@ -365,6 +367,7 @@ state RunningState
                 PlaySound(sound'Claw2s', SLOT_Interact);
                 GoToState('');
             }
+            OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         }
     }
 
@@ -800,7 +803,8 @@ defaultproperties
     ColHeight=25
     PrePivot=(Z=2)
 
-    SoloHeadScale=1.55
-    OnlineHeadshotScale=1.75//1.3
+    HeadHeight=8
+    HeadRadius=9
+    OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=30,Y=7,Z=68)
 }

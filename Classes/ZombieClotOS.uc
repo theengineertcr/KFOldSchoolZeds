@@ -200,12 +200,12 @@ defaultproperties
     ColRadius=25.000000
     ColHeight=5.000000
 
-    SoloHeadScale=1.1
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=25,Y=-7,Z=45)
+    OnlineHeadshotOffset=(X=25,Y=-7,Z=42)
 
     Health=130
     HealthMax=130
+    HeadHeight=5
 
     RotationRate=(Yaw=45000,Roll=0)
 

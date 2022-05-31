@@ -105,6 +105,8 @@ function RangedAttack(Actor A)
         return;
     else if ( Dist < (MeleeRange - DistBeforeSaw + CollisionRadius + A.CollisionRadius) && CanAttack(A) )
     {
+        //Reset to default when you swing
+        OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         bShotAnim = true;
         SetAnimAction(MeleeAnims[Rand(2)]);
         CurrentDamType = ZombieDamType[0];
@@ -158,7 +160,7 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z=39;
+            OnlineHeadshotOffset.Z = 39;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -172,7 +174,7 @@ state RunningState
         bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
-        OnlineHeadshotOffset.Z=57;
+        OnlineHeadshotOffset = default.OnlineHeadshotOffset;
     }
 
     function RemoveHead()
@@ -199,6 +201,7 @@ state RunningState
                 SetAnimAction(MeleeAnims[0]);
             CurrentDamType = ZombieDamType[0];
             GoToState('SawingLoop');
+            OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         }
     }
 }
@@ -424,10 +427,10 @@ defaultproperties
     ColRadius=29
     ColHeight=18
     Prepivot=(Z=0.0)
+    HeadHeight=6
+    HeadRadius=8
 
-
-    SoloHeadScale=1.3
-    OnlineHeadshotScale=1.5
+    OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
 
     ControllerClass=class'ControllerScrakeOS'
