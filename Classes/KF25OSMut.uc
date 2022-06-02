@@ -15,27 +15,19 @@ class KF25OSMut extends Mutator
 // We've taken this code from CssHDMut:
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
-//config vars
+//config vars - culled
 var config bool bEnableCorpseDecay;                 // Zed corpses disappear similarly to KF1
 var config bool bEnableRangedPound;                 // Fleshpound Chaingunners replace Husks
-var config bool bEnableExplosivesPound;             // Explosive Fleshpound Gunners spawn Alongside Fleshphounds
-var config bool bEnableOldZedHealth;                // Zeds use 2.5 health values and modifiers
-var config bool bEnableOldZedSpeed;                 // Zeds use 2.5 speed values and modifiers
-var config bool bEnableOldZedDamage;                // Zeds use 2.5 damage values and modifiers
-var config bool bEnableOldZedRange;                 // Zeds use 2.5 Melee, Puke, Scream, etc. range
-var config bool bEnableOldZedKnockback;             // Zeds use 2.5 Melee Knockback values
+var config bool bEnableExplosivesPound;             // Explosive Fleshpound Gunners spawn alongside Fleshpounds
+var config bool bNerfEP;                            // Explosive Pound is nerfed.
 var config bool bEnableOldBloatPuke;                // Bloat uses 2.5 puke behavior
 var config bool bEnableOldCrawlerBehaviour;         // Crawler uses 2.5 leaping behavior
-var config bool bEnableOldGorefastChargeRange;      // The range at which a Gorefast begins to charge. Enables 2.5 range.
-var config bool bEnableOldGorefastChargeSpeed;      // Use 2.5 Gorefast charge speed multiplier.
 var config bool bEnableSirenNadeBoom;               // Swaps Siren Scream Damage type, causing explosives to explode
 var config bool bEnableOldScrakeBehavior;           // Use 2.5 Scrake behavior: No rage charging.
 var config bool bEnableOldFleshpoundBehavior;       // Use 2.5 Fleshpound behavior: No LoS rage.
-var config bool bEnableOldFleshpoundChargeSpeed;    // Use 2.5 Fleshpound charge speed multiplier.
 var config bool bEnableOldFleshpoundSpinAttack;     // Fleshpound uses his spin attack/state
 var config bool bEnableOldHeadshotBehavior;         // Use 2.5 Headshot behavior. No head health/bleedout. Damage Vs. Health / HealthMax * Multiplier determines if big zed loses head.
-var config bool bEnableOldWaveStyle;                // Spawn same amount of zeds in 2.5
-var config bool bEnableNoHealthScaling;             // Zed health values does not scale with player count.
+var config bool bDisableHealthScaling;              // Disables Health Scaling, similar to the mod version of the game
 var config bool bEnableRandomSkins;                 // Zeds use a random skin from other zeds
 
 var private array< class<KFMonsterOS> > ZedList;
@@ -83,7 +75,7 @@ event PostBeginPlay()
             KF.MonsterCollection.default.MonsterClasses[8].MClassName = string(class'ZombieRangedPoundOS');
     }
     else
-        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";
+        KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";        
 }
 
 // precache materials

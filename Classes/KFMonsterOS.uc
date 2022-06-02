@@ -21,28 +21,17 @@ var class <KFGibOS> MonsterLowerTorsoGibletOS;
 
 var Vector LastBloodHitDirection;
 
-var float SoloHeadScale;
-
 var bool bEnableCorpseDecay;
 var bool bEnableRangedPound;
 var bool bEnableExplosivesPound;
-var bool bEnableOldZedHealth;
-var bool bEnableOldZedSpeed;
-var bool bEnableOldZedDamage;
-var bool bEnableOldZedRange;
-var bool bEnableOldZedKnockback;
 var bool bEnableOldBloatPuke;
 var bool bEnableOldCrawlerBehaviour;
-var bool bEnableOldGorefastChargeRange;
-var bool bEnableOldGorefastChargeSpeed;
 var bool bEnableSirenNadeBoom;
 var bool bEnableOldScrakeBehavior;
 var bool bEnableOldFleshpoundBehavior;
-var bool bEnableOldFleshpoundChargeSpeed;
 var bool bEnableOldFleshpoundSpinAttack;
 var bool bEnableOldHeadshotBehavior;
-var bool bEnableOldWaveStyle;
-var bool bEnableNoHealthScaling;
+var bool bDisableHealthScaling;
 var bool bEnableRandomSkins;
 
 var int damageRand;
@@ -57,9 +46,6 @@ var private bool bHeadSpawned;
 // shut these, since we dont' use them
 simulated function SpawnSeveredGiblet(class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation){}
 simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
-
-// TODO:new function that swaps skins
-function SkinSwap(){}
 
 simulated function PostBeginPlay()
 {
