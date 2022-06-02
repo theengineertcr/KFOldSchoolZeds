@@ -21,6 +21,14 @@ var float DeathTimer;
 
 // Fixes credit: https://github.com/Shtoyan/KF1066/blob/main/docs/VeryAnnoying/ZedIssues.md
 
+simulated function PostBeginPlay()
+{
+    super.PostBeginPlay();
+
+    if(bEnableSirenNadeBoom)
+        ScreamDamageType=class'SirenScreamDamageOS';
+}
+
 function bool FlipOver()
 {
     return false;
