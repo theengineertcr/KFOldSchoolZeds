@@ -119,7 +119,7 @@ function RangedAttack(Actor A)
     else if(AnimAction == MeleeAnims[1])
          MeleeDamage = Max( (DifficultyDamageModifer() * default.MeleeDamage * 1.15), 1 );
 
-    if( !bShotAnim && !bDecapitated )
+    if( !bShotAnim && !bDecapitated && !bEnableOldScrakeBehavior )
     {
         if ( Level.Game.GameDifficulty < 5.0 )
         {
