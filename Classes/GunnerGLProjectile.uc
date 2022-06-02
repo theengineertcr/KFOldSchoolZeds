@@ -5,6 +5,8 @@ class GunnerGLProjectile extends SPGrenadeProjectile;
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KF_IJC_HalloweenSnd.uax
 
+var bool bNerfed;
+
 simulated function Disintegrate(vector HitLocation, vector HitNormal)
 {
 }
@@ -31,11 +33,11 @@ simulated function PostBeginPlay()
         {
             Damage = default.Damage * 1.0;
         }
-        else if( Level.Game.GameDifficulty < 5.0 )
+        else if( Level.Game.GameDifficulty < 5.0 && !bNerfed )
         {
             Damage = default.Damage * 1.33;
         }
-        else
+        else if (!bNerfed)
         {
             Damage = default.Damage * 1.66;
         }
