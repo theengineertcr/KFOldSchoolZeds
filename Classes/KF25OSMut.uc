@@ -76,6 +76,28 @@ event PostBeginPlay()
     }
     else
         KF.MonsterCollection.default.MonsterClasses[8].MClassName = "";        
+
+    if(bEnableExplosivesPound)
+    {
+        // Replace 2/3 Scrake Squad Spawns(temporary)
+        // He's supposed to be as rare as a Fleshpound, but
+        // This is fine for now. People will learn to fear him :)
+        KF.StandardMonsterSquads[13]="2A1J";
+        KF.MonsterSquad[13]="2A1J";
+        KF.StandardMonsterSquads[14]="2A3C1J";
+        KF.MonsterSquad[14]="2A3C1J";
+
+        if(bNerfEP)
+
+            class'ZombieExplosivesPoundOS'.default.bNerfed = true;
+            class'GunnerGLProjectile'.default.bNerfed = true;
+    }
+
+    if(bEnableSirenNadeBoom)
+        class'ZombieSirenOS'.default.bEnableSirenNadeBoom = true;
+
+    if(bEnableOldScrakeBehavior)
+        class'ZombieScrakeOS'.default.bEnableOldScrakeBehavior = true;        
 }
 
 // precache materials

@@ -61,17 +61,6 @@ simulated function PostBeginPlay()
     }
 
     SpawnClientExtendedZCollision();
-
-    if (Level.Game != none && !bDiffAdjusted )
-    {
-        if(bEnableOldZedDamage)
-        {
-            damageConst *= (Level.Game.GameDifficulty / 3);
-            damageRand *= (Level.Game.GameDifficulty / 3);
-        }
-
-        bDiffAdjusted = true;
-    }
 }
 
 // Fix client side projectors (i.e. ebr laser dot)
@@ -943,17 +932,8 @@ function ClawDamageTarget()
         PushDir = (damageForce * Normal(Controller.Target.Location - Location));
     else PushDir = damageForce * vector(Rotation);
 
-    if(!bEnableOldZedDamage)
-    {
-
-        if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) )
-            PlayZombieAttackHitSound();
-    }
-    else
-    {
-        if ( MeleeDamageTarget( (damageConst + rand(damageRand) ), PushDir))
-            PlayZombieAttackHitSound();
-    }
+    if ( MeleeDamageTarget(UsedMeleeDamage, PushDir) )
+        PlayZombieAttackHitSound();
 }
 
 function PlayZombieAttackHitSound()
