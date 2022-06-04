@@ -3,6 +3,7 @@
 > return back to [README](../README.md#documentation)
 
 ## Gameplay Tweaks
+- [ ] Fix Scrake not playin SawImpaleLoop anim on dedis
 - [ ] Zed Gun disintegrates Explosive Gunner projectiles
 - [ ] Flamethrower/Explosive damage blows up Explosive Gunner projectiles
 - [ ] Mutator configurations to add:
