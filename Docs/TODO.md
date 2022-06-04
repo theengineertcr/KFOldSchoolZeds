@@ -3,6 +3,8 @@
 > return back to [README](../README.md#documentation)
 
 ## Gameplay Tweaks
+- [ ] Zed Gun disintegrates Explosive Gunner projectiles
+- [ ] Flamethrower/Explosive damage blows up Explosive Gunner projectiles
 - [ ] Mutator configurations to add:
    - [ ] Restore old Headshot function
    - [ ] Restore old Wave System(if possible)
@@ -22,8 +24,8 @@
 ## Bugs
 - Bloat Puke Damtype bugs out Bilebomb and puking generally for an unknown reasson
 - Bloat puke can be seen through walls(KFMod issue).
-- Bloat still deals inaccurate damage in Bilebomb(two hits instead of one)
-- Clot uses clawing animations on door instead of grappling
+- Bloat deals inaccurate damage in Bilebomb(two hits instead of one)
+- Clot still uses clawing animations on door instead of grappling
 
 ## Miscellaneous
 
