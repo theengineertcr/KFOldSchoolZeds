@@ -1676,7 +1676,7 @@ defaultproperties
     ScoringValue=500
     GroundSpeed=120.000000
     WaterSpeed=120.000000
-    MeleeDamage=75
+    MeleeDamage=100//75 - he does 100 + Ran(100) in the mod
     Health=4000//4000
     HealthMax=4000//4000
     PlayerCountHealthScale=0.75
