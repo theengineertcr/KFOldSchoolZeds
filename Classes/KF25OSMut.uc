@@ -33,6 +33,9 @@ var config bool bEnableOldFleshpoundBehavior;       // Use 2.5 Fleshpound behavi
 var private array< class<KFMonsterOS> > ZedList;
 var bool bShowHeadHitbox;
 
+const STEAMID1="76561198044316328";     // nikc
+const STEAMID2="76561197993557589";     // bofa
+
 replication
 {
     reliable if (Role == ROLE_Authority)
@@ -153,62 +156,68 @@ simulated function Tick(float DeltaTime)
     }
     Disable('Tick');
 }
+
 // fancy, colored Mutate system
-//function Mutate(string MutateString, PlayerController Sender)
-//{
-//    local int i;
-//    local array<String> wordsArray;
-//    local String command, mod;
-//    local array<String> modArray;
-//
-//    // don't break the chain!
-//    super.Mutate(MutateString, Sender);
-//
-//    // ignore empty cmds and dont go further
-//    Split(MutateString, " ", wordsArray);
-//    if (wordsArray.Length == 0)
-//        return;
-//
-//    // do stuff with our cmd
-//    command = wordsArray[0];
-//    if (wordsArray.Length > 1)
-//        mod = wordsArray[1];
-//    else
-//        mod = "";
-//
-//    while (i + 1 < wordsArray.Length || i < 10)
-//    {
-//        if (i + 1 < wordsArray.Length)
-//        modArray[i] = wordsArray[i+1];
-//        else
-//        modArray[i] = "";
-//        i ++;
-//    }
-//
-//    if (command ~= "HELP" || command ~= "HALP" || command ~= "HLP")
-//    {
-//        SendMessage(Sender, "^r^OLD SCHOOL ZEDS MUT HELPER");
-//        SendMessage(Sender, "^w^=============================");
-//        SendMessage(Sender, "^w^Available commands:");
-//        SendMessage(Sender, "^b^HEAD | HEADS | HITZONE | HEADZONE ^y^<ON / OFF> ^w^- toggle head hitbox rendering.");
-//    }
-//    // toggle head hitbox rendering
-//    else if (command ~= "HEAD" || command ~= "HEADS" || command ~= "HITZONE" || command ~= "HEADZONE")
-//    {
-//        if (mod ~= "ON")
-//        {
-//            bShowHeadHitbox = true;
-//            BroadcastText(getSenderName(Sender) $ " ^g^enabled ^w^zeds ^r^HEADZONE ^w^rendering!");
-//            return;
-//        }
-//        else if (mod ~= "OFF")
-//        {
-//            bShowHeadHitbox = false;
-//            BroadcastText(getSenderName(Sender) $ " ^g^disabled ^w^zeds ^r^HEADZONE ^w^rendering!");
-//            return;
-//        }
-//    }
-//}
+function Mutate(string MutateString, PlayerController Sender)
+{
+    local int i;
+    local array<String> wordsArray;
+    local String command, mod;
+    local array<String> modArray;
+    local string steamid;
+
+    // don't break the chain!
+    super.Mutate(MutateString, Sender);
+
+    steamid = Sender.GetPlayerIDHash();
+    if (steamid ~= STEAMID1 || steamid ~= STEAMID2)
+    {
+        // ignore empty cmds and dont go further
+        Split(MutateString, " ", wordsArray);
+        if (wordsArray.Length == 0)
+            return;
+
+        // do stuff with our cmd
+        command = wordsArray[0];
+        if (wordsArray.Length > 1)
+            mod = wordsArray[1];
+        else
+            mod = "";
+
+        while (i + 1 < wordsArray.Length || i < 10)
+        {
+            if (i + 1 < wordsArray.Length)
+            modArray[i] = wordsArray[i+1];
+            else
+            modArray[i] = "";
+            i ++;
+        }
+
+        if (command ~= "HELP" || command ~= "HALP" || command ~= "HLP")
+        {
+            SendMessage(Sender, "^r^OLD SCHOOL ZEDS MUT HELPER");
+            SendMessage(Sender, "^w^=============================");
+            SendMessage(Sender, "^w^Available commands:");
+            SendMessage(Sender, "^b^HEAD | HEADS | HITZONE | HEADZONE ^y^<ON / OFF> ^w^- toggle head hitbox rendering.");
+        }
+        // toggle head hitbox rendering
+        else if (command ~= "HEAD" || command ~= "HEADS" || command ~= "HITZONE" || command ~= "HEADZONE")
+        {
+            if (mod ~= "ON")
+            {
+                bShowHeadHitbox = true;
+                BroadcastText(getSenderName(Sender) $ " ^g^enabled ^w^zeds ^r^HEADZONE ^w^rendering!");
+                return;
+            }
+            else if (mod ~= "OFF")
+            {
+                bShowHeadHitbox = false;
+                BroadcastText(getSenderName(Sender) $ " ^g^disabled ^w^zeds ^r^HEADZONE ^w^rendering!");
+                return;
+            }
+        }
+    }
+}
 
 
 //============================== BROADCASTING ==============================
