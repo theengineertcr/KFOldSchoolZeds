@@ -15,12 +15,18 @@
 - Fill me later!
 
 ### Finished / Fixed
-- Reimported Zed models WIP:
+- [X] Zed Head hitboxes overhaul
+- [X] Explosive Pound movement speed increase
+- [X] Explosive Pound to prioritize Attack 1 when charging on Sui+
+- [X] Disable collision, hittrace, projblock, etc. on death for all zeds
+- Reimported Zed models:
     - [X] Crawler
-- Head Attach WIP:
-    - None
 - Mutator configs:
     - [X] Restore old Crawler Behavior
+    - [X] Restore old Bloat Bilebomb and Puke behavior
+    - [X] Restore old Scrake behavior
+    - [X] Restore old Fleshpound behavior
+    - [X] Nerf Explosive Gunner
 - [X] Fleshpound and Scrake head lower into body when charging Begin and go back to default when End
 - [X] Explosive pound overhaul complete
 - [X] Rangedpound rebalance(no more super attack, deals appropriate damage)
@@ -36,7 +42,6 @@
 - [x] Zeds no longer turn their body while knocked down
 - [x] Fleshpound Chaingunner no longer skips stun animation
 - [x] Potential fix implemented for Chaingunner skipping Firing end animations
-- [x] Clot uses clawing animations on door instead of grappling
 - [x] Gorefast no longer stops charging after a short while of being in his charge state
 - [x] Scrake's prefer to use their faster sawing attack(attack 1) when enraged on Suicidal+
     - [x] Attack 1 deals 15% less damage as it's faster and hits twice in quick succession
