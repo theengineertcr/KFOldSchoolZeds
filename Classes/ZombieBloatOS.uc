@@ -4,6 +4,24 @@ var Actor BloatJet;
 var bool bPlayBileSplash;
 var float DistBeforePuke;
 
+//Call Puke Emitter via AnimNotify_Script than Effect
+//Otherwise, compiling will complain about missing meshes
+function SpawnPukeEmitter()
+{
+    local vector X,Y,Z, FireStart;
+    local rotator FireRotation;
+
+    GetAxes(Rotation,X,Y,Z);
+
+    FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
+    FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
+
+    if(bEnableOldBloatPuke)
+        Spawn(class'KFVomitJetOS',,,FireStart,FireRotation);
+    else
+        Spawn(class'KFVomitJet',,,FireStart,FireRotation);
+}
+
 function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vector momentum, class<DamageType> damageType)
 {
     super.BodyPartRemoval(Damage, instigatedBy, hitlocation, momentum, damageType);

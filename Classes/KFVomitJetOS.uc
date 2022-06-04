@@ -10,5 +10,6 @@ defaultproperties
     mGrowthRate=50.000000
     LifeSpan=2.000000
     Skins(0)=Texture'KFOldSchoolZeds_Textures.VomitSplash'
+    DrawScale=1.5
     bUnlit=false
 }
