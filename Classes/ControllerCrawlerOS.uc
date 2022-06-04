@@ -2,6 +2,7 @@ class ControllerCrawlerOS extends KFMonsterControllerOS;
 
 var    float    LastPounceTime;
 var    bool    bDoneSpottedCheck;
+var    bool bEnableOldCrawlerBehaviour;
 
 state ZombieHunt
 {
@@ -62,8 +63,9 @@ function bool FireWeaponAt(Actor A)
       Monster(Pawn).RangedAttack(Target);
     }
     else
-    { //bEnableOldCrawlerBehavior
-        if( LastPounceTime+1 < Level.TimeSeconds )
+    {
+        if(LastPounceTime +             1            < Level.TimeSeconds && bEnableOldCrawlerBehaviour ||
+           LastPounceTime + (4.5 - (FRand() * 3.0)) < Level.TimeSeconds && !bEnableOldCrawlerBehaviour)
         {
             aFacing=Normal(Vector(Pawn.Rotation));
 

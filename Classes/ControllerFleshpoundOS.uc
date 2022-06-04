@@ -1,9 +1,10 @@
 class ControllerFleshpoundOS extends KFMonsterControllerOS;
 
-var     float       RageAnimTimeout;   
-var        bool        bDoneSpottedCheck;
-var     float       RageFrustrationTimer;       
-var     float       RageFrustrationThreshhold;
+var     float   RageAnimTimeout;
+var     bool    bDoneSpottedCheck;
+var     float   RageFrustrationTimer;
+var     float   RageFrustrationThreshhold;
+var     bool    bEnableOldFleshpoundBehavior;
 
 state ZombieHunt
 {
@@ -67,7 +68,7 @@ state ZombieCharge
         local ZombieFleshpoundOS ZFP;
         Global.Tick(Delta);
 
-        if( RageFrustrationTimer < RageFrustrationThreshhold )
+        if( RageFrustrationTimer < RageFrustrationThreshhold && !bEnableOldFleshpoundBehavior )
         {
             RageFrustrationTimer += Delta;
 
@@ -105,8 +106,11 @@ state ZombieCharge
     {
         super.BeginState();
 
+        if(!bEnableOldFleshpoundBehavior)
+        {
         RageFrustrationThreshhold = default.RageFrustrationThreshhold + (Frand() * 5);
         RageFrustrationTimer = 0;
+        }
     }
 
 WaitForAnim:

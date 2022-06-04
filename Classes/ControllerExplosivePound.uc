@@ -158,7 +158,6 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
 function float AdjustAimError(float aimerror, float TargetDist, bool bDefendMelee, bool bInstantProj, bool bLeadTargetNow )
 {
-    super.AdjustAimError(aimerror,TargetDist,bDefendMelee,bInstantProj,bLeadTargetNow);
     return aimerror*=0;
 }
 

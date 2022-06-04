@@ -285,7 +285,7 @@ defaultproperties
     DistBeforeScream=200
     ScreamRadius=900
     ScreamDamage=8
-    ScreamDamageType=class'SirenScreamDamageOS'
+    ScreamDamageType=class'SirenScreamDamage'
     ScreamForce=-150000
     RotMag=(Pitch=150,Yaw=150,Roll=150)
     RotRate=500

@@ -43,6 +43,12 @@ var protected array<material> MixHairPool;
 
 var private bool bHeadSpawned;
 
+replication
+{
+	reliable if(Role == ROLE_Authority)
+		bEnableCorpseDecay;
+}
+
 // shut these, since we dont' use them
 simulated function SpawnSeveredGiblet(class<SeveredAppendage> GibClass, Vector Location, Rotator Rotation, float GibPerterbation, rotator SpawnRotation){}
 simulated function SpawnGibs(Rotator HitRotation, float ChunkPerterbation){}
@@ -335,7 +341,16 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     AnimBlendParams(1, 0.0);
     FireState = FS_None;
 
-    GotoState('ZombieDyingOS');
+    //Doesn't work because casting onto parent(KFMonsterOS) does not
+    //Cast onto child classes. Maybe make it cast onto ZedList?
+    if(bEnableCorpseDecay)
+    {
+        GotoState('ZombieDyingDecay');
+        LifeSpan=30;
+        DeResTime=8;
+    }
+    else
+        GotoState('ZombieDyingOS');
 
     if ( BE != none )
         return;
@@ -343,6 +358,12 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     PlayDyingAnimation(DamageType, HitLoc);
 }
 
+State ZombieDyingDecay extends ZombieDying
+{
+    ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, Falling, BreathTimer, Died, RangedAttack, TakeDamage;
+}
+
+//Until I can fix Decay not being enabled, I'll make corpses decay & not eat bullets here
 State ZombieDyingOS extends Dying
 {
 ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, Falling, BreathTimer, Died, RangedAttack;
@@ -399,6 +420,10 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
         if( Level.NetMode==NM_DedicatedServer )
             SetTimer(1,false);
 
+        //Don't eat bullets or block shit
+        bBlockHitPointTraces=false;
+        bBlockPlayers=false;
+        bBlockProjectiles=false;
         SetTimer(5,false);
      }
 }

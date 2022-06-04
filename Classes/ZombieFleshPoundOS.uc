@@ -378,7 +378,11 @@ Ignores StartCharging;
             }
 
             OnlineHeadshotOffset.Z=50;
-            RageEndTime = (Level.TimeSeconds + 5 * DifficultyModifier) + (FRand() * 6 * DifficultyModifier);
+
+            if(!bEnableOldFleshpoundBehavior)
+                RageEndTime = (Level.TimeSeconds + 5 * DifficultyModifier) + (FRand() * 6 * DifficultyModifier);
+            else
+                RageEndTime = Level.TimeSeconds + 10;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }

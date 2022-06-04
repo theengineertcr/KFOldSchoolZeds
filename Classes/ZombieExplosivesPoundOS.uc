@@ -399,6 +399,25 @@ state RunningToMarker extends RunningState
 {
 }
 
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
+{
+    local bool bIsHeadShot;
+    bIsHeadShot = IsHeadShot(Hitlocation, normal(Momentum), 1.0);
+
+    if ( Level.Game.GameDifficulty >= 5.0 && bIsHeadshot && (class<DamTypeCrossbow>(damageType) != none || class<DamTypeCrossbowHeadShot>(damageType) != none) )
+    {
+        Damage *= 0.5; // Half Damage from Crossbow HS
+    }
+
+    if(DamageType == class 'DamTypeFrag' || DamageType == class 'DamTypePipeBomb' || DamageType == class 'DamTypeM79Grenade' ||
+       DamageType == class 'DamTypeM32Grenade' || DamageType == class 'DamTypeM203Grenade' || DamageType == class 'DamTypeSPGrenade' ||
+       DamageType == class 'DamTypeSealSquealExplosion' || DamageType == class 'DamTypeSeekerSixRocket')
+
+       Damage *= 0.5; // Half damage from explosives
+
+    Super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType, HitIndex);
+}
+
 simulated function AddTraceHitFX( vector HitPos )
 {
     local vector Start,SpawnVel,SpawnDir;
@@ -576,7 +595,6 @@ state FireGrenades
         TraceHitPos = vect(0,0,0);
         bGLing = false;
 
-        AmbientSound = default.AmbientSound;
         SoundVolume=default.SoundVolume;
         SoundRadius=default.SoundRadius;
         GLFireCounter=0;

@@ -1,6 +1,6 @@
 class ZombieBloatOS extends KFMonsterOS;
 
-var BileJetOS BloatJet;
+var Actor BloatJet;
 var bool bPlayBileSplash;
 var float DistBeforePuke;
 
@@ -121,15 +121,24 @@ function SpawnTwoShots()
     ToggleAuxCollision(false);
 
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
-    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
+    if(bEnableOldBloatPuke)
+        Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
+    else
+        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     FireStart-=(0.5*CollisionRadius*Y);
     FireRotation.Yaw -= 1200;
-    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
+    if(bEnableOldBloatPuke)
+        Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
+    else
+        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
-    spawn(class'KFBloatVomitOS',,,FireStart, FireRotation);
+    if(bEnableOldBloatPuke)
+        Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
+    else
+        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     ToggleAuxCollision(true);
 }
@@ -137,7 +146,7 @@ function SpawnTwoShots()
 simulated function Tick(float deltatime)
 {
     local vector BileExplosionLoc;
-    local BileExplosionOS GibBileExplosion;
+    local Actor GibBileExplosion;
 
     super.tick(deltatime);
 
@@ -147,7 +156,10 @@ simulated function Tick(float deltatime)
     {
         BileExplosionLoc = self.Location;
         BileExplosionLoc.z += (CollisionHeight - (CollisionHeight * 0.5));
-        GibBileExplosion = Spawn(class 'BileExplosionOS',self,, BileExplosionLoc );
+        if(bEnableOldBloatPuke)
+            GibBileExplosion = Spawn(class 'BileExplosionOS',self,, BileExplosionLoc );
+        else
+            GibBileExplosion = Spawn(class 'LowGoreBileExplosion',self,, BileExplosionLoc );
         bPlayBileSplash = true;
     }
 }
@@ -156,15 +168,20 @@ function BileBomb()
 {
     local bool AttachSucess;
 
-    BloatJet = spawn(class'BileJetOS', self,,,);
+    if(bEnableOldBloatPuke)
+    {
+        BloatJet = spawn(class'BileJetOS', self,,,);
 
-    if(Gored < 5)
-        AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
+        if(Gored < 5)
+            AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
 
-    if(!AttachSucess)
-        BloatJet.SetBase(self);
+        if(!AttachSucess)
+            BloatJet.SetBase(self);
 
-    BloatJet.SetRelativeRotation(rot(0,-4096,0));
+        BloatJet.SetRelativeRotation(rot(0,-4096,0));
+    }
+    else
+        BloatJet = spawn(class'BileJet', self,,Location,Rotator(-PhysicsVolume.Gravity));
 }
 
 function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
@@ -182,7 +199,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
     {
         BileBomb();
 
-        if(BloatJet!=none)
+        if(BloatJet!=none && bEnableOldBloatPuke)
         {
             if(Gored < 5)
                 AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');

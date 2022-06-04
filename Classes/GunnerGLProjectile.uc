@@ -25,21 +25,24 @@ simulated function PostBeginPlay()
 
     if (Level.Game != none)
     {
-        if( Level.Game.GameDifficulty < 2.0 )
+        if(!bNerfed)
         {
-            Damage = default.Damage * 0.5;
-        }
-        else if( Level.Game.GameDifficulty < 4.0 )
-        {
-            Damage = default.Damage * 1.0;
-        }
-        else if( Level.Game.GameDifficulty < 5.0 && !bNerfed )
-        {
-            Damage = default.Damage * 1.33;
-        }
-        else if (!bNerfed)
-        {
-            Damage = default.Damage * 1.66;
+            if( Level.Game.GameDifficulty < 2.0 )
+            {
+                Damage = default.Damage * 0.5;
+            }
+            else if( Level.Game.GameDifficulty < 4.0 )
+            {
+                Damage = default.Damage * 1.0;
+            }
+            else if( Level.Game.GameDifficulty < 5.0 )
+            {
+                Damage = default.Damage * 1.33;
+            }
+            else
+            {
+                Damage = default.Damage * 1.66;
+            }
         }
     }
 
@@ -86,9 +89,9 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
 			dir = dir/dist;
 			damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius)/DamageRadius);
 
-			if (Victims.IsA('KFGlassMover'))  
+			if (Victims.IsA('KFGlassMover'))
 			{
-				UsedDamageAmount = 100000; 
+				UsedDamageAmount = 100000;
 			}
 			else
 			{
