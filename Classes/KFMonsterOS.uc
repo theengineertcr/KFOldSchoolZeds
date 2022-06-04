@@ -31,9 +31,10 @@ var bool bEnableOldScrakeBehavior;
 var bool bEnableOldFleshpoundBehavior;
 var bool bEnableOldFleshpoundSpinAttack;
 var bool bEnableOldHeadshotBehavior;
-var bool bDisableHealthScaling;
+//var bool bDisableHealthScaling;
 var bool bEnableRandomSkins;
 
+//To be removed
 var int damageRand;
 var int damageConst;
 
@@ -400,7 +401,8 @@ ignores AnimEnd, Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, 
                 return;
             }
 
-            Disable('TakeDamage');
+            //This just spams the clients log, get rid of it
+            //Disable('TakeDamage');
             SetPhysics(PHYS_None);
             SetTimer(30,false);
 
