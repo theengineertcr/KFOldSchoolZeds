@@ -91,9 +91,10 @@ event PostBeginPlay()
         KF.MonsterSquad[14]="2A3C1J";
 
         if(bNerfEP)
-
+        {
             class'ZombieExplosivesPoundOS'.default.bNerfed = true;
             class'GunnerGLProjectile'.default.bNerfed = true;
+        }
     }
 
     if(bEnableSirenNadeBoom)
