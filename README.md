@@ -4,7 +4,7 @@ Killing Floor modification that adds in KFMod 2.5 zeds to the game.
 
 ## Installation
 
-- Download the release from [GDrive](https://drive.google.com/file/d/1l4X4RCjGerr9-jfgPCAwlPAZVYC9YFXv/view).
+- Download the release from [GDrive](https://drive.google.com/file/d/1RHZIDJKxKcrIhVS9AwYyuyV1PL9Ko7O3/view).
 - Copy all of the contents within the zip file into your Killing Floor directory.
 
 ## Usage
