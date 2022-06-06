@@ -19,9 +19,7 @@ function tick(float DeltaTime)
         bAboutToGetDoor = false;
 
         if( TargetDoor!=none )
-        {
             BreakUpDoor(TargetDoor, true);
-        }
     }
 }
 

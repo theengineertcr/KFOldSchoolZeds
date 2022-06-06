@@ -1,7 +1,9 @@
+//Controller class for Gorefast ✓
 class ControllerGorefastOS extends KFMonsterControllerOS;
 
 var    bool    bDoneSpottedCheck;
 
+//Players that spot a Gorefast will have a 25% chance to call him out
 state ZombieHunt
 {
     event SeePlayer(Pawn SeenPlayer)
@@ -23,5 +25,6 @@ state ZombieHunt
 
 defaultproperties
 {
+    //Makes him strafe left/right, same as KF1 Gorefast
     StrafingAbility=0.500000
 }

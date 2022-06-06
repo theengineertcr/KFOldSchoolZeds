@@ -1,5 +1,8 @@
+//2.5 BloodSpurt Emitter
 class BloodSpurtOS extends xEmitter;
 
+//Usage:
+//Decals for when blood impacts a wall
 #exec OBJ LOAD FILE=KFOldSchool_XEffects.utx
 
 var class<Actor>    BloodDecalClass;
@@ -16,13 +19,9 @@ replication
 simulated function PostNetBeginPlay()
 {
     if ( Level.NetMode != NM_DedicatedServer )
-    {
         WallSplat();
-    }
     else
-    {
         LifeSpan = 0.2;
-    }
 }
 
 simulated function WallSplat()
@@ -31,29 +30,21 @@ simulated function WallSplat()
     local Actor WallActor;
 
     if ( Level.bDropDetail || (!bMustShow && (FRand() > 0.8)) || (BloodDecalClass == none) )
-    {
         return;
-    }
 
     if ( HitDir == vect(0,0,0) )
     {
         if ( Owner != none )
-        {
             HitDir = Location - Owner.Location;
-        }
         else
-        {
             HitDir.Z = -1;
-        }
     }
 
     HitDir = Normal(HitDir);
     WallActor = Trace(WallHit, WallNormal, Location + 350 * HitDir, Location, false);
 
     if ( WallActor != none )
-    {
         spawn(BloodDecalClass,,,WallHit + 20 * (WallNormal + VRand()), rotator(-WallNormal));
-    }
 }
 
 static function PrecacheContent(LevelInfo Level)
@@ -63,10 +54,8 @@ static function PrecacheContent(LevelInfo Level)
     super.PrecacheContent(Level);
 
     if ( default.BloodDecalClass != none )
-    {
         for ( i=0; i<3; i++ )
             Level.AddPrecacheMaterial(default.splats[i]);
-    }
 }
 
 defaultproperties

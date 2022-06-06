@@ -1,5 +1,8 @@
+//2.5 ClotGibHead ✓
 class ClotGibHeadOS extends KFGibOS;
 
+//Usage:
+//Giblet that spawns when Zed takes massive explosive damage.
 simulated function PostBeginPlay()
 {
     SpawnTrail();

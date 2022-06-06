@@ -1,3 +1,4 @@
+//Controller class for Fleshpound
 class ControllerFleshpoundOS extends KFMonsterControllerOS;
 
 var     float   RageAnimTimeout;

@@ -21,12 +21,16 @@ state ZombieHunt
     }
 }
 
-function TimedFireWeaponAtEnemy()
-{
-    if ( (Enemy == none) || FireWeaponAt(Enemy) )
-        SetCombatTimer();
-    else SetTimer(0.01, true);
-}
+//Exactly same as parent
+//TODO:After push to git, delete this.
+
+//function TimedFireWeaponAtEnemy()
+//{
+//	if ( (Enemy == None) || FireWeaponAt(Enemy) )
+//		SetCombatTimer();
+//	else
+//		SetTimer(0.1, True);
+//}
 
 state ZombieCharge
 {

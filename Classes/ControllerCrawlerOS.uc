@@ -1,8 +1,9 @@
+//Controller class for Crawler ✓
 class ControllerCrawlerOS extends KFMonsterControllerOS;
 
-var    float    LastPounceTime;
+var    float   LastPounceTime;
 var    bool    bDoneSpottedCheck;
-var    bool bEnableOldCrawlerBehaviour;
+var    bool    bEnableOldCrawlerBehaviour;
 
 state ZombieHunt
 {
@@ -25,26 +26,26 @@ state ZombieHunt
 
 function bool IsInPounceDist(actor PTarget)
 {
-  local vector DistVec;
-  local float time;
+    local vector DistVec;
+    local float time;
 
-  local float HeightMoved;
-  local float EndHeight;
+    local float HeightMoved;
+    local float EndHeight;
 
-  DistVec = pawn.location - PTarget.location;
-  DistVec.Z=0;
+    DistVec = pawn.location - PTarget.location;
+    DistVec.Z=0;
 
-  time = vsize(DistVec)/ZombieCrawlerOS(pawn).PounceSpeed;
+    time = vsize(DistVec)/ZombieCrawlerOS(pawn).PounceSpeed;
 
-  HeightMoved = Pawn.JumpZ*time + 0.5 * pawn.PhysicsVolume.Gravity.z * time * time;
+    HeightMoved = Pawn.JumpZ*time + 0.5 * pawn.PhysicsVolume.Gravity.z * time * time;
 
-  EndHeight = pawn.Location.z +HeightMoved;
+    EndHeight = pawn.Location.z +HeightMoved;
 
-  if((abs(EndHeight - PTarget.Location.Z) < Pawn.CollisionHeight + PTarget.CollisionHeight) &&
-      VSize(pawn.Location - PTarget.Location) < KFMonster(pawn).MeleeRange    *     5     )
+    if((abs(EndHeight - PTarget.Location.Z)     < Pawn.CollisionHeight + PTarget.CollisionHeight) &&
+        VSize(pawn.Location - PTarget.Location) < KFMonster(pawn).MeleeRange    *     5         )
         return true;
-  else
-    return false;
+    else
+        return false;
 }
 
 function bool FireWeaponAt(Actor A)
@@ -59,12 +60,12 @@ function bool FireWeaponAt(Actor A)
 
     if(CanAttack(A))
     {
-      Target = A;
-      Monster(Pawn).RangedAttack(Target);
+        Target = A;
+        Monster(Pawn).RangedAttack(Target);
     }
     else
     {
-        if(LastPounceTime +             1            < Level.TimeSeconds && bEnableOldCrawlerBehaviour ||
+        if(LastPounceTime +             1           < Level.TimeSeconds &&  bEnableOldCrawlerBehaviour ||
            LastPounceTime + (4.5 - (FRand() * 3.0)) < Level.TimeSeconds && !bEnableOldCrawlerBehaviour)
         {
             aFacing=Normal(Vector(Pawn.Rotation));

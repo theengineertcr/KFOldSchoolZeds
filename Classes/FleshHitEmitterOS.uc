@@ -1,5 +1,10 @@
-class FleshHitEmitterOS extends KFHitEmitter;
+//2.5 FleshHitEmitter ✓
+class FleshHitEmitterOS extends KFHitEmitter
+    abstract
+    hidedropdown;
 
+//Usage:
+//Parent class. Holds information for blood that comes out of zeds.
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx
 

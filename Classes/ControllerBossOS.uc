@@ -1,11 +1,12 @@
+//Controller class for Patriarch
 class ControllerBossOS extends KFMonsterControllerOS;
 
 var NavigationPoint HidingSpots;
 
-var     float       WaitAnimTimeout;    
-var     int         AnimWaitChannel;   
-var     name        AnimWaitingFor;    
-var     bool        bAlreadyFoundEnemy; 
+var     float       WaitAnimTimeout;
+var     int         AnimWaitChannel;
+var     name        AnimWaitingFor;
+var     bool        bAlreadyFoundEnemy;
 
 
 function bool CanKillMeYet()
@@ -170,7 +171,7 @@ Begin:
     if( HidingSpots==none )
         HidingSpots = FindRandomDest();
     if( HidingSpots==none )
-        ZombieBossOS(Pawn).BeginHealing(); 
+        ZombieBossOS(Pawn).BeginHealing();
     if( ActorReachable(HidingSpots) )
     {
         MoveTarget = HidingSpots;
@@ -178,12 +179,12 @@ Begin:
     }
     else FindBestPathToward(HidingSpots,true,false);
     if( MoveTarget==none )
-        ZombieBossOS(Pawn).BeginHealing(); 
+        ZombieBossOS(Pawn).BeginHealing();
     if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
         MoveToward(MoveTarget,Enemy,,false);
     else MoveToward(MoveTarget,MoveTarget,,false);
     if( HidingSpots==none || !PlayerSeesMe() )
-        ZombieBossOS(Pawn).BeginHealing(); 
+        ZombieBossOS(Pawn).BeginHealing();
     GoTo'Begin';
 }
 State SyrRetreat
@@ -254,7 +255,7 @@ Begin:
     }
     else FindBestPathToward(HidingSpots,true,false);
     if( MoveTarget==none )
-        ZombieBossOS(Pawn).BeginHealing(); 
+        ZombieBossOS(Pawn).BeginHealing();
     if( Enemy!=none && VSize(Enemy.Location-Pawn.Location)<100 )
         MoveToward(MoveTarget,Enemy,,false);
     else MoveToward(MoveTarget,MoveTarget,,false);

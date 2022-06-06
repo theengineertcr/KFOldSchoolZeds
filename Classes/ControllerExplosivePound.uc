@@ -1,8 +1,9 @@
+//Controller class for Explosive Gunner Pound
 class ControllerExplosivePound extends KFMonsterControllerOS;
 
-var     float       WaitAnimTimeout;
-var     int         AnimWaitChannel;
-var     name        AnimWaitingFor;
+var    float   WaitAnimTimeout;
+var    int     AnimWaitChannel;
+var    name    AnimWaitingFor;
 var    bool    bDoneSpottedCheck;
 
 state ZombieHunt
@@ -37,8 +38,8 @@ function bool FireWeaponAt(Actor A)
     if(ZombieExplosivesPoundOS(Pawn).Health / ZombieExplosivesPoundOS(Pawn).HealthMax < 0.5 )
         Monster(Pawn).RangedAttack(Target);
 
-    if((VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius)
-        && ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
+    if((VSize(A.Location - Pawn.Location) >= ZombieExplosivesPoundOS(Pawn).MeleeRange + Pawn.CollisionRadius + Target.CollisionRadius) &&
+        ZombieExplosivesPoundOS(Pawn).LastGLTime - Level.TimeSeconds > 0 )
     {
         return false;
     }
@@ -54,7 +55,6 @@ function TimedFireWeaponAtEnemy()
     else
         SetTimer(0.01, true);
 }
-
 
 state ZombieCharge
 {
@@ -89,7 +89,6 @@ Moving:
     if ( bSoaking )
         SoakStop("STUCK IN CHARGING!");
 }
-
 
 function SetWaitForAnimTimout(float NewWaitAnimTimeout, name AnimToWaitFor)
 {

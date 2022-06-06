@@ -1,5 +1,8 @@
+//2.5 KFGibJet ✓
 class KFGibJetOS extends BloodJetOS;
 
+//Usage:
+//Blood trails that spawn out of giblets
 defaultproperties
 {
     mMaxParticles=20

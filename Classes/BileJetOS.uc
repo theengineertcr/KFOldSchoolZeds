@@ -1,5 +1,8 @@
+//2.5 BileJet ✓
 class BileJetOS extends Actor;
 
+//Usage:
+//Bile that flies out of a Bloat's stomach when he explodes
 function PostBeginPlay()
 {
     settimer(0.5, true);//settimer(0.1, false);

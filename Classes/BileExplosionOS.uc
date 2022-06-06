@@ -1,5 +1,8 @@
+//2.5 Bile Explosion ✓
 class BileExplosionOS extends FleshHitEmitterOS;
 
+//Usage:
+//Emitter for when Bloat dies, but not to bleedout
 defaultproperties
 {
     Begin Object class=SpriteEmitter Name=BileExplosionEmitter

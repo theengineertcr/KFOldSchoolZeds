@@ -34,20 +34,16 @@ var bool bEnableOldHeadshotBehavior;
 //var bool bDisableHealthScaling;
 var bool bEnableRandomSkins;
 
-//To be removed
-var int damageRand;
-var int damageConst;
-
 // contains textures for mixed zed variants
 var protected array<material> MixTexturePool;
 var protected array<material> MixHairPool;
 
 var private bool bHeadSpawned;
 
-replication
+// Zeds shouldn't be doing this at all
+function bool CanGetOutOfWay()
 {
-	reliable if(Role == ROLE_Authority)
-		bEnableCorpseDecay;
+    return false;
 }
 
 // shut these, since we dont' use them
@@ -99,9 +95,7 @@ final private function SpawnClientExtendedZCollision()
 function bool FlipOver()
 {
     if( Physics==PHYS_Falling )
-    {
         SetPhysics(PHYS_Walking);
-    }
 
     bShotAnim = true;
     SetAnimAction('KnockDown');

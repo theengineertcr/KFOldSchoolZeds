@@ -56,17 +56,14 @@ simulated function PostBeginPlay()
     }
 
     if (PhysicsVolume.bWaterVolume)
-    {
         Velocity=0.6*Velocity;
-    }
+
     super(Projectile).PostBeginPlay();
 
     SetTimer(ExplodeTimer, false);
 }
 
-function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
-{
-}
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex){}
 
 // override to prevent zeds from taking damage - taken from siren
 simulated function HurtRadius( float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, vector HitLocation )
