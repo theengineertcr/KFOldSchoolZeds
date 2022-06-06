@@ -1718,7 +1718,7 @@ defaultproperties
 
     ZombieFlag=3
 
-    KKFRagdollName="FleshPoundRag" // "BossRag" - this is buggy and dumb looking, use fleshpound instead since it's weighty
+    KFRagdollName="FleshPoundRag" // "BossRag" - this is buggy and dumb looking, use fleshpound instead since it's weighty
 
     HeadHeight=8.5
     HeadRadius=8.2
