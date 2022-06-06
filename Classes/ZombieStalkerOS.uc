@@ -53,6 +53,9 @@ simulated function Tick(float DeltaTime)
     }
 }
 
+// You can have this because you're invisible and annoying to headshot
+function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex){}
+
 simulated function CloakStalker()
 {
     if( bZapped )
@@ -291,10 +294,9 @@ defaultproperties
 
     PuntAnim="ClotPunt"
 
-    HeadRadius=9.2
-    HeadHeight=2.9
+    HeadHeight=2.0
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=30,Y=-8,Z=28)
+    OnlineHeadshotOffset=(X=19,Y=-7,Z=25)
 
     bUseExtendedCollision=true
     ColOffset=(Z=48.000000)

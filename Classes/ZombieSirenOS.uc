@@ -280,7 +280,7 @@ defaultproperties
     ColHeight=5
 
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=20,Y=-3,Z=41)
+    OnlineHeadshotOffset=(X=12,Y=-3,Z=44)
 
     DistBeforeScream=200
     ScreamRadius=900
@@ -300,7 +300,7 @@ defaultproperties
     GroundSpeed=100.0
     WaterSpeed=80.000000
 
-    HeadRadius=7.5
+    HeadRadius=6.0
     HeadHeight=4.5
     Health=300
     HealthMax=300

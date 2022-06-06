@@ -1,10 +1,11 @@
 class ZombieClotOS extends KFMonsterOS;
 
-var     KFPawn  DisabledPawn;
-var     bool    bGrappling;
-var     float   GrappleEndTime;
-var()   float   GrappleDuration;
-var    float    ClotGrabMessageDelay;
+//TODO: Break grapple immediately on death
+var     KFPawn  DisabledPawn;           // The pawn that has been disabled by this zombie's grapple
+var     bool    bGrappling;             // This zombie is grappling someone
+var     float   GrappleEndTime;         // When the current grapple should be over
+var()   float   GrappleDuration;        // How long a grapple by this zombie should last
+var    float    ClotGrabMessageDelay;   // Amount of time between a player saying "I've been grabbed" message
 
 replication
 {
@@ -14,11 +15,7 @@ replication
 
 function BreakGrapple()
 {
-    if( DisabledPawn != none )
-    {
-         DisabledPawn.bMovementDisabled = false;
-         DisabledPawn = none;
-    }
+    super(ZombieClotBase).BreakGrapple();
 }
 
 function ClawDamageTarget()
@@ -28,13 +25,9 @@ function ClawDamageTarget()
     local float UsedMeleeDamage;
 
     if( MeleeDamage > 1 )
-    {
        UsedMeleeDamage = (MeleeDamage - (MeleeDamage * 0.05)) + (MeleeDamage * (FRand() * 0.1));
-    }
     else
-    {
        UsedMeleeDamage = MeleeDamage;
-    }
 
     if ( MeleeDamageTarget( UsedMeleeDamage, PushDir))
     {
@@ -45,9 +38,7 @@ function ClawDamageTarget()
             if ( KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
             {
                 if( DisabledPawn != none )
-                {
                      DisabledPawn.bMovementDisabled = false;
-                }
 
                 KFP.DisableMovement(GrappleDuration);
                 DisabledPawn = KFP;
@@ -98,21 +89,16 @@ simulated event SetAnimAction(name NewAction)
     }
     else if( NewAction == 'DoorBash' )
     {
-       //TODO: Make sure Grapple Anim isn't used
-       NewAction = meleeAnims[rand(2)];
+       NewAction = meleeAnims[0];
        CurrentDamtype = ZombieDamType[Rand(3)];
     }
 
     ExpectingChannel = DoAnimAction(NewAction);
 
     if( AnimNeedsWait(NewAction) )
-    {
         bWaitForAnim = true;
-    }
     else
-    {
         bWaitForAnim = false;
-    }
 
     if( Level.NetMode!=NM_Client )
     {
@@ -127,7 +113,7 @@ simulated function int DoAnimAction( name AnimName )
     if( AnimName=='ClotGrapple' )
     {
         if ( FRand() < 0.10 && LookTarget != none && KFPlayerController(LookTarget.Controller) != none &&
-             VSizeSquared(Location - LookTarget.Location) < 2500 /* (MeleeRange + 20)^2 */ &&
+             VSizeSquared(Location - LookTarget.Location) < 2500 &&
              Level.TimeSeconds - KFPlayerController(LookTarget.Controller).LastClotGrabMessageTime > ClotGrabMessageDelay &&
              KFPlayerController(LookTarget.Controller).SelectedVeterancy != class'KFVetBerserker' )
         {
@@ -138,17 +124,10 @@ simulated function int DoAnimAction( name AnimName )
     return super.DoAnimAction( AnimName );
 }
 
+//this doesn't even work in retail kf
 function RemoveHead()
 {
-    super.RemoveHead();
-
-    //this doesn't even work in retail kf
-    MeleeAnims[0] = 'Claw';
-    MeleeAnims[1] = 'Claw';
-    MeleeAnims[2] = 'Claw2';
-
-    MeleeDamage *= 2;
-    MeleeRange *= 2;
+    super(ZombieClot).RemoveHead();
 }
 
 static simulated function PreCacheStaticMeshes(LevelInfo myLevel)
@@ -165,60 +144,44 @@ defaultproperties
 {
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.InfectedWhiteMale1'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Clot.ClotSkin'
-
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Clot.Clot_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-
     MenuName="Clot 2.5"
     ScoringValue=7
     Intelligence=BRAINS_Mammal
     KFRagdollName="ClotRag"
-
     MovementAnims(0)="ClotWalk"
     WalkAnims(0)="ClotWalk"
     WalkAnims(1)="ClotWalk"
     WalkAnims(2)="ClotWalk"
     WalkAnims(3)="ClotWalk"
-    AdditionalWalkAnims(0) = "ClotWalk2"
-
+    AdditionalWalkAnims(0) = "ClotWalk"
     MeleeAnims(0)="Claw"
     MeleeAnims(1)="Claw2"
     MeleeAnims(2)="ClotGrapple"
-
     MeleeRange=20.0
     MeleeDamage=6
     damageForce=5000
-
     PuntAnim="ClotPunt"
-
     bUseExtendedCollision=true
     ColOffset=(Z=48.000000)
     ColRadius=25.000000
     ColHeight=5.000000
-
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=25,Y=-7,Z=42)
-
+    OnlineHeadshotOffset=(X=21,Y=-7,Z=43)
     Health=130
     HealthMax=130
     HeadHeight=5
-
     RotationRate=(Yaw=45000,Roll=0)
-
     GroundSpeed=105.000000
     WaterSpeed=105.000000
     JumpZ=340.000000
-
     MotionDetectorThreat=0.34
-
     CrispUpThreshhold=9
-
     GrappleDuration=1.0//1.5
     ClotGrabMessageDelay=12.0
-
     bCannibal = true
 }

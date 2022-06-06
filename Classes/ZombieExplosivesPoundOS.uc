@@ -21,37 +21,57 @@ replication
         TraceHitPos,bGLing,bCharging;
 }
 
+function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPosition, float fTimeEnd  )
+{
+    local vector NewVelocity;
+
+    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
+
+    if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
+    {
+        if( PhysicsVolume.Gravity.Z < class'PhysicsVolume'.default.Gravity.Z )
+        {
+            if( Mass > 900 )
+            {
+                NewVelocity.Z += 90;
+            }
+        }
+    }
+
+    return NewVelocity;
+}
+
 simulated function PostBeginPlay()
 {
     if( Role < ROLE_Authority )
-    {
         return;
-    }
 
-    if (Level.Game != none && !bNerfed)
+    if (Level.Game != none)
     {
-        if( Level.Game.GameDifficulty < 2.0 )
+        if(!bNerfed)
         {
-            GLFireBurst = default.GLFireBurst * 0.5;
-            GLFireRate = default.GLFireRate * 1.66;
-        }
-        else if( Level.Game.GameDifficulty < 4.0 )
-        {
-            GLFireBurst = default.GLFireBurst * 1.0;
-            GLFireRate = default.GLFireRate * 1.0;
-        }
-        else if( Level.Game.GameDifficulty < 5.0 )
-        {
-            GLFireBurst = default.GLFireBurst * 1.5;
-            GLFireRate = default.GLFireRate * 0.8;
+            if( Level.Game.GameDifficulty < 2.0 )
+            {
+                GLFireBurst = default.GLFireBurst * 0.5;
+                GLFireRate = default.GLFireRate * 1.66;
+            }
+            else if( Level.Game.GameDifficulty < 4.0 )
+            {
+                GLFireBurst = default.GLFireBurst * 1.0;
+                GLFireRate = default.GLFireRate * 1.0;
+            }
+            else if( Level.Game.GameDifficulty < 5.0 )
+            {
+                GLFireBurst = default.GLFireBurst * 1.5;
+                GLFireRate = default.GLFireRate * 0.8;
+            }
+            else
+            {
+                GLFireBurst = default.GLFireBurst * 2.0;
+                GLFireRate = default.GLFireRate * 0.5;
+            }
         }
         else
-        {
-            GLFireBurst = default.GLFireBurst * 2.0;
-            GLFireRate = default.GLFireRate * 0.5;
-        }
-
-        if(bNerfed)
         {
             GLFireInterval = default.GLFireInterval * 0.6;
             GLFireBurst = default.GLFireBurst * 0.5;
@@ -74,15 +94,11 @@ simulated Function PostNetBeginPlay()
 simulated function PostNetReceive()
 {
     if (bCharging)
-    {
         MovementAnims[0]='PoundRun';
-    }
-    else if( !(bCrispified && bBurnified) )
-    {
+    else if(!(bCrispified && bBurnified))
         MovementAnims[0]=default.MovementAnims[0];
-    }
 
-    if( bClientGLing != bGLing )
+    if(bClientGLing != bGLing)
     {
         bClientGLing = bGLing;
 
@@ -113,58 +129,12 @@ simulated function PostNetReceive()
 
 function SetMindControlled(bool bNewMindControlled)
 {
-    if( bNewMindControlled )
-    {
-        NumZCDHits++;
-
-        if( NumZCDHits > 1 )
-        {
-            if( !IsInState('RunningToMarker') )
-            {
-                GotoState('RunningToMarker');
-            }
-            else
-            {
-                NumZCDHits = 1;
-                if( IsInState('RunningToMarker') )
-                {
-                    GotoState('');
-                }
-            }
-        }
-        else
-        {
-            if( IsInState('RunningToMarker') )
-            {
-                GotoState('');
-            }
-        }
-
-        if( bNewMindControlled != bZedUnderControl )
-        {
-            SetGroundSpeed(OriginalGroundSpeed * 1.25);
-            Health *= 1.25;
-            HealthMax *= 1.25;
-        }
-    }
-    else
-    {
-        NumZCDHits=0;
-    }
-
-    bZedUnderControl = bNewMindControlled;
+    super(ZombieScrake).SetMindControlled(bNewMindControlled);
 }
 
 function GivenNewMarker()
 {
-    if( bCharging && NumZCDHits > 1  )
-    {
-        GotoState('RunningToMarker');
-    }
-    else
-    {
-        GotoState('');
-    }
+    super(ZombieScrake).GivenNewMarker();
 }
 
 simulated function SetBurningBehavior()
@@ -176,30 +146,6 @@ simulated function SetBurningBehavior()
     }
 
     super.SetBurningBehavior();
-}
-
-function vector ComputeTrajectoryByTime( vector StartPosition, vector EndPosition, float fTimeEnd  )
-{
-    local vector NewVelocity;
-
-    NewVelocity = super.ComputeTrajectoryByTime( StartPosition, EndPosition, fTimeEnd );
-
-    if( PhysicsVolume.IsA( 'KFPhysicsVolume' ) && StartPosition.Z < EndPosition.Z )
-    {
-        if( PhysicsVolume.Gravity.Z < class'PhysicsVolume'.default.Gravity.Z )
-        {
-            if( Mass > 900 )
-            {
-                NewVelocity.Z += 90;
-            }
-        }
-    }
-    return NewVelocity;
-}
-
-function bool CanGetOutOfWay()
-{
-    return false;
 }
 
 function bool FlipOver()
@@ -323,7 +269,9 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z = 50;
+            OnlineHeadshotOffset.Z = 53;
+            OnlineHeadshotOffset.X = 38;
+            OnlineHeadshotOffset.Y = -5;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -860,9 +808,9 @@ defaultproperties
     ColHeight=25
     PrePivot=(Z=2)
 
-    HeadHeight=8
-    HeadRadius=9
+    HeadHeight=11.0
+    HeadRadius=8.75
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=30,Y=7,Z=68)
+    OnlineHeadshotOffset=(X=-5,Y=7,Z=77)
     bNerfed=false
 }

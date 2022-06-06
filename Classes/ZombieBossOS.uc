@@ -656,6 +656,7 @@ state FireChaingun
 
     function BeginState()
     {
+        OnlineHeadshotOffset=default.OnlineHeadshotOffset;
         bFireAtWill = false;
         Acceleration = vect(0,0,0);
         MGLostSightTimeout = 0.0;
@@ -797,6 +798,7 @@ Ignores RangedAttack;
 
     function BeginState()
     {
+        OnlineHeadshotOffset=default.OnlineHeadshotOffset;
         Acceleration = vect(0,0,0);
     }
 
@@ -863,6 +865,9 @@ state Charging
         return false;
     }
 
+    //Dont play hit anims while charging so people don't complain about broken head hitboxes :)
+    function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex){}
+
     function BeginState()
     {
         bChargingPlayer = true;
@@ -870,6 +875,9 @@ state Charging
             PostNetReceive();
 
         NumChargeAttacks = Rand(2) + 1;
+
+        OnlineHeadshotOffset.Z=60;
+        OnlineHeadshotOffset.X=30;
     }
 
     function EndState()
@@ -880,6 +888,7 @@ state Charging
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
 
+        OnlineHeadshotOffset=default.OnlineHeadshotOffset;
         LastChargeTime = Level.TimeSeconds;
     }
 
@@ -1676,7 +1685,7 @@ defaultproperties
     ScoringValue=500
     GroundSpeed=120.000000
     WaterSpeed=120.000000
-    MeleeDamage=100//75 - he does 100 + Ran(100) in the mod
+    MeleeDamage=100//75 - he does 100 + Rand(100) in the mod
     Health=4000//4000
     HealthMax=4000//4000
     PlayerCountHealthScale=0.75
@@ -1709,12 +1718,12 @@ defaultproperties
 
     ZombieFlag=3
 
-    KFRagdollName="BossRag"
+    KKFRagdollName="FleshPoundRag" // "BossRag" - this is buggy and dumb looking, use fleshpound instead since it's weighty
 
     HeadHeight=8.5
-    HeadRadius=8
+    HeadRadius=8.2
     OnlineHeadshotScale=1.1
-    OnlineHeadshotOffset=(X=20,Y=-6,Z=67) //Z=75
+    OnlineHeadshotOffset=(X=2,Y=-6,Z=74)
 
     ControllerClass=class'ControllerBossOS'
 }

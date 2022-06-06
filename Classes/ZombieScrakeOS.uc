@@ -19,80 +19,24 @@ simulated function PostNetBeginPlay()
 simulated function PostNetReceive()
 {
     if (bCharging)
-    {
         MovementAnims[0]='ZombieRun';
-    }
     else if( !(bCrispified && bBurnified) )
-    {
         MovementAnims[0]=default.MovementAnims[0];
-    }
 }
 
 function SetMindControlled(bool bNewMindControlled)
 {
-    if( bNewMindControlled )
-    {
-        NumZCDHits++;
-
-        if( NumZCDHits > 1 )
-        {
-            if( !IsInState('RunningToMarker') )
-            {
-                GotoState('RunningToMarker');
-            }
-            else
-            {
-                NumZCDHits = 1;
-                if( IsInState('RunningToMarker') )
-                {
-                    GotoState('');
-                }
-            }
-        }
-        else
-        {
-            if( IsInState('RunningToMarker') )
-            {
-                GotoState('');
-            }
-        }
-
-        if( bNewMindControlled != bZedUnderControl )
-        {
-            SetGroundSpeed(OriginalGroundSpeed * 1.25);
-            Health *= 1.25;
-            HealthMax *= 1.25;
-        }
-    }
-    else
-    {
-        NumZCDHits=0;
-    }
-
-    bZedUnderControl = bNewMindControlled;
+    super(ZombieScrake).SetMindControlled(bNewMindControlled);
 }
 
 function GivenNewMarker()
 {
-    if( bCharging && NumZCDHits > 1  )
-    {
-        GotoState('RunningToMarker');
-    }
-    else
-    {
-        GotoState('');
-    }
+    super(ZombieScrake).GivenNewMarker();
 }
 
 simulated function SetBurningBehavior()
 {
-    if( Role == Role_Authority && IsInState('RunningState') )
-    {
-        super.SetBurningBehavior();
-        GotoState('');
-    }
-
-    super.SetBurningBehavior();
+    super(ZombieScrake).SetBurningBehavior();
 }
 
 function RangedAttack(Actor A)
@@ -147,12 +91,13 @@ state RunningState
         return false;
     }
 
+    //Dont play hit anims while charging so people don't complain about broken head hitboxes :)
+    function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex){}
+
     function BeginState()
     {
         if( bZapped )
-        {
             GoToState('');
-        }
         else
         {
             SetGroundSpeed(OriginalGroundSpeed * 3.5);
@@ -160,7 +105,9 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z = 39;
+            OnlineHeadshotOffset.Z = 41;
+            OnlineHeadshotOffset.X = 24;
+            OnlineHeadshotOffset.Y = -10;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -168,9 +115,7 @@ state RunningState
     function EndState()
     {
         if( !bZapped )
-        {
             SetGroundSpeed(GetOriginalGroundSpeed());
-        }
         bCharging = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
@@ -210,15 +155,9 @@ state RunningToMarker extends RunningState
 {
 }
 
-
 State SawingLoop
 {
     function bool CanSpeedAdjust()
-    {
-        return false;
-    }
-
-    function bool CanGetOutOfWay()
     {
         return false;
     }
@@ -274,28 +213,12 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
 function PlayTakeHit(vector HitLocation, int Damage, class<DamageType> DamageType)
 {
-    local int StunChance;
-
-    StunChance = rand(5);
-
-    if( Level.TimeSeconds - LastPainAnim < MinTimeBetweenPainAnims )
-        return;
-
-    if( (Level.Game.GameDifficulty < 5.0 || StunsRemaining != 0) && (Damage>=150 || (DamageType.name=='DamTypeStunNade' && StunChance>3) || (DamageType.name=='DamTypeCrossbowHeadshot' && Damage>=200)) )
-        PlayDirectionalHit(HitLocation);
-
-    LastPainAnim = Level.TimeSeconds;
-
-    if( Level.TimeSeconds - LastPainSound < MinTimeBetweenPainSounds )
-        return;
-
-    LastPainSound = Level.TimeSeconds;
-    PlaySound(HitSound[0], SLOT_Pain,1.25,,400);
+    super(ZombieScrake).PlayTakeHit(HitLocation,Damage,DamageType);
 }
 
 simulated function int DoAnimAction( name AnimName )
 {
-    if( AnimName=='SawZombieAttack1' || AnimName=='SawZombieAttack2' || AnimName=='SawImpaleLoop' )
+    if( AnimName=='SawZombieAttack1' || AnimName=='SawZombieAttack2' /*|| AnimName=='SawImpaleLoop' */)
     {
         AnimBlendParams(1, 1.0, 0.0,, 'Bip01 Spine1');
         PlayAnim(AnimName,, 0.0, 1);
@@ -321,9 +244,7 @@ simulated event SetAnimAction(name NewAction)
     ExpectingChannel = DoAnimAction(NewAction);
 
     if( AnimNeedsWait(NewAction) )
-    {
         bWaitForAnim = true;
-    }
 
     if( Level.NetMode!=NM_Client )
     {
@@ -336,9 +257,7 @@ simulated event SetAnimAction(name NewAction)
 simulated function bool AnimNeedsWait(name TestAnim)
 {
     if( TestAnim == 'SawImpaleLoop' || TestAnim == 'DoorBash' || TestAnim == 'KnockDown' )
-    {
         return true;
-    }
 
     return false;
 }
@@ -364,16 +283,12 @@ defaultproperties
     Skins(1)=TexOscillator'KFOldSchoolZeds_Textures.Scrake.SawChainOSC'
     Skins(2)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeFrockSkin'
     Skins(3)=Texture'KFOldSchoolZeds_Textures.Scrake.ScrakeSawSkin'
-
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Scrake.Saw_Idle'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Scrake.Scrake_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-
     ZombieFlag=3
-
     bMeleeStunImmune = true
     MeleeAnims(0)="SawZombieAttack1"
     MeleeAnims(1)="SawZombieAttack2"
@@ -396,7 +311,6 @@ defaultproperties
     bUseExtendedCollision=true
     DamageToMonsterScale=8.0
     PoundRageBumpDamScale=0.01
-
     MeleeDamage=20
     damageForce=-100000
     ScoringValue=75
@@ -416,22 +330,18 @@ defaultproperties
     bHarpoonToHeadStuns=true
     bHarpoonToBodyStuns=false
     Intelligence=BRAINS_Mammal
-
-    KFRagdollName="SawZombieRag"
+    KFRagdollName="FleshPoundRag"//SawZombieRag"
     bCannibal = true
     MenuName="Scrake 2.5"
     SoundRadius=200.000000
     AmbientSoundScaling=5
-
     ColOffset=(Z=55)
     ColRadius=29
     ColHeight=18
     Prepivot=(Z=0.0)
     HeadHeight=6
     HeadRadius=8
-
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=25,Y=-7,Z=57) //Z=39 while charging
-
+    OnlineHeadshotOffset=(X=10,Y=-7,Z=58)
     ControllerClass=class'ControllerScrakeOS'
 }

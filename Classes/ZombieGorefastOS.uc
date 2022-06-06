@@ -13,70 +13,20 @@ simulated function PostNetReceive()
     if( !bZapped )
     {
         if (bRunning)
-        {
             MovementAnims[0]='ZombieRun';
-        }
         else
-        {
             MovementAnims[0]=default.MovementAnims[0];
-        }
     }
 }
 
 function SetMindControlled(bool bNewMindControlled)
 {
-    if( bNewMindControlled )
-    {
-        NumZCDHits++;
-
-        if( NumZCDHits > 1 )
-        {
-            if( !IsInState('RunningToMarker') )
-            {
-                GotoState('RunningToMarker');
-            }
-            else
-            {
-                NumZCDHits = 1;
-                if( IsInState('RunningToMarker') )
-                {
-                    GotoState('');
-                }
-            }
-        }
-        else
-        {
-            if( IsInState('RunningToMarker') )
-            {
-                GotoState('');
-            }
-        }
-
-        if( bNewMindControlled != bZedUnderControl )
-        {
-            SetGroundSpeed(OriginalGroundSpeed * 1.25);
-            Health *= 1.25;
-            HealthMax *= 1.25;
-        }
-    }
-    else
-    {
-        NumZCDHits=0;
-    }
-
-    bZedUnderControl = bNewMindControlled;
+    super(ZombieGorefast).SetMindControlled(bNewMindControlled);
 }
 
 function GivenNewMarker()
 {
-    if( bRunning && NumZCDHits > 1 )
-    {
-        GotoState('RunningToMarker');
-    }
-    else
-    {
-        GotoState('');
-    }
+    super(ZombieGorefast).GivenNewMarker();
 }
 
 function PlayZombieAttackHitSound()
@@ -103,9 +53,7 @@ function RangedAttack(Actor A)
     super.RangedAttack(A);
 
     if( !bShotAnim && !bDecapitated && VSize(A.Location-Location)<=700 )
-    {
         GoToState('RunningState');
-    }
 }
 
 state RunningState
@@ -121,12 +69,13 @@ state RunningState
         return false;
     }
 
+    //Dont play hit anims while charging so people don't complain about broken head hitboxes :)
+    function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex){}
+
     function BeginState()
     {
         if( bZapped )
-        {
             GoToState('');
-        }
         else
         {
             SetGroundSpeed(OriginalGroundSpeed * 1.875);
@@ -134,7 +83,8 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z = 34;
+            OnlineHeadshotOffset.Z = 32;
+            OnlineHeadshotOffset.X = 20;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
@@ -142,9 +92,7 @@ state RunningState
     function EndState()
     {
         if( !bZapped )
-        {
             SetGroundSpeed(GetOriginalGroundSpeed());
-        }
         bRunning = false;
         if( Level.NetMode!=NM_DedicatedServer )
             PostNetReceive();
@@ -185,9 +133,7 @@ CheckCharge:
         GoTo('CheckCharge');
     }
     else
-    {
         GoToState('');
-    }
 }
 
 state RunningToMarker extends RunningState
@@ -201,9 +147,7 @@ CheckCharge:
         GoTo('CheckCharge');
     }
     else
-    {
         GoToState('');
-    }
 }
 
 static simulated function PreCacheMaterials(LevelInfo myLevel)
@@ -215,14 +159,11 @@ defaultproperties
 {
     Mesh=SkeletalMesh'KFCharacterModelsOldSchool.GoreFast'
     Skins(0)=Texture'KFOldSchoolZeds_Textures.Gorefast.GorefastSkin'
-
     AmbientSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieBreath'
     MoanVoice=Sound'KFOldSchoolZeds_Sounds.Gorefast.Gorefast_Speech'
     JumpSound=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieJump'
-
     HitSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombiePain'
     DeathSound(0)=Sound'KFOldSchoolZeds_Sounds.Shared.Male_ZombieDeath'
-
     MeleeAnims(0)="GoreAttack1"
     MeleeAnims(1)="GoreAttack2"
     MeleeAnims(2)="GoreAttack1"
@@ -238,7 +179,6 @@ defaultproperties
     IdleRifleAnim="GoreIdle"
     Mass=350.000000
     RotationRate=(Yaw=45000,Roll=0)
-
     MeleeDamage=15
     damageForce=5000
     ScoringValue=12
@@ -252,18 +192,12 @@ defaultproperties
     HeadHealth=25
     CrispUpThreshhold=8
     MotionDetectorThreat=0.5
-
     HeadRadius=8
     HeadHeight=5
     bCannibal = true
     MenuName="Gorefast 2.5"
-
-    damageConst = 10
-    damageRand = 10
-
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=30,Y=-8,Z=37)
-
+    OnlineHeadshotOffset=(X=16,Y=-8,Z=38)
     bUseExtendedCollision=true
     ColOffset=(Z=52)
     ColRadius=25
