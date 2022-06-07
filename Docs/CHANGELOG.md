@@ -15,6 +15,9 @@
 - Fill me later!
 
 ### Finished / Fixed
+- [X] Bloat deals inaccurate damage in Bilebomb(two hits instead of one)
+- [X] Fleshpound Spin attack back
+- [X] Fix Scrake not playin SawImpaleLoop anim on dedis
 - [X] Zed Head hitboxes overhaul
 - [X] Explosive Pound movement speed increase
 - [X] Explosive Pound to prioritize Attack 1 when charging on Sui+
