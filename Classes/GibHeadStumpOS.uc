@@ -14,7 +14,7 @@ defaultproperties
     StaticMesh=StaticMesh'22Patch.Severed_Head'
     RemoteRole=ROLE_SimulatedProxy
     NetUpdateFrequency=10.000000
-    LifeSpan=9999.000000
+    LifeSpan=40.000000
     DrawScale=0.600000
     Skins(0)=Texture'22CharTex.SeveredSkin'
     bUnlit=false
