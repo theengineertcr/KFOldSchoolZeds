@@ -124,6 +124,14 @@ simulated function int DoAnimAction( name AnimName )
     return super.DoAnimAction( AnimName );
 }
 
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
+{
+    super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
+
+    if( Health < 0 || Damage > Health)
+        DisabledPawn.bMovementDisabled = false;
+}
+
 //this doesn't even work in retail kf
 function RemoveHead()
 {
