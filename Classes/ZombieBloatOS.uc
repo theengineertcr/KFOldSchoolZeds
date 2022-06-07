@@ -8,8 +8,9 @@ var float DistBeforePuke;
 
 //Call Puke Emitter via AnimNotify_Script than Effect
 //Otherwise, compiling will complain about missing meshes
-//This may not work on dedis, figure a way to fix that later
-function SpawnPukeEmitter()
+//Redo this function to aim puke to player
+//Also, bEnableOldBloatPuke doesn't work
+simulated function SpawnPukeEmitter()
 {
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
@@ -115,6 +116,11 @@ function SpawnTwoShots()
 {
     local vector X,Y,Z, FireStart;
     local rotator FireRotation;
+
+    // Credit: https://github.com/InsultingPros/SuperZombieMut/blob/somechanges/Classes/ZombieSuperBloat.uc#L94
+    // check this from the very start to prevent any log spam / dead bloats dont barf!(headless bloats dont barf either!)
+    if (Controller == none || IsInState('ZombieDyingOS') || bDecapitated )
+        return;
 
     if( Controller!=none && KFDoorMover(Controller.Target)!=none )
     {
