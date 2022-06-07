@@ -48,23 +48,19 @@ simulated function PostBeginPlay()
     {
         if( Level.Game.GameDifficulty < 2.0 )
         {
-            SpinDamConst = default.SpinDamConst * 0.8;
-            SpinDamRand = default.SpinDamRand  * 0.5;
+            SpinDamConst = default.SpinDamConst * 0.5;
         }
         else if( Level.Game.GameDifficulty < 4.0 )
         {
             SpinDamConst = default.SpinDamConst * 1.0;
-            SpinDamRand = default.SpinDamRand  * 1.0;
         }
         else if( Level.Game.GameDifficulty < 5.0 )
         {
             SpinDamConst = default.SpinDamConst * 1.2;
-            SpinDamRand = default.SpinDamRand  * 1.25;
         }
         else // Hardest difficulty
         {
             SpinDamConst = default.SpinDamConst * 1.6;
-            SpinDamRand = default.SpinDamRand  * 1.25;
         }
     }
 
@@ -189,6 +185,7 @@ function RangedAttack(Actor A)
             bShotAnim = true;
             SetAnimAction('Claw');
             PlaySound(sound'Claw2s', SLOT_None);
+            damageForce=default.damageForce;
             return;
     }
 }
@@ -295,7 +292,7 @@ Ignores StartCharging;
             }
             else
             {
-                DifficultyModifier = 3.0; //
+                DifficultyModifier = 3.0;
             }
 
             OnlineHeadshotOffset.Z=50;
@@ -322,6 +319,7 @@ Ignores StartCharging;
 
         if( Level.NetMode!=NM_DedicatedServer )
             ClientChargingAnims();
+
 
         OnlineHeadshotOffset = default.OnlineHeadshotOffset;
         NetUpdateTime = Level.TimeSeconds - 1;
@@ -356,7 +354,8 @@ Ignores StartCharging;
         else if ( Dist < MeleeRange + CollisionRadius + A.CollisionRadius )
         {
             bShotAnim = true;
-            SetAnimAction('Claw');
+            SetAnimAction('FPRageAttack'); // ACTUALLY do your rage attack when raged
+            damageForce=-20000;            // Your rage attack looks like it pulls players, so actually pull them
             PlaySound(sound'Claw2s', SLOT_None);
             return;
         }
@@ -517,7 +516,7 @@ function SpinDamage(actor Target)
         return;
 
     PushDir = (damageForce * Normal(Target.Location - Location));
-    damageamount = (SpinDamConst + rand(SpinDamRand) );
+    damageamount = (SpinDamConst);
 
     if (Target.IsA('KFHumanPawn') && Pawn(Target).Health <= DamageAmount)
     {
@@ -709,7 +708,6 @@ defaultproperties
     WaterSpeed=120.000000
     MeleeDamage=35
     SpinDamConst=5.000000
-    SpinDamRand=5.000000
     Health=1500
     HealthMax=1500
     PlayerCountHealthScale=0.25
