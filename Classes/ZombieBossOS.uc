@@ -1440,7 +1440,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     if( Health<=0 || SyringeCount==3 || IsInState('Escaping') || IsInState('KnockDown'))
         return;
 
-    if( (SyringeCount==0 && Health<HealingLevels[0]) || (SyringeCount==1 && Health<HealingLevels[1]) || (SyringeCount==2 && Health<HealingLevels[2]) )
+    if( ((SyringeCount==0 && Health<HealingLevels[0]) || (SyringeCount==1 && Health<HealingLevels[1]) || (SyringeCount==2 && Health<HealingLevels[2]) ))
     {
         bShotAnim = true;
         Acceleration = vect(0,0,0);

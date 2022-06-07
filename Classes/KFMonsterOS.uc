@@ -21,7 +21,6 @@ var class <KFGibOS> MonsterLowerTorsoGibletOS;
 
 var Vector LastBloodHitDirection;
 
-var bool bEnableCorpseDecay;
 var bool bEnableRangedPound;
 var bool bEnableExplosivesPound;
 var bool bEnableOldBloatPuke;
@@ -29,7 +28,6 @@ var bool bEnableOldCrawlerBehaviour;
 var bool bEnableSirenNadeBoom;
 var bool bEnableOldScrakeBehavior;
 var bool bEnableOldFleshpoundBehavior;
-var bool bEnableOldFleshpoundSpinAttack;
 var bool bEnableOldHeadshotBehavior;
 //var bool bDisableHealthScaling;
 var bool bEnableRandomSkins;
@@ -336,16 +334,7 @@ simulated function PlayDying(class<DamageType> DamageType, vector HitLoc)
     AnimBlendParams(1, 0.0);
     FireState = FS_None;
 
-    //Doesn't work because casting onto parent(KFMonsterOS) does not
-    //Cast onto child classes. Maybe make it cast onto ZedList?
-    if(bEnableCorpseDecay)
-    {
-        GotoState('ZombieDyingDecay');
-        LifeSpan=30;
-        DeResTime=8;
-    }
-    else
-        GotoState('ZombieDyingOS');
+    GotoState('ZombieDyingOS');
 
     if ( BE != none )
         return;
