@@ -142,6 +142,6 @@ defaultproperties
     HeadHeight=1.0
     HeadRadius=10
     OnlineHeadshotScale=1.1
-    OnlineHeadshotOffset=(X=26,Y=-5,Z=-7)
+    OnlineHeadshotOffset=(X=20,Y=-5,Z=-7)
     ControllerClass=class'ControllerCrawlerOS'
 }

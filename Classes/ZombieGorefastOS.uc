@@ -84,7 +84,7 @@ state RunningState
                 PostNetReceive();
 
             OnlineHeadshotOffset.Z = 32;
-            OnlineHeadshotOffset.X = 20;
+            OnlineHeadshotOffset.X = 32;
             NetUpdateTime = Level.TimeSeconds - 1;
         }
     }
