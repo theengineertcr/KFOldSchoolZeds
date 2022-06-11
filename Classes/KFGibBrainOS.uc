@@ -1,3 +1,4 @@
+// Piece of the brain when zed's head is destroyed ✓
 class KFGibBrainOS extends KFGibOS;
 
 defaultproperties

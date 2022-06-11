@@ -1,3 +1,4 @@
+// Blood Splatter decal ✓
 class KFBloodSplatterDecalOS extends BloodSplatterOS;
 
 simulated function PostBeginPlay()

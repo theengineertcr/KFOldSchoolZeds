@@ -1,8 +1,9 @@
+//Controller class for Gunner Pound ✓
 class ControllerRangedPoundOS extends KFMonsterControllerOS;
 
-var     float       WaitAnimTimeout;    
-var     int         AnimWaitChannel;    
-var     name        AnimWaitingFor;     
+var     float       WaitAnimTimeout;
+var     int         AnimWaitChannel;
+var     name        AnimWaitingFor;
 
 
 function bool FireWeaponAt(Actor A)

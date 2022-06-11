@@ -1,3 +1,4 @@
+// Blood Puff effect when zed is damaged ✓
 class KFBloodPuffOS extends BloodSmallHit;
 
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Textures.utx

@@ -1,3 +1,4 @@
+// Projectile for Gunner Class ✓
 class GunnerGLProjectile extends SPGrenadeProjectile;
 
 #exec OBJ LOAD FILE=KFOldSchoolStatics.usx

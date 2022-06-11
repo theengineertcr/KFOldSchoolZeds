@@ -1,3 +1,4 @@
+// 2.5 Gib Class ✓
 class KFGibOS extends KFGib;
 
 #exec OBJ LOAD FILE=KFOldSchoolZeds_Sounds.uax

@@ -1,4 +1,4 @@
-//Controller class for Patriarch
+//Controller class for Patriarch ✓
 class ControllerBossOS extends KFMonsterControllerOS;
 
 var NavigationPoint HidingSpots;

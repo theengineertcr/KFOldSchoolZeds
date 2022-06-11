@@ -1,4 +1,4 @@
-//2.5 BloodSpurt Emitter
+//2.5 BloodSpurt Emitter ✓
 class BloodSpurtOS extends xEmitter;
 
 //Usage:

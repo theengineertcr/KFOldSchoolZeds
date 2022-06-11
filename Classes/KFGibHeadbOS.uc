@@ -1,3 +1,4 @@
+// Piece of the head when zed's head is destroyed ✓
 class KFGibHeadbOS extends KFGibOS;
 
 defaultproperties

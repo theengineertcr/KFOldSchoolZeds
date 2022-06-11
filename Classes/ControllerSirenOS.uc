@@ -1,3 +1,4 @@
+// Controller class for Siren
 class ControllerSirenOS extends KFMonsterControllerOS;
 
 var        bool        bDoneSpottedCheck;

@@ -1,3 +1,4 @@
+// Explosion when zed is obliterated ✓
 class GibExplosionOS extends FleshHitEmitterOS;
 
 defaultproperties

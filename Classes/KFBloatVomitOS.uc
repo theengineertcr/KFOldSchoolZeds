@@ -1,3 +1,4 @@
+// Vomit for Bloat Zombie ✓
 class KFBloatVomitOS extends KFBloatVomit;
 
 #exec OBJ LOAD FILE=KillingFloorLabTextures.utx

@@ -1,3 +1,4 @@
+// Stump attached to the neck after the head has been destroyed ✓
 class GibHeadStumpOS extends KFGibOS;
 
 simulated function PostBeginPlay()

@@ -1,3 +1,4 @@
+// Controller Class for Scrake ✓
 class ControllerScrakeOS extends KFMonsterControllerOS;
 
 var    bool    bDoneSpottedCheck;
@@ -20,17 +21,6 @@ state ZombieHunt
         super.SeePlayer(SeenPlayer);
     }
 }
-
-//Exactly same as parent
-//TODO:After push to git, delete this.
-
-//function TimedFireWeaponAtEnemy()
-//{
-//	if ( (Enemy == None) || FireWeaponAt(Enemy) )
-//		SetCombatTimer();
-//	else
-//		SetTimer(0.1, True);
-//}
 
 state ZombieCharge
 {

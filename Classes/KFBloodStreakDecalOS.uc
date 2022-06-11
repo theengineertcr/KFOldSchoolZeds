@@ -1,3 +1,4 @@
+// Blood Streak Decal ✓
 class KFBloodStreakDecalOS extends KFBloodSplatterDecalOS;
 
 simulated function PostBeginPlay()

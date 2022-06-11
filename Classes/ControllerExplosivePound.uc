@@ -1,4 +1,4 @@
-//Controller class for Explosive Gunner Pound
+//Controller class for Explosive Gunner Pound ✓
 class ControllerExplosivePound extends KFMonsterControllerOS;
 
 var    float   WaitAnimTimeout;
