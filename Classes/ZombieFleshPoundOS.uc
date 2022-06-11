@@ -13,6 +13,7 @@ var name ChargingAnim;
 var () int RageDamageThreshold;
 var FleshPoundAvoidArea AvoidArea;
 var bool    bFrustrated;
+var bool bEnableOldFleshpoundBehavior;
 
 replication
 {
@@ -296,7 +297,7 @@ Ignores StartCharging;
             }
 
             OnlineHeadshotOffset.Z=50;
-            OnlineHeadshotOffset.X=45;
+            OnlineHeadshotOffset.X=44;
             OnlineHeadshotOffset.Y=-4;
 
             if(!bEnableOldFleshpoundBehavior)
@@ -739,6 +740,6 @@ defaultproperties
     ColHeight=35.000000
     PrePivot=(Z=0)
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=0,Y=-6,Z=69)
+    OnlineHeadshotOffset=(X=-9,Y=-6,Z=69)
     ControllerClass=class'ControllerFleshpoundOS'
 }

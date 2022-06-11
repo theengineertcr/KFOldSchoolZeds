@@ -2,6 +2,7 @@ class ZombieScrakeOS extends KFMonsterOS;
 
 var         bool    bCharging;
 var float DistBeforeSaw;
+var bool bEnableOldScrakeBehavior;
 
 replication
 {
@@ -106,7 +107,7 @@ state RunningState
                 PostNetReceive();
 
             OnlineHeadshotOffset.Z = 41;
-            OnlineHeadshotOffset.X = 24;
+            OnlineHeadshotOffset.X = 30;
             OnlineHeadshotOffset.Y = -10;
             NetUpdateTime = Level.TimeSeconds - 1;
         }

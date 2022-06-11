@@ -269,7 +269,7 @@ state RunningState
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
 
-            OnlineHeadshotOffset.Z = 53;
+            OnlineHeadshotOffset.Z = 51;
             OnlineHeadshotOffset.X = 38;
             OnlineHeadshotOffset.Y = -5;
             NetUpdateTime = Level.TimeSeconds - 1;
@@ -811,6 +811,6 @@ defaultproperties
     HeadHeight=11.0
     HeadRadius=8.75
     OnlineHeadshotScale=1.2
-    OnlineHeadshotOffset=(X=-5,Y=7,Z=77)
+    OnlineHeadshotOffset=(X=-8,Y=7,Z=77)
     bNerfed=false
 }
