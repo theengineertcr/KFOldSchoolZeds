@@ -18,6 +18,7 @@ var(Shake)  float    ScreamBlurScale;
 
 var bool bAboutToDie;
 var float DeathTimer;
+var bool bEnableSirenNadeBoom;
 
 // Fixes credit: https://github.com/Shtoyan/KF1066/blob/main/docs/VeryAnnoying/ZedIssues.md
 
