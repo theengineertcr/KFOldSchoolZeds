@@ -21,16 +21,14 @@ var class <KFGibOS> MonsterLowerTorsoGibletOS;
 
 var Vector LastBloodHitDirection;
 
-var bool bEnableRangedPound;
-var bool bEnableExplosivesPound;
-var bool bEnableOldBloatPuke;
-var bool bEnableOldCrawlerBehaviour;
-var bool bEnableSirenNadeBoom;
-var bool bEnableOldScrakeBehavior;
-var bool bEnableOldFleshpoundBehavior;
-var bool bEnableOldHeadshotBehavior;
+// Zed specific vars moved to their respective classes
+
+// Enabling these via casting from the mutator "works"
+// But it does not pass to child classes for whatever reason
+// (KFMonsterOS has it enabled, but zeds that spawn won't)
+//var bool bEnableOldHeadshotBehavior;
 //var bool bDisableHealthScaling;
-var bool bEnableRandomSkins;
+//var bool bEnableRandomSkins;
 
 // contains textures for mixed zed variants
 var protected array<material> MixTexturePool;
