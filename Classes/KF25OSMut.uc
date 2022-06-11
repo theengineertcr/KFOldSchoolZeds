@@ -15,8 +15,6 @@ class KF25OSMut extends Mutator
 // We've taken this code from CssHDMut:
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
-//config vars - culled
-//var config bool bEnableCorpseDecay;                 // Zed corpses disappear similarly to KF1
 var config bool bEnableRangedPound;                 // Fleshpound Chaingunners replace Husks
 var config bool bEnableExplosivesPound;             // Explosive Fleshpound Gunners spawn alongside Fleshpounds
 var config bool bNerfEP;                            // Explosive Pound is nerfed.
@@ -25,10 +23,9 @@ var config bool bEnableOldCrawlerBehaviour;         // Crawler uses 2.5 leaping 
 var config bool bEnableSirenNadeBoom;               // Swaps Siren Scream Damage type, causing explosives to explode
 var config bool bEnableOldScrakeBehavior;           // Use 2.5 Scrake behavior: No rage charging.
 var config bool bEnableOldFleshpoundBehavior;       // Use 2.5 Fleshpound behavior: No LoS rage and 10 second long rage.
-//var config bool bEnableOldFleshpoundSpinAttack;     // Fleshpound uses his spin attack/state
 //var config bool bEnableOldHeadshotBehavior;         // Use 2.5 Headshot behavior. No head health/bleedout. Damage Vs. Health / HealthMax * Multiplier determines if big zed loses head.
 //var config bool bDisableHealthScaling;              // Disables Health Scaling, similar to the mod version of the game
-//var config bool bEnableRandomSkins;                 // Zeds use a random skin from other zeds
+var config bool bEnableRandomSkins;                 // Zeds use a random skin from other zeds
 
 var private array< class<KFMonsterOS> > ZedList;
 var bool bShowHeadHitbox;
