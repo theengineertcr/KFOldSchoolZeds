@@ -2,12 +2,18 @@ Brings back the UT2004 zeds from KFMod 2.5 to Retail! Includes bonus zed "Fleshp
 
 To play, select "Killing Floor" Game, enable the mutator in the mutator page and configure as desired.
 
-For server owners: Mutator=KF25OSMut
+For server owners: Mutator=KFOldSchoolZeds.KF25OSMut
 
-Additional configuration to be added in later versions. Planned variables include: Toggle of each zeds old behavior, old headshot behavior, old health, speed & damage values, and more.
+You may configure variables in the KFOldSchoolZeds.ini or the mutator options page. As of now, Zed corpses in solo cannot be shot as it was a bit buggy to begin with and resulted in people wasting ammo trying to kill crawlers. You can still shoot them online, but it will not eat your shots.
 
-Download: https://drive.google.com/file/d/1l4X4RCjGerr9-jfgPCAwlPAZVYC9YFXv/view
+Download: https://drive.google.com/file/d/1ez4BN6YQRBZUTAwpJma81h0QVhfZu2zV/view
 
 Source: https://github.com/theengineertcr/KFOldSchoolZeds
 
 Many thanks to #NikC- for helping me out with various bugs, improving my code and work efficiency, and a lot of other stuff.
+
+Latest release: Ver. 1.51 
+
+Changes:Further improved head hitboxes, Fleshpound uses rage attack consistently and is more deadly, disabled old Bloat puke temporarily.
+
+P.S: As of Version 1.5, the mod is "Feature complete". Updates beyond this point will be bug fixes. Thanks for playing! And be on the look out for future mods :)
