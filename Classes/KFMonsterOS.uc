@@ -1477,6 +1477,5 @@ defaultproperties
     RagMaxSpinAmount=1.000000
     MoanVolume=10
     SoundVolume=200
-    //add later
-    //SoundGroupClass=
+    SoundGroupClass=Class'KFOldSchoolZeds.KFMaleZombieSoundsOS'
 }

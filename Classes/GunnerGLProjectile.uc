@@ -8,8 +8,22 @@ class GunnerGLProjectile extends SPGrenadeProjectile;
 
 var bool bNerfed;
 
-simulated function Disintegrate(vector HitLocation, vector HitNormal)
+// Does not work
+function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
+    if ( Monster(instigatedBy) != none || instigatedBy == Instigator )
+    {
+        //If were hit by the zed guns, go away
+        if( damageType == class'DamTypeZEDGun' || DamageType == class 'DamTypeZEDGunMKII')
+        {
+            Disintegrate(HitLocation, vect(0,0,1));
+        }
+        //If were hit by fire, explode
+        else if(DamageType == class'DamTypeBurned')
+        {
+            Explode(HitLocation, vect(0,0,1));
+        }
+    }
 }
 
 simulated function PostBeginPlay()
@@ -64,45 +78,43 @@ simulated function PostBeginPlay()
     SetTimer(ExplodeTimer, false);
 }
 
-function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex){}
-
 // override to prevent zeds from taking damage - taken from siren
 simulated function HurtRadius( float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, vector HitLocation )
 {
-	local actor Victims;
-	local float damageScale, dist;
-	local vector dir;
-	local float UsedDamageAmount;
+    local actor Victims;
+    local float damageScale, dist;
+    local vector dir;
+    local float UsedDamageAmount;
 
-	if( bHurtEntry )
-		return;
+    if( bHurtEntry )
+        return;
 
-	bHurtEntry = true;
-	foreach VisibleCollidingActors( class 'Actor', Victims, DamageRadius, HitLocation )
-	{
-		if( (Victims != self) && !Victims.IsA('FluidSurfaceInfo') && !Victims.IsA('KFMonster') && !Victims.IsA('ExtendedZCollision') )
-		{
-			dir = Victims.Location - HitLocation;
-			dist = FMax(1,VSize(dir));
-			dir = dir/dist;
-			damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius)/DamageRadius);
+    bHurtEntry = true;
+    foreach VisibleCollidingActors( class 'Actor', Victims, DamageRadius, HitLocation )
+    {
+        if( (Victims != self) && !Victims.IsA('FluidSurfaceInfo') && !Victims.IsA('KFMonster') && !Victims.IsA('ExtendedZCollision') )
+        {
+            dir = Victims.Location - HitLocation;
+            dist = FMax(1,VSize(dir));
+            dir = dir/dist;
+            damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius)/DamageRadius);
 
-			if (Victims.IsA('KFGlassMover'))
-			{
-				UsedDamageAmount = 100000;
-			}
-			else
-			{
+            if (Victims.IsA('KFGlassMover'))
+            {
+                UsedDamageAmount = 100000;
+            }
+            else
+            {
                 UsedDamageAmount = DamageAmount;
-			}
+            }
 
-			Victims.TakeDamage(damageScale * UsedDamageAmount,Instigator, Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,(damageScale * Momentum * dir),DamageType);
+            Victims.TakeDamage(damageScale * UsedDamageAmount,Instigator, Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,(damageScale * Momentum * dir),DamageType);
 
             if (Instigator != None && Vehicle(Victims) != None && Vehicle(Victims).Health > 0)
-				Vehicle(Victims).DriverRadiusDamage(UsedDamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
-		}
-	}
-	bHurtEntry = false;
+                Vehicle(Victims).DriverRadiusDamage(UsedDamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
+        }
+    }
+    bHurtEntry = false;
 }
 
 simulated function ProcessTouch(Actor Other, Vector HitLocation)

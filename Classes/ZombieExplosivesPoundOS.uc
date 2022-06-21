@@ -312,7 +312,7 @@ state RunningState
                 SetAnimAction('RangedPreFireMG');
                 HandleWaitForAnim('RangedPreFireMG');
 
-                GLFireCounter =  1;
+                GLFireCounter =  2;
                 GoToState('FireGrenades');
             }
             else
@@ -343,9 +343,7 @@ state RunningState
     }
 }
 
-state RunningToMarker extends RunningState
-{
-}
+state RunningToMarker extends RunningState{}
 
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
@@ -414,12 +412,15 @@ function FireGLShot()
     local rotator FireRotation;
     local float Dist;
 
+    //Log spam prevention(?)
+    if(Controller.Target != None)
+    {
+        Controller.Target = Controller.Target;
+    }
+
     Dist = VSize(Controller.Target.Location-Location);
 
-    if(Dist < 400 && GLFireCounter <= 1 && !bNerfed)
-        GLFireCounter++;
-    else
-        GLFireCounter--;
+    GLFireCounter--;
 
     //Randomness in leading target
     if(FRand() > 0.5 && !bNerfed)
@@ -486,8 +487,12 @@ state FireGrenades
 {
     function RangedAttack(Actor A)
     {
-        Controller.Target = A;
-        Controller.Focus = A;
+        //Log spam prevention(?)
+        if(Controller.Target != None)
+        {
+            Controller.Target = A;
+            Controller.Focus = A;
+        }
     }
 
     simulated function Tick(float DeltaTime)
@@ -497,14 +502,18 @@ state FireGrenades
         local float AdditionalSpeed;
         local float TimerDivizor;
 
-        Dist = VSize(Controller.Target.Location-Location);
+        //Log spam prevention
+        if(Controller.Target != None)
+        {
+            Dist = VSize(Controller.Target.Location-Location);
+            TossZ = Controller.Target.Location.Z - Location.Z;
+        }
 
         AdditionalSpeed = 250;
         TimerDivizor = 1250;
 
         Speed = Dist + AdditionalSpeed;
         Timer = Dist / TimerDivizor;
-        TossZ = Controller.Target.Location.Z - Location.Z;
 
         if(TossZ >= 200)
             TossZ = 200;

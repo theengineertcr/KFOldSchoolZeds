@@ -1,9 +1,5 @@
 class ZombieRangedPoundOS extends KFMonsterOS;
 
-var float SetMGDamage;
-var float SetMGAccuracy;
-var float SetMGFireRate;
-var int SetMGFireBurst;
 var bool bFireAtWill,bMinigunning;
 var float LastChainGunTime;
 var vector TraceHitPos;
@@ -17,6 +13,9 @@ var()            float    MGFireRate;
 var()             int     MGFireBurst;
 var()   float   BurnDamageScale;
 var()   float   MGFireInterval;
+var bool bDisableIncendiaryRounds;
+var bool bDisableIncendiaryResistance;
+var () class <DamageType> MGDamageType;
 
 replication
 {
@@ -115,12 +114,11 @@ simulated function PostBeginPlay()
             MGFireBurst = default.MGFireBurst * 1.67;
             MGFireRate = default.MGFireRate * 0.68;
         }
-
-        SetMGDamage = MGDamage;
-        SetMGAccuracy = MGAccuracy;
-        SetMGFireBurst = MGFireBurst;
-        SetMGFireRate = MGFireRate;
     }
+
+    if(bDisableIncendiaryRounds)
+        MGDamageType=class'ZombieMeleeDamage';
+
     super.PostBeginPlay();
 }
 
@@ -371,12 +369,13 @@ state FireChaingun
         if( Level.NetMode!=NM_DedicatedServer )
             AddTraceHitFX(HL);
 
-        if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)))
+        if( A!=Level && ( A == KFPawn(A) || A == KFGlassMover(A) || A == KFDoorMover(A)) )
         {
-            if(Dist > 400)
-                A.TakeDamage(MGDamage,self,HL,Dir*500,class'DamTypeBurned');
-            else // temp until I can get it to only do this to Berserkers
-                A.TakeDamage(MGDamage + 1,self,HL,Dir*500,class'DamTypeBurned');
+            // This spams server logs with "Accessed None PlayerReplicationInfo"
+            if(KFPlayerReplicationInfo(KFP.PlayerReplicationInfo).ClientVeteranSkill != class'KFVetBerserker')
+                A.TakeDamage(MGDamage,self,HL,Dir*500,MGDamageType);
+            else
+                A.TakeDamage((MGDamage + 1),self,HL,Dir*500,MGDamageType);
         }
         else    return;
     }
@@ -521,7 +520,7 @@ simulated function bool AnimNeedsWait(name TestAnim)
 
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex)
 {
-    if (DamageType == class 'DamTypeBurned' || DamageType == class 'DamTypeFlamethrower')
+    if ((DamageType == class 'DamTypeBurned' || DamageType == class 'DamTypeFlamethrower') && !bDisableIncendiaryResistance)
     {
         Damage *= BurnDamageScale;
     }
@@ -649,6 +648,6 @@ defaultproperties
 
     OnlineHeadshotScale=1.2
     OnlineHeadshotOffset=(X=5,Y=7,Z=71)
-
+    MGDamageType=class'DamTypeBurned'
     ControllerClass=class'ControllerRangedPoundOS'
 }

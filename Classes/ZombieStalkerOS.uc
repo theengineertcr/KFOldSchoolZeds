@@ -325,6 +325,5 @@ defaultproperties
 
     bCannibal=true
 
-    //Have yet to make this, will do it later
-    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
+    SoundGroupClass=class'KFOldSchoolZeds.KFFemaleZombieSoundsOS'
 }

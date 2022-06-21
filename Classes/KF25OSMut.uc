@@ -16,6 +16,8 @@ class KF25OSMut extends Mutator
 // https://github.com/InsultingPros/CsHDMut/blob/02a0cdd2b79de8e1c7ea26f12370b115c038e542/sources/CsHDMut.uc#L20
 
 var config bool bEnableRangedPound;                 // Fleshpound Chaingunners replace Husks
+var config bool bDisableIncendiaryRounds;           // Fleshpound Chaingunner does not use incendiary rounds
+var config bool bDisableIncendiaryResistance;       // Fleshpound Chaingunner no longer has resistance to burned damagetype
 var config bool bEnableExplosivesPound;             // Explosive Fleshpound Gunners spawn alongside Fleshpounds
 var config bool bNerfEP;                            // Explosive Pound is nerfed.
 var config bool bEnableOldBloatPuke;                // Bloat uses 2.5 puke behavior
@@ -111,6 +113,12 @@ event PostBeginPlay()
 
     if(bEnableOldBloatPuke)
         class'ZombieBloatOS'.default.bEnableOldBloatPuke = true;
+
+    if(bDisableIncendiaryRounds)
+        class'ZombieRangedPoundOS'.default.bDisableIncendiaryRounds = true;
+
+    if(bDisableIncendiaryResistance)
+        class'ZombieRangedPoundOS'.default.bDisableIncendiaryResistance = true;
 }
 
 // precache materials
@@ -281,15 +289,16 @@ static function FillPlayInfo(PlayInfo PlayInfo)
     super(Info).FillPlayInfo(PlayInfo);
 
     //PlayInfo.AddSetting(default.FriendlyName, "bEnableCorpseDecay", "Corpses Decay", 0, 0, "Check",,,,true);
-    PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,true);
-    PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,true);
-    PlayInfo.AddSetting(default.FriendlyName, "bNerfEP", "Fleshpound Explosives Gunner Nerf", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableRangedPound", "Fleshpound Chaingunner", 0, 0, "Check",,,,false);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableExplosivesPound", "Fleshpound Explosives Gunner", 0, 0, "Check",,,,false);
+    PlayInfo.AddSetting(default.FriendlyName, "bNerfEP", "Fleshpound Explosives Gunner Nerf", 0, 0, "Check",,,,false);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldBloatPuke", "Old Bloat Puke", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldCrawlerBehaviour", "Old Crawler Leap", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableSirenNadeBoom", "Old Siren Scream", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldScrakeBehavior", "Disable Scrake Charge", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundBehavior", "Old Fleshpound Rage", 0, 0, "Check",,,,true);
-    //PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundSpinAttack", "Fleshpound Spin Attack", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bDisableIncendiaryRounds", "Fleshpound Chaingunner - Disable Incendiary rounds", 0, 0, "Check",,,,false);
+    PlayInfo.AddSetting(default.FriendlyName, "bDisableIncendiaryResistance", "Fleshpound Chaingunner - Disable Fire Resistance", 0, 0, "Check",,,,false);
     //PlayInfo.AddSetting(default.FriendlyName, "bEnableOldHeadshotBehavior", "Old Headshot System", 0, 0, "Check",,,,true);
     //PlayInfo.AddSetting(default.FriendlyName, "bDisableHealthScaling", "Disable Health Scaling", 0, 0, "Check",,,,true);
     //TODO: Implement this properly
@@ -319,8 +328,10 @@ static event string GetDescriptionText(string Property)
         return "Use 2.5 Scrake behavior: No rage charging.";
     case "bEnableOldFleshpoundBehavior":
         return "Use 2.5 Fleshpound behavior: No LoS rage and 10 second rage duration.";
-    //case "bEnableOldFleshpoundSpinAttack":
-    //    return "Enables Fleshpound buggy spinning attack";
+    case "bDisableIncendiaryRounds":
+        return "Fleshpound Chaingunner does not fire incendiary rounds";
+    case "bDisableIncendiaryResistance":
+        return "Fleshpound Chaingunner does not resist fire damage";
     //case "bEnableOldHeadshotBehavior":
     //    return "Use 2.5 Headshot behavior. No head health/bleedout.";
     //case "bDisableHealthScaling":
@@ -348,8 +359,15 @@ defaultproperties
     bAddToServerPackages=true
 
     bEnableRangedPound=true
+    bDisableIncendiaryRounds=false
+    bDisableIncendiaryResistance=false
     bEnableExplosivesPound=false
-
+    bNerfEP=false
+    bEnableOldBloatPuke=false
+    bEnableOldCrawlerBehaviour=false
+    bEnableSirenNadeBoom=false
+    bEnableOldScrakeBehavior=false
+    bEnableOldFleshpoundBehavior=false
     ZedList(00)=class'ZombieBloatOS'
     ZedList(01)=class'ZombieBossOS'
     ZedList(02)=class'ZombieClotOS'

@@ -493,7 +493,7 @@ function ClawDamageTarget()
     else
         PushDir = damageForce * vector(Rotation);
 
-    if ( MeleeDamageTarget( UsedMeleeDamage, PushDir))
+    if (MeleeDamageTarget(UsedMeleeDamage,PushDir))
     {
         HumanTarget = KFHumanPawn(Controller.Target);
         if( HumanTarget!=none )
@@ -527,7 +527,7 @@ function SpinDamage(actor Target)
 
     if (Target !=none && Target.IsA('KFDoorMover'))
     {
-        Target.TakeDamage(DamageAmount , self ,HitLocation,pushdir, class 'KFmod.ZombieMeleeDamage');
+        Target.TakeDamage(DamageAmount,self,HitLocation,pushdir,class'KFmod.ZombieMeleeDamage');
         PlayZombieAttackHitSound();
     }
 
@@ -538,7 +538,7 @@ function SpinDamage(actor Target)
         if (HumanTarget.Controller != none)
             HumanTarget.Controller.ShakeView(RotMag, RotRate, RotTime, OffsetMag, OffsetRate, OffsetTime);
 
-        KFHumanPawn(Target).TakeDamage(DamageAmount, self ,HitLocation,pushdir, class 'KFmod.ZombieMeleeDamage');
+        KFHumanPawn(Target).TakeDamage(DamageAmount,self,HitLocation,pushdir,class'KFmod.ZombieMeleeDamage');
 
         if (KFHumanPawn(Target).Health <=0)
         {
@@ -563,6 +563,8 @@ simulated function int DoAnimAction( name AnimName )
 
 simulated event SetAnimAction(name NewAction)
 {
+    local int meleeAnimIndex;
+
     if (!bWaitForAnim)
     {
         AnimAction = NewAction;
@@ -606,7 +608,9 @@ simulated event SetAnimAction(name NewAction)
         }
         else if(AnimAction == 'Claw')
         {
+            meleeAnimIndex = Rand(3);
             AnimAction=meleeAnims[Rand(3)];
+            CurrentDamtype = ZombieDamType[meleeAnimIndex];
             SetAnimAction(AnimAction);
             return;
         }

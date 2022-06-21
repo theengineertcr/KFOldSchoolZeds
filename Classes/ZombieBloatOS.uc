@@ -1,16 +1,10 @@
 class ZombieBloatOS extends KFMonsterOS;
 
+var class<Actor> VomitJet;
 var Actor BloatJet;
 var bool bPlayBileSplash;
 var float DistBeforePuke;
 var bool bEnableOldBloatPuke;
-
-//This replication didn't fix the issue either, help!?
-replication
-{
-    reliable if( Role==ROLE_Authority )
-        bEnableOldBloatPuke;
-}
 
 //Call Puke Emitter via AnimNotify_Script than Effect
 //Otherwise, compiling will complain about missing meshes
@@ -19,22 +13,12 @@ replication
 simulated function SpawnPukeEmitter()
 {
     local vector X,Y,Z, FireStart;
-    local rotator FireRotation;
 
     GetAxes(Rotation,X,Y,Z);
 
-    FireStart = Location+(vect(30,0,64) >> Rotation)*DrawScale;
-    FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
+    FireStart = GetBoneCoords('bip01 head').Origin;
 
-    // Does not work :)
-    //if(bEnableOldBloatPuke)
-    //{
-        Spawn(class'KFVomitJetOS',,,FireStart,FireRotation);
-    //}
-    //else
-    //{
-    //    Spawn(class'KFVomitJet',,,FireStart,FireRotation);
-    //}
+    Spawn(VomitJet,,,FireStart,Rotation);
 }
 
 function BodyPartRemoval(int Damage, Pawn instigatedBy, Vector hitlocation, Vector momentum, class<DamageType> damageType)
@@ -160,26 +144,17 @@ function SpawnTwoShots()
 
     FireRotation = Controller.AdjustAim(SavedFireProperties,FireStart,600);
 
-    //if(bEnableOldBloatPuke)
-    //    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
-    //else
-        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     FireStart-=(0.5*CollisionRadius*Y);
     FireRotation.Yaw -= 1200;
 
-    //if(bEnableOldBloatPuke)
-    //    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
-    //else
-        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     FireStart+=(CollisionRadius*Y);
     FireRotation.Yaw += 2400;
 
-    //if(bEnableOldBloatPuke)
-    //    Spawn(class'KFBloatVomitOS',,,FireStart,FireRotation);
-    //else
-        Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
+    Spawn(class'KFBloatVomit',,,FireStart,FireRotation);
 
     ToggleAuxCollision(true);
 }
@@ -196,11 +171,7 @@ simulated function Tick(float deltatime)
         BileExplosionLoc = self.Location;
         BileExplosionLoc.z += (CollisionHeight - (CollisionHeight * 0.5));
 
-        // This does not work :)
-        //if(bEnableOldBloatPuke)
-            GibBileExplosion = Spawn(class 'BileExplosionOS',self,, BileExplosionLoc );
-        //else
-        //    GibBileExplosion = Spawn(class 'LowGoreBileExplosion',self,, BileExplosionLoc );
+        GibBileExplosion = Spawn(class 'BileExplosionOS',self,, BileExplosionLoc );
 
         bPlayBileSplash = true;
     }
@@ -210,21 +181,22 @@ function BileBomb()
 {
     local bool AttachSucess;
 
-    // This does not work :)
-    //if(bEnableOldBloatPuke)
-    //{
-    //    BloatJet = spawn(class'BileJetOS', self,,,);
+    if(bEnableOldBloatPuke)
+    {
+        BloatJet = spawn(class'BileJetOS', self,,,);
 
-    //    if(Gored < 5)
-    //        AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
+        if(Gored < 5)
+            AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
 
-    //    if(!AttachSucess)
-    //        BloatJet.SetBase(self);
+        if(!AttachSucess)
+            BloatJet.SetBase(self);
 
-    //    BloatJet.SetRelativeRotation(rot(0,-4096,0));
-    //}
-    //else
-        BloatJet = spawn(class'BileJet', self,,Location,Rotator(-PhysicsVolume.Gravity));
+        BloatJet.SetRelativeRotation(rot(0,-4096,0));
+    }
+    else
+
+    BloatJet = spawn(class'BileJet', self,,Location,Rotator(-PhysicsVolume.Gravity));
+
 }
 
 function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
@@ -240,16 +212,16 @@ function PlayDyingAnimation(class<DamageType> DamageType, vector HitLoc)
     {
         BileBomb();
 
-        //if(BloatJet!=none && bEnableOldBloatPuke)
-        //{
-        //    if(Gored < 5)
-        //        AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
+        if(BloatJet!=none && bEnableOldBloatPuke)
+        {
+            if(Gored < 5)
+                AttachSucess=AttachToBone(BloatJet,'Bip01 Spine');
 
-        //    if(!AttachSucess)
-        //        BloatJet.SetBase(self);
+            if(!AttachSucess)
+                BloatJet.SetBase(self);
 
-        //    BloatJet.SetRelativeRotation(rot(0,-4096,0));
-        //}
+            BloatJet.SetRelativeRotation(rot(0,-4096,0));
+        }
     }
 }
 
@@ -354,4 +326,5 @@ defaultproperties
     bHarpoonToBodyStuns=false
     KFRagdollName="BloatRag"
     bCannibal=true
+    VomitJet=class'KFVomitJet'
 }

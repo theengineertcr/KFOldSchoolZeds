@@ -128,7 +128,8 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 {
     super.takeDamage(Damage, instigatedBy, hitLocation, momentum, damageType);
 
-    if( Health < 0 || Damage > Health)
+    //Fixed log spam
+    if( (Health < 0 || Damage > Health) && DisabledPawn != None)
         DisabledPawn.bMovementDisabled = false;
 }
 

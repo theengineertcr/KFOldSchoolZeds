@@ -321,7 +321,5 @@ defaultproperties
     bCanDistanceAttackDoors=true
 
     KFRagdollName="SirenRag"
-
-    //Yet to make this
-    //SoundGroupClass=class'KFMod.KFFemaleZombieSounds'
+    SoundGroupClass=class'KFOldSchoolZeds.KFFemaleZombieSoundsOS'
 }

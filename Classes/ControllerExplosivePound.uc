@@ -6,6 +6,7 @@ var    int     AnimWaitChannel;
 var    name    AnimWaitingFor;
 var    bool    bDoneSpottedCheck;
 
+//Players call out his Chainsaw when he sees them
 state ZombieHunt
 {
     event SeePlayer(Pawn SeenPlayer)
@@ -157,6 +158,7 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
 
 function float AdjustAimError(float aimerror, float TargetDist, bool bDefendMelee, bool bInstantProj, bool bLeadTargetNow )
 {
+    //Always have the best accuracy, otherwise you aren't a threat
     return aimerror*=0;
 }
 
