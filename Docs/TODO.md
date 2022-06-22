@@ -15,20 +15,17 @@
    - [ ] Option to enable Hardpat
 - [ ] Play minigun whirring sound when Ranged Pound enters prefire animation so that it's less unexpected.
 - [ ] Ranged Pounds that have LoS timed out from their attack should fire nearly immediately after making contact with the player.
-- [ ] Option to disable Minigun Pound Incendiary Round
 - [ ] Explosive Pound spawns alongside Fleshpounds
 - [ ] Add additional Siren "explosive block" state in controller similar to Fleshpound Spinstate that causes each explosive within range to explode.
 - [ ] Redo animation for RangedPreFireMG, removing excessive head shake and point minigun accurately
 - [ ] Mirror Scrake melee animation for Explosive Pound(probably never?)
 - [ ] Make Fleshpound Avoid Area's only spawn when enraged and make Avoid Area extend a couple of meters infront of Fleshpounds to make zeds "Clear the way"
   - Currently, Fleshpound Avoid Area has been temporarily removed until this is done.
-- [ ] Fix TWI's Scrake Slow Rage bug(if possible).
 
 ## Bugs
 - Log Spams(update this with specific log spam later)
 - Bloat Puke Damtype bugs out Bilebomb and puking generally for an unknown reasson
 - Bloat puke can be seen through walls(KFMod issue).
-- Clot still uses clawing animations on door instead of grappling(?)
 
 ## Miscellaneous
 

@@ -15,6 +15,8 @@
 - Fill me later!
 
 ### Finished / Fixed
+- [X] Option to disable Minigun Pound Incendiary Round
+- [X] Fix TWI's Scrake Slow Rage bug(if possible).
 - [X] Bloat deals inaccurate damage in Bilebomb(two hits instead of one)
 - [X] Fleshpound Spin attack back
 - [X] Fix Scrake not playin SawImpaleLoop anim on dedis
