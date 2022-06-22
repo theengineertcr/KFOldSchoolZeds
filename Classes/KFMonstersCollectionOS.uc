@@ -11,6 +11,7 @@ defaultproperties
     MonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloatOS",MID="G")
     MonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSirenOS",MID="H")
     MonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPoundOS",MID="I")
+    MonsterClasses(9)=(MClassName="KFOldSchoolZeds.ZombieExplosivesPoundOS",MID="J")
 
     StandardMonsterClasses(0)=(MClassName="KFOldSchoolZeds.ZombieClotOS",MID="A")
     StandardMonsterClasses(1)=(MClassName="KFOldSchoolZeds.ZombieCrawlerOS",MID="B")
@@ -21,6 +22,7 @@ defaultproperties
     StandardMonsterClasses(6)=(MClassName="KFOldSchoolZeds.ZombieBloatOS",MID="G")
     StandardMonsterClasses(7)=(MClassName="KFOldSchoolZeds.ZombieSirenOS",MID="H")
     StandardMonsterClasses(8)=(MClassName="KFOldSchoolZeds.ZombieRangedPoundOS",MID="I")
+    StandardMonsterClasses(9)=(MClassName="KFOldSchoolZeds.ZombieExplosivesPoundOS",MID="J")
 
 
     FinalSquads(0)=(ZedClass=("KFOldSchoolZeds.ZombieClotOS"),NumZeds=(4))
