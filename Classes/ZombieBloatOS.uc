@@ -15,9 +15,7 @@ simulated function SpawnPukeEmitter()
     local vector X,Y,Z, FireStart;
 
     GetAxes(Rotation,X,Y,Z);
-
     FireStart = GetBoneCoords('bip01 head').Origin;
-
     Spawn(VomitJet,,,FireStart,Rotation);
 }
 
@@ -326,5 +324,5 @@ defaultproperties
     bHarpoonToBodyStuns=false
     KFRagdollName="BloatRag"
     bCannibal=true
-    VomitJet=class'KFVomitJet'
+    VomitJet=class'KFVomitJetOS'
 }
