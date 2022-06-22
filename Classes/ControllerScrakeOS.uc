@@ -3,6 +3,38 @@ class ControllerScrakeOS extends KFMonsterControllerOS;
 
 var    bool    bDoneSpottedCheck;
 
+//Fixes slow charge for charging zeds
+//Credits:NikC for forum link, aleat0r for the code
+state WaitForAnim
+{
+    ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
+
+    function EndState()
+    {
+        if (Pawn != None)
+        {
+            Pawn.AccelRate = Pawn.Default.AccelRate;
+            Pawn.GroundSpeed = ZombieScrakeOS(Pawn).GetOriginalGroundSpeed();
+        }
+        bUseFreezeHack = False;
+    }
+}
+
+//ditto
+state DoorBashing
+{
+    ignores EnemyNotVisible,SeeMonster;
+
+    function EndState()
+    {
+        if (Pawn != None)
+        {
+            Pawn.AccelRate = Pawn.Default.AccelRate;
+            Pawn.GroundSpeed = ZombieScrakeOS(Pawn).GetOriginalGroundSpeed();
+        }
+    }
+}
+
 state ZombieHunt
 {
     event SeePlayer(Pawn SeenPlayer)

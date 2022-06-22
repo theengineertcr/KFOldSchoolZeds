@@ -58,6 +58,13 @@ function RangedAttack(Actor A)
 
 state RunningState
 {
+    //Fixes slow charge for charging zeds
+    //Credits:NikC for forum link, aleat0r for the code
+    simulated function float GetOriginalGroundSpeed()
+    {
+        return 1.875 * OriginalGroundSpeed;
+    }
+
     simulated function SetZappedBehavior()
     {
         Global.SetZappedBehavior();
