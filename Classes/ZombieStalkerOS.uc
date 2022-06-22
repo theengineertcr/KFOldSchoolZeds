@@ -54,7 +54,13 @@ simulated function Tick(float DeltaTime)
 }
 
 // You can have this because you're invisible and annoying to headshot
-function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex){}
+function OldPlayHit(float Damage, Pawn InstigatedBy, vector HitLocation, class<DamageType> damageType, vector Momentum, optional int HitIndex)
+{
+    if(!bShotAnim)
+        return;
+    else
+        super.OldPlayHit(Damage,InstigatedBy,hitlocation,damageType,momentum,HitIndex);
+}
 
 simulated function CloakStalker()
 {
