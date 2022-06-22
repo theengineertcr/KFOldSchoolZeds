@@ -908,6 +908,35 @@ simulated function Tick(float DeltaTime)
     }
 }
 
+//Slow rage from burn damage fix
+function TakeFireDamage(int Damage,pawn Instigator)
+{
+	local Vector DummyHitLoc,DummyMomentum;
+
+	TakeDamage(Damage, BurnInstigator, DummyHitLoc, DummyMomentum, FireDamageClass);
+
+	if ( BurnDown > 0 )
+	{
+		// Decrement the number of FireDamage calls left before our Zombie is extinguished :)
+		BurnDown --;
+	}
+
+	// Melt em' :)
+	if ( BurnDown < CrispUpThreshhold )
+	{
+		ZombieCrispUp();
+	}
+
+	if ( BurnDown == 0 )
+	{
+		bBurnified = false;
+		if( !bZapped )
+		{
+            SetGroundSpeed(GetOriginalGroundSpeed());
+        }
+	}
+}
+
 function DoorAttack(Actor A)
 {
     if ( bShotAnim || Physics == PHYS_Swimming)
