@@ -6,14 +6,14 @@ For server owners: Mutator=KFOldSchoolZeds.KF25OSMut
 
 You may configure variables in the KFOldSchoolZeds.ini or the mutator options page. As of now, Zed corpses in solo cannot be shot as it was a bit buggy to begin with and resulted in people wasting ammo trying to kill crawlers. You can still shoot them online, but it will not eat your shots.
 
-Download: https://drive.google.com/file/d/1ez4BN6YQRBZUTAwpJma81h0QVhfZu2zV/view
+Download: https://drive.google.com/file/d/1_Zi96IdwO8eTZxf2usBPyB0l2vcTV0d5/view
 
 Source: https://github.com/theengineertcr/KFOldSchoolZeds
 
 Many thanks to #NikC- for helping me out with various bugs, improving my code and work efficiency, and a lot of other stuff.
 
-Latest release: Ver. 1.51 
+Latest release: Ver. 1.52 
 
-Changes:Further improved head hitboxes, Fleshpound uses rage attack consistently and is more deadly, disabled old Bloat puke temporarily.
+Changes:Old Bloat Puke option working again. Additional options added to disable chaingunner incendiary rounds and fire resistance. Implemented Scrake & Gorefast Charge Slowdown fix. Explosive Pound minor tweaks + reduced server log spam for server owners.
 
 P.S: As of Version 1.5, the mod is "Feature complete". Updates beyond this point will be bug fixes. Thanks for playing! And be on the look out for future mods :)
