@@ -245,6 +245,13 @@ function RangedAttack(Actor A)
 
 state RunningState
 {
+    //Fixes slow charge for charging zeds
+    //Credits:NikC for forum link, aleat0r for the code
+    simulated function float GetOriginalGroundSpeed()
+    {
+        return 3.0 * OriginalGroundSpeed;
+    }
+
     simulated function SetZappedBehavior()
     {
         Global.SetZappedBehavior();
@@ -264,7 +271,7 @@ state RunningState
         }
         else
         {
-            SetGroundSpeed(OriginalGroundSpeed * 3.5);
+            SetGroundSpeed(OriginalGroundSpeed * 3.0);
             bCharging = true;
             if( Level.NetMode!=NM_DedicatedServer )
                 PostNetReceive();
@@ -739,7 +746,7 @@ defaultproperties
 
     ScoringValue=125
     GroundSpeed=80.0
-    WaterSpeed=80.0
+    WaterSpeed=75.0
     Health=1250//700
     HealthMax=1250//700
     PlayerCountHealthScale=0.10//0.15

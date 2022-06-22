@@ -6,6 +6,20 @@ var    int     AnimWaitChannel;
 var    name    AnimWaitingFor;
 var    bool    bDoneSpottedCheck;
 
+state DoorBashing
+{
+    ignores EnemyNotVisible,SeeMonster;
+
+    function EndState()
+    {
+        if (Pawn != None)
+        {
+            Pawn.AccelRate = Pawn.Default.AccelRate;
+            Pawn.GroundSpeed = ZombieExplosivesPoundOS(Pawn).GetOriginalGroundSpeed();
+        }
+    }
+}
+
 //Players call out his Chainsaw when he sees them
 state ZombieHunt
 {
@@ -151,6 +165,13 @@ Ignores SeePlayer,HearNoise,Timer,EnemyNotVisible,NotifyBump,Startle;
     function EndState()
     {
         super.EndState();
+
+        if (Pawn != None)
+        {
+            Pawn.AccelRate = Pawn.Default.AccelRate;
+            Pawn.GroundSpeed = ZombieExplosivesPoundOS(Pawn).GetOriginalGroundSpeed();
+        }
+        bUseFreezeHack = False;
 
         AnimWaitingFor = '';
     }
