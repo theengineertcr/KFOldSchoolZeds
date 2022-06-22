@@ -54,7 +54,7 @@ function DoorAttack(Actor A)
     else if ( CanAttack(A) )
     {
         bShotAnim = true;
-        SetAnimAction('DoorBash');
+        SetAnimAction('Claw2');
         PlaySound(sound'Claw2s', SLOT_None);
         return;
     }
@@ -86,11 +86,6 @@ simulated event SetAnimAction(name NewAction)
         meleeAnimIndex = Rand(3);
         NewAction = meleeAnims[2];
         CurrentDamtype = ZombieDamType[meleeAnimIndex];
-    }
-    else if( NewAction == 'DoorBash' )
-    {
-       NewAction = meleeAnims[0];
-       CurrentDamtype = ZombieDamType[Rand(3)];
     }
 
     ExpectingChannel = DoAnimAction(NewAction);
