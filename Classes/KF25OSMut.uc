@@ -295,7 +295,7 @@ static function FillPlayInfo(PlayInfo PlayInfo)
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldBloatPuke", "Old Bloat Puke", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldCrawlerBehaviour", "Old Crawler Leap", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableSirenNadeBoom", "Old Siren Scream", 0, 0, "Check",,,,true);
-    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldScrakeBehavior", "Disable Scrake Charge", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.FriendlyName, "bEnableOldScrakeBehavior", "Old Scrake Behavior", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bEnableOldFleshpoundBehavior", "Old Fleshpound Rage", 0, 0, "Check",,,,true);
     PlayInfo.AddSetting(default.FriendlyName, "bDisableIncendiaryRounds", "Fleshpound Chaingunner - Disable Incendiary rounds", 0, 0, "Check",,,,false);
     PlayInfo.AddSetting(default.FriendlyName, "bDisableIncendiaryResistance", "Fleshpound Chaingunner - Disable Fire Resistance", 0, 0, "Check",,,,false);
@@ -310,8 +310,6 @@ static event string GetDescriptionText(string Property)
 {
   switch (Property)
   {
-    //case "bEnableCorpseDecay":
-    //    return "Zed corpses disappear, similarly to KF1";
     case "bEnableRangedPound":
       return "Enables the Fleshpound Chaingunner";
     case "bEnableExplosivesPound":
@@ -325,7 +323,7 @@ static event string GetDescriptionText(string Property)
     case "bEnableSirenNadeBoom":
         return "Use 2.5 Siren Behavior: Sirens scream blows up explosives.";
     case "bEnableOldScrakeBehavior":
-        return "Use 2.5 Scrake behavior: No rage charging.";
+        return "Use 2.5 Scrake behavior: No more rage state.";
     case "bEnableOldFleshpoundBehavior":
         return "Use 2.5 Fleshpound behavior: No LoS rage and 10 second rage duration.";
     case "bDisableIncendiaryRounds":
