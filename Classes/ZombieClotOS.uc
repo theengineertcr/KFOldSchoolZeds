@@ -15,7 +15,11 @@ replication
 
 function BreakGrapple()
 {
-    super(ZombieClotBase).BreakGrapple();
+    if( DisabledPawn != none )
+    {
+         DisabledPawn.bMovementDisabled = false;
+         DisabledPawn = none;
+    }
 }
 
 function ClawDamageTarget()
@@ -128,10 +132,21 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         DisabledPawn.bMovementDisabled = false;
 }
 
-//this doesn't even work in retail kf
 function RemoveHead()
 {
-    super(ZombieClot).RemoveHead();
+    Super.RemoveHead();
+    MeleeAnims[0] = 'Claw';
+    MeleeAnims[1] = 'Claw';
+    MeleeAnims[2] = 'Claw2';
+
+    MeleeDamage *= 2;
+    MeleeRange *= 2;
+
+    if( DisabledPawn != none )
+    {
+         DisabledPawn.bMovementDisabled = false;
+         DisabledPawn = none;
+    }
 }
 
 static simulated function PreCacheStaticMeshes(LevelInfo myLevel)

@@ -19,14 +19,63 @@ simulated function PostNetReceive()
     }
 }
 
+// This zed has been taken control of. Boost its health and speed
 function SetMindControlled(bool bNewMindControlled)
 {
-    super(ZombieGorefast).SetMindControlled(bNewMindControlled);
+    if( bNewMindControlled )
+    {
+        NumZCDHits++;
+
+        // if we hit him a couple of times, make him rage!
+        if( NumZCDHits > 1 )
+        {
+            if( !IsInState('ChargeToMarker') )
+            {
+                GotoState('ChargeToMarker');
+            }
+            else
+            {
+                NumZCDHits = 1;
+                if( IsInState('ChargeToMarker') )
+                {
+                    GotoState('');
+                }
+            }
+        }
+        else
+        {
+            if( IsInState('ChargeToMarker') )
+            {
+                GotoState('');
+            }
+        }
+
+        if( bNewMindControlled != bZedUnderControl )
+        {
+            SetGroundSpeed(OriginalGroundSpeed * 1.25);
+            Health *= 1.25;
+            HealthMax *= 1.25;
+        }
+    }
+    else
+    {
+        NumZCDHits=0;
+    }
+
+    bZedUnderControl = bNewMindControlled;
 }
 
+// Handle the zed being commanded to move to a new location
 function GivenNewMarker()
 {
-    super(ZombieGorefast).GivenNewMarker();
+    if( bRunning && NumZCDHits > 1  )
+    {
+        GotoState('ChargeToMarker');
+    }
+    else
+    {
+        GotoState('');
+    }
 }
 
 function PlayZombieAttackHitSound()
