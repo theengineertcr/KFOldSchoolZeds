@@ -12,8 +12,8 @@ Source: https://github.com/theengineertcr/KFOldSchoolZeds
 
 Many thanks to #NikC- for helping me out with various bugs, improving my code and work efficiency, and a lot of other stuff.
 
-Latest release: Ver. 1.53 
+Latest release: Ver. 1.54 
 
-Changes:Old Bloat Puke and Enable Explosive Pound option now working again. Additional options added to disable chaingunner incendiary rounds and fire resistance. Implemented Scrake & Gorefast Charge Slowdown fix. Explosive Pound minor tweaks and reduced server log spam for server owners.
+Change: Fixed crash issue related to headshotting Clots. 
 
 P.S: As of Version 1.5, the mod is "Feature complete". Updates beyond this point will be bug fixes. Thanks for playing! And be on the look out for future mods :)
